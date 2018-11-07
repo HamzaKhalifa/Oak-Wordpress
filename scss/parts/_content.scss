@@ -1,0 +1,58 @@
+body, html, h1, h2 {
+    padding: 0px;
+    margin: 0px;
+}
+
+html {
+    padding: 0px;
+    margin: 0px;
+}
+
+.flexible-sections {
+    width: 80%;
+    margin: auto;
+}
+
+// Article 
+.post {
+    margin-top: 30px;
+}
+
+// Section paragraph image
+
+.section-paragraph-image {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+
+.paragraph-image__paragraph {
+    width: 50%;
+    margin-right: 10px;
+}
+
+.paragraph-image__image {
+    width: 50%;
+}
+
+// Section title paragraph image
+
+.section-title-paragraph-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+
+.title-paragraph-image__paragraph {
+    width: 100%;
+    margin-right: 10px;
+}
+
+.title-paragraph-image__image {
+    width: 100%;
+    height: auto;
+}

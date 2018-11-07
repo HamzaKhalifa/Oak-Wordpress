@@ -1,0 +1,108 @@
+/*
+    Theme Name: CSR Reporting Dawn
+    Author: Hamza Khalifa
+    Author URI: http://hamzakhalifa.com/
+    Version: 1.0
+*/
+header {
+  background-color: black;
+}
+
+.site-title-link {
+  text-decoration: none;
+}
+
+.site-title {
+  color: white;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.categories ul {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+  padding-inline-start: 0px;
+  margin: 0px;
+  padding-bottom: 10px;
+}
+
+.cat-item {
+  width: 100%;
+  text-align: center;
+}
+
+.cat-item a {
+  text-decoration: none;
+  color: white;
+}
+
+footer {
+  background-color: black;
+  margin-top: 50px;
+}
+
+footer p {
+  margin: 0px;
+  color: white;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+}
+
+body, html, h1, h2 {
+  padding: 0px;
+  margin: 0px;
+}
+
+html {
+  padding: 0px;
+  margin: 0px;
+}
+
+.flexible-sections {
+  width: 80%;
+  margin: auto;
+}
+
+.post {
+  margin-top: 30px;
+}
+
+.section-paragraph-image {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+.paragraph-image__paragraph {
+  width: 50%;
+  margin-right: 10px;
+}
+
+.paragraph-image__image {
+  width: 50%;
+}
+
+.section-title-paragraph-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+.title-paragraph-image__paragraph {
+  width: 100%;
+  margin-right: 10px;
+}
+
+.title-paragraph-image__image {
+  width: 100%;
+  height: auto;
+}
+
+/*# sourceMappingURL=style.css.map */
