@@ -5,6 +5,10 @@ class Dawn {
         add_action( 'wp_enqueue_scripts', array( $this, 'dawn_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'dawn_enqueue_scripts' ) );
 
+
+        add_action( 'admin_enqueue_scripts', array( $this, 'dawn_admin_enqueue_styles' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'dawn_admin_enqueue_scripts' ) );
+
         add_action( 'after_setup_theme', array( $this, 'dawn_add_theme_support' ) );
 
         add_action( 'init', array( $this, 'dawn_register_post_types') );
@@ -13,7 +17,16 @@ class Dawn {
 
         add_action( 'acf/init', array( $this, 'dawn_add_custom_field_groups') );
 
-        add_filter('acf/load_field/name=list_of_disclosures', array( $this, 'dawn_link_disclosures' ) );
+        add_action( 'admin_menu', array( $this, 'dawn_handle_admin_menu' ) );
+
+        // add_filter('acf/load_field/name=list_of_disclosures', array( $this, 'dawn_link_disclosures' ) );
+
+        // For Ajax requests
+        add_action('wp_ajax_dawn_save_analysis_model', array( $this, 'dawn_save_analysis_model') );
+        add_action('wp_ajax_nopriv_dawn_save_analysis_model', array( $this, 'dawn_save_analysis_model') );
+
+        add_action( 'wp_ajax_dawn_save_analyzes', array( $this, 'dawn_save_analyzes') );
+        add_action( 'wp_ajax_nopriv_dawn_save_analyzes', array( $this, 'dawn_save_analyzes') );
 
         $this->dawn_contact_form();
 
@@ -26,6 +39,44 @@ class Dawn {
     function dawn_enqueue_scripts() {
     }
 
+
+    function dawn_admin_enqueue_styles( $hook ) {
+        if ( $hook == 'analyse-critique_page_dawn_critical_analysis_configuration' || $hook = 'toplevel_page_dawn_critical_analysis' ) :
+            wp_enqueue_style( 'dawn_the_style', get_stylesheet_directory_uri() . '/style.css' );
+            // wp_enqueue_style( 'dawn_font-awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
+            ?>
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+            <?php
+        endif;
+    }
+
+    function dawn_admin_enqueue_scripts( $hook ) {
+        if ( $hook == 'analyse-critique_page_dawn_critical_analysis_configuration' ) :
+            wp_enqueue_script( 'dawn_critical_analysis_configuration', get_template_directory_uri() . '/src/js/critical-analysis-configuration.js', array('jquery'), false, true);
+            $base_data = json_decode( file_get_contents( get_template_directory_uri() . '/src/data/basedata.json' ), true );
+            wp_localize_script( 'dawn_critical_analysis_configuration', 'DATA', array (
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'adminUrl' => admin_url(),
+                'principles' => get_option('dawn_principles') ? get_option('dawn_principles') : [],
+                'criteria' => get_option('dawn_criteria') ? get_option('dawn_criteria') : [],
+                'baseData' => $base_data
+            ));
+        endif;
+
+        if ( $hook == 'toplevel_page_dawn_critical_analysis' ) : 
+            wp_enqueue_script( 'dawn_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
+            wp_enqueue_script( 'dawn_critical_analysis', get_template_directory_uri() . '/src/js/critical-analysis.js', array('jquery'), false, true);
+            wp_localize_script( 'dawn_critical_analysis', 'DATA', array (
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'adminUrl' => admin_url(),
+                'principles' => get_option('dawn_principles') ? get_option('dawn_principles') : [],
+                'criteria' => get_option('dawn_criteria') ? get_option('dawn_criteria') : [],
+                'baseData' => $base_data,
+                'analyzes' => get_option('dawn_analyzes') ? get_option('dawn_analyzes') : []
+            ));
+        endif;
+    }
+
     function dawn_add_theme_support() {
         add_theme_support( 'menus' );
     }
@@ -36,17 +87,17 @@ class Dawn {
         }
     }
 
-    function dawn_link_disclosures( $field ) {
-        $disclosures = get_field( 'disclosures', 'option' );
+    function dawn_handle_admin_menu() {
+        add_menu_page( 'Analyse Critique', 'Analyse Critique', 'manage_options', 'dawn_critical_analysis', array( $this, 'dawn_critical_analysis' ), 'dashicons-chart-pie', 5);
+        add_submenu_page( 'dawn_critical_analysis', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'dawn_critical_analysis_configuration', array( $this, 'dawn_critical_analysis_configuration') );
+    }
 
-        $choices = [];
-        foreach( $disclosures as $disclosure ) {
-            $choices []= $disclosure['name'];
-        }
+    function dawn_critical_analysis() {
+        include get_template_directory() . '/template-parts/critical-analysis.php';
+    }
 
-        $field['choices'] = $choices;
-
-        return $field;
+    function dawn_critical_analysis_configuration() {
+        include get_template_directory() . '/template-parts/critical-analysis-configuration.php';
     }
 
     function dawn_register_post_types() {
@@ -57,7 +108,7 @@ class Dawn {
                 'add_new' => 'Ajouter',
                 'add_new_item' => 'Ajouter une nouvelle Organisation',
                 'edit_item' => 'Editer'
-            ), 
+            ),
             'description' => 'Une organisation est un organisme émetteur/concepteur d’une ou plusieurs publication(s).', 
             'public' => true,
             'menu_position' => 25,
@@ -248,6 +299,24 @@ class Dawn {
         } else {
             var_dump('Error');
         }
+    }
+
+    function dawn_save_analysis_model() {
+        $principles = $_GET['principles'];
+        $criteria = $_GET['criteria'];
+
+        update_option( 'dawn_principles', $principles, false );
+        update_option( 'dawn_criteria', $criteria, false );
+        wp_send_json_success( array(
+            'principles' => get_option('dawn_principles'),
+            'criteria' => get_option('dawn_criteria')
+        ) );
+    }
+
+    function dawn_save_analyzes() {
+        $analyzes = $_POST['analyzes'];
+        update_option( 'dawn_analyzes', $analyzes );
+        wp_send_json_success();
     }
 }
 

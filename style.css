@@ -105,4 +105,472 @@ html {
   height: auto;
 }
 
+body #wpcontent {
+  padding-left: 0px;
+}
+
+.dawn__admin_analysis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.dawn_admin_analysis__chart_container {
+  width: 100%;
+  background-color: white;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #E1E1E1;
+  border-top: none;
+}
+
+.dawn_admin_analysis__list {
+  width: 90%;
+}
+
+.dawn_critical_analysis_configuration__principles {
+  width: 80%;
+}
+
+.dawn_admin_analysis_list__tile_container {
+  background-color: #3B414E;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dawn_admin_analysis_list_tile_container__tile {
+  color: white;
+}
+
+.dawn_admin_analysis_list_tile_container__add_analysis_button, .dawn_admin_analysis_modals_container_add_modal__cancel_button, .dawn_admin_analysis_modals_container_add_modal__add_button {
+  background-color: #24E08C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 100px;
+  text-align: center;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid #24E08C;
+}
+
+.dawn_admin_analysis_list_tile_container__add_analysis_button:hover, .dawn_admin_analysis_modals_container_add_modal__cancel_button:hover, .dawn_admin_analysis_modals_container_add_modal__add_button:hover {
+  cursor: pointer;
+  background-color: white;
+}
+
+.dawn_admin_analysis_list_tile_container__add_analysis_button:hover span, .dawn_admin_analysis_modals_container_add_modal__add_button:hover span {
+  color: #24E08C;
+}
+
+.dawn_admin_analysis_list_tile_container_add_analysis_button__text, .dawn_admin_analysis_modals_container_add_modal_cancel_button__text, .dawn_admin_analysis_modals_container_add_modal_add_button__text {
+  color: white;
+}
+
+.dawn_admin_analysis_list__single_analysis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  position: relative;
+}
+
+.dawn_admin_analysis_list_single_analysis__title {
+  background-color: white;
+  width: 100%;
+  text-align: center;
+  padding: 20px 0px;
+  border: 1px solid #E1E1E1;
+  font-size: 30px;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__upper_content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dawn_admin_analysis_list_single_analysis__single_principle {
+  background-color: white;
+  width: 100%;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle__principle_title {
+  padding-left: 20px;
+  font-size: 30px;
+  border: 1px solid #E1E1E1;
+  border-top: none;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  margin: 0px;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle__single_criteria {
+  border: 1px solid #E1E1E1;
+  border-top: none;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle__single_criteria {
+  padding: 0px 20px;
+  padding-bottom: 20px;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content__score_container {
+  display: flex;
+  align-items: center;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__criteria_title {
+  font-size: 25px;
+  line-height: 30px;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label {
+  font-size: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark_label {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark {
+  width: 100%;
+}
+
+.dawn_admin_analysis_list_single_analysis__delete_button {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.dawn_admin_analysis__modals_container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  right: 0px;
+  top: 0px;
+  transition: all 0.1s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  z-index: -10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.dawn_admin_analysis__modals_container_activated {
+  opacity: 1;
+  z-index: 10;
+}
+
+.dawn_admin_analysis_modals_container__add_modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 40%;
+  background-color: white;
+  padding: 20px;
+  position: fixed;
+  top: 30%;
+}
+
+.dawn_admin_analysis_modals_container_add_modal__title_container {
+  text-align: center;
+}
+
+.dawn_admin_analysis_modals_container_add_modal__error {
+  color: #FC394D;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.dawn_admin_analysis_modals_container_add_modal__buttons_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.dawn_admin_analysis_modals_container_add_modal__cancel_button {
+  background-color: #FC394D;
+  border: 1px solid #FC394D;
+}
+
+.dawn_admin_analysis_modals_container_add_modal__cancel_button:hover span {
+  color: #FC394D;
+}
+
+.dawn_admin_analysis__save_container {
+  position: fixed;
+  background-color: #389EF0;
+  bottom: 30px;
+  right: 30px;
+  height: 100px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 50px;
+}
+
+.dawn_admin_analysis__save_container:hover {
+  cursor: pointer;
+}
+
+.fa-save {
+  color: white;
+  font-size: 30px;
+}
+
+.dawn_admin_analysis_save_container__text {
+  color: white;
+}
+
+body #wpcontent {
+  padding-left: 0px;
+}
+
+body .dawn_hidden {
+  display: none;
+}
+
+.dawn_critical_analysis__configuration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dawn_critical_analysis_configuration__principles {
+  width: 80%;
+}
+
+.dawn_critical_analysis_configuration_principles__title_container {
+  background-color: #3B414E;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container__title {
+  color: white;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container__add_principle_button, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button, .dawn_critical_analysis_configuration_principles_principle_add_container__add_button {
+  background-color: #24E08C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 100px;
+  text-align: center;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid #24E08C;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container__add_principle_button:hover, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button:hover, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button:hover, .dawn_critical_analysis_configuration_principles_principle_add_container__add_button:hover {
+  cursor: pointer;
+  background-color: white;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container__add_principle_button:hover span, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button:hover span {
+  color: #24E08C;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container_add_principle_button__text, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container_add_button__text, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container_cancel_button__text, .dawn_critical_analysis_configuration_principles_principle_add_container_add_button__text {
+  color: white;
+}
+
+.dawn_critical_analysis_configuration_principles__principle {
+  border: 1px solid #E1E1E1;
+  margin-top: 20px;
+  background-color: white;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__add_container {
+  background-color: #F5F5F5;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 30px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_container__title {
+  margin-left: 20px;
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_add_container__add_button {
+  width: 150px;
+  background-color: #389EF0;
+  border: 1px solid #389EF0;
+  margin-right: 20px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_add_container__add_button:hover span {
+  color: #389EF0;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_criteria__criterion {
+  padding: 0px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #F5F5F5;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_criteria_criterion_delete {
+  text-align: center;
+}
+
+.fa-minus-square, .fa-trash-alt {
+  color: #FC394D;
+  font-size: 18px;
+}
+
+.fa-minus-square:hover, .fa-trash-alt:hover {
+  cursor: pointer;
+}
+
+.dawn_critical_analysis_configuration__save_button, .dawn_critical_analysis_configuration__load_base_data_button {
+  background-color: #389EF0;
+  margin-top: 30px;
+  border: 1px solid #389EF0;
+  transition: all 0.2s ease-in-out;
+  width: 80%;
+  padding: 10px 0px;
+  text-align: center;
+}
+
+.dawn_critical_analysis_configuration__save_button span, .dawn_critical_analysis_configuration__load_base_data_button span {
+  color: white;
+}
+
+.dawn_critical_analysis_configuration__save_button:hover, .dawn_critical_analysis_configuration__load_base_data_button:hover {
+  cursor: pointer;
+  background-color: white;
+}
+
+.dawn_critical_analysis_configuration__save_button:hover span, .dawn_critical_analysis_configuration__load_base_data_button:hover span {
+  color: #389EF0;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_criteria_criterion__title {
+  padding-right: 10px;
+}
+
+.dawn_critical_analysis_configuration__modals_container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  right: 0px;
+  top: 0px;
+  transition: all 0.3s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  z-index: -10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dawn_critical_analysis_configuration__modals_container_activated {
+  opacity: 1;
+  z-index: 10;
+}
+
+.dawn_critical_analysis_configuration_modals_container__add_principle_modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 40%;
+  background-color: white;
+  padding: 20px;
+  position: fixed;
+  top: 30%;
+}
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal__title_container {
+  text-align: center;
+}
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal__buttons_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button {
+  background-color: #FC394D;
+  border: 1px solid #FC394D;
+}
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button:hover span {
+  color: #FC394D;
+}
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal__error {
+  color: #FC394D;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.dawn_loader {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+  position: fixed;
+  top: 30%;
+}
+
+.dawn_loader:after {
+  content: " ";
+  display: block;
+  border-radius: 50%;
+  width: 0;
+  height: 0;
+  margin: 6px;
+  box-sizing: border-box;
+  border: 26px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: dawn_loader 1.2s infinite;
+}
+
+@keyframes dawn_loader {
+  0% {
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+  50% {
+    transform: rotate(900deg);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  100% {
+    transform: rotate(1800deg);
+  }
+}
+
 /*# sourceMappingURL=style.css.map */

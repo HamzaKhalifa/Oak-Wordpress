@@ -1,0 +1,88 @@
+{
+    "data": [
+        {
+            "principle": "Implication des parties prenantes",
+            "criteria": [
+                "Les groupes de parties prenantes sont cités.",
+                "Une cartographie des parties prenantes est présente.",
+                "Le contenu du rapport s'appuie sur les résultats d'une démarche d'implication des parties prenantes.",
+                "Les résultats qui éclairent les décisions sont en phase avec les enjeux pertinents présentés."
+            ]
+        },
+        {
+            "principle": "Contexte du développement durable",
+            "criteria": [
+                "Il existe une cartographie des risques ESG dans la chaîne de valeur.",
+                "Il est fait référence aux enjeux DD présents et futurs du secteur et aux opportunités correspondantes.",
+                "Il est clairement établi un lien du développement durable avec le business modèle de l'entreprise.",
+                "Les impacts sont connectés avec les Objectifs de Développement Durable (ODD)."
+            ]
+        },
+        {
+            "principle": "Pertinence/Matérialité",
+            "criteria": [
+                "Une enquête a été menée par des spécialistes reconnus auprès des parties prenantes.",
+                "L'étude s'appuie sur les enjeux et défis du secteur.",
+                "Une étude de matérialité a été réalisée et la méthodologie est présentée.",
+                "Une matrice de matérialité positionne les enjeux les plus pertinents."
+            ]
+        },
+        {
+            "principle": "Exhaustivité",
+            "criteria": [
+                "Le rapport prend en compte les impacts causés et couvre et hiérarchise toutes les informations pertinentes.",
+                "Le rapport prend en compte les impacts significatifs futurs.",
+                "Une approche géographique ou sectorielle permet de comprendre les enjeux des activités de l'entreprise."
+            ]
+        },
+        {
+            "principle": "Exactitude",
+            "criteria": [
+                "L'entreprise présente les données mesurées.",
+                "Un protocole de reporting est présenté et détaille la méthodologie de consolidation des données.",
+                "Les méthodes d'évaluation sont précisées (données réelles ou extrapolation)",
+                "Les déclarations qualitatives sont cohérentes avec les données quantitatives."
+            ]
+        },
+        {
+            "principle": "Equilibre",
+            "criteria": [
+                "L'entreprise communique des informations sur la prise en compte des sujets de crise et des actions correctives.",
+                "L'entreprise mentionne les sujets de polémique publiés dans les médias et réseaux sociaux.",
+                "Les tendances positives et négatives sont présentées de manière claire."
+            ]
+        },
+        {
+            "principle": "Clarté",
+            "criteria": [
+                "Le reporting a une navigation claire et compréhensible.",
+                "La communication envers les parties prenantes est concise.",
+                "Le rapport a un ton pédagogique et explicatif.",
+                "Les informations sont accessibles pour les parties prenantes ayant des besoins particuliers."
+            ]
+        },
+        {
+            "principle": "Comparabilité",
+            "criteria": [
+                "Des benchmarks, évaluations et distinctions par des organisations externes sont mentionnés.",
+                "Les tendances des indicateurs de performance et objectifs à moyen ou long terme sont analysées.",
+                "L'entreprise applique des référentiels internationaux reconnus pour le reporting tels que GRI et/ou IR."
+            ]
+        },
+        {
+            "principle": "Fiabilité",
+            "criteria": [
+                "Le protocole de reporting précise la méthodologie de vérification externe.",
+                "Les sources des informations sont citées dans le rapport.",
+                "Une déclaration est incluse sur les marges d'erreur acceptables."
+            ]
+        },
+        {
+            "principle": "Respect des délais",
+            "criteria": [
+                "Le cycle de reporting est régulier (au plus bisannuel).",
+                "Il existe une proximité temporelle des événements décrits."
+            ]
+        }
+    ]
+}

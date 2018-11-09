@@ -1,0 +1,247 @@
+body #wpcontent {
+    padding-left: 0px;
+}
+
+body .dawn_hidden {
+    display: none;
+}
+
+.dawn_critical_analysis__configuration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dawn_critical_analysis_configuration__principles {
+    width: 80%
+}
+
+.dawn_critical_analysis_configuration_principles__title_container {
+    background-color: #3B414E;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container__title {
+    color: white;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container__add_principle_button, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button, .dawn_critical_analysis_configuration_principles_principle_add_container__add_button {
+    background-color: #24E08C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    border-radius: 10px;
+    transition: all .2s ease-in-out;
+    border: 1px solid #24E08C;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container__add_principle_button:hover, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button:hover, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button:hover, .dawn_critical_analysis_configuration_principles_principle_add_container__add_button:hover {
+    cursor: pointer;
+    background-color: white;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container__add_principle_button:hover span, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button:hover span {
+    color: #24E08C;
+}
+
+.dawn_critical_analysis_configuration_principles_title_container_add_principle_button__text, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container_add_button__text, .dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container_cancel_button__text, .dawn_critical_analysis_configuration_principles_principle_add_container_add_button__text {
+    color: white;
+}
+
+.dawn_critical_analysis_configuration_principles__principle {
+    border: 1px solid #E1E1E1;
+    margin-top: 20px;
+    background-color: white;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__add_container {
+    background-color: #F5F5F5;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 0px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 30px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_container__title {
+    margin-left: 20px;
+    font-size: 30px;
+    line-height: 30px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_add_container__add_button {
+    width: 150px;
+    background-color: #389EF0;
+    border: 1px solid #389EF0; 
+    margin-right: 20px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_add_container__add_button:hover span {
+    color: #389EF0
+}
+
+.dawn_critical_analysis_configuration_principles_principle_criteria__criterion {
+    padding: 0px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #F5F5F5;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_criteria_criterion_delete {
+    text-align: center;
+}
+
+.fa-minus-square, .fa-trash-alt {
+    color: #FC394D;
+    font-size: 18px;
+}
+
+.fa-minus-square:hover, .fa-trash-alt:hover {
+    cursor: pointer;
+}
+
+.dawn_critical_analysis_configuration__save_button, .dawn_critical_analysis_configuration__load_base_data_button {
+    background-color: #389EF0;
+    margin-top: 30px;
+    border: 1px solid #389EF0;
+    transition: all .2s ease-in-out;
+    width: 80%;
+    padding: 10px 0px;
+    text-align: center;
+}
+
+.dawn_critical_analysis_configuration__save_button span, .dawn_critical_analysis_configuration__load_base_data_button span {
+    color: white;
+}
+
+.dawn_critical_analysis_configuration__save_button:hover, .dawn_critical_analysis_configuration__load_base_data_button:hover {
+    cursor: pointer;
+    background-color: white;
+}
+
+.dawn_critical_analysis_configuration__save_button:hover span, .dawn_critical_analysis_configuration__load_base_data_button:hover span {
+    color: #389EF0;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_criteria_criterion__title {
+    padding-right: 10px;
+}
+
+// For the modals container
+
+.dawn_critical_analysis_configuration__modals_container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    right: 0px;
+    top: 0px;
+    transition: all .3s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    z-index: -10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dawn_critical_analysis_configuration__modals_container_activated {
+    opacity: 1;
+    z-index: 10;
+}
+
+// Done with the modals container
+
+// For the add principal modal
+
+.dawn_critical_analysis_configuration_modals_container__add_principle_modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 40%;
+    background-color: white;
+    padding: 20px;
+    position: fixed;
+    top: 30%;
+}
+
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal__title_container {
+    text-align: center;
+}
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal__buttons_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button {
+    background-color: #FC394D;
+    border: 1px solid #FC394D;
+}
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button:hover span {
+    color: #FC394D;
+}
+
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal__error {
+    color: #FC394D;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+// Done with the add principle modal
+
+
+// For the loader
+.dawn_loader {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+    position: fixed;
+    top: 30%;
+}
+  .dawn_loader:after {
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    margin: 6px;
+    box-sizing: border-box;
+    border: 26px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: dawn_loader 1.2s infinite;
+  }
+  @keyframes dawn_loader {
+    0% {
+      transform: rotate(0);
+      animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    50% {
+      transform: rotate(900deg);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    100% {
+      transform: rotate(1800deg);
+    }
+  }
+
+  
+// Done with the loader
