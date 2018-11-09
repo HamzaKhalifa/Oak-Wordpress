@@ -12,7 +12,7 @@
     </div>
     <div class="dawn_critical_analysis_configuration__load_base_data_button">
         <span class="dawn_critical_analysis_configuration_oad_base_data_button__text">
-            Charger les données base.
+            Charger les données de base.
         </span>
     </div>
 

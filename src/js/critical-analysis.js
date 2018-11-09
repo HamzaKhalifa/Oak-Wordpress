@@ -191,7 +191,7 @@ function addCriticalAnalysis(title, analysis) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'ff',
+                label: title,
                 data: scores,
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255,99,132,1)',
