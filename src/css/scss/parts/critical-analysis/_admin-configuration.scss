@@ -58,6 +58,64 @@ body .dawn_hidden {
     border: 1px solid #E1E1E1;
     margin-top: 20px;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__definition_label {
+    padding-left: 20px;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_roles_title_container__label {
+    padding-left: 20px;
+    font-size: 15px;
+    margin-right: 20px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__textarea, .dawn_critical_analysis_configuration_principles_principle__single_role_textarea {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__single_role_textarea {
+    width: 100%;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__role_title_container {
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_role_title_container__title {
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_role_title_container__textarea {
+    width: 100%;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__roles_title_container, .dawn_critical_analysis_configuration_principles_principle__single_role {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__single_role {
+    margin-bottom: 20px;
+    justify-content: stretch;
+}
+
+.dawn_critical_analysis_configuration_principles_principle__roles_title_container {
+    justify-content: flex-start;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .dawn_critical_analysis_configuration_principles_principle__add_container {
@@ -108,7 +166,12 @@ body .dawn_hidden {
     font-size: 18px;
 }
 
-.fa-minus-square:hover, .fa-trash-alt:hover {
+.fa-plus-square {
+    color: #389EF0;
+    font-size: 18px;
+}
+
+.fa-minus-square:hover, .fa-trash-alt:hover, .fa-plus-square:hover {
     cursor: pointer;
 }
 
@@ -199,7 +262,7 @@ body .dawn_hidden {
     color: #FC394D;
 }
 
-.dawn_critical_analysis_configuration_modals_container_add_principle_modal__error {
+.dawn_critical_analysis_configuration_modals_container_add_principle_modal__error, .dawn_critical_analysis_configuration__load_default_data_error {
     color: #FC394D;
     margin-top: 5px;
     font-weight: bold;

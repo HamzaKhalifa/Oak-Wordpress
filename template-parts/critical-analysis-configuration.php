@@ -9,12 +9,19 @@
                 </span>
             </div>
         </div>
+
+        <!-- Here we are gonna be adding the principles -->
+        
     </div>
+
+
     <div class="dawn_critical_analysis_configuration__load_base_data_button">
         <span class="dawn_critical_analysis_configuration_oad_base_data_button__text">
             Charger les données de base.
         </span>
     </div>
+
+    <span class="dawn_critical_analysis_configuration__load_default_data_error"></span>
 
     <div class="dawn_critical_analysis_configuration__save_button">
         <span class="dawn_critical_analysis_configuration_save_button__text">

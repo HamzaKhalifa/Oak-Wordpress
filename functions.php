@@ -58,7 +58,6 @@ class Dawn {
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'adminUrl' => admin_url(),
                 'principles' => get_option('dawn_principles') ? get_option('dawn_principles') : [],
-                'criteria' => get_option('dawn_criteria') ? get_option('dawn_criteria') : [],
                 'baseData' => $base_data
             ));
         endif;
@@ -70,7 +69,6 @@ class Dawn {
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'adminUrl' => admin_url(),
                 'principles' => get_option('dawn_principles') ? get_option('dawn_principles') : [],
-                'criteria' => get_option('dawn_criteria') ? get_option('dawn_criteria') : [],
                 'baseData' => $base_data,
                 'analyzes' => get_option('dawn_analyzes') ? get_option('dawn_analyzes') : []
             ));
@@ -302,14 +300,10 @@ class Dawn {
     }
 
     function dawn_save_analysis_model() {
-        $principles = $_GET['principles'];
-        $criteria = $_GET['criteria'];
+        $data = $_POST['data'];
 
-        update_option( 'dawn_principles', $principles, false );
-        update_option( 'dawn_criteria', $criteria, false );
+        update_option( 'dawn_principles', $data, false );
         wp_send_json_success( array(
-            'principles' => get_option('dawn_principles'),
-            'criteria' => get_option('dawn_criteria')
         ) );
     }
 

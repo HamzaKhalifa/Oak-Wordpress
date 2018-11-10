@@ -2,6 +2,15 @@
     "data": [
         {
             "principle": "Implication des parties prenantes",
+            "principleDescription": "l’organisation doit identifier ses parties prenantes et expliquer comment elle a répondu à leurs attentes et intérêts légitimes. Elle doit renforcer l’adhésion et l’appropriation du rapport par les parties prenantes.",
+            "content": {
+                "title": "L’organisation peut décrire les parties prenantes envers lesquelles elle se considère redevable.",
+                "roles": [
+                    "Le contenu du rapport s’appuie sur les résultats des démarches d’implication des parties prenantes utilisées par l’organisation dans le cadre de ses activités, conformément au cadre légal et institutionnel dans lequel elle opère.",
+                    "Le contenu du rapport s’appuie sur les résultats de toute démarche d’implication des parties prenantes mise en œuvre spécifiquement pour le rapport.",
+                    "Les résultats des démarches d’implication des parties prenantes qui éclairent les décisions concernant le rapport sont en phase avec les enjeux pertinents inclus dans le rapport."
+                ]
+            },
             "criteria": [
                 "Les groupes de parties prenantes sont cités.",
                 "Une cartographie des parties prenantes est présente.",
@@ -11,6 +20,15 @@
         },
         {
             "principle": "Contexte du développement durable",
+            "principleDescription": "le rapport doit présenter la performance de l’organisation dans le contexte plus large du développement durable. Les informations relatives à la performance doivent être mises en contexte.",
+            "content": {
+                "title": "L’organisation présente sa compréhension du développement durable, en s’appuyant sur les informations objectives dont elle dispose, ainsi que des mesures de principe en la matière pour les enjeux concernés.",
+                "roles": [
+                    "L’organisation présente sa performance par rapport à des conditions et objectifs de développement durable plus larges, tels que définis dans les instruments reconnus à l’échelle sectorielle, locale, régionale ou internationale.",
+                    "L’organisation présente sa performance de façon à communiquer ses impacts et ses contributions dans les contextes géographiques appropriés.",
+                    "Les enjeux environnementaux et/ou sociaux concernent sa stratégie à long terme, ses risques, ses opportunités et ses objectifs, notamment dans le cadre de sa chaîne de valeur."
+                ]
+            },
             "criteria": [
                 "Il existe une cartographie des risques ESG dans la chaîne de valeur.",
                 "Il est fait référence aux enjeux DD présents et futurs du secteur et aux opportunités correspondantes.",
@@ -20,6 +38,21 @@
         },
         {
             "principle": "Pertinence/Matérialité",
+            "principleDescription": "le rapport doit porter sur les aspects qui reflètent les impacts économiques, environnementaux et sociaux substantiels de l’organisation ou ceux qui influent de manière significative sur les évaluations et décisions des parties prenantes.",
+            "content": {
+                "title": "Lors de la définition des enjeux pertinents, l’organisation a pris en compte les facteurs suivants :",
+                "roles": [
+                    "les impacts économiques, environnementaux et/ou sociaux estimables de manière raisonnable (tels que le changement climatique, le VIH/SIDA ou la pauvreté) identifiés au moyen d’une enquête en bonne et due forme par des spécialistes reconnus ou par des organes experts dont les compétences sont reconnues",
+                    "les intérêts et les attentes des parties prenantes particulièrement investies dans l’organisation, tels que les employés et les actionnaires",
+                    "les intérêts et enjeux économiques, sociaux et/ou environnementaux plus larges exprimés par les parties prenantes telles que les travailleurs qui ne sont pas des employés, les fournisseurs, les communautés locales, les groupes vulnérables et la société civile",
+                    "les enjeux principaux et les défis à venir pour un secteur, tels qu’ils sont identifiés par les pairs et les concurrents ; les lois, réglementations, accords internationaux ou accords volontaires ayant une importance stratégique pour l’organisation et ses parties prenantes",
+                    "les valeurs, politiques, stratégies, systèmes de management opérationnel, objectifs et cibles clés de l’organisation ;",
+                    "les compétences essentielles de l’organisation et leur contribution au développement durable",
+                    "les conséquences pour l’organisation qui sont liées à ses impacts sur l’économie, l’environnement et/ou la société (par exemple, les risques pour son modèle opérationnel ou sa réputation)",
+                    "les enjeux pertinents sont hiérarchisés par ordre de priorité approprié dans le rapport."
+                    
+                ]
+            },
             "criteria": [
                 "Une enquête a été menée par des spécialistes reconnus auprès des parties prenantes.",
                 "L'étude s'appuie sur les enjeux et défis du secteur.",
@@ -29,6 +62,14 @@
         },
         {
             "principle": "Exhaustivité",
+            "principleDescription": "le rapport doit suffisamment aborder les aspects pertinents et leurs périmètres afin de refléter les impacts économiques, environnementaux et sociaux substantiels et permettre aux parties prenantes d’évaluer la performance de l’organisation sur la période de reporting.",
+            "content": {
+                "title": "Le rapport prend en compte les impacts causés par l’organisation, ceux auxquels elle contribue ou ceux auxquels elle est directement liée à travers une relation d’affaires. Il couvre et hiérarchise toutes les informations pertinentes sur la base des principes de matérialité, du contexte de développement durable et de la prise en compte des parties prenantes.",
+                "roles": [
+                    "Les informations du rapport comprennent l’ensemble des impacts significatifs pour la période de reporting, ainsi que les estimations raisonnables des impacts significatifs futurs lorsque ces impacts sont raisonnablement prévisibles et peuvent devenir inévitables ou irréversibles.",
+                    "Le rapport n’omet pas d’informations pertinentes qui ont une influence significative sur les évaluations et les décisions des parties prenantes ou qui couvrent les impacts économiques, environnementaux et sociaux significatifs."
+                ]
+            },
             "criteria": [
                 "Le rapport prend en compte les impacts causés et couvre et hiérarchise toutes les informations pertinentes.",
                 "Le rapport prend en compte les impacts significatifs futurs.",
@@ -37,6 +78,16 @@
         },
         {
             "principle": "Exactitude",
+            "principleDescription": "Les informations du rapport doivent être exactes et suffisamment détaillées pour que les parties prenantes puissent évaluer la performance de l’organisation.",
+            "content": {
+                "title": "Le rapport indique les données qui ont été mesurées.",
+                "roles": [
+                    "Les mesures de données et les méthodes de calcul sont décrites de manière adéquate. Les analyses sont reproductibles et produisent des résultats similaires.",
+                    "La marge d’erreur des données quantitatives n’est pas suffisante pour influencer de manière significative la capacité des parties prenantes à tirer des conclusions appropriées en toute connaissance de cause.",    
+                    "Le rapport indique quelles données ont été estimées et les hypothèses sous-jacentes et techniques utilisées pour l’estimation ou la source des informations.",
+                    "Les déclarations qualitatives du rapport sont cohérentes avec d’autres informations du rapport et d’autres données probantes disponibles."
+                ]
+            },
             "criteria": [
                 "L'entreprise présente les données mesurées.",
                 "Un protocole de reporting est présenté et détaille la méthodologie de consolidation des données.",
@@ -46,6 +97,14 @@
         },
         {
             "principle": "Equilibre",
+            "principleDescription": "le rapport doit refléter les aspects positifs et négatifs de la performance de l’organisation afin de permettre une appréciation juste de sa performance globale. La présentation générale de son contenu doit montrer de manière objective la performance de l’organisation.",
+            "content": {
+                "title": "Le rapport couvre à la fois les résultats et enjeux favorables et défavorables.",
+                "roles": [
+                    "Les informations du rapport sont présentées dans un format qui permet aux utilisateurs de visualiser les tendances positives et négatives de la performance d’année en année.",
+                    "L’accent est mis différemment sur les divers enjeux du rapport afin de refléter leurs priorités relatives."
+                ]
+            },
             "criteria": [
                 "L'entreprise communique des informations sur la prise en compte des sujets de crise et des actions correctives.",
                 "L'entreprise mentionne les sujets de polémique publiés dans les médias et réseaux sociaux.",
@@ -54,6 +113,15 @@
         },
         {
             "principle": "Clarté",
+            "principleDescription": "l’organisation doit rendre les informations disponibles de manière compréhensible et accessible aux parties prenantes qui utilisent ces informations.",
+            "content": {
+                "title": "Le rapport contient le niveau d’informations exigé par les parties prenantes, mais évite des détails excessifs et inutiles.",
+                "roles": [
+                    "Les parties prenantes peuvent repérer les informations spécifiques qu’elles recherchent sans effort déraisonnable, grâce à des tables des matières, des cartes, des liens ou d’autres aides.",
+                    "Le rapport évite les termes techniques, les acronymes, le jargon ou autres contenus susceptibles de ne pas être connus des parties prenantes. Il inclut des explications (lorsque cela est nécessaire) dans le chapitre pertinent ou dans un glossaire.",
+                    "Les informations du rapport sont à la disposition de toutes les parties prenantes, y compris celles ayant des besoins particuliers en matière d’accessibilité, par exemple des capacités, langues ou technologies différentes."
+                ]
+            },
             "criteria": [
                 "Le reporting a une navigation claire et compréhensible.",
                 "La communication envers les parties prenantes est concise.",
@@ -63,6 +131,15 @@
         },
         {
             "principle": "Comparabilité",
+            "principleDescription": "l’organisation doit choisir, compiler et rapporter les informations de façon cohérente. La présentation des informations communiquées doit permettre aux parties prenantes d’analyser les changements survenus dans la performance de l’organisation au fil du temps et de la comparer avec celle d’autres organisations.",
+            "content": {
+                "title": "Les informations figurant dans le rapport peuvent être comparées d’année en année.",
+                "roles": [
+                    "La performance de l’organisation peut être comparée à des références appropriées.",
+                    "Toute variation significative entre les périodes de reporting au niveau des enjeux pertinents, des périmètres des enjeux, de la durée de la période de reporting ou des informations fournies dans le rapport peut être identifiée ou expliquée.",
+                    "Le rapport utilise des protocoles généralement acceptés, s’ils sont disponibles, afin de compiler, mesurer et présenter les informations, notamment les informations requises par les normes GRI."
+                ]
+            },
             "criteria": [
                 "Des benchmarks, évaluations et distinctions par des organisations externes sont mentionnés.",
                 "Les tendances des indicateurs de performance et objectifs à moyen ou long terme sont analysées.",
@@ -71,6 +148,15 @@
         },
         {
             "principle": "Fiabilité",
+            "principleDescription": "L’organisation doit rassembler, enregistrer, compiler, analyser et rapporter les informations et procédures utilisées lors de la préparation du rapport de manière à permettre leur examen et à garantir la qualité et la matérialité des informations.",
+            "content": {
+                "title": "La portée et l’étendue de la vérification externe sont identifiées.",
+                "roles": [
+                    "L’organisation peut citer les sources à l’origine des informations du rapport.",
+                    "L’organisation peut fournir des preuves fiables pour étayer les hypothèses ou les calculs complexes.",
+                    "Une déclaration a été faite par les propriétaires des données ou des informations sources, attestant de l’exactitude dans des marges d’erreur acceptables."
+                ]
+            },
             "criteria": [
                 "Le protocole de reporting précise la méthodologie de vérification externe.",
                 "Les sources des informations sont citées dans le rapport.",
@@ -79,6 +165,15 @@
         },
         {
             "principle": "Respect des délais",
+            "principleDescription": "L’organisation doit établir un rapport à intervalles réguliers afin que les informations soient disponibles à temps pour que les parties prenantes puissent prendre des décisions éclairées.",
+            "content": {
+                "title": "",
+                "roles": [
+                    "Les informations figurant dans le rapport sont récentes par rapport à la période de reporting.",
+                    "Le rapport indique clairement la période à laquelle il est fait référence, la date à laquelle les informations seront mises à jour et la date à laquelle les dernières modifications ont été effectuées.",
+                    "Toute réaffirmation des éléments d’information précédents, ainsi que les raisons de cette réaffirmation sont distinctes du reste du contenu."
+                ]
+            },
             "criteria": [
                 "Le cycle de reporting est régulier (au plus bisannuel).",
                 "Il existe une proximité temporelle des événements décrits."

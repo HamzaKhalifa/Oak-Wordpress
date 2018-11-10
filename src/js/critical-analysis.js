@@ -93,66 +93,86 @@ function addCriticalAnalysis(title, analysis) {
 
         var principleTitleH3 = document.createElement('h3');
         principleTitleH3.className = 'dawn_admin_analysis_list_single_analysis_single_principle__principle_title';
+        var principleDefinition = analysis ? analysis.principles[i].principleDescription : DATA.principles[i].principleDescription;
+        var principleContentTitle = analysis ? analysis.principles[i].content.title : DATA.principles[i].content.title;
+        principleTitleH3.setAttribute('principleDefinition', principleDefinition);
+        principleTitleH3.setAttribute('principleContentTitle', principleContentTitle);
+        principleTitleH3.innerHTML = analysis ? principlesData[i].principle.replace(/\\/g, '') : DATA.principles[i].principle.replace(/\\/g, '');
 
-        principleTitleH3.innerHTML = analysis ? principlesData[i].title.replace(/\\/g, '') : DATA.principles[i].replace(/\\/g, '');
+        var hiddenRolesContainer = document.createElement('div');
+        hiddenRolesContainer.className = 'dawn_hidden_information_container';
+        singlePrincipleDiv.append(hiddenRolesContainer);
+
+        var principleRoles = analysis ? analysis.principles[i].content.roles : DATA.principles[i].content.roles;
+        if (principleRoles) {
+            for (var j = 0; j < principleRoles.length; j++) {
+                var roleDiv = document.createElement('div');
+                roleDiv.setAttribute('role', principleRoles[j]);
+                roleDiv.className = 'dawn_principle_role_hidden_information';
+                hiddenRolesContainer.append(roleDiv);
+            }
+        }
+        
 
         singlePrincipleDiv.append(principleTitleH3);
 
-        var criteriaData = analysis ? principlesData[i].criteria : DATA.criteria[i];
+        var criteriaData = analysis ? principlesData[i].criteria : DATA.principles[i].criteria;
         
-        for (var j = 0; j < criteriaData.length; j++) {
-            var singleCriteriaDiv = document.createElement('div');
-            singleCriteriaDiv.className = 'dawn_admin_analysis_list_single_analysis_single_principle__single_criteria';
-
-            singlePrincipleDiv.append(singleCriteriaDiv);
-
-            var singleCriteriaUpperContent = document.createElement('div');
-            singleCriteriaUpperContent.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__upper_content';
-
-            singleCriteriaDiv.append(singleCriteriaUpperContent);
-
-            var singleCriteriaTitleH4 = document.createElement('h4');
-            singleCriteriaTitleH4.classList = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__criteria_title';
-            singleCriteriaTitleH4.innerHTML = analysis ? criteriaData[j].title.replace(/\\/g, '') : DATA.criteria[i][j].replace(/\\/g, '');
-
-            singleCriteriaUpperContent.append(singleCriteriaTitleH4);
-
-            var singleCriteriaScoreContainer = document.createElement('div');
-            singleCriteriaScoreContainer.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content__score_container';
-
-            singleCriteriaUpperContent.append(singleCriteriaScoreContainer);
-
-            var scoreContainerLabel1 = document.createElement('span');
-            scoreContainerLabel1.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label';
-            scoreContainerLabel1.innerHTML = 'SCORE: ';
-
-            var scoreContainerInput = document.createElement('input');
-            scoreContainerInput.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__score';
-            scoreContainerInput.setAttribute('type', 'number');
-            scoreContainerInput.value = analysis ? criteriaData[j].score.replace(/\\/g, '') : '';
-
-            var scoreContainerLabel2 = document.createElement('span');
-            scoreContainerLabel2.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label';
-            scoreContainerLabel2.innerHTML = '%';
-
-            singleCriteriaScoreContainer.append(scoreContainerLabel1);
-            singleCriteriaScoreContainer.append(scoreContainerInput);
-            singleCriteriaScoreContainer.append(scoreContainerLabel2);
-
-
-            var remarkLabel = document.createElement('span');
-            remarkLabel.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark_label';
-            remarkLabel.innerHTML = 'Remarques: ';
-
-            singleCriteriaDiv.append(remarkLabel);
-
-            var remarkTextarea = document.createElement('textarea');
-            remarkTextarea.setAttribute('cols', '30');
-            remarkTextarea.setAttribute('rows', '10');
-            remarkTextarea.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark';
-            remarkTextarea.value = analysis ? criteriaData[j].remark.replace(/\\/g, '') : '';
-
-            singleCriteriaDiv.append(remarkTextarea);
+        if (criteriaData) {
+            for (var j = 0; j < criteriaData.length; j++) {
+                var singleCriteriaDiv = document.createElement('div');
+                singleCriteriaDiv.className = 'dawn_admin_analysis_list_single_analysis_single_principle__single_criteria';
+    
+                singlePrincipleDiv.append(singleCriteriaDiv);
+    
+                var singleCriteriaUpperContent = document.createElement('div');
+                singleCriteriaUpperContent.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__upper_content';
+    
+                singleCriteriaDiv.append(singleCriteriaUpperContent);
+    
+                var singleCriteriaTitleH4 = document.createElement('h4');
+                singleCriteriaTitleH4.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__criteria_title';
+                singleCriteriaTitleH4.innerHTML = analysis ? criteriaData[j].title.replace(/\\/g, '') : DATA.principles[i].criteria[j].replace(/\\/g, '');
+    
+                singleCriteriaUpperContent.append(singleCriteriaTitleH4);
+    
+                var singleCriteriaScoreContainer = document.createElement('div');
+                singleCriteriaScoreContainer.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content__score_container';
+    
+                singleCriteriaUpperContent.append(singleCriteriaScoreContainer);
+    
+                var scoreContainerLabel1 = document.createElement('span');
+                scoreContainerLabel1.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label';
+                scoreContainerLabel1.innerHTML = 'SCORE: ';
+    
+                var scoreContainerInput = document.createElement('input');
+                scoreContainerInput.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__score';
+                scoreContainerInput.setAttribute('type', 'number');
+                scoreContainerInput.value = analysis ? criteriaData[j].score.replace(/\\/g, '') : '';
+    
+                var scoreContainerLabel2 = document.createElement('span');
+                scoreContainerLabel2.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label';
+                scoreContainerLabel2.innerHTML = '%';
+    
+                singleCriteriaScoreContainer.append(scoreContainerLabel1);
+                singleCriteriaScoreContainer.append(scoreContainerInput);
+                singleCriteriaScoreContainer.append(scoreContainerLabel2);
+    
+    
+                var remarkLabel = document.createElement('span');
+                remarkLabel.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark_label';
+                remarkLabel.innerHTML = 'Remarques: ';
+    
+                singleCriteriaDiv.append(remarkLabel);
+    
+                var remarkTextarea = document.createElement('textarea');
+                remarkTextarea.setAttribute('cols', '30');
+                remarkTextarea.setAttribute('rows', '10');
+                remarkTextarea.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark';
+                remarkTextarea.value = analysis ? criteriaData[j].remark.replace(/\\/g, '') : '';
+    
+                singleCriteriaDiv.append(remarkTextarea);
+            }
         }
     }
 
@@ -172,7 +192,7 @@ function addCriticalAnalysis(title, analysis) {
     var scores = [];
     if (analysis) {
         for (var i = 0; i < analysis.principles.length; i++) {
-            labels.push(analysis.principles[i].title);
+            labels.push(analysis.principles[i].principle);
             var allScores = 0;
             for (var j = 0; j < analysis.principles[i].criteria.length; j++) {
                 var score = analysis.principles[i].criteria[j].score == '' ? 0 : parseFloat(analysis.principles[i].criteria[j].score);
@@ -181,8 +201,9 @@ function addCriticalAnalysis(title, analysis) {
             scores.push(allScores / analysis.principles[i].criteria.length);
         }
     } else {
-        labels = DATA.principles;
+        labels = [];
         for (var i = 0; i < DATA.principles.length; i++) {
+            labels.push(DATA.principles[i].principle);
             scores.push(0);
         }
     }
@@ -254,10 +275,22 @@ function saveAll() {
         var principles = allAnalyzes[i].getElementsByClassName('dawn_admin_analysis_list_single_analysis__single_principle');
         for (var j = 0; j < principles.length; j++) {
             var principle = {
-                title: '',
+                principle: '',
+                principleDescription: '',
+                content: {
+                    title: '',
+                    roles: []
+                },
                 criteria: []
             }
-            principle.title = principles[j].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle__principle_title').innerHTML;
+            principle.principle = principles[j].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle__principle_title').innerHTML;
+            principle.principleDescription = principles[j].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle__principle_title').getAttribute('principleDefinition');
+            principle.content.title = principles[j].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle__principle_title').getAttribute('principleContentTitle');
+            var rolesDivs = principles[j].querySelector('.dawn_hidden_information_container').getElementsByClassName('dawn_principle_role_hidden_information');
+            for (var m = 0; m < rolesDivs.length; m++) {
+                principle.content.roles.push(rolesDivs[m].getAttribute('role'));
+            }
+
             var criteria = principles[j].getElementsByClassName('dawn_admin_analysis_list_single_analysis_single_principle__single_criteria');
             for (var m = 0; m < criteria.length; m++) {
                 var criterion = {
