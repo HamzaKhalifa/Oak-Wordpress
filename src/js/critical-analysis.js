@@ -194,11 +194,17 @@ function addCriticalAnalysis(title, analysis) {
         for (var i = 0; i < analysis.principles.length; i++) {
             labels.push(analysis.principles[i].principle);
             var allScores = 0;
-            for (var j = 0; j < analysis.principles[i].criteria.length; j++) {
-                var score = analysis.principles[i].criteria[j].score == '' ? 0 : parseFloat(analysis.principles[i].criteria[j].score);
-                allScores+=score;
+            if (analysis.principles[i].criteria) {
+                for (var j = 0; j < analysis.principles[i].criteria.length; j++) {
+                    var score = analysis.principles[i].criteria[j].score == '' ? 0 : parseFloat(analysis.principles[i].criteria[j].score);
+                    allScores+=score;
+                }
             }
-            scores.push(allScores / analysis.principles[i].criteria.length);
+            var scoreToPush = 0;
+            if (analysis.principles[i].criteria) {
+                scoreToPush = allScores / analysis.principles[i].criteria.length
+            } 
+            scores.push(scoreToPush);
         }
     } else {
         labels = [];

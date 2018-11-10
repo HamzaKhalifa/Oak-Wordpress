@@ -19,7 +19,7 @@ class Dawn {
 
         add_action( 'admin_menu', array( $this, 'dawn_handle_admin_menu' ) );
 
-        // add_filter('acf/load_field/name=list_of_disclosures', array( $this, 'dawn_link_disclosures' ) );
+        add_filter('acf/load_field/name=analyzes', array( $this, 'dawn_set_analyzes' ) );
 
         // For Ajax requests
         add_action('wp_ajax_dawn_save_analysis_model', array( $this, 'dawn_save_analysis_model') );
@@ -41,7 +41,7 @@ class Dawn {
 
 
     function dawn_admin_enqueue_styles( $hook ) {
-        if ( $hook == 'analyse-critique_page_dawn_critical_analysis_configuration' || $hook = 'toplevel_page_dawn_critical_analysis' ) :
+        if ( get_current_screen()->id == 'toplevel_page_dawn_critical_analysis' || get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' ) :
             wp_enqueue_style( 'dawn_the_style', get_stylesheet_directory_uri() . '/style.css' );
             // wp_enqueue_style( 'dawn_font-awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
             ?>
@@ -50,8 +50,8 @@ class Dawn {
         endif;
     }
 
-    function dawn_admin_enqueue_scripts( $hook ) {
-        if ( $hook == 'analyse-critique_page_dawn_critical_analysis_configuration' ) :
+    function dawn_admin_enqueue_scripts( $hook ) { 
+        if ( get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' ) :
             wp_enqueue_script( 'dawn_critical_analysis_configuration', get_template_directory_uri() . '/src/js/critical-analysis-configuration.js', array('jquery'), false, true);
             $base_data = json_decode( file_get_contents( get_template_directory_uri() . '/src/data/basedata.json' ), true );
             wp_localize_script( 'dawn_critical_analysis_configuration', 'DATA', array (
@@ -62,7 +62,7 @@ class Dawn {
             ));
         endif;
 
-        if ( $hook == 'toplevel_page_dawn_critical_analysis' ) : 
+        if ( get_current_screen()->id == 'toplevel_page_dawn_critical_analysis' ) :
             wp_enqueue_script( 'dawn_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
             wp_enqueue_script( 'dawn_critical_analysis', get_template_directory_uri() . '/src/js/critical-analysis.js', array('jquery'), false, true);
             wp_localize_script( 'dawn_critical_analysis', 'DATA', array (
@@ -287,6 +287,17 @@ class Dawn {
         include get_template_directory() . '/functions/glossary.php';
         include get_template_directory() . '/functions/gri.php';
         include get_template_directory() . '/functions/standards-series.php';
+        include get_template_directory() . '/functions/critical_analyzes.php';
+    }
+
+    function dawn_set_analyzes( $field ) {
+        $choices = $field['choices'];
+        $analyzes = get_option( 'dawn_analyzes' ) ? get_option( 'dawn_analyzes') : [];
+        for ( $i = 0; $i < sizeof( $analyzes ); $i++) {
+            $choices[] = $analyzes[$i]['title'];
+        }
+        $field['choices'] = $choices;
+        return $field;
     }
 
     function dawn_contact_form() {
