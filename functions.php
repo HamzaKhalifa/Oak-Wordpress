@@ -5,7 +5,6 @@ class Dawn {
         add_action( 'wp_enqueue_scripts', array( $this, 'dawn_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'dawn_enqueue_scripts' ) );
 
-
         add_action( 'admin_enqueue_scripts', array( $this, 'dawn_admin_enqueue_styles' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'dawn_admin_enqueue_scripts' ) );
 
@@ -37,6 +36,24 @@ class Dawn {
     }
 
     function dawn_enqueue_scripts() {
+        if ( strpos( get_page_template(), "critical-analysis" ) != false ) :
+            wp_enqueue_script( 'dawn_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
+            wp_enqueue_script( 'dawn_critical_analysis_front', get_template_directory_uri() . '/src/js/critical-analysis-front.js', array('jquery'), false, true);
+            
+            $analyzes = get_option('dawn_analyzes');
+            $analyzes_field = get_field_object('analyzes');
+            $selected_analyze = $analyzes_field['choices'][ get_field('analyzes') ];
+            $analyzes = get_option('dawn_analyzes');
+            $analysis; 
+            for ( $i = 0; $i < sizeof( $analyzes ); $i++ ) :
+                if ( $analyzes[$i]['title'] == $selected_analyze ) :
+                    $analysis = $analyzes[$i];
+                endif;
+            endfor;
+            wp_localize_script('dawn_critical_analysis_front', 'DATA', array(
+                'analysis' => $analysis
+            ));
+        endif;
     }
 
 
@@ -57,6 +74,7 @@ class Dawn {
             wp_localize_script( 'dawn_critical_analysis_configuration', 'DATA', array (
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'adminUrl' => admin_url(),
+                'templateDirectoryUri' => get_template_directory_uri(),
                 'principles' => get_option('dawn_principles') ? get_option('dawn_principles') : [],
                 'baseData' => $base_data
             ));
@@ -69,7 +87,7 @@ class Dawn {
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'adminUrl' => admin_url(),
                 'principles' => get_option('dawn_principles') ? get_option('dawn_principles') : [],
-                'baseData' => $base_data,
+                // 'baseData' => $base_data,
                 'analyzes' => get_option('dawn_analyzes') ? get_option('dawn_analyzes') : []
             ));
         endif;
@@ -313,8 +331,12 @@ class Dawn {
     function dawn_save_analysis_model() {
         $data = $_POST['data'];
 
+        foreach( $data as $single_data) :
+            // save_image( $single_data['image'], $single_data['principle'] );
+        endforeach;
         update_option( 'dawn_principles', $data, false );
         wp_send_json_success( array(
+            'image' => $data['0']['image']
         ) );
     }
 
@@ -322,6 +344,32 @@ class Dawn {
         $analyzes = $_POST['analyzes'];
         update_option( 'dawn_analyzes', $analyzes );
         wp_send_json_success();
+    }
+
+    function save_image( $base64_img, $title ) {
+        // Upload dir.
+        $upload_dir  = wp_upload_dir();
+        $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+    
+        $img             = str_replace( 'data:image/png;base64,', '', $base64_img );
+        $img             = str_replace( ' ', '+', $img );
+        $decoded         = base64_decode( $img );
+        $filename        = $title . '.jpeg';
+        $file_type       = 'image/jpeg';
+        $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
+    
+        // Save the image in the uploads directory.
+        $upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
+    
+        $attachment = array(
+            'post_mime_type' => $file_type,
+            'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $hashed_filename ) ),
+            'post_content'   => '',
+            'post_status'    => 'inherit',
+            'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
+        );
+    
+        $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
     }
 }
 

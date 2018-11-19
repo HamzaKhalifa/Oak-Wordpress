@@ -2,6 +2,7 @@
     "data": [
         {
             "principle": "Implication des parties prenantes",
+            "image": "https://image.ibb.co/fpV220/Capture-d-e-cran-2018-11-19-a-16-10-53.png",
             "principleDescription": "l’organisation doit identifier ses parties prenantes et expliquer comment elle a répondu à leurs attentes et intérêts légitimes. Elle doit renforcer l’adhésion et l’appropriation du rapport par les parties prenantes.",
             "content": {
                 "title": "L’organisation peut décrire les parties prenantes envers lesquelles elle se considère redevable.",
@@ -20,6 +21,7 @@
         },
         {
             "principle": "Contexte du développement durable",
+            "image": "https://image.ibb.co/hJiY9f/Capture-d-e-cran-2018-11-19-a-16-11-07.png",
             "principleDescription": "le rapport doit présenter la performance de l’organisation dans le contexte plus large du développement durable. Les informations relatives à la performance doivent être mises en contexte.",
             "content": {
                 "title": "L’organisation présente sa compréhension du développement durable, en s’appuyant sur les informations objectives dont elle dispose, ainsi que des mesures de principe en la matière pour les enjeux concernés.",
@@ -38,6 +40,7 @@
         },
         {
             "principle": "Pertinence/Matérialité",
+            "image": "https://image.ibb.co/nhW6vL/Capture-d-e-cran-2018-11-19-a-18-57-37.png",
             "principleDescription": "le rapport doit porter sur les aspects qui reflètent les impacts économiques, environnementaux et sociaux substantiels de l’organisation ou ceux qui influent de manière significative sur les évaluations et décisions des parties prenantes.",
             "content": {
                 "title": "Lors de la définition des enjeux pertinents, l’organisation a pris en compte les facteurs suivants :",
@@ -62,6 +65,7 @@
         },
         {
             "principle": "Exhaustivité",
+            "image": "https://image.ibb.co/jpcoaL/Capture-d-e-cran-2018-11-19-a-16-11-21.png",
             "principleDescription": "le rapport doit suffisamment aborder les aspects pertinents et leurs périmètres afin de refléter les impacts économiques, environnementaux et sociaux substantiels et permettre aux parties prenantes d’évaluer la performance de l’organisation sur la période de reporting.",
             "content": {
                 "title": "Le rapport prend en compte les impacts causés par l’organisation, ceux auxquels elle contribue ou ceux auxquels elle est directement liée à travers une relation d’affaires. Il couvre et hiérarchise toutes les informations pertinentes sur la base des principes de matérialité, du contexte de développement durable et de la prise en compte des parties prenantes.",
@@ -78,6 +82,7 @@
         },
         {
             "principle": "Exactitude",
+            "image": "https://image.ibb.co/bt19h0/Capture-d-e-cran-2018-11-19-a-18-51-27.png",
             "principleDescription": "Les informations du rapport doivent être exactes et suffisamment détaillées pour que les parties prenantes puissent évaluer la performance de l’organisation.",
             "content": {
                 "title": "Le rapport indique les données qui ont été mesurées.",
@@ -97,6 +102,7 @@
         },
         {
             "principle": "Equilibre",
+            "image": "https://image.ibb.co/bt19h0/Capture-d-e-cran-2018-11-19-a-18-51-27.png",
             "principleDescription": "le rapport doit refléter les aspects positifs et négatifs de la performance de l’organisation afin de permettre une appréciation juste de sa performance globale. La présentation générale de son contenu doit montrer de manière objective la performance de l’organisation.",
             "content": {
                 "title": "Le rapport couvre à la fois les résultats et enjeux favorables et défavorables.",
@@ -113,6 +119,7 @@
         },
         {
             "principle": "Clarté",
+            "image": "https://image.ibb.co/mfbaN0/Capture-d-e-cran-2018-11-19-a-18-52-11.png",
             "principleDescription": "l’organisation doit rendre les informations disponibles de manière compréhensible et accessible aux parties prenantes qui utilisent ces informations.",
             "content": {
                 "title": "Le rapport contient le niveau d’informations exigé par les parties prenantes, mais évite des détails excessifs et inutiles.",
@@ -131,6 +138,7 @@
         },
         {
             "principle": "Comparabilité",
+            "image": "https://image.ibb.co/eOS4FL/Capture-d-e-cran-2018-11-19-a-18-54-39.png",
             "principleDescription": "l’organisation doit choisir, compiler et rapporter les informations de façon cohérente. La présentation des informations communiquées doit permettre aux parties prenantes d’analyser les changements survenus dans la performance de l’organisation au fil du temps et de la comparer avec celle d’autres organisations.",
             "content": {
                 "title": "Les informations figurant dans le rapport peuvent être comparées d’année en année.",
@@ -148,6 +156,7 @@
         },
         {
             "principle": "Fiabilité",
+            "image": "https://image.ibb.co/dN6WvL/Capture-d-e-cran-2018-11-19-a-18-54-48.png",
             "principleDescription": "L’organisation doit rassembler, enregistrer, compiler, analyser et rapporter les informations et procédures utilisées lors de la préparation du rapport de manière à permettre leur examen et à garantir la qualité et la matérialité des informations.",
             "content": {
                 "title": "La portée et l’étendue de la vérification externe sont identifiées.",
@@ -165,6 +174,7 @@
         },
         {
             "principle": "Respect des délais",
+            "image": "https://preview.ibb.co/nd6H20/Capture-d-e-cran-2018-11-19-a-19-02-13.png",
             "principleDescription": "L’organisation doit établir un rapport à intervalles réguliers afin que les informations soient disponibles à temps pour que les parties prenantes puissent prendre des décisions éclairées.",
             "content": {
                 "title": "",

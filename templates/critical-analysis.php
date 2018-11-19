@@ -1,19 +1,23 @@
 <?php 
 /* Template Name: Analyse Critique */
 
-get_header();
+include get_template_directory() . '/template-parts/critical-analyzes-front/header.php';
 
 $analyzes = get_option('dawn_analyzes');
 $analyzes_field = get_field_object('analyzes');
 $selected_analyze = $analyzes_field['choices'][ get_field('analyzes') ];
 $analyzes = get_option('dawn_analyzes');
-$analyze; 
+$analysis; 
 for ( $i = 0; $i < sizeof( $analyzes ); $i++ ) :
     if ( $analyzes[$i]['title'] == $selected_analyze ) :
-        $analyze = $analyzes[$i];
-    endif; 
+        $analysis = $analyzes[$i];
+        echo('<pre>');
+        // var_dump( $analysis );
+        echo('</pre>');
+    endif;
 endfor;
 
-// We are gonna show the analyze data here: 
+if ( $analysis )
+    include get_template_directory() . '/template-parts/critical-analyzes-front/content.php';
 
-get_footer();
+include get_template_directory() . '/template-parts/critical-analyzes-front/footer.php';

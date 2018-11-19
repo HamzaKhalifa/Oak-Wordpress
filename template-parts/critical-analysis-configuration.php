@@ -11,7 +11,6 @@
         </div>
 
         <!-- Here we are gonna be adding the principles -->
-        
     </div>
 
 

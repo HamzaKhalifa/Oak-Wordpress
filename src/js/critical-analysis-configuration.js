@@ -114,6 +114,30 @@ function addPrinciple(principleName, principleData) {
         definitionTextArea.value = principleData.principleDescription;
     }
 
+    // For the image
+    var principleImageContainerDiv = document.createElement('div');
+    principleImageContainerDiv.className = 'dawn_critical_analysis_configuration_principles_principle_image';
+
+    var principleImageTitleH3 = document.createElement('h3');
+    principleImageTitleH3.innerHTML = 'Image: '
+
+    var imageInput = document.createElement('input');
+    imageInput.id = principleName.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_image_input';
+    imageInput.setAttribute('type', 'file');
+    imageInput.setAttribute('onChange', 'readUrl(this);');
+
+    var image = document.createElement('img');
+    image.className = 'dawn_critical_analysis_configuration_principles_principle_image__image';
+    image.id = principleName.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_image';
+    if (principleData) {
+        image.setAttribute('src', principleData.image);
+    }
+
+    principleImageContainerDiv.append(principleImageTitleH3);
+    principleImageContainerDiv.append(imageInput);
+    principleImageContainerDiv.append(image);
+    // Done with the image
+
     var rolesTitleContainer = document.createElement('div');
     rolesTitleContainer.className = 'dawn_critical_analysis_configuration_principles_principle__roles_title_container';
 
@@ -179,6 +203,7 @@ function addPrinciple(principleName, principleData) {
     principleDiv.append(principleContainerDiv);
     principleDiv.append(principleDefinitionLabel);
     principleDiv.append(definitionTextArea);
+    principleDiv.append(principleImageContainerDiv);
     principleDiv.append(rolesTitleContainer);
     principleDiv.append(roleHeadingContainer);
 
@@ -244,38 +269,45 @@ function addPrinciple(principleName, principleData) {
 
     // What we are creating here
     // <div class="dawn_critical_analysis_configuration_principles__principle">
-//         <div class="dawn_critical_analysis_configuration_principles_principle__container">
-//             <h3 class="dawn_critical_analysis_configuration_principles_principle_container__title">Implication des parties prenantes</h3>
-//             <i class="fas fa-trash-alt"></i>
-//         </div>
+    //     <div class="dawn_critical_analysis_configuration_principles_principle__container">
+    //         <h3 class="dawn_critical_analysis_configuration_principles_principle_container__title">Implication des parties prenantes</h3>
+    //         <i class="fas fa-trash-alt"></i>
+    //     </div>
 
-//         <span class="dawn_critical_analysis_configuration_principles_principle__definition_label">Définition du principe</span>
-//         <textarea class="dawn_critical_analysis_configuration_principles_principle__textarea" cols="30" rows="5"></textarea>
-//         <div class="dawn_critical_analysis_configuration_principles_principle__roles_title_container">
-//             <span class="dawn_critical_analysis_configuration_principles_principle_roles_title_container__label">Roles</span>
-//             <i class="fas fa-plus-square"></i>
-//         </div>
-//         <div class="dawn_critical_analysis_configuration_principles_principle__role_title_container">
-//             <span class="dawn_critical_analysis_configuration_principles_principle_role_title_container__title">Entête des roles:</span>
-//             <textarea class="dawn_critical_analysis_configuration_principles_principle_role_title_container__textarea" cols="30" rows="2"></textarea>
-//         </div>
-//         <div class="dawn_critical_analysis_configuration_principles_principle__single_role">
-//             <textarea class="dawn_critical_analysis_configuration_principles_principle__single_role_textarea" cols="30" rows="2"></textarea>
-//             <i class="fas fa-trash-alt"></i>
-//         </div>
+    //     <span class="dawn_critical_analysis_configuration_principles_principle__definition_label">Définition du principe</span>
+    //     <textarea class="dawn_critical_analysis_configuration_principles_principle__textarea" cols="30" rows="5"></textarea>
+
+    //     <div class="dawn_critical_analysis_configuration_principles_principle_image">
+    //         <h3>Image</h3>
+    //         <input type="file" src="" onChange="readUrl(this);" alt="">
+    //         <img src="" id="principle_image" class="dawn_critical_analysis_configuration_principles_principle_image__image" alt="">
+    //     </div>
+
+    //     <div class="dawn_critical_analysis_configuration_principles_principle__roles_title_container">
+    //         <span class="dawn_critical_analysis_configuration_principles_principle_roles_title_container__label">Roles</span>
+    //         <i class="fas fa-plus-square"></i>
+    //     </div>
+    //     <div class="dawn_critical_analysis_configuration_principles_principle__role_title_container">
+    //         <span class="dawn_critical_analysis_configuration_principles_principle_role_title_container__title">Entête des roles:</span>
+    //         <textarea class="dawn_critical_analysis_configuration_principles_principle_role_title_container__textarea" cols="30" rows="2"></textarea>
+    //     </div>
+    //     <div class="dawn_critical_analysis_configuration_principles_principle__single_role">
+    //         <textarea class="dawn_critical_analysis_configuration_principles_principle__single_role_textarea" cols="30" rows="2"></textarea>
+    //         <i class="fas fa-trash-alt"></i>
+    //     </div>
 
 
-//         <div class="dawn_critical_analysis_configuration_principles_principle__criteria">
-//             <!-- This is where the criteria are gonna be added dynamically.  -->
-//         </div>
-//         <div class="dawn_critical_analysis_configuration_principles_principle__add_container">
-//             <div class="dawn_critical_analysis_configuration_principles_principle_add_container__add_button">
-//                 <span class="dawn_critical_analysis_configuration_principles_principle_add_container_add_button__text" >
-//                     Ajouter un critère
-//                 </span>
-//             </div>
-//         </div>
-//     </div>
+    //     <div class="dawn_critical_analysis_configuration_principles_principle__criteria">
+    //         <!-- This is where the criteria are gonna be added dynamically.  -->
+    //     </div>
+    //     <div class="dawn_critical_analysis_configuration_principles_principle__add_container">
+    //         <div class="dawn_critical_analysis_configuration_principles_principle_add_container__add_button">
+    //             <span class="dawn_critical_analysis_configuration_principles_principle_add_container_add_button__text" >
+    //                 Ajouter un critère
+    //             </span>
+    //         </div>
+    //     </div>
+    // </div>
 }
 
 function addCriterion(criterion) {
@@ -342,6 +374,7 @@ saveButton.addEventListener('click', function() {
     for (var i = 0; i < principles.length; i++) {
         var principleData = {
             principle: '',
+            image: '',
             principleDescription: '',
             content: {
                 title: '',
@@ -357,6 +390,10 @@ saveButton.addEventListener('click', function() {
         // Principle Description
         var principleDescription = principles[i].querySelector('.dawn_critical_analysis_configuration_principles_principle__textarea').value;
         principleData.principleDescription = principleDescription;
+
+        // Principle Image 
+        var imageSrc = principles[i].querySelector('.dawn_critical_analysis_configuration_principles_principle_image__image').getAttribute('src');
+        principleData.image = imageSrc;
 
         // Content title 
         var contentTitle = principles[i].querySelector('.dawn_critical_analysis_configuration_principles_principle_role_title_container__textarea').value;
@@ -407,4 +444,17 @@ function makeid() {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
   
     return text;
-  }
+}
+
+function readUrl(input) {
+    console.log('dfkdfkld lkfdlflk df');
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        var imageId = input.id.split('_')[0] + '_image';
+        console.log(imageId);
+        reader.onload = function (e) {
+            document.querySelector('#' + imageId).setAttribute('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}

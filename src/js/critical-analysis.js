@@ -95,8 +95,10 @@ function addCriticalAnalysis(title, analysis) {
         principleTitleH3.className = 'dawn_admin_analysis_list_single_analysis_single_principle__principle_title';
         var principleDefinition = analysis ? analysis.principles[i].principleDescription : DATA.principles[i].principleDescription;
         var principleContentTitle = analysis ? analysis.principles[i].content.title : DATA.principles[i].content.title;
+        var principleImage = analysis ? analysis.principles[i].image : DATA.principles[i].image;
         principleTitleH3.setAttribute('principleDefinition', principleDefinition);
         principleTitleH3.setAttribute('principleContentTitle', principleContentTitle);
+        principleTitleH3.setAttribute('principleImage', principleImage);
         principleTitleH3.innerHTML = analysis ? principlesData[i].principle.replace(/\\/g, '') : DATA.principles[i].principle.replace(/\\/g, '');
 
         var hiddenRolesContainer = document.createElement('div');
@@ -227,13 +229,11 @@ function addCriticalAnalysis(title, analysis) {
             }]
         },
         options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
+            scale: {
+                ticks: {
+                    min: 0, max: 100
+                }
+            },
         }
     });
 
@@ -282,6 +282,7 @@ function saveAll() {
         for (var j = 0; j < principles.length; j++) {
             var principle = {
                 principle: '',
+                image: '',
                 principleDescription: '',
                 content: {
                     title: '',
@@ -292,6 +293,7 @@ function saveAll() {
             principle.principle = principles[j].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle__principle_title').innerHTML;
             principle.principleDescription = principles[j].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle__principle_title').getAttribute('principleDefinition');
             principle.content.title = principles[j].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle__principle_title').getAttribute('principleContentTitle');
+            principle.image = principles[j].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle__principle_title').getAttribute('principleImage');
             var rolesDivs = principles[j].querySelector('.dawn_hidden_information_container').getElementsByClassName('dawn_principle_role_hidden_information');
             for (var m = 0; m < rolesDivs.length; m++) {
                 principle.content.roles.push(rolesDivs[m].getAttribute('role'));

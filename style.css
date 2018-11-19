@@ -211,6 +211,7 @@ body #wpcontent {
   padding-bottom: 30px;
   padding-top: 30px;
   margin: 0px;
+  color: #FC394D;
 }
 
 .dawn_admin_analysis_list_single_analysis_single_principle__single_criteria {
@@ -545,6 +546,15 @@ body .dawn_hidden {
   padding-right: 10px;
 }
 
+.dawn_critical_analysis_configuration_principles_principle_image {
+  margin-left: 20px;
+  width: 200px;
+}
+
+.dawn_critical_analysis_configuration_principles_principle_image__image {
+  width: 100%;
+}
+
 .dawn_critical_analysis_configuration__modals_container {
   position: absolute;
   width: 100%;
@@ -638,6 +648,30 @@ body .dawn_hidden {
   100% {
     transform: rotate(1800deg);
   }
+}
+#wpadminbar {
+  display: none;
+}
+
+.dawn_charts {
+  width: 80%;
+  margin: auto;
+}
+
+.dawn_charts_all_principles_averages {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dawn_charts_all_principles_averages__single_principle {
+  width: 50%;
+}
+
+.dawn_charts_all_principles_averages_single_principle__title {
+  text-align: center;
 }
 
 /*# sourceMappingURL=style.css.map */
