@@ -12,7 +12,7 @@ for ( $i = 0; $i < sizeof( $analyzes ); $i++ ) :
     if ( $analyzes[$i]['title'] == $selected_analyze ) :
         $analysis = $analyzes[$i];
         echo('<pre>');
-        // var_dump( $analysis );
+        var_dump( $analysis );
         echo('</pre>');
     endif;
 endfor;

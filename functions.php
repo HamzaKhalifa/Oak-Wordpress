@@ -329,14 +329,43 @@ class Dawn {
     }
 
     function dawn_save_analysis_model() {
-        $data = $_POST['data'];
+        $principles = $_POST['data'];
+        $image_url = '';
 
-        foreach( $data as $single_data) :
-            // save_image( $single_data['image'], $single_data['principle'] );
+        foreach( $principles as $key => $single_principle) :
+            if ( !filter_var( $single_principle['image'], FILTER_VALIDATE_URL ) ) :
+                // Uploading the image
+                $upload_dir  = wp_upload_dir();
+                $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+            
+                $img             = str_replace( 'data:image/png;base64,', '', $single_principle['image'] );
+                $img             = str_replace( ' ', '+', $img );
+                $decoded         = base64_decode( $img );
+                $filename        = $single_principle['principle'] . '.jpeg';
+                $file_type       = 'image/jpeg';
+                $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
+                $upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
+                $attachment = array(
+                    'post_mime_type' => $file_type,
+                    'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $hashed_filename ) ),
+                    'post_content'   => '',
+                    'post_status'    => 'inherit',
+                    'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
+                );
+            
+                $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
+                $url = wp_get_attachment_image_url( $attach_id );
+                $single_principle['image'] = $url;
+                $image_url = $single_principle['image'];
+                $principles[ $key ] = $single_principle;
+                // Done uploading the image
+            endif;
         endforeach;
-        update_option( 'dawn_principles', $data, false );
+        
+
+        update_option( 'dawn_principles', $principles, false );
         wp_send_json_success( array(
-            'image' => $data['0']['image']
+            'image' => $principles['0']['image']
         ) );
     }
 
@@ -370,6 +399,8 @@ class Dawn {
         );
     
         $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
+        $url = wp_get_attachment_image_url( $attach_id );
+        // return $url;
     }
 }
 

@@ -249,6 +249,25 @@ body #wpcontent {
   width: 100%;
 }
 
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__notes_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note {
+  width: 47.5%;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note h4 {
+  margin-top: 0px;
+}
+
+.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_sustain_textarea, .dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_improve_textarea {
+  width: 100%;
+}
+
 .dawn_admin_analysis_list_single_analysis__delete_button {
   position: absolute;
   right: 20px;
@@ -327,6 +346,7 @@ body #wpcontent {
   justify-content: center;
   flex-direction: column;
   border-radius: 50px;
+  z-index: 100;
 }
 
 .dawn_admin_analysis__save_container:hover {

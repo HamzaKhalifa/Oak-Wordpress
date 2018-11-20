@@ -159,6 +159,46 @@ function addCriticalAnalysis(title, analysis) {
                 singleCriteriaScoreContainer.append(scoreContainerLabel1);
                 singleCriteriaScoreContainer.append(scoreContainerInput);
                 singleCriteriaScoreContainer.append(scoreContainerLabel2);
+
+                // To sustain and to improve
+                var notesContainerDiv = document.createElement('div');
+                notesContainerDiv.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__notes_container';
+
+                var singleNoteContainerDiv = document.createElement('div');
+                singleNoteContainerDiv.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note';
+
+                var toSustainTitle = document.createElement('h4');
+                toSustainTitle.innerHTML = 'A pérenniser';
+                var toSustainTextArea = document.createElement('textarea');
+                toSustainTextArea.setAttribute('cols', 30);
+                toSustainTextArea.setAttribute('rows', 10);
+                toSustainTextArea.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_sustain_textarea';
+                toSustainTextArea.value = analysis ? criteriaData[j].toSustain.replace(/\\/g, '') : '';
+
+                singleNoteContainerDiv.append(toSustainTitle);
+                singleNoteContainerDiv.append(toSustainTextArea);
+
+                notesContainerDiv.append(singleNoteContainerDiv);
+
+                var secondSingleNoteContainerDiv = document.createElement('div');
+                secondSingleNoteContainerDiv.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note';
+
+                var toImproveTitle = document.createElement('h4');
+                toImproveTitle.innerHTML = 'A améliorer';
+                var toImproveTextArea = document.createElement('textarea');
+                toImproveTextArea.setAttribute('cols', 30);
+                toImproveTextArea.setAttribute('rows', 10);
+                toImproveTextArea.className = 'dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_improve_textarea';
+                toImproveTextArea.value = analysis ? criteriaData[j].toImprove.replace(/\\/g, '') : '';
+
+                secondSingleNoteContainerDiv.append(toImproveTitle);
+                secondSingleNoteContainerDiv.append(toImproveTextArea);
+
+                notesContainerDiv.append(secondSingleNoteContainerDiv);
+
+                singleCriteriaDiv.append(notesContainerDiv);
+
+                // Done with to sustain and to improve
     
     
                 var remarkLabel = document.createElement('span');
@@ -243,29 +283,42 @@ function addCriticalAnalysis(title, analysis) {
 
 
     // <div class="dawn_admin_analysis_list__single_analysis">
-    //     <i class="fas fa-trash-alt dawn_admin_analysis_list_single_analysis__delete_button"></i>
-    //     <h2 class="dawn_admin_analysis_list_single_analysis__title">Analyse 1</h2>
-    //     <div class="dawn_admin_analysis_list_single_analysis__single_principle">
-    //         <h3 class="dawn_admin_analysis_list_single_analysis_single_principle__principle_title">Principe 1</h3>
-    
-    //         <div class="dawn_admin_analysis_list_single_analysis_single_principle__single_criteria">
-    //             <div class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__upper_content">
-    //                 <h4 class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__criteria_title">Critère 1</h4>
-    //                 <div class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content__score_container">
-    //                     <span class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label">SCORE: </span>
-    //                     <input type="number" class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__score" name="" id="">
-    //                     <span class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label">    %</span>
+    //         <i class="fas fa-trash-alt dawn_admin_analysis_list_single_analysis__delete_button"></i>
+    //         <h2 class="dawn_admin_analysis_list_single_analysis__title">Analyse 1</h2>
+    //         <div class="dawn_admin_analysis_list_single_analysis__single_principle">
+    //             <h3 class="dawn_admin_analysis_list_single_analysis_single_principle__principle_title">Principe 1</h3>
+        
+    //             <div class="dawn_admin_analysis_list_single_analysis_single_principle__single_criteria">
+    //                 <div class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__upper_content">
+    //                     <h4 class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__criteria_title">Critère 1</h4>
+    //                     <div class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content__score_container">
+    //                         <span class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label">SCORE: </span>
+    //                         <input type="number" class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__score" name="" id="">
+    //                         <span class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label">    %</span>
+    //                     </div>
     //                 </div>
+
+    //                 <div class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__notes_container">
+    //                     <div class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note">
+    //                         <h4>A pérenniser</h4>
+    //                         <textarea name="" id="" cols="30" rows="10" class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_sustain_textarea"></textarea>
+    //                     </div>
+    //                     <div class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note">
+    //                         <h4>A améliorer</h4>
+    //                         <textarea name="" id="" cols="30" rows="10" class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_improve_textarea"></textarea>
+    //                     </div>
+    //                 </div>
+                    
+
+    //                 <span class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark_label">Remarques:</span>
+    //                 <br>
+    //                 <textarea cols="30" rows="10" name="remark" class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark"></textarea>
     //             </div>
-    //             <span class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark_label">Remarques:</span>
-    //             <br>
-    //             <textarea cols="30" rows="10" name="remark" class="dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark"></textarea>
+    //         </div>
+    //         <div class="dawn_admin_analysis__chart_container">
+    //             <canvas class="dawn_admin_analysis_chart_container__radar_chart"></canvas>
     //         </div>
     //     </div>
-    //     <div class="dawn_admin_analysis__chart_container">
-    //         <canvas class="dawn_admin_analysis_chart_container__radar_chart"></canvas>
-    //     </div>
-    // </div>
 }
 
 function saveAll() {
@@ -304,11 +357,15 @@ function saveAll() {
                 var criterion = {
                     title: '',
                     score: '',
-                    remark: ''
+                    remark: '',
+                    toSustain: '', 
+                    toImprove: '',
                 };
                 criterion.title = criteria[m].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__upper_content').querySelector('.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__criteria_title').innerHTML;
                 criterion.score = criteria[m].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__upper_content').querySelector('.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content__score_container').querySelector('.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__score').value;
                 criterion.remark = criteria[m].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark').value;
+                criterion.toSustain = criteria[m].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_sustain_textarea').value;
+                criterion.toImprove = criteria[m].querySelector('.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_improve_textarea').value;
                 principle.criteria.push(criterion);
             }
             analysis.principles.push(principle);
@@ -334,29 +391,3 @@ function saveAll() {
         });
     });
 }
-
-
-// var radarChart = document.querySelector('.dawn_admin_analysis_chart_container__radar_chart').getContext('2d');
-// var myChart = new Chart(radarChart, {
-//     type: 'radar',
-//     data: {
-//         labels: DATA.principles,
-//         datasets: [{
-//             label: 'ff',
-//             data: [100, 50, 75, 50, 90, 10, 80, 66, 30, 45],
-//             backgroundColor: 'rgba(255, 99, 132, 0.2)',
-//             borderColor: 'rgba(255,99,132,1)',
-//             pointStyle: 'star',
-//             borderWidth: 4,
-//         }]
-//     },
-//     options: {
-//         scales: {
-//             yAxes: [{
-//                 ticks: {
-//                     beginAtZero:true
-//                 }
-//             }]
-//         }
-//     }
-// });

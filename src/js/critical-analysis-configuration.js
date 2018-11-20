@@ -447,11 +447,9 @@ function makeid() {
 }
 
 function readUrl(input) {
-    console.log('dfkdfkld lkfdlflk df');
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         var imageId = input.id.split('_')[0] + '_image';
-        console.log(imageId);
         reader.onload = function (e) {
             document.querySelector('#' + imageId).setAttribute('src', e.target.result);
         };

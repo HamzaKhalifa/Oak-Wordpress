@@ -105,7 +105,6 @@ if (DATA.analysis.principles) {
     });
     
     for (var i = 0; i < principles.length; i++) {
-        console.log('dawn_principle' + i + '_doughnut_chart');
         var singlePrincipleChart = document.querySelector('.dawn_principle' + i + '_doughnut_chart');
         var singlePrincipleChartCreator = singlePrincipleChart.getContext('2d');
         new Chart(singlePrincipleChartCreator, {
