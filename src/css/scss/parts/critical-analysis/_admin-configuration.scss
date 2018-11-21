@@ -2,6 +2,10 @@ body #wpcontent {
     padding-left: 0px;
 }
 
+html.wp-toolbar {
+    padding-top: 0px;
+}
+
 body .dawn_hidden {
     display: none;
 }
