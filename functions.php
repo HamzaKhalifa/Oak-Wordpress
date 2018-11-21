@@ -18,7 +18,7 @@ class Dawn {
 
         add_action( 'admin_menu', array( $this, 'dawn_handle_admin_menu' ) );
 
-        add_filter('acf/load_field/name=analyzes', array( $this, 'dawn_set_analyzes' ) );
+        add_filter( 'acf/load_field/name=analyzes', array( $this, 'dawn_set_analyzes' ) );
 
         // For Ajax requests
         add_action('wp_ajax_dawn_save_analysis_model', array( $this, 'dawn_save_analysis_model') );
