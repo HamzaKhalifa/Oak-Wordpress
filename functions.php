@@ -1,7 +1,11 @@
 <?php 
 
 class Dawn {
+    public static $text_domain; 
+
     function __construct() {
+        Dawn::$text_domain = 'dawn';
+
         add_action( 'wp_enqueue_scripts', array( $this, 'dawn_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'dawn_enqueue_scripts' ) );
 
@@ -12,13 +16,16 @@ class Dawn {
 
         add_action( 'init', array( $this, 'dawn_register_post_types') );
         add_action( 'init', array( $this, 'dawn_register_taxonomies') );
-        add_action( 'init', array( $this, 'dawn_add_options_page'));
+        add_action( 'init', array( $this, 'dawn_add_options_page') );
 
-        add_action( 'acf/init', array( $this, 'dawn_add_custom_field_groups') );
 
         add_action( 'admin_menu', array( $this, 'dawn_handle_admin_menu' ) );
 
+        add_action( 'acf/init', array( $this, 'dawn_add_custom_field_groups') );
         add_filter( 'acf/load_field/name=analyzes', array( $this, 'dawn_set_analyzes' ) );
+        add_filter( 'acf/load_field/name=contacts', array( $this, 'dawn_set_organizations_contacts' ) );
+
+        add_action( 'save_post', array( $this, 'dawn_set_contacts_organizations') );
 
         // For Ajax requests
         add_action('wp_ajax_dawn_save_analysis_model', array( $this, 'dawn_save_analysis_model') );
@@ -55,7 +62,6 @@ class Dawn {
             ));
         endif;
     }
-
 
     function dawn_admin_enqueue_styles( $hook ) {
         if ( get_current_screen()->id == 'toplevel_page_dawn_critical_analysis' || get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' ) :
@@ -99,7 +105,11 @@ class Dawn {
 
     function dawn_add_options_page() {
         if( function_exists('acf_add_options_page') ) {
-            acf_add_options_page();
+            acf_add_options_page( array(
+                'page_title' => 'Options',
+                'menu_title' => 'Options',
+                'menu_slug' => 'options'
+             ) );
         }
     }
 
@@ -122,7 +132,7 @@ class Dawn {
                 'name' => 'Organisations',
                 'singular_name' => 'Organisation',
                 'add_new' => 'Ajouter',
-                'add_new_item' => 'Ajouter une nouvelle Organisation',
+                'add_new_item' => __('Ajouter une nouvelle Organisation', 'dawn'),
                 'edit_item' => 'Editer'
             ),
             'description' => 'Une organisation est un organisme émetteur/concepteur d’une ou plusieurs publication(s).', 
@@ -136,7 +146,7 @@ class Dawn {
                 'name' => 'Publications', 
                 'singular_name' => 'Publication',
                 'add_new' => 'Ajouter',
-                'add_new_item' => 'Ajouter une nouvelle Publication',
+                'add_new_item' => __('Ajouter une nouvelle Publication', 'dawn'),
                 'edit_item' => 'Editer'
             ), 
             'description' => 'Une publication est un texte, une norme, une loi, un cadre de référence (etc.) qui guide la rédaction d’un reporting, le structure et en uniformise les contenus.', 
@@ -294,6 +304,7 @@ class Dawn {
     function dawn_add_custom_field_groups() {
         if ( !function_exists('acf_add_local_field_group') ) return;
 
+        include get_template_directory() . '/functions/options.php';
         include get_template_directory() . '/functions/organizations.php';
         include get_template_directory() . '/functions/org-sizes.php';
         include get_template_directory() . '/functions/activities.php';
@@ -316,6 +327,68 @@ class Dawn {
         }
         $field['choices'] = $choices;
         return $field;
+    }
+
+    function dawn_set_organizations_contacts( $field ) {
+        $choices = $field['choices'];
+
+        $api_key = get_field('crm_api_key', 'options');
+        $api_secret = get_field('crm_api_secret', 'options');
+        $endpoint = get_field('crm_api_endpoint', 'options');
+
+        // Lets get all the contacts first: 
+        $get_contacts_url = $endpoint . 'customers?api_key=' . $api_key . '&api_secret=' . $api_secret;
+        $contacts = json_decode( wp_remote_post( $get_contacts_url)['body'] );
+        $choices = [];
+        foreach( $contacts as $contact ) :
+            $field['choices'][] = $contact->email;
+        endforeach;
+
+        return $field;
+    }
+
+    function dawn_set_contacts_organizations( $post_id ) {
+        if ( !function_exists ('get_field_object') )
+            return; 
+        
+        $post_type = get_post_type( $post_id );
+        if ( $post_type != 'organization' ) :
+            return;
+        endif;
+
+        $api_key = get_field('crm_api_key', 'options');
+        $api_secret = get_field('crm_api_secret', 'options');
+        $endpoint = get_field('crm_api_endpoint', 'options');
+
+        $contacts_object = get_field_object( 'contacts' );
+        $the_query = new WP_Query( array( 'post_type'=> 'organization' ) );
+        $posts = $the_query->posts;
+        foreach( $posts as $post ) :
+            $post_name = $post->post_name;
+            $post_id = $post->ID;
+            $selected_contacts_indexes = get_field( 'contacts', $post_id );
+            $selected_contacts = [];
+            foreach ( $selected_contacts_indexes as $selected_contact_index ) :
+                $selected_contact_name = $contacts_object['choices'][ $selected_contact_index ];
+                $selected_contacts[] = $selected_contact_name;
+            endforeach;
+
+            foreach ( $selected_contacts as $selected_contact ) :   
+                $url = 'http://localhost:8888/boilerplate/zbs_api/create_customer?api_key=' . $api_key . '&api_secret=' . $api_secret;
+
+                $params = array(      
+                    'email'  => $selected_contact,
+                    'organisation' => $post_name
+                );
+
+                $result = wp_remote_post( $url, array(
+                    'headers'     => array('Content-Type' => 'application/json; charset=utf-8'),
+                    'body'        => json_encode( $params ),
+                    'method'      => 'POST',
+                    'data_format' => 'body',
+                ));
+            endforeach;
+        endforeach;
     }
 
     function dawn_contact_form() {

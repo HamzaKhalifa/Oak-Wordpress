@@ -1,5 +1,5 @@
 <?php 
-acf_add_local_field_group(array (
+acf_add_local_field_group( array (
     'key' => 'organization',
     'title' => 'Organisation',
     'fields' => array (
@@ -202,6 +202,28 @@ acf_add_local_field_group(array (
             ),
             'default_value' => '',
             // Specific for field type
+        ),
+
+        array (
+            'key' => 'contacts',
+            'label' => 'Contactes',
+            'name' => 'contacts',
+            'type' => 'select',
+            'prefix' => '',
+            'instructions' => __('Contactes CRM', Dawn::$text_domain),
+            'required' => 0,
+            'conditional_logic' => 0,
+            'wrapper' => array (
+                'width' => '',
+                'class' => '',
+                'id' => '',
+            ),
+            'choices' => array(
+            ),        
+            'allow_null' => 0, 
+            'multiple' => 1,  
+	        'ui' => 0,
+	        'ajax' => 0,
         ),
     ),
     'location' => array (

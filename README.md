@@ -1,4 +1,5 @@
 To start watching for changes in the SCSS files: 
+npm install
 sass --watch src/css/scss/style.scss style.css
 
 
