@@ -4,7 +4,7 @@ class Dawn {
     public static $text_domain; 
 
     function __construct() {
-        Dawn::$text_domain = 'dawn';
+        Dawn::$text_domain = 'oak';
 
         add_action( 'wp_enqueue_scripts', array( $this, 'dawn_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'dawn_enqueue_scripts' ) );
@@ -17,13 +17,14 @@ class Dawn {
         add_action( 'init', array( $this, 'dawn_register_post_types') );
         add_action( 'init', array( $this, 'dawn_register_taxonomies') );
         add_action( 'init', array( $this, 'dawn_add_options_page') );
-
-
+        add_action( 'init', array( $this, 'dawn_remove_post_type_editors' ) );  
+        
         add_action( 'admin_menu', array( $this, 'dawn_handle_admin_menu' ) );
 
         add_action( 'acf/init', array( $this, 'dawn_add_custom_field_groups') );
         add_filter( 'acf/load_field/name=analyzes', array( $this, 'dawn_set_analyzes' ) );
         add_filter( 'acf/load_field/name=contacts', array( $this, 'dawn_set_organizations_contacts' ) );
+        add_filter( 'acf/load_field/name=countries', array( $this, 'dawn_set_countries' ) );
 
         add_action( 'save_post', array( $this, 'dawn_set_contacts_organizations') );
 
@@ -155,12 +156,12 @@ class Dawn {
             'menu_icon' => 'dashicons-welcome-add-page',
         ) );
 
-        register_post_type( 'country', array(
+        register_post_type( 'results', array(
             'labels' => array(
-                'name' => 'Pays', 
-                'singular_name' => 'Pays',
+                'name' => __( 'Resultats', Dawn::$text_domain ), 
+                'singular_name' => __ ('Resultats', Dawn::$text_domain ),
                 'add_new' => 'Ajouter',
-                'add_new_item' => 'Ajouter un nouveau Pays',
+                'add_new_item' => __( 'Ajouter un nouveau Résultat', Dawn::$text_domain ),
                 'edit_item' => 'Editer'
             ), 
             'description' => '', 
@@ -168,6 +169,20 @@ class Dawn {
             'menu_position' => 25,
             'menu_icon' => 'dashicons-admin-site',
         ) );
+
+        // register_post_type( 'country', array(
+        //     'labels' => array(
+        //         'name' => 'Pays', 
+        //         'singular_name' => 'Pays',
+        //         'add_new' => 'Ajouter',
+        //         'add_new_item' => 'Ajouter un nouveau Pays',
+        //         'edit_item' => 'Editer'
+        //     ), 
+        //     'description' => '', 
+        //     'public' => true,
+        //     'menu_position' => 25,
+        //     'menu_icon' => 'dashicons-admin-site',
+        // ) );
 
         register_post_type( 'quali_indic', array(
             'labels' => array(
@@ -226,22 +241,27 @@ class Dawn {
         ) );
     }
 
-    function dawn_register_taxonomies() {
-        register_taxonomy( 'org_size', 'organization', array(
-            'label' => 'Taille de l\'organisation',
-            'labels' => array(
-                'name' => 'Tailles',
-                'single_name' => 'Taille de l\'Organisation',
-            )
-        ) );
+    function dawn_remove_post_type_editors() {
+        remove_post_type_support( 'publication', 'editor' );
+        remove_post_type_support( 'results', 'editor' );
+    }
 
-        register_taxonomy( 'org_type', 'organization', array(
-            'label' => 'Type de l\'organisation',
-            'labels' => array(
-                'name' => 'Types',
-                'single_name' => 'Type de l\'Organisation',
-            )
-        ) );
+    function dawn_register_taxonomies() {
+        // register_taxonomy( 'org_size', 'organization', array(
+        //     'label' => 'Taille de l\'organisation',
+        //     'labels' => array(
+        //         'name' => 'Tailles',
+        //         'single_name' => 'Taille de l\'Organisation',
+        //     )
+        // ) );
+
+        // register_taxonomy( 'org_type', 'organization', array(
+        //     'label' => 'Type de l\'organisation',
+        //     'labels' => array(
+        //         'name' => 'Types',
+        //         'single_name' => 'Type de l\'Organisation',
+        //     )
+        // ) );
 
 
         register_taxonomy( 'org_activity', 'organization', array(
@@ -252,21 +272,21 @@ class Dawn {
             )
         ) );
 
-        register_taxonomy( 'langue', 'country', array(
-            'label' => 'langue',
-            'labels' => array(
-                'name' => 'Langues',
-                'single_name' => 'Langue',
-            )
-        ) );
+        // register_taxonomy( 'langue', 'country', array(
+        //     'label' => 'langue',
+        //     'labels' => array(
+        //         'name' => 'Langues',
+        //         'single_name' => 'Langue',
+        //     )
+        // ) );
 
-        register_taxonomy( 'region', 'country', array(
-            'label' => 'Régions',
-            'labels' => array(
-                'name' => 'Régions',
-                'single_name' => 'Régions',
-            )
-        ) );
+        // register_taxonomy( 'region', 'country', array(
+        //     'label' => 'Régions',
+        //     'labels' => array(
+        //         'name' => 'Régions',
+        //         'single_name' => 'Régions',
+        //     )
+        // ) );
 
         register_taxonomy( 'publication_type', 'publication', array(
             'label' => 'Type',
@@ -306,9 +326,10 @@ class Dawn {
 
         include get_template_directory() . '/functions/options.php';
         include get_template_directory() . '/functions/organizations.php';
-        include get_template_directory() . '/functions/org-sizes.php';
+        include get_template_directory() . '/functions/results.php';
+        // include get_template_directory() . '/functions/org-sizes.php';
         include get_template_directory() . '/functions/activities.php';
-        include get_template_directory() . '/functions/countries.php';
+        // include get_template_directory() . '/functions/countries.php';
         include get_template_directory() . '/functions/regions.php';
         include get_template_directory() . '/functions/publications.php';
         include get_template_directory() . '/functions/quali-indics.php';
@@ -344,6 +365,23 @@ class Dawn {
             $field['choices'][] = $contact->email;
         endforeach;
 
+        return $field;
+    }
+
+    function dawn_set_countries( $field ) {
+        $field['choices'];
+        $choices = $field['choices'];
+
+        $country_query_result = wp_remote_get( 'https://restcountries.eu/rest/v2/all' );
+        echo('<pre>');
+        $countries = json_decode( $country_query_result['body'] );
+        // var_dump( $countries );
+        foreach( $countries as $country ) :
+            $choices[] = $country->name;
+        endforeach;
+        echo('</pre>');
+
+        $field['choices'] = $choices;
         return $field;
     }
 

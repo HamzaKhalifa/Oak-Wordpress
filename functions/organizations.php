@@ -22,65 +22,65 @@ acf_add_local_field_group( array (
             'message' => 0,
         ),
 
-        array (
-            'key' => 'slug_org_size',
-            'label' => 'Taille',
-            'name' => 'slug_org_size',
-            'type' => 'taxonomy',
-            'prefix' => '',
-            'instructions' => 'Taille de l\'Entreprise',
-            'required' => 0,
-            'conditional_logic' => array(
-                array(
-                    array(
-                        'field' => 'company_org', 'operator' => '==', 'value' => '1'
-                    )
-                )
-            ),
-            'wrapper' => array (
-                'width' => '50%',
-                'class' => '',
-                'id' => '',
-            ),
-            'default_value' => '',
-            // Specific for field type
-            'taxonomy' => 'org_size',
-            'field_type' => 'checkbox',
-            'allow_null' => 0,
-            'load_save_terms' => 1,
-            'return_format' => 'id',
-            'add_term' => 1
-        ),
+        // array (
+        //     'key' => 'slug_org_size',
+        //     'label' => 'Taille',
+        //     'name' => 'slug_org_size',
+        //     'type' => 'taxonomy',
+        //     'prefix' => '',
+        //     'instructions' => 'Taille de l\'Entreprise',
+        //     'required' => 0,
+        //     'conditional_logic' => array(
+        //         array(
+        //             array(
+        //                 'field' => 'company_org', 'operator' => '==', 'value' => '1'
+        //             )
+        //         )
+        //     ),
+        //     'wrapper' => array (
+        //         'width' => '50%',
+        //         'class' => '',
+        //         'id' => '',
+        //     ),
+        //     'default_value' => '',
+        //     // Specific for field type
+        //     'taxonomy' => 'org_size',
+        //     'field_type' => 'checkbox',
+        //     'allow_null' => 0,
+        //     'load_save_terms' => 1,
+        //     'return_format' => 'id',
+        //     'add_term' => 1
+        // ),
 
-        array (
-            'key' => 'slug_org_type',
-            'label' => 'Type',
-            'name' => 'slug_org_type',
-            'type' => 'taxonomy',
-            'prefix' => '',
-            'instructions' => 'Type de l\'Entreprise',
-            'required' => 0,
-            'conditional_logic' => array(
-                array(
-                    array(
-                        'field' => 'company_org', 'operator' => '==', 'value' => '1'
-                    )
-                )
-            ),
-            'wrapper' => array (
-                'width' => '50%',
-                'class' => '',
-                'id' => '',
-            ),
-            'default_value' => '',
-            // Specific for field type
-            'taxonomy' => 'org_type',
-            'field_type' => 'checkbox',
-            'allow_null' => 0,
-            'load_save_terms' => 1,
-            'return_format' => 'id',
-            'add_term' => 1
-        ),
+        // array (
+        //     'key' => 'slug_org_type',
+        //     'label' => 'Type',
+        //     'name' => 'slug_org_type',
+        //     'type' => 'taxonomy',
+        //     'prefix' => '',
+        //     'instructions' => 'Type de l\'Entreprise',
+        //     'required' => 0,
+        //     'conditional_logic' => array(
+        //         array(
+        //             array(
+        //                 'field' => 'company_org', 'operator' => '==', 'value' => '1'
+        //             )
+        //         )
+        //     ),
+        //     'wrapper' => array (
+        //         'width' => '50%',
+        //         'class' => '',
+        //         'id' => '',
+        //     ),
+        //     'default_value' => '',
+        //     // Specific for field type
+        //     'taxonomy' => 'org_type',
+        //     'field_type' => 'checkbox',
+        //     'allow_null' => 0,
+        //     'load_save_terms' => 1,
+        //     'return_format' => 'id',
+        //     'add_term' => 1
+        // ),
 
         array (
             'key' => 'listed_org',
@@ -138,36 +138,6 @@ acf_add_local_field_group( array (
         ),
 
         array (
-            'key' => 'slug_country',
-            'label' => 'Pays',
-            'name' => 'slug_country',
-            'type' => 'taxonomy',
-            'prefix' => '',
-            'instructions' => 'Pays de l\'Entreprise',
-            'required' => 0,
-            'conditional_logic' => array(
-                array(
-                    array(
-                        'field' => 'company_org', 'operator' => '==', 'value' => '1'
-                    )
-                )
-            ),
-            'wrapper' => array (
-                'width' => '100%',
-                'class' => '',
-                'id' => '',
-            ),
-            'default_value' => '',
-            // Specific for field type
-            'taxonomy' => 'country',
-            'field_type' => 'checkbox',
-            'allow_null' => 0,
-            'load_save_terms' => 1,
-            'return_format' => 'id',
-            'add_term' => 1
-        ),
-
-        array (
             'key' => 'website_org',
             'label' => 'Site Internet',
             'name' => 'website_org',
@@ -202,6 +172,28 @@ acf_add_local_field_group( array (
             ),
             'default_value' => '',
             // Specific for field type
+        ),
+
+        array (
+            'key' => 'countries',
+            'label' => 'Pays',
+            'name' => 'countries',
+            'type' => 'select',
+            'prefix' => '',
+            // 'instructions' => 'Pays',
+            'required' => 0,
+            'conditional_logic' => 0,
+            'wrapper' => array (
+                'width' => '',
+                'class' => '',
+                'id' => '',
+            ),
+            'choices' => array(
+            ),        
+            'allow_null' => 0, 
+            'multiple' => 0,  
+	        'ui' => 0,
+	        'ajax' => 0,
         ),
 
         array (
