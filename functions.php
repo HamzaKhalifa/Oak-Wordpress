@@ -436,12 +436,14 @@ class Dawn {
             $selected_contacts_indexes = get_field( 'contacts', $post_id );
             $selected_contacts = [];
             // var_dump( $selected_contacts_indexes );
-            foreach ( $selected_contacts_indexes as $selected_contact_index ) :
-                if ( isset( $contacts_object['choices'][ $selected_contact_index ] ) ) :
-                    $selected_contact_name = $contacts_object['choices'][ $selected_contact_index ];
-                    $selected_contacts[] = $selected_contact_name;
-                endif;
-            endforeach;
+            if ( isset( $selected_contacts_indexes ) ) :
+                foreach ( $selected_contacts_indexes as $selected_contact_index ) :
+                    if ( isset( $contacts_object['choices'][ $selected_contact_index ] ) ) :
+                        $selected_contact_name = $contacts_object['choices'][ $selected_contact_index ];
+                        $selected_contacts[] = $selected_contact_name;
+                    endif;
+                endforeach;
+            endif;
 
             foreach ( $selected_contacts as $selected_contact ) :   
                 $url = 'http://localhost:8888/boilerplate/zbs_api/create_customer?api_key=' . $api_key . '&api_secret=' . $api_secret;
