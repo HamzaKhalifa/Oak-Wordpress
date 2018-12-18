@@ -362,6 +362,10 @@ class Dawn {
         $api_secret = get_field('crm_api_secret', 'options');
         $endpoint = get_field('crm_api_endpoint', 'options');
 
+        if ( $api_key == '' || $api_secret == '' || $endpoint == '' ) :
+            return $field;
+        endif;
+        
         // Lets get all the contacts first: 
         $get_contacts_url = $endpoint . 'customers?api_key=' . $api_key . '&api_secret=' . $api_secret;
         $contacts = json_decode( wp_remote_post( $get_contacts_url)['body'] );
