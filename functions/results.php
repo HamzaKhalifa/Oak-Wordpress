@@ -89,7 +89,7 @@ acf_add_local_field_group( array (
             'key' => 'balancesheet_res',
             'label' => __('Bilan', Dawn::$text_domain),
             'name' => 'balancesheet_res',
-            'type' => 'text',
+            'type' => 'number',
             'prefix' => '',
             // 'instructions' => __('Bilan', Dawn::$text_domain ),
             'required' => 0,

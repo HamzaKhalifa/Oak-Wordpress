@@ -14,7 +14,7 @@ acf_add_local_field_group(
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array (
-                    'width' => '50%',
+                    'width' => '100%',
                     'class' => '',
                     'id' => '',
                 ),
@@ -23,12 +23,12 @@ acf_add_local_field_group(
             ),
 
             array (
-                'key' => 'fle_publication',
-                'label' => 'Fichier',
-                'name' => 'fle_publication',
-                'type' => 'file',
+                'key' => 'pub_file_type',
+                'label' => __('Fichier ou lien', Dawn::$text_domain),
+                'name' => 'pub_file_type',
+                'type' => 'select',
                 'prefix' => '',
-                'instructions' => '',
+                'instructions' => 'Spécifier si l\'organisation est de type entreprise ou non',
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array (
@@ -38,12 +38,111 @@ acf_add_local_field_group(
                 ),
                 'default_value' => '',
                 // Specific for field type
+                'choices' => array(
+                    __('Fichier', Dawn::$text_domain),
+                    __('Lien', Dawn::$text_domain)
+                ),
+                'message' => 0,
+                'multiple' => 0
+            ),
+
+            array (
+                'key' => 'file_publication',
+                'label' => 'Fichier',
+                'name' => 'file_publication',
+                'type' => 'file',
+                'prefix' => '',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'pub_file_type', 'operator' => '==', 'value' => '0'
+                        )
+                    )
+                ),
+                'wrapper' => array (
+                    'width' => '50%',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                // Specific for field type
                 'return_format' => 'array',
-                // 'preview_size' => 'thumbnail',
                 'library' => 'all',
                 'min_size' => 0,
-                // 'max_size' => 0,
-                // 'mime_types' => '',
+            ),
+
+            array (
+                'key' => 'pub_link',
+                'label' => 'Lien',
+                'name' => 'pub_link',
+                'type' => 'text',
+                'prefix' => '',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'pub_file_type', 'operator' => '==', 'value' => '1'
+                        )
+                    )
+                ),
+                'wrapper' => array (
+                    'width' => '50%',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                // Specific for field type
+                'return_format' => 'array',
+                'library' => 'all',
+                'min_size' => 0,
+                'placeholder' => __('Lien', Dawn::$text_domain)
+            ),
+
+            array (
+                'key' => 'pub_des',
+                'label' => __('Description', Dawn::$text_domain),
+                'name' => 'pub_des',
+                'type' => 'textarea',
+                'prefix' => '',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' =>0,
+                'wrapper' => array (
+                    'width' => '100%',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                // Specific for field type
+                'return_format' => 'array',
+                'library' => 'all',
+                'min_size' => 0,
+                'placeholder' => __('Description', Dawn::$text_domain)
+            ),
+
+            array (
+                'key' => 'pub_year',
+                'label' => __('Année', Dawn::$text_domain),
+                'name' => 'pub_year',
+                'type' => 'number',
+                'prefix' => '',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' =>0,
+                'wrapper' => array (
+                    'width' => '100%',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                // Specific for field type
+                'return_format' => 'array',
+                'library' => 'all',
+                'min_size' => 0,
+                'placeholder' => __('Exemple: 2019', Dawn::$text_domain)
             ),
 
             array (

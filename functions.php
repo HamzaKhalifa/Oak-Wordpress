@@ -244,6 +244,9 @@ class Dawn {
     function dawn_remove_post_type_editors() {
         remove_post_type_support( 'publication', 'editor' );
         remove_post_type_support( 'results', 'editor' );
+        remove_post_type_support( 'organization', 'editor' );
+        remove_post_type_support( 'quanti_indic', 'editor' );
+        remove_post_type_support( 'quali_indic', 'editor' );
     }
 
     function dawn_register_taxonomies() {
@@ -269,7 +272,9 @@ class Dawn {
             'labels' => array(
                 'name' => 'Secteurs d\'activité',
                 'single_name' => 'Secteur d\'activité',
-            )
+            ),
+            'show_in_quick_edit' => false,
+            'meta_box_cb' => false
         ) );
 
         // register_taxonomy( 'langue', 'country', array(

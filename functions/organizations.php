@@ -3,6 +3,7 @@ acf_add_local_field_group( array (
     'key' => 'organization',
     'title' => 'Organisation',
     'fields' => array (
+        
         array (
             'key' => 'company_org',
             'label' => 'Une Entreprise?',
@@ -21,66 +22,6 @@ acf_add_local_field_group( array (
             // Specific for field type
             'message' => 0,
         ),
-
-        // array (
-        //     'key' => 'slug_org_size',
-        //     'label' => 'Taille',
-        //     'name' => 'slug_org_size',
-        //     'type' => 'taxonomy',
-        //     'prefix' => '',
-        //     'instructions' => 'Taille de l\'Entreprise',
-        //     'required' => 0,
-        //     'conditional_logic' => array(
-        //         array(
-        //             array(
-        //                 'field' => 'company_org', 'operator' => '==', 'value' => '1'
-        //             )
-        //         )
-        //     ),
-        //     'wrapper' => array (
-        //         'width' => '50%',
-        //         'class' => '',
-        //         'id' => '',
-        //     ),
-        //     'default_value' => '',
-        //     // Specific for field type
-        //     'taxonomy' => 'org_size',
-        //     'field_type' => 'checkbox',
-        //     'allow_null' => 0,
-        //     'load_save_terms' => 1,
-        //     'return_format' => 'id',
-        //     'add_term' => 1
-        // ),
-
-        // array (
-        //     'key' => 'slug_org_type',
-        //     'label' => 'Type',
-        //     'name' => 'slug_org_type',
-        //     'type' => 'taxonomy',
-        //     'prefix' => '',
-        //     'instructions' => 'Type de l\'Entreprise',
-        //     'required' => 0,
-        //     'conditional_logic' => array(
-        //         array(
-        //             array(
-        //                 'field' => 'company_org', 'operator' => '==', 'value' => '1'
-        //             )
-        //         )
-        //     ),
-        //     'wrapper' => array (
-        //         'width' => '50%',
-        //         'class' => '',
-        //         'id' => '',
-        //     ),
-        //     'default_value' => '',
-        //     // Specific for field type
-        //     'taxonomy' => 'org_type',
-        //     'field_type' => 'checkbox',
-        //     'allow_null' => 0,
-        //     'load_save_terms' => 1,
-        //     'return_format' => 'id',
-        //     'add_term' => 1
-        // ),
 
         array (
             'key' => 'listed_org',
@@ -137,6 +78,35 @@ acf_add_local_field_group( array (
             'add_term' => 1
         ),
 
+
+        array (
+            'key' => 'countries',
+            'label' => 'Pays',
+            'name' => 'countries',
+            'type' => 'select',
+            'prefix' => '',
+            // 'instructions' => 'Pays',
+            'required' => 0,
+            'conditional_logic' => array(
+                array(
+                    array(
+                        'field' => 'company_org', 'operator' => '==', 'value' => '1'
+                    )
+                )
+            ),
+            'wrapper' => array (
+                'width' => '',
+                'class' => '',
+                'id' => '',
+            ),
+            'choices' => array(
+            ),        
+            'allow_null' => 0, 
+            'multiple' => 0,  
+	        'ui' => 0,
+	        'ajax' => 0,
+        ),
+        
         array (
             'key' => 'website_org',
             'label' => 'Site Internet',
@@ -175,25 +145,47 @@ acf_add_local_field_group( array (
         ),
 
         array (
-            'key' => 'countries',
-            'label' => 'Pays',
-            'name' => 'countries',
-            'type' => 'select',
+            'key' => 'org_description',
+            'label' => __( 'Description', Dawn::$text_domain ),
+            'name' => 'org_description',
+            'type' => 'textarea',
             'prefix' => '',
-            // 'instructions' => 'Pays',
+            'instructions' => 'Description de l\'organisation',
             'required' => 0,
             'conditional_logic' => 0,
             'wrapper' => array (
-                'width' => '',
+                'width' => '100%',
                 'class' => '',
                 'id' => '',
             ),
-            'choices' => array(
-            ),        
-            'allow_null' => 0, 
-            'multiple' => 0,  
-	        'ui' => 0,
-	        'ajax' => 0,
+            'default_value' => '',
+            'placeholder' => __( 'Description', Dawn::$text_domain )
+            // Specific for field type
+        ),
+
+        array (
+            'key' => 'org_type',
+            'label' => __( 'Type', Dawn::$text_domain ),
+            'name' => 'org_type',
+            'type' => 'select',
+            'prefix' => '',
+            'instructions' => 'Type de l\'organisation',
+            'required' => 0,
+            'conditional_logic' => 0,
+            'wrapper' => array (
+                'width' => '100%',
+                'class' => '',
+                'id' => '',
+            ),
+            'choices' => array( 
+                'duale',
+                'personnalisée',
+                'pyramidale',
+                'cellulaire'
+            ),
+            'default_value' => '',
+            'placeholder' => __( 'Description', Dawn::$text_domain )
+            // Specific for field type
         ),
 
         array (
