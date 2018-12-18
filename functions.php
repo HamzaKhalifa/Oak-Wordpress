@@ -435,9 +435,12 @@ class Dawn {
             $post_id = $post->ID;
             $selected_contacts_indexes = get_field( 'contacts', $post_id );
             $selected_contacts = [];
+            // var_dump( $selected_contacts_indexes );
             foreach ( $selected_contacts_indexes as $selected_contact_index ) :
-                $selected_contact_name = $contacts_object['choices'][ $selected_contact_index ];
-                $selected_contacts[] = $selected_contact_name;
+                if ( isset( $contacts_object['choices'][ $selected_contact_index ] ) ) :
+                    $selected_contact_name = $contacts_object['choices'][ $selected_contact_index ];
+                    $selected_contacts[] = $selected_contact_name;
+                endif;
             endforeach;
 
             foreach ( $selected_contacts as $selected_contact ) :   

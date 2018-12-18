@@ -329,9 +329,9 @@ acf_add_local_field_group(
                     'Reporting intégré',
                     'Initiatives d’évaluation (Notation)',
                     'Reporting RSE'
-                ),        
-                'allow_null' => 0, 
-                'multiple' => 0,  
+                ),
+                'allow_null' => 0,
+                'multiple' => 0,
                 'ui' => 0,
                 'ajax' => 0,
             ),
