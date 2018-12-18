@@ -93,6 +93,36 @@ acf_add_local_field_group(
             ),
 
             array (
+                'key' => 'pub_url',
+                'label' => __('URL de la publication', Dawn::$text_domain ),
+                'name' => 'pub_url',
+                'type' => 'url',
+                'prefix' => '',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'pub_format', 'operator' => '>', 'value' => '0', 
+                        )
+                    )
+                ),
+                'wrapper' => array (
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'choices' => array(
+                    'Fichier PDF', 
+                    'ePub',
+                    'web'
+                ),        
+                'allow_null' => 0,  
+                'ui' => 0,
+                'ajax' => 0,
+            ),
+
+            array (
                 'key' => 'file_publication',
                 'label' => 'Fichier de la publication',
                 'name' => 'file_publication',
@@ -366,13 +396,20 @@ acf_add_local_field_group(
                 'prefix' => '',
                 'instructions' => '',
                 'required' => 0,
-                'conditional_logic' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'report_publication', 'operator' => '==', 'value' => '0', 
+                        )
+                    )
+                ),
                 'wrapper' => array (
                     'width' => '',
                     'class' => '',
                     'id' => '',
                 ),
                 'choices' => array(
+                    '',
                     'Non - GRI',
                     'Citing – GRI',
                     'GRI – Referenced',
@@ -423,13 +460,20 @@ acf_add_local_field_group(
                 'prefix' => '',
                 'instructions' => '',
                 'required' => 0,
-                'conditional_logic' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'report_publication', 'operator' => '==', 'value' => '0', 
+                        )
+                    )
+                ),
                 'wrapper' => array (
                     'width' => '',
                     'class' => '',
                     'id' => '',
                 ),
                 'choices' => array(
+                    '',
                     'Services d’électricité (EUSS)',
                     'Services financiers (FSSS)',
                     'Préparation alimentaire (FPSS)',
