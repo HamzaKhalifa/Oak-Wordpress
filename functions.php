@@ -79,16 +79,25 @@ class Dawn {
     function dawn_admin_enqueue_scripts( $hook ) { 
         if ( get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' ) :
             wp_enqueue_script( 'dawn_critical_analysis_configuration', get_template_directory_uri() . '/src/js/critical-analysis-configuration.js', array('jquery'), false, true);
-            // $base_data = json_decode( file_get_contents( get_template_directory_uri() . '/src/data/basedata.json' ), true );
-            $args = array(
-                'headers' => array(
-                  'Authorization' => 'Basic ' . base64_encode( 'root' . ':' . 'm4t3r_T_ngH' )
-                )
-            );
 
-            $query = wp_remote_get ( get_template_directory_uri() . '/src/data/basedata.json', $args );
-            $body = $query['body'];
-            $base_data = json_decode( $body, true );
+            // getting base data from file:
+            // $base_data = json_decode( file_get_contents( get_template_directory_uri() . '/src/data/basedata.json' ), true );
+
+            // getting base data with authentification
+            // $args = array(
+            //     'headers' => array(
+            //       'Authorization' => 'Basic ' . base64_encode( 'root' . ':' . 'm4t3r_T_ngH' )
+            //     )
+            // );
+            // $query = wp_remote_request ( get_template_directory_uri() . '/src/data/basedata.json', $args );
+            // $body = $query['body'];
+            // $base_data = json_decode( $body, true );
+
+            // getting base data from mock: 
+            // http://demo1291769.mockable.io/base_data
+            $data = wp_remote_get( 'http://demo1291769.mockable.io/base_data' );
+            $base_data = json_decode( $data['body'], true );
+
 
             wp_localize_script( 'dawn_critical_analysis_configuration', 'DATA', array (
                 'ajaxUrl' => admin_url('admin-ajax.php'),
