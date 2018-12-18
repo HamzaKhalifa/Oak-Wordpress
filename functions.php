@@ -25,6 +25,8 @@ class Dawn {
         add_filter( 'acf/load_field/name=analyzes', array( $this, 'dawn_set_analyzes' ) );
         add_filter( 'acf/load_field/name=contacts', array( $this, 'dawn_set_organizations_contacts' ) );
         add_filter( 'acf/load_field/name=countries', array( $this, 'dawn_set_countries' ) );
+        add_filter( 'acf/load_field/name=language_publication', array( $this, 'dawn_set_languages' ) );
+        
 
         add_action( 'save_post', array( $this, 'dawn_set_contacts_organizations') );
 
@@ -377,20 +379,38 @@ class Dawn {
         return $field;
     }
 
+    function dawn_get_countries() {
+        $country_query_result = wp_remote_get( 'https://restcountries.eu/rest/v2/all' );
+        $countries = json_decode( $country_query_result['body'] );
+        return $countries;
+    }
+
     function dawn_set_countries( $field ) {
-        $field['choices'];
         $choices = $field['choices'];
 
-        $country_query_result = wp_remote_get( 'https://restcountries.eu/rest/v2/all' );
-        echo('<pre>');
-        $countries = json_decode( $country_query_result['body'] );
-        // var_dump( $countries );
+        $countries = $this->dawn_get_countries();
         foreach( $countries as $country ) :
             $choices[] = $country->name;
         endforeach;
-        echo('</pre>');
+    
+        $field['choices'] = $choices;
+        return $field;
+    }
+
+    function dawn_set_languages( $field ) {
+        $choices = $field['choices'];
+
+        $countries = $this->dawn_get_countries();
+
+        foreach( $countries as $country ) :
+            foreach( $country->languages as $language ) :
+                if ( !in_array( $language->name, $choices ) )
+                    $choices[] = $language->name;
+            endforeach;
+        endforeach;
 
         $field['choices'] = $choices;
+ 
         return $field;
     }
 

@@ -70,12 +70,12 @@ acf_add_local_field_group(
             ),
 
             array (
-                'key' => 'country_activity',
-                'label' => 'Pays dans le(s)quel(s) s\'applique le secteur d’activité',
-                'name' => 'country_activity',
-                'type' => 'post_object',
+                'key' => 'countries',
+                'label' => 'Pays',
+                'name' => 'countries',
+                'type' => 'select',
                 'prefix' => '',
-                'instructions' => '',
+                // 'instructions' => 'Pays',
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
@@ -85,16 +85,16 @@ acf_add_local_field_group(
                     )
                 ),
                 'wrapper' => array (
-                    'width' => '100%',
+                    'width' => '',
                     'class' => '',
                     'id' => '',
                 ),
-                'default_value' => '',
-                // Specific for field type
-                'post_type' => 'country',
-                'allow_null' => 0,
-                'multiple' => 1,
-                'return_format' => 'object',
+                'choices' => array(
+                ),        
+                'allow_null' => 0, 
+                'multiple' => 0,  
+                'ui' => 0,
+                'ajax' => 0,
             ),
 
             array (

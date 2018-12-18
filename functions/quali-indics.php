@@ -75,11 +75,11 @@ acf_add_local_field_group(
                 'prefix' => '',
                 'instructions' => '',
                 'required' => 0,
-                'conditional_logic' => array (
+                'conditional_logic' => array(
                     array(
-                        'field' => 'parent_indic',
-                        'operator' => '==',
-                        'value' => '1'
+                        array(
+                            'field' => 'parent_indic_quali', 'operator' => '==', 'value' => '1'
+                        )
                     )
                 ),
                 'wrapper' => array (
@@ -94,6 +94,7 @@ acf_add_local_field_group(
                 'multiple' => 0,
                 'return_format' => 'object',
             ),
+
             array (
                 'key' => 'code_quali_indic_quali',
                 'label' => 'Numérotation de l’indicateur',
