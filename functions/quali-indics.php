@@ -96,9 +96,35 @@ acf_add_local_field_group(
             ),
 
             array (
-                'key' => 'code_quali_indic_quali',
+                'key' => 'code_type_quali_indic',
+                'label' => 'Type de numérotation',
+                'name' => 'code_type_quali_indic',
+                'type' => 'select',
+                'prefix' => '',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array (
+                    'width' => '100%',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                // Specific for field type
+                'choices' => array(
+                    'I', 
+                    '1', 
+                    'A',
+                    'a'
+                ),
+                'message' => 0,
+                'multiple' => 0
+            ),
+
+            array (
+                'key' => 'code_quali_indic',
                 'label' => 'Numérotation de l’indicateur',
-                'name' => 'code_quali_indic_quali',
+                'name' => 'code_quali_indic',
                 'type' => 'number',
                 'prefix' => '',
                 'instructions' => '',
@@ -115,10 +141,10 @@ acf_add_local_field_group(
             ),
 
             array (
-                'key' => 'desc_quali_indic_quali',
+                'key' => 'desc_quali_indic',
                 'label' => 'Description de la publication',
-                'name' => 'desc_quali_indic_quali',
-                'type' => 'text',
+                'name' => 'desc_quali_indic',
+                'type' => 'textarea',
                 'prefix' => '',
                 'instructions' => '',
                 'required' => 0,

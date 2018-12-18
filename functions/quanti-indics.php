@@ -94,6 +94,33 @@ acf_add_local_field_group(
                 'multiple' => 0,
                 'return_format' => 'object',
             ),
+
+            array (
+                'key' => 'code_type_quanti_indic',
+                'label' => 'Type de numérotation',
+                'name' => 'code_type_quanti_indic',
+                'type' => 'select',
+                'prefix' => '',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array (
+                    'width' => '100%',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                // Specific for field type
+                'choices' => array(
+                    'I', 
+                    '1', 
+                    'A',
+                    'a'
+                ),
+                'message' => 0,
+                'multiple' => 0
+            ),
+
             array (
                 'key' => 'code_quanti_indic',
                 'label' => 'Numérotation de l’indicateur',
@@ -115,9 +142,9 @@ acf_add_local_field_group(
 
             array (
                 'key' => 'desc_quanti_indic',
-                'label' => 'Description de la publication',
+                'label' => __( 'Description de la publication', Dawn::$text_domain ),
                 'name' => 'desc_quanti_indic',
-                'type' => 'text',
+                'type' => 'textarea',
                 'prefix' => '',
                 'instructions' => '',
                 'required' => 0,

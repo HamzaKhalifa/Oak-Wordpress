@@ -98,7 +98,7 @@ acf_add_local_field_group(
                 'key' => 'def_glossary',
                 'label' => 'Défnition de la terminologie',
                 'name' => 'def_glossary',
-                'type' => 'text',
+                'type' => 'textarea',
                 'prefix' => '',
                 'instructions' => '',
                 'required' => 0,

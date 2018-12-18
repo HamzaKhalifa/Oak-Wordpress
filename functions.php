@@ -303,19 +303,19 @@ class Dawn {
             )
         ) );
 
-        register_taxonomy( 'code_type', array ( 'quali_indic', 'quanti_indic') , array(
-            'label' => 'Type de code',
-            'labels' => array(
-                'name' => 'Types de code',
-                'single_name' => 'Type de code',
-            )
-        ) );
+        // register_taxonomy( 'code_type', array ( 'quali_indic', 'quanti_indic') , array(
+        //     'label' => 'Type de code',
+        //     'labels' => array(
+        //         'name' => 'Types de code',
+        //         'single_name' => 'Type de code',
+        //     )
+        // ) );
 
-        register_taxonomy( 'value_type', array ( 'quali_indic', 'quanti_indic' ), array(
-            'label' => 'Type de code',
+        register_taxonomy( 'value_type', array ( 'quanti_indic' ), array(
+            'label' => 'Type de Donnée',
             'labels' => array(
-                'name' => 'Types de code',
-                'single_name' => 'Type de code',
+                'name' => 'Types de Donnée',
+                'single_name' => 'Type de Donnée',
             )
         ) );
 
