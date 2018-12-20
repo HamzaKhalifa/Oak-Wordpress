@@ -26,7 +26,6 @@ class Dawn {
         add_filter( 'acf/load_field/name=contacts', array( $this, 'dawn_set_organizations_contacts' ) );
         add_filter( 'acf/load_field/name=countries', array( $this, 'dawn_set_countries' ) );
         add_filter( 'acf/load_field/name=language_publication', array( $this, 'dawn_set_languages' ) );
-        
 
         add_action( 'save_post', array( $this, 'dawn_set_contacts_organizations') );
 
@@ -37,8 +36,16 @@ class Dawn {
         add_action( 'wp_ajax_dawn_save_analyzes', array( $this, 'dawn_save_analyzes') );
         add_action( 'wp_ajax_nopriv_dawn_save_analyzes', array( $this, 'dawn_save_analyzes') );
 
+        add_action( 'wp_ajax_dawn_save_taxonomy', array( $this, 'dawn_save_taxonomy') );
+        add_action( 'wp_ajax_nopriv_dawn_save_taxonomy', array( $this, 'dawn_save_taxonomy') );
+
+        add_action( 'wp_ajax_dawn_delete_taxonomy', array( $this, 'dawn_delete_taxonomy') );
+        add_action( 'wp_ajax_nopriv_dawn_delete_taxonomy', array( $this, 'dawn_delete_taxonomy') );
+
         $this->dawn_contact_form();
 
+        // To reset taxonomies (temporary)
+        // update_option('dawn_taxonomies', []);
     }
 
     function dawn_enqueue_styles() {
@@ -67,7 +74,7 @@ class Dawn {
     }
 
     function dawn_admin_enqueue_styles( $hook ) {
-        if ( get_current_screen()->id == 'toplevel_page_dawn_critical_analysis' || get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' ) :
+        if ( get_current_screen()->id == 'toplevel_page_dawn_critical_analysis' || get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' || get_current_screen()->id == 'toplevel_page_dawn_add_taxonomies' ) :
             wp_enqueue_style( 'dawn_the_style', get_stylesheet_directory_uri() . '/style.css' );
             // wp_enqueue_style( 'dawn_font-awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
             ?>
@@ -119,6 +126,20 @@ class Dawn {
                 'analyzes' => get_option('dawn_analyzes') ? get_option('dawn_analyzes') : []
             ));
         endif;
+
+        if ( get_current_screen()->id == 'toplevel_page_dawn_add_taxonomies' ) :
+            $result_taxonomies = get_taxonomies(false, 'objects');
+            $taxonomies = [];
+            foreach( $result_taxonomies as $result_taxonomy ) : 
+                $taxonomies[] = $result_taxonomy;
+            endforeach;
+            wp_enqueue_script( 'dawn_add_taxonomies', get_template_directory_uri() . '/src/js/add-taxonomies.js', array('jquery'), false, true);
+            wp_localize_script( 'dawn_add_taxonomies', 'DATA', array(
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'taxonomies' => $taxonomies
+            ));
+        endif;
+        
     }
 
     function dawn_add_theme_support() {
@@ -136,8 +157,10 @@ class Dawn {
     }
 
     function dawn_handle_admin_menu() {
-        add_menu_page( 'Analyse Critique', 'Analyse Critique', 'manage_options', 'dawn_critical_analysis', array( $this, 'dawn_critical_analysis' ), 'dashicons-chart-pie', 5);
+        add_menu_page( 'Analyse Critique', 'Analyse Critique', 'manage_options', 'dawn_critical_analysis', array( $this, 'dawn_critical_analysis' ), 'dashicons-chart-pie', 5 );
         add_submenu_page( 'dawn_critical_analysis', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'dawn_critical_analysis_configuration', array( $this, 'dawn_critical_analysis_configuration') );
+        
+        add_menu_page( __( 'Ajouter une Taxonomie', Dawn::$text_domain ), __( 'Ajout Taxonomie', Dawn::$text_domain ), 'manage_options', 'dawn_add_taxonomies', array( $this, 'dawn_add_taxonomies'), 'dashicons-chart-pie', 6 );
     }
 
     function dawn_critical_analysis() {
@@ -146,6 +169,10 @@ class Dawn {
 
     function dawn_critical_analysis_configuration() {
         include get_template_directory() . '/template-parts/critical-analysis-configuration.php';
+    }
+
+    function dawn_add_taxonomies() {
+        include get_template_directory() . '/template-parts/taxonomies/add_taxonomy.php';
     }
 
     function dawn_register_post_types() {
@@ -345,6 +372,17 @@ class Dawn {
                 'single_name' => 'Standards/Séries',
             )
         ) );
+
+        $dawn_taxonomies = get_option('dawn_taxonomies') ? get_option('dawn_taxonomies') : [];
+        foreach( $dawn_taxonomies as $taxonomy) :
+            register_taxonomy( $taxonomy['slug'], 'publication', array(
+                'label' => $taxonomy['name'],
+                'labels' => array(
+                    'name' => $taxonomy['name'],
+                    'single_name' => $taxonomy['singleName']
+                )
+            ) );
+        endforeach;
     }
 
     function dawn_add_custom_field_groups() {
@@ -364,6 +402,7 @@ class Dawn {
         include get_template_directory() . '/functions/gri.php';
         include get_template_directory() . '/functions/standards-series.php';
         include get_template_directory() . '/functions/critical_analyzes.php';
+        include get_template_directory() . '/functions/custom-taxes-fields.php';
     }
 
     function dawn_set_analyzes( $field ) {
@@ -565,6 +604,29 @@ class Dawn {
         $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
         $url = wp_get_attachment_image_url( $attach_id );
         // return $url;
+    }
+
+    function dawn_save_taxonomy() {
+        $taxonomy = $_POST['data'];
+        $dawn_taxonomies = get_option( 'dawn_taxonomies' ) ? get_option( 'dawn_taxonomies' ) : [];
+        $dawn_taxonomies[] = $taxonomy;
+        update_option( 'dawn_taxonomies', $dawn_taxonomies );
+        wp_send_json_success( array(
+            'taxonomy' => $taxonomy
+        ) );
+    }
+
+    function dawn_delete_taxonomy() {
+        $taxonomy_name = $_POST['data'];
+        $current_taxonomies = get_option('dawn_taxonomies');
+        $taxonomies = [];
+        foreach( $current_taxonomies as $taxonomy ) :
+            if ( $taxonomy['slug'] != $taxonomy_name) :
+                $taxonomies[] = $taxonomy;
+            endif;
+        endforeach;
+        update_option('dawn_taxonomies', $taxonomies);
+        wp_send_json_success();
     }
 }
 
