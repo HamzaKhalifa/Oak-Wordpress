@@ -73,6 +73,14 @@ addTaxButton.addEventListener('click', function() {
 });
 
 function openModal(title, twoButtons) {
+    var confirmButtonSpan = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container_add_button_container__text');
+    if (addingSpecificField) {
+        confirmButtonSpan.innerHTML = 'Ajouter';
+    } 
+    if (deletingTaxonomy) {
+        confirmButtonSpan.innerHTML = 'Supprimer';
+    }
+
     var modalsContainer = document.querySelector('.dawn_tax_add_formula_modal_container');
     modalsContainer.classList.add('dawn_tax_add_formula_modal_container__activated');
 
@@ -260,8 +268,8 @@ function createSingleTypeContainer() {
 // Handling modal add and cancel buttons: 
 handleModalButtons();
 function handleModalButtons() {
-    var addButton = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container__add_button_container');
-    addButton.addEventListener('click', function() {
+    var confirmButton = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container__add_button_container');
+    confirmButton.addEventListener('click', function() {
         if (addingSpecificField) {
             addSpecificField(specificFieldName);
             closeModals();
@@ -278,6 +286,13 @@ function handleModalButtons() {
                     },
                     success: function(data) {
                         doneLoading();
+                        var taxonomiesContainers = document.querySelectorAll('.dawn_taxt_list__single_taxt');
+                        for (var i = 0; i < taxonomiesContainers.length; i++) {
+                            var taxonomyName = taxonomiesContainers[i].querySelector('span');
+                            if (taxonomyName.innerHTML == taxonomyToDelete) {
+                                taxonomiesContainers[i].remove();
+                            }
+                        }
                         // console.log(data);
                     },
                     error: function(error) {
