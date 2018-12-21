@@ -88,7 +88,7 @@
 
     <div class="dawn_object_model__custom_post_types_lists">
         <h1 class="dawn_object_model_custom_post_types_lists__title"><?php _e('Liste des modèles d\'objets'); ?></h1>
-        <?php 
+        <?php
         $custom_post_types = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
         foreach( $custom_post_types as $custom_post_type ) : ?>
             <div class="dawn_object_model__custom_post_types_lists__single_post_type_container">

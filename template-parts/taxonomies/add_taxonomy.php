@@ -67,7 +67,7 @@
     <div class="dawn_tax_list">
         <h3><?php _e( 'Liste des taxonomies:', Dawn::$text_domain ); ?></h3>
         <?php $taxonomies = get_taxonomies(false, 'objects');
-        $custom_taxonomies = get_option('dawn_taxonomies');
+        $custom_taxonomies = get_option('dawn_taxonomies') ? get_option('dawn_taxonomies') : [];
         // echo('<pre>');
         // var_dump( $custom_taxonomies );
         // echo('</pre>');
