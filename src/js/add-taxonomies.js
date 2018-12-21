@@ -47,9 +47,9 @@ addTaxButton.addEventListener('click', function() {
             fields += fieldsLabels[i].innerHTML + ':' + types + ',';
         }
 
-        var publication = document.querySelector('.dawn_tax_add_formula_element__select_publication').value;
+        var objectModel = document.querySelector('.dawn_tax_add_formula_element__select_cpts').value;
 
-        tax = { slug, name, singleName, publication, fields };
+        tax = { slug, name, singleName, objectModel, fields };
         jQuery(document).ready(function() {
             jQuery.ajax({
                 url: DATA.ajaxUrl,
@@ -136,9 +136,16 @@ function addTaxUI(taxonomy) {
     var taxName = document.createElement('span');
     taxName.innerHTML = taxonomy.slug;
 
-    div.append(taxName);
+    var icon = document.createElement('i');
+    icon.className = 'fas fa-minus dawn_tax_list_delete';
+    icon.addEventListener('click', function() {
+        deleteTaxonomy(this);
+    });
 
-    taxList.append(taxName);
+    div.append(taxName);
+    div.append(icon);
+
+    taxList.append(div);
 
 }
 
@@ -316,10 +323,14 @@ function handleDeleteTaxonomies() {
     var deleteButtons = document.querySelectorAll('.dawn_tax_list_delete');
     for (var i = 0; i < deleteButtons.length; i++) {
         deleteButtons[i].addEventListener('click', function() {
-            var slugName = this.parentNode.querySelector('span').innerHTML;
-            taxonomyToDelete = slugName;
-            deletingTaxonomy = true;
-            openModal('Êtes vous sûr de vouloir supprimer la taxonomie ' + slugName + '?', true); 
+            deleteTaxonomy(this);
         });
     }
+}
+
+function deleteTaxonomy(element) {
+    var slugName = element.parentNode.querySelector('span').innerHTML;
+    taxonomyToDelete = slugName;
+    deletingTaxonomy = true;
+    openModal('Êtes vous sûr de vouloir supprimer la taxonomie ' + slugName + '?', true); 
 }

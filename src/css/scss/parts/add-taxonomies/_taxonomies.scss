@@ -1,6 +1,7 @@
 .dawn_manage_tax_container {
     padding-left: 20px;
     display: flex;
+    justify-content: space-between;
 }
 
 .dawn_tax_add_formula_container {
@@ -89,6 +90,16 @@
 .dawn_tax_list_delete {
     color: #FC394D;
     margin-left: 10px;
+}
+
+.dawn_taxt_list__single_taxt {
+    background-color: white;
+    margin-bottom: 10px;
+    padding: 10px; 
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 

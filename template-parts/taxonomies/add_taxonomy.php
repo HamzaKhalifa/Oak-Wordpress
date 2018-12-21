@@ -11,6 +11,7 @@
                 <label class="dawn_tax_add_formula_element__label" for="slug"><?php  _e( 'Slug:', Dawn::$text_domain ); ?></label>
                 <input type="text" name="slug" class="dawn_tax_add_formula_element__slug">
             </div>
+            
             <div class="dawn_tax_add_formula__element">
                 <label class="dawn_tax_add_formula_element__label" for="name"><?php _e( 'Nom de la Taxonomie:', Dawn::$text_domain ); ?></label>
                 <input type="text" name="name" id="dawn_tax_name_input" class="dawn_tax_add_formula_element__name">
@@ -22,15 +23,14 @@
             </div>
 
             <div class="dawn_tax_add_formula__element">
-                <label class="publications-select" for="single_name"><?php _e('Publication:', Dawn::$text_domain); ?></label>
+                <label class="publications-select" for="single_name"><?php _e('Modèle (CTP/Page):', Dawn::$text_domain); ?></label>
                 <?php
-                $the_query = new WP_Query( array( 'post_type'=> 'publication' ) );
-                $publications = $the_query->posts;
+                $cpts = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
                 ?>
-                <select name="publications-select" class="dawn_tax_add_formula_element__select_publication">
+                <select name="cpts-select" class="dawn_tax_add_formula_element__select_cpts">
                     <?php
-                    foreach( $publications as $single_publication ) : ?>
-                        <option value="<?php echo( $single_publication->ID ); ?>"><?php echo( $single_publication->post_title ); ?></option>
+                    foreach( $cpts as $single_cpt ) : ?>
+                        <option value="<?php echo( $single_cpt['slug'] ); ?>"><?php echo( $single_cpt['name'] ); ?></option>
                         <?php
                     endforeach;
                     ?>

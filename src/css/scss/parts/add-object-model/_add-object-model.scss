@@ -1,0 +1,250 @@
+.dawn_object_model {
+    width: 90%;
+    margin: auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.dawn_object_model__custom_post_types_lists {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dawn_object_model__custom_post_types_lists__single_post_type_container {
+
+    background-color: white;
+    margin-bottom: 10px;
+    padding: 10px; 
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dawn_object_model__custom_post_types_lists_single_post_type_container__name {
+    margin-right: 10px;
+}
+
+.dawn_object_model__custom_post_types_lists_single_post_type_container__delete_button {
+    color: #FC394D;
+}
+
+.dawn_object_model__custom_post_types_lists_single_post_type_container__delete_button:hover {
+    cursor: pointer;
+}
+
+.dawn_object_model_add_formula__element {
+    display: flex;
+    // justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    margin-right: 10px;
+}
+
+.dawn_object_model_custom_post_types_lists__title {
+    margin-bottom: 10px;
+    line-height: 25px;
+}
+
+.dawn_object_model_add_formula_element__label {
+    width: 300px;
+}
+
+.dawn_object_model_add_formula_element__field_container {
+    background-color: #24E08C;
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #24E08C;
+    transition: .2s all ease-in-out;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.dawn_object_model_add_formula_element__field_container:hover {
+    cursor: pointer;
+    background-color: white;
+}
+
+.dawn_object_model_add_formula_element__field_container span {
+    color: white;
+}
+
+.dawn_object_model_add_formula_element_field_container__field_name {
+    color: white;
+    padding: 10px;
+}
+
+.dawn_object_model_add_formula_element__field_container:hover span, .dawn_object_model_add_formula_element__field_container:hover i  {
+    color: #24E08C;
+}
+
+.dawn_object_model_add_formula_element__field_container_already_added {
+    background-color: #FC394D;
+    border-color: #FC394D;
+}
+
+.dawn_object_model_add_formula_element__field_container_already_added:hover span, .dawn_object_model_add_formula_element__field_container_already_added:hover i {
+    color: #FC394D;
+}
+
+// Adding specific fields
+.dawn_object_model_add_formula_element_specific_fields_container__single_field_container {
+    margin-bottom: 10px;
+    background-color: white;
+    padding: 20px;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.dawn_object_model_add_formula_element_specific_fields_container__single_field_container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.dawn_object_model_add_formula_element_specific_field_name {
+    margin-bottom: 10px;
+}
+
+.dawn_tax_add_formula_element_specific_field_delete_button {
+    color: #FC394D;
+    position: absolute;
+    right: 10px;
+}
+
+.dawn_object_model_add_formula_element_specific_field_delete_button:hover, .dawn_object_model_list_delete:hover {
+    cursor: pointer;
+}
+
+.dawn_object_model_add_formula_element_specific_fields_container_single_field_container__plus_container i {
+    color: black;
+    transition: .15 all ease-in-out;
+}
+
+.dawn_object_model_add_formula_element_specific_fields_container_single_field_container__plus_container:hover {
+    cursor: pointer;
+}
+
+.dawn_object_model_add_formula_element_specific_fields_container_single_field_container__plus_container:hover i, .dawn_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover span {
+    color: #24E08C;
+}
+
+.dawn_object_model_add_formula_element_specific_fields_container_single_field_container_types_container__single_type {
+    display: flex;
+    align-items: center;
+}
+
+.dawn_object_model_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i {
+    color: #FC394D;
+}
+
+.dawn_object_model_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i:hover {
+    cursor: pointer;
+}
+
+.dawn_object_model_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__ {
+    margin-right: 10px;
+}
+
+.dawn_object_model_add_formula_element_specific_field_delete_button {
+    color: #FC394D;
+    position: absolute;
+    right: 10px;
+}
+
+.dawn_object_model_add_formula_element_specific_field_delete_button:hover, .dawn_object_model_list_delete:hover {
+    cursor: pointer;
+}
+
+// For the modal
+.dawn_object_model_add_formula_modal_container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    right: 0px;
+    top: 0px;
+    transition: all .3s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    z-index: -10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dawn_object_model_add_formula_modal_container__activated {
+    opacity: 1;
+    z-index: 10;
+}
+
+.dawn_object_model_add_formula_modal_container__modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 40%;
+    background-color: white;
+    padding: 20px;
+    position: fixed;
+    top: 30%;
+}
+
+.dawn_object_model_add_formula_modal_container_modal__title_container {
+    text-align: center;
+}
+
+.dawn_object_model_add_formula_modal_container_modal_buttons_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.dawn_object_model_add_formula_modal_container_modal__error {
+    color: #FC394D;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.dawn_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container, .dawn_object_model_add_formula_modal_container_modal_buttons_container__add_button_container, .dawn_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container {
+    background-color: #24E08C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    border-radius: 10px;
+    transition: all .2s ease-in-out;
+    border: 1px solid #24E08C;
+}
+
+.dawn_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .dawn_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .dawn_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
+    cursor: pointer;
+    background-color: white;
+}
+
+.dawn_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container {
+    background-color: #FC394D;
+    border: 1px solid #FC394D;
+}
+
+.dawn_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
+    color: #FC394D;
+}
+
+.dawn_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .dawn_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
+    color: #24E08C;
+}
+
+.dawn_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .dawn_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text {
+    color: white;
+}
+// Done with the modal

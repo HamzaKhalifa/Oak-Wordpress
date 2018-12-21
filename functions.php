@@ -42,6 +42,12 @@ class Dawn {
         add_action( 'wp_ajax_dawn_delete_taxonomy', array( $this, 'dawn_delete_taxonomy') );
         add_action( 'wp_ajax_nopriv_dawn_delete_taxonomy', array( $this, 'dawn_delete_taxonomy') );
 
+        add_action( 'wp_ajax_dawn_save_cpt', array( $this, 'dawn_save_cpt') );
+        add_action( 'wp_ajax_nopriv_dawn_save_cpt', array( $this, 'dawn_save_cpt') );
+
+        add_action( 'wp_ajax_dawn_delete_cpt', array( $this, 'dawn_delete_cpt') );
+        add_action( 'wp_ajax_nopriv_dawn_delete_cpt', array( $this, 'dawn_delete_cpt') );
+
         $this->dawn_contact_form();
 
         // To reset taxonomies (temporary)
@@ -74,7 +80,11 @@ class Dawn {
     }
 
     function dawn_admin_enqueue_styles( $hook ) {
-        if ( get_current_screen()->id == 'toplevel_page_dawn_critical_analysis' || get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' || get_current_screen()->id == 'toplevel_page_dawn_add_taxonomies' ) :
+        if ( get_current_screen()->id == 'toplevel_page_dawn_critical_analysis' 
+            || get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' 
+            || get_current_screen()->id == 'toplevel_page_dawn_add_taxonomies' 
+            || get_current_screen()->id == 'toplevel_page_dawn_add_object_model' 
+        ) :
             wp_enqueue_style( 'dawn_the_style', get_stylesheet_directory_uri() . '/style.css' );
             // wp_enqueue_style( 'dawn_font-awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
             ?>
@@ -139,7 +149,19 @@ class Dawn {
                 'taxonomies' => $taxonomies
             ));
         endif;
-        
+
+        if ( get_current_screen()->id == 'toplevel_page_dawn_add_object_model' ) :
+            $post_types_data = get_post_types();
+            $post_types = [];
+            foreach ( $post_types_data as $key => $single_post_type ) :
+                $post_types[] = $single_post_type;
+            endforeach;
+            wp_enqueue_script( 'dawn_add_object_model', get_template_directory_uri() . '/src/js/add-object-model.js', array('jquery'), false, true);
+            wp_localize_script( 'dawn_add_object_model', 'DATA', array(
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'customPostTypes' => $post_types
+            ));
+        endif;
     }
 
     function dawn_add_theme_support() {
@@ -160,7 +182,8 @@ class Dawn {
         add_menu_page( 'Analyse Critique', 'Analyse Critique', 'manage_options', 'dawn_critical_analysis', array( $this, 'dawn_critical_analysis' ), 'dashicons-chart-pie', 5 );
         add_submenu_page( 'dawn_critical_analysis', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'dawn_critical_analysis_configuration', array( $this, 'dawn_critical_analysis_configuration') );
         
-        add_menu_page( __( 'Ajouter une Taxonomie', Dawn::$text_domain ), __( 'Ajout Taxonomie', Dawn::$text_domain ), 'manage_options', 'dawn_add_taxonomies', array( $this, 'dawn_add_taxonomies'), 'dashicons-chart-pie', 6 );
+        add_menu_page( __( 'Ajouter Taxonomie', Dawn::$text_domain ), __( 'Ajout d\'une Taxonomie', Dawn::$text_domain ), 'manage_options', 'dawn_add_taxonomies', array( $this, 'dawn_add_taxonomies'), 'dashicons-welcome-add-page', 6 );
+        add_menu_page( __( 'Ajouter un modèle d\'Objet', Dawn::$text_domain ), __( 'Ajout d\'un modèle d\'objet', Dawn::$text_domain ), 'manage_options', 'dawn_add_object_model', array( $this, 'dawn_add_object_model'), 'dashicons-welcome-add-page', 6 );
     }
 
     function dawn_critical_analysis() {
@@ -173,6 +196,10 @@ class Dawn {
 
     function dawn_add_taxonomies() {
         include get_template_directory() . '/template-parts/taxonomies/add_taxonomy.php';
+    }
+
+    function dawn_add_object_model() {
+        include get_template_directory() . '/template-parts/objects/add-objects-model.php';
     }
 
     function dawn_register_post_types() {
@@ -287,6 +314,23 @@ class Dawn {
             'menu_position' => 25,
             'menu_icon' => 'dashicons-video-alt',
         ) );
+
+        $dawn_cpts = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
+        foreach( $dawn_cpts as $cpt ) :
+            register_post_type( $cpt['slug'], array(
+                'labels' => array(
+                    'name' => $cpt['name'], 
+                    'singular_name' => $cpt['singleName'],
+                    'add_new' => 'Ajouter',
+                    'add_new_item' => 'Ajouter',
+                    'edit_item' => 'Editer'
+                ), 
+                'description' => $cpt['description'], 
+                'public' => true,
+                'menu_position' => 25,
+                'menu_icon' => $cpt['icon'],
+            ) );    
+        endforeach;
     }
 
     function dawn_remove_post_type_editors() {
@@ -375,7 +419,7 @@ class Dawn {
 
         $dawn_taxonomies = get_option('dawn_taxonomies') ? get_option('dawn_taxonomies') : [];
         foreach( $dawn_taxonomies as $taxonomy) :
-            register_taxonomy( $taxonomy['slug'], 'publication', array(
+            register_taxonomy( $taxonomy['slug'], $taxonomy['objectModel'], array(
                 'label' => $taxonomy['name'],
                 'labels' => array(
                     'name' => $taxonomy['name'],
@@ -403,6 +447,7 @@ class Dawn {
         include get_template_directory() . '/functions/standards-series.php';
         include get_template_directory() . '/functions/critical_analyzes.php';
         include get_template_directory() . '/functions/custom-taxes-fields.php';
+        include get_template_directory() . '/functions/custom-post-types-fields.php';
     }
 
     function dawn_set_analyzes( $field ) {
@@ -618,7 +663,7 @@ class Dawn {
 
     function dawn_delete_taxonomy() {
         $taxonomy_name = $_POST['data'];
-        $current_taxonomies = get_option('dawn_taxonomies');
+        $current_taxonomies = get_option('dawn_taxonomies') ? get_option('dawn_taxonomies') : [];
         $taxonomies = [];
         foreach( $current_taxonomies as $taxonomy ) :
             if ( $taxonomy['slug'] != $taxonomy_name) :
@@ -626,6 +671,27 @@ class Dawn {
             endif;
         endforeach;
         update_option('dawn_taxonomies', $taxonomies);
+        wp_send_json_success();
+    }
+
+    function dawn_save_cpt() {
+        $cpt = $_POST['data'];
+        $dawn_cpts = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
+        $dawn_cpts[] = $cpt;
+        update_option( 'dawn_custom_post_types', $dawn_cpts );
+        wp_send_json_success();
+    }
+
+    function dawn_delete_cpt() {
+        $cpt_name = $_POST['data'];
+        $current_cpts = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
+        $cpts = [];
+        foreach( $current_cpts as $cpt ) :
+            if ( $cpt['slug'] != $cpt_name) :
+                $cpts[] = $cpt;
+            endif;
+        endforeach;
+        update_option('dawn_custom_post_types', $cpts);
         wp_send_json_success();
     }
 }
