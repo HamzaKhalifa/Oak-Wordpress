@@ -176,7 +176,7 @@ class Dawn {
     }
 
     function add_cors_http_header() {
-        header("Access-Control-Allow-Origin: *");
+        // header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Origin: http://localhost:8888/boilerplate/");
         header('content-type: application/json; charset=utf-8');
         header("Access-Control-Allow-Credentials: true");
