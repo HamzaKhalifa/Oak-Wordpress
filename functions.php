@@ -18,7 +18,7 @@ class Dawn {
         add_action( 'init', array( $this, 'dawn_register_taxonomies') );
         add_action( 'init', array( $this, 'dawn_add_options_page') );
         add_action( 'init', array( $this, 'dawn_remove_post_type_editors' ) ); 
-        add_action('init','add_cors_http_header');
+        add_action('init', array( $this, 'add_cors_http_header' ) );
         
         add_action( 'admin_menu', array( $this, 'dawn_handle_admin_menu' ) );
 
@@ -163,8 +163,8 @@ class Dawn {
             endforeach;
             wp_enqueue_script( 'dawn_add_object_model', get_template_directory_uri() . '/src/js/add-object-model.js', array('jquery'), false, true);
             wp_localize_script( 'dawn_add_object_model', 'DATA', array(
-                'ajaxUrl' => admin_url('admin-ajax.php'),
-                // 'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
+                // 'ajaxUrl' => admin_url('admin-ajax.php'),
+                'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
                 'customPostTypes' => $post_types
             ));
         endif;
