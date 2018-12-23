@@ -3,6 +3,7 @@ var specificFieldName = '';
 var addingSpecificField = false;
 var deletingObjectModel = false;
 var ObjectModelToDelete = '';
+var allCPTs = DATA.customPostTypes;
 
 
 // For the save button
@@ -70,7 +71,8 @@ addObjectModelButton.addEventListener('click', function() {
                 },
                 success: function(data) {
                     doneLoading();
-                    addCPTUI(cpt)
+                    allCPTs.push(cpt);
+                    addCPTUI(cpt);
                     // addTaxUI(tax);
                     // console.log(data);
                 },

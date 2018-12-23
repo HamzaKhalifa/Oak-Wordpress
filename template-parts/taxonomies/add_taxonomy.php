@@ -1,6 +1,3 @@
-<?php 
-// var_dump( get_option('dawn_taxonomies') );
-?>
 <div class="dawn_manage_tax_container">
     <div class="dawn_tax_add_formula_container">
         <h3><?php _e( 'Ajouter une Taxonomie', Dawn::$text_domain ); ?></h3>

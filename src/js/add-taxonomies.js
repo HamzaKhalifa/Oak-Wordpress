@@ -3,6 +3,7 @@ var specificFieldName = '';
 var addingSpecificField = false;
 var deletingTaxonomy = false;
 var taxonomyToDelete = '';
+var allTaxonomies = DATA.taxonomies;
 
 var addTaxButton = document.querySelector('.dawn_tax_add_formula__add_button');
 addTaxButton.addEventListener('click', function() {
@@ -60,6 +61,7 @@ addTaxButton.addEventListener('click', function() {
                 },
                 success: function(data) {
                     doneLoading();
+                    allTaxonomies.push(tax);
                     addTaxUI(tax);
                     // console.log(data);
                 },

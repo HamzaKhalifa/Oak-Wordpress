@@ -17,7 +17,8 @@ class Dawn {
         add_action( 'init', array( $this, 'dawn_register_post_types') );
         add_action( 'init', array( $this, 'dawn_register_taxonomies') );
         add_action( 'init', array( $this, 'dawn_add_options_page') );
-        add_action( 'init', array( $this, 'dawn_remove_post_type_editors' ) );  
+        add_action( 'init', array( $this, 'dawn_remove_post_type_editors' ) ); 
+        add_action('init','add_cors_http_header');
         
         add_action( 'admin_menu', array( $this, 'dawn_handle_admin_menu' ) );
 
@@ -30,6 +31,15 @@ class Dawn {
         add_action( 'save_post', array( $this, 'dawn_set_contacts_organizations') );
 
         // For Ajax requests
+        $this->dawn_ajax_calls();
+        
+        $this->dawn_contact_form();
+
+        // To reset taxonomies (temporary)
+        // update_option('dawn_taxonomies', []);
+    }
+
+    function dawn_ajax_calls() {
         add_action('wp_ajax_dawn_save_analysis_model', array( $this, 'dawn_save_analysis_model') );
         add_action('wp_ajax_nopriv_dawn_save_analysis_model', array( $this, 'dawn_save_analysis_model') );
 
@@ -47,11 +57,6 @@ class Dawn {
 
         add_action( 'wp_ajax_dawn_delete_cpt', array( $this, 'dawn_delete_cpt') );
         add_action( 'wp_ajax_nopriv_dawn_delete_cpt', array( $this, 'dawn_delete_cpt') );
-
-        $this->dawn_contact_form();
-
-        // To reset taxonomies (temporary)
-        // update_option('dawn_taxonomies', []);
     }
 
     function dawn_enqueue_styles() {
@@ -159,6 +164,7 @@ class Dawn {
             wp_enqueue_script( 'dawn_add_object_model', get_template_directory_uri() . '/src/js/add-object-model.js', array('jquery'), false, true);
             wp_localize_script( 'dawn_add_object_model', 'DATA', array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
+                // 'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
                 'customPostTypes' => $post_types
             ));
         endif;
@@ -166,6 +172,10 @@ class Dawn {
 
     function dawn_add_theme_support() {
         add_theme_support( 'menus' );
+    }
+
+    function add_cors_http_header() {
+        header("Access-Control-Allow-Origin: *");
     }
 
     function dawn_add_options_page() {
