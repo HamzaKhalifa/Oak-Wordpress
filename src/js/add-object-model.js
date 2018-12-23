@@ -57,10 +57,8 @@ addObjectModelButton.addEventListener('click', function() {
         var publication = document.querySelector('.dawn_object_model_add_formula_element__select_publication').value;
 
         indicators = jQuery('.dawn_object_model_add_formula_element__select_indicators').val();
-        console.log('Indicators', indicators);
 
         cpt = { slug, name, singleName, description, icon, publication, indicators, fields };
-        console.log(cpt);
         jQuery(document).ready(function() {
             jQuery.ajax({
                 url: DATA.ajaxUrl,
@@ -71,7 +69,7 @@ addObjectModelButton.addEventListener('click', function() {
                 },
                 crossDomain: true,
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader('Authorization', makeBaseAuth('mradmin', 'm4t3r_T_ngH'));
+                    xhr.setRequestHeader('Authorization', makeBaseAuth('mrtest', 'MatRep0rT17'));
                 },
 
                 data: {
@@ -82,11 +80,9 @@ addObjectModelButton.addEventListener('click', function() {
                     doneLoading();
                     allCPTs.push(cpt);
                     addCPTUI(cpt);
-                    // addTaxUI(tax);
-                    // console.log(data);
                 },
                 error: function(error) {
-                    // console.log(error);
+                    console.log(error);
                     doneLoading();
                 }
             });

@@ -163,9 +163,9 @@ class Dawn {
             endforeach;
             wp_enqueue_script( 'dawn_add_object_model', get_template_directory_uri() . '/src/js/add-object-model.js', array('jquery'), false, true);
             wp_localize_script( 'dawn_add_object_model', 'DATA', array(
-                'ajaxUrl' => admin_url('admin-ajax.php'),
+                // 'ajaxUrl' => admin_url('admin-ajax.php'),
                 // 'ajaxUrl' => 'http://localhost:8888/test/wp-admin/admin-ajax.php',
-                // 'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
+                'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
                 'customPostTypes' => $post_types
             ));
         endif;
@@ -177,6 +177,7 @@ class Dawn {
 
     function add_cors_http_header() {
         header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: http://localhost:8888/boilerplate/");
         header('content-type: application/json; charset=utf-8');
         header("Access-Control-Allow-Credentials: true");
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
