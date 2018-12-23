@@ -163,8 +163,9 @@ class Dawn {
             endforeach;
             wp_enqueue_script( 'dawn_add_object_model', get_template_directory_uri() . '/src/js/add-object-model.js', array('jquery'), false, true);
             wp_localize_script( 'dawn_add_object_model', 'DATA', array(
-                // 'ajaxUrl' => admin_url('admin-ajax.php'),
-                'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                // 'ajaxUrl' => 'http://localhost:8888/test/wp-admin/admin-ajax.php',
+                // 'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
                 'customPostTypes' => $post_types
             ));
         endif;
@@ -176,6 +177,11 @@ class Dawn {
 
     function add_cors_http_header() {
         header("Access-Control-Allow-Origin: *");
+        header('content-type: application/json; charset=utf-8');
+        header("Access-Control-Allow-Credentials: true");
+        header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+        header('Access-Control-Max-Age: 1000');
+        header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
     }
 
     function dawn_add_options_page() {
@@ -327,9 +333,10 @@ class Dawn {
 
         $dawn_cpts = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
         foreach( $dawn_cpts as $cpt ) :
+            $name = str_replace( '\\', '', $cpt['name'] );
             register_post_type( $cpt['slug'], array(
                 'labels' => array(
-                    'name' => $cpt['name'], 
+                    'name' => $name, 
                     'singular_name' => $cpt['singleName'],
                     'add_new' => 'Ajouter',
                     'add_new_item' => 'Ajouter',

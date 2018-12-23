@@ -65,6 +65,15 @@ addObjectModelButton.addEventListener('click', function() {
             jQuery.ajax({
                 url: DATA.ajaxUrl,
                 type: 'POST',
+
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', makeBaseAuth('mradmin', 'm4t3r_T_ngH'));
+                },
+
                 data: {
                     'action': 'dawn_save_cpt',
                     'data': cpt
@@ -85,6 +94,15 @@ addObjectModelButton.addEventListener('click', function() {
     }
 });
 
+
+function makeBaseAuth (user, pswd) { 
+    var token = user + ':' + pswd;
+    var hash = "";
+    if (btoa) {
+       hash = btoa(token);
+    }
+    return "Basic " + hash;
+}
 
 function addCPTUI(cpt) {
     var cptList = document.querySelector('.dawn_object_model__custom_post_types_lists');

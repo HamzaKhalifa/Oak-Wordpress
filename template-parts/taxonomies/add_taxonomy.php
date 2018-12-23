@@ -26,8 +26,10 @@
                 ?>
                 <select name="cpts-select" class="dawn_tax_add_formula_element__select_cpts">
                     <?php
-                    foreach( $cpts as $single_cpt ) : ?>
-                        <option value="<?php echo( $single_cpt['slug'] ); ?>"><?php echo( $single_cpt['name'] ); ?></option>
+                    foreach( $cpts as $single_cpt ) :
+                        $name = str_replace( '\\', '', $single_cpt['name']);
+                    ?>
+                        <option value="<?php echo( $single_cpt['slug'] ); ?>"><?php echo( $name ); ?></option>
                         <?php
                     endforeach;
                     ?>
@@ -65,9 +67,6 @@
         <h3><?php _e( 'Liste des taxonomies:', Dawn::$text_domain ); ?></h3>
         <?php $taxonomies = get_taxonomies(false, 'objects');
         $custom_taxonomies = get_option('dawn_taxonomies') ? get_option('dawn_taxonomies') : [];
-        // echo('<pre>');
-        // var_dump( $custom_taxonomies );
-        // echo('</pre>');
         foreach ( $taxonomies as $key => $taxonomy ) : ?>
             <div class="dawn_taxt_list__single_taxt">
                 <span><?php echo( $taxonomy->name ); ?></span>

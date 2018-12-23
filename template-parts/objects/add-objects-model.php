@@ -34,8 +34,10 @@
             ?>
             <select name="publications-select" class="dawn_object_model_add_formula_element__select_publication">
                 <?php
-                foreach( $publications as $single_publication ) : ?>
-                    <option value="<?php echo( $single_publication->ID ); ?>"><?php echo( $single_publication->post_title ); ?></option>
+                foreach( $publications as $single_publication ) : 
+                    $post_title = str_replace('\\', '', $single_publication->post_title);
+                ?>
+                    <option value="<?php echo( $single_publication->ID ); ?>"><?php echo( $post_title ); ?></option>
                     <?php
                 endforeach;
                 ?>
