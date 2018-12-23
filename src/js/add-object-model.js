@@ -64,9 +64,9 @@ addObjectModelButton.addEventListener('click', function() {
                 url: DATA.ajaxUrl,
                 type: 'POST',
 
-                xhrFields: {
-                    withCredentials: true
-                },
+                // xhrFields: {
+                //     withCredentials: true
+                // },
                 crossDomain: true,
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader('Authorization', makeBaseAuth('mrtest', 'MatRep0rT17'));

@@ -176,13 +176,13 @@ class Dawn {
     }
 
     function add_cors_http_header() {
-        // header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Origin: http://localhost:8888/boilerplate/");
-        header('content-type: application/json; charset=utf-8');
-        header("Access-Control-Allow-Credentials: true");
-        header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-        header('Access-Control-Max-Age: 1000');
-        header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
+        header("Access-Control-Allow-Origin: *");
+        // header("Access-Control-Allow-Origin: http://localhost:8888/boilerplate/");
+        // header('content-type: application/json; charset=utf-8');
+        // header("Access-Control-Allow-Credentials: true");
+        // header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+        // header('Access-Control-Max-Age: 1000');
+        // header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
     }
 
     function dawn_add_options_page() {
