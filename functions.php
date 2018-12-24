@@ -34,9 +34,6 @@ class Dawn {
         $this->dawn_ajax_calls();
         
         $this->dawn_contact_form();
-
-        // To reset taxonomies (temporary)
-        // update_option('dawn_taxonomies', []);
     }
 
     function dawn_ajax_calls() {
@@ -85,10 +82,10 @@ class Dawn {
     }
 
     function dawn_admin_enqueue_styles( $hook ) {
-        if ( get_current_screen()->id == 'toplevel_page_dawn_critical_analysis' 
-            || get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' 
-            || get_current_screen()->id == 'toplevel_page_dawn_add_taxonomies' 
-            || get_current_screen()->id == 'toplevel_page_dawn_add_object_model' 
+        if ( get_current_screen()->id == 'oak-materiality-reporting_page_dawn_critical_analysis' 
+            || get_current_screen()->id == 'oak-materiality-reporting_page_dawn_critical_analysis_configuration' 
+            || get_current_screen()->id == 'oak-materiality-reporting_page_dawn_add_taxonomies' 
+            || get_current_screen()->id == 'oak-materiality-reporting_page_dawn_add_object_model' 
         ) :
             wp_enqueue_style( 'dawn_the_style', get_stylesheet_directory_uri() . '/style.css' );
             // wp_enqueue_style( 'dawn_font-awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
@@ -99,21 +96,13 @@ class Dawn {
     }
 
     function dawn_admin_enqueue_scripts( $hook ) { 
-        if ( get_current_screen()->id == 'analyse-critique_page_dawn_critical_analysis_configuration' ) :
+        wp_enqueue_script( 'admin_menu_script', get_template_directory_uri() . '/src/js/admin-menu.js', array('jquery'), false, true );
+
+        if ( get_current_screen()->id == 'oak-materiality-reporting_page_dawn_critical_analysis_configuration' ) :
             wp_enqueue_script( 'dawn_critical_analysis_configuration', get_template_directory_uri() . '/src/js/critical-analysis-configuration.js', array('jquery'), false, true);
 
             // getting base data from file:
             // $base_data = json_decode( file_get_contents( get_template_directory_uri() . '/src/data/basedata.json' ), true );
-
-            // getting base data with authentification
-            // $args = array(
-            //     'headers' => array(
-            //       'Authorization' => 'Basic ' . base64_encode( 'root' . ':' . 'm4t3r_T_ngH' )
-            //     )
-            // );
-            // $query = wp_remote_request ( get_template_directory_uri() . '/src/data/basedata.json', $args );
-            // $body = $query['body'];
-            // $base_data = json_decode( $body, true );
 
             // getting base data from mock: 
             // http://demo1291769.mockable.io/base_data
@@ -130,7 +119,7 @@ class Dawn {
             ));
         endif;
 
-        if ( get_current_screen()->id == 'toplevel_page_dawn_critical_analysis' ) :
+        if ( get_current_screen()->id == 'oak-materiality-reporting_page_dawn_critical_analysis' ) :
             wp_enqueue_script( 'dawn_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
             wp_enqueue_script( 'dawn_critical_analysis', get_template_directory_uri() . '/src/js/critical-analysis.js', array('jquery'), false, true);
             wp_localize_script( 'dawn_critical_analysis', 'DATA', array (
@@ -142,7 +131,7 @@ class Dawn {
             ));
         endif;
 
-        if ( get_current_screen()->id == 'toplevel_page_dawn_add_taxonomies' ) :
+        if ( get_current_screen()->id == 'oak-materiality-reporting_page_dawn_add_taxonomies' ) :
             $result_taxonomies = get_taxonomies(false, 'objects');
             $taxonomies = [];
             foreach( $result_taxonomies as $result_taxonomy ) : 
@@ -155,7 +144,7 @@ class Dawn {
             ));
         endif;
 
-        if ( get_current_screen()->id == 'toplevel_page_dawn_add_object_model' ) :
+        if ( get_current_screen()->id == 'oak-materiality-reporting_page_dawn_add_object_model' ) :
             $post_types_data = get_post_types();
             $post_types = [];
             foreach ( $post_types_data as $key => $single_post_type ) :
@@ -163,9 +152,9 @@ class Dawn {
             endforeach;
             wp_enqueue_script( 'dawn_add_object_model', get_template_directory_uri() . '/src/js/add-object-model.js', array('jquery'), false, true);
             wp_localize_script( 'dawn_add_object_model', 'DATA', array(
-                // 'ajaxUrl' => admin_url('admin-ajax.php'),
+                'ajaxUrl' => admin_url('admin-ajax.php'),
                 // 'ajaxUrl' => 'http://localhost:8888/test/wp-admin/admin-ajax.php',
-                'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
+                // 'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
                 'customPostTypes' => $post_types
             ));
         endif;
@@ -176,7 +165,7 @@ class Dawn {
     }
 
     function add_cors_http_header() {
-        header("Access-Control-Allow-Origin: *");
+        // header("Access-Control-Allow-Origin: *");
         // header("Access-Control-Allow-Origin: http://localhost:8888/boilerplate/");
         // header('content-type: application/json; charset=utf-8');
         // header("Access-Control-Allow-Credentials: true");
@@ -196,12 +185,70 @@ class Dawn {
     }
 
     function dawn_handle_admin_menu() {
-        add_menu_page( 'Analyse Critique', 'Analyse Critique', 'manage_options', 'dawn_critical_analysis', array( $this, 'dawn_critical_analysis' ), 'dashicons-chart-pie', 5 );
-        add_submenu_page( 'dawn_critical_analysis', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'dawn_critical_analysis_configuration', array( $this, 'dawn_critical_analysis_configuration') );
+        add_menu_page( 'OAK (Materiality Reporting)', 'OAK (Materiality Reporting)', 'manage_options', 'dawn_materiality_reporting', array( $this, 'dawn_materility_reporting' ), 'dashicons-chart-pie', 99 );
+
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Ogranisations', Dawn::$text_domain ), __( 'Ogranisations', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=organization' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Ajouter', Dawn::$text_domain ), __( 'Ajouter', Dawn::$text_domain ), 'manage_options', 'post-new.php?post_type=organization' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Sécteurs d\'activité', Dawn::$text_domain ), __( 'Sécteurs d\'activité', Dawn::$text_domain ), 'manage_options', 'edit-tags.php?taxonomy=org_activity&post_type=organization' );
+
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Publications', Dawn::$text_domain ), __( 'Publications', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=publication' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Ajouter', Dawn::$text_domain ), __( 'Ajouter', Dawn::$text_domain ), 'manage_options', 'post-new.php?post_type=publication' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Types de Publication', Dawn::$text_domain ), __( 'Type de Publication', Dawn::$text_domain ), 'manage_options', 'edit-tags.php?taxonomy=publication_type&post_type=publication' );
+
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Résultats', Dawn::$text_domain ), __( 'Résultats', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=results' );
+
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Élément d\'Information', Dawn::$text_domain ), __( 'Élément d\'Information', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=gri' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Ajouter', Dawn::$text_domain ), __( 'Ajouter', Dawn::$text_domain ), 'manage_options', 'post-new.php?post_type=gri' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Standards/Series', Dawn::$text_domain ), __( 'Standards/Series', Dawn::$text_domain ), 'manage_options', 'edit-tags.php?taxonomy=standards_series&post_type=gri' );
+
+        // $dawn_cpts = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
+        // $dawn_taxonomies = get_option('dawn_taxonomies') ? get_option('dawn_taxonomies') : [];
+        // foreach( $dawn_cpts as $cpt ) :
+        //     $name = str_replace( '\\', '', $cpt['name'] );
+        //     add_submenu_page( 'dawn_materiality_reporting', $cpt['name'], $cpt['name'], 'manage_options', 'edit.php?post_type=' . $cpt['slug'] );   
+        //     add_submenu_page( 'dawn_materiality_reporting', __( 'Ajouter', Dawn::$text_domain ), __( 'Ajouter', Dawn::$text_domain ), 'manage_options', 'post-new.php?post_type=' . $cpt['slug'] );
+        //     foreach( $dawn_taxonomies as $taxonomy) :
+        //         if ( $taxonomy['objectModel'] == $cpt['slug'] ) : 
+        //             add_submenu_page( 'dawn_materiality_reporting', $taxonomy['name'], $taxonomy['name'], 'manage_options', 'edit-tags.php?taxonomy=' . $taxonomy['slug'] . '&post_type=' . $cpt['slug'] );
+        //         endif;
+        //     endforeach;
+        // endforeach;
+
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Indicateurs Quali', Dawn::$text_domain ), __( 'Indicateurs Qualitatifs', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=quali_indic' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Ajouter', Dawn::$text_domain ), __( 'Ajouter', Dawn::$text_domain ), 'manage_options', 'post-new.php?post_type=quali_indic' );
+
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Indicateurs Quanti', Dawn::$text_domain ), __( 'Indicateurs Quantitafis', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=quanti_indic' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Ajouter', Dawn::$text_domain ), __( 'Ajouter', Dawn::$text_domain ), 'manage_options', 'post-new.php?post_type=quanti_indic' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Types de Données', Dawn::$text_domain ), __( 'Type de Données', Dawn::$text_domain ), 'manage_options', 'edit-tags.php?taxonomy=value_type&post_type=quanti_indic' );
+
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Glossaire', Dawn::$text_domain ), __( 'Glossaire', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=glossary' );
+
+        add_submenu_page( 'dawn_materiality_reporting', __('Analyse Critique', Dawn::$text_domain), __('Analyse Critique', Dawn::$text_domain), 'manage_options', 'dawn_critical_analysis', array( $this, 'dawn_critical_analysis') );
+        add_submenu_page( 'dawn_materiality_reporting', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'dawn_critical_analysis_configuration', array( $this, 'dawn_critical_analysis_configuration') );
         
-        add_menu_page( __( 'Ajouter Taxonomie', Dawn::$text_domain ), __( 'Ajout d\'une Taxonomie', Dawn::$text_domain ), 'manage_options', 'dawn_add_taxonomies', array( $this, 'dawn_add_taxonomies'), 'dashicons-welcome-add-page', 6 );
-        add_menu_page( __( 'Ajouter un modèle d\'Objet', Dawn::$text_domain ), __( 'Ajout d\'un modèle d\'objet', Dawn::$text_domain ), 'manage_options', 'dawn_add_object_model', array( $this, 'dawn_add_object_model'), 'dashicons-welcome-add-page', 6 );
+        add_submenu_page( 'dawn_materiality_reporting', __('Ajouter un Modèle d\'Objet', Dawn::$text_domain), __('Ajouter un Modèle d\'Objet', Dawn::$text_domain), 'manage_options', 'dawn_add_object_model', array( $this, 'dawn_add_object_model') );
+        add_submenu_page( 'dawn_materiality_reporting', __('Ajouter une Taxonomie', Dawn::$text_domain), __('Ajouter une Taxonomie', Dawn::$text_domain), 'manage_options', 'dawn_add_taxonomies', array( $this, 'dawn_add_taxonomies') );
     }
+
+    function add_admin_menu_separator( $position ) {
+        global $menu;
+        $index = 0;
+        foreach( $menu as $offset => $section ) {
+          if ( substr( $section [2], 0, 9 ) =='separator')
+            $index++;
+          if ( $offset>=$position ) {
+            $menu [ $position ] = array ('', 'read', "separator{$index}", '', 'wp-menu-separator' );
+            break;
+          }
+        }
+        ksort ( $menu );
+    }
+
+    function dawn_materility_reporting() {
+        ?>
+        <h1>Materiality Reporting</h1>
+        <?php
+    } 
 
     function dawn_critical_analysis() {
         include get_template_directory() . '/template-parts/critical-analysis.php';
@@ -230,8 +277,9 @@ class Dawn {
             ),
             'description' => 'Une organisation est un organisme émetteur/concepteur d’une ou plusieurs publication(s).', 
             'public' => true,
-            'menu_position' => 25,
+            'menu_position' => 101,
             'menu_icon' => 'dashicons-groups',
+            'show_in_menu' => false
         ) );
 
         register_post_type( 'publication', array(
@@ -244,8 +292,9 @@ class Dawn {
             ), 
             'description' => 'Une publication est un texte, une norme, une loi, un cadre de référence (etc.) qui guide la rédaction d’un reporting, le structure et en uniformise les contenus.', 
             'public' => true,
-            'menu_position' => 25,
+            'menu_position' => 102,
             'menu_icon' => 'dashicons-welcome-add-page',
+            'show_in_menu' => false
         ) );
 
         register_post_type( 'results', array(
@@ -258,78 +307,24 @@ class Dawn {
             ), 
             'description' => '', 
             'public' => true,
-            'menu_position' => 25,
+            'menu_position' => 103,
             'menu_icon' => 'dashicons-admin-site',
-        ) );
-
-        // register_post_type( 'country', array(
-        //     'labels' => array(
-        //         'name' => 'Pays', 
-        //         'singular_name' => 'Pays',
-        //         'add_new' => 'Ajouter',
-        //         'add_new_item' => 'Ajouter un nouveau Pays',
-        //         'edit_item' => 'Editer'
-        //     ), 
-        //     'description' => '', 
-        //     'public' => true,
-        //     'menu_position' => 25,
-        //     'menu_icon' => 'dashicons-admin-site',
-        // ) );
-
-        register_post_type( 'quali_indic', array(
-            'labels' => array(
-                'name' => 'Indicateurs Qualitatifs', 
-                'singular_name' => 'Indicateur Qualitatif',
-                'add_new' => 'Ajouter',
-                'add_new_item' => 'Ajouter un nouvel Indicateur Qualitatif',
-                'edit_item' => 'Editer'
-            ), 
-            'description' => '', 
-            'public' => true,
-            'menu_position' => 25,
-            'menu_icon' => 'dashicons-admin-post',
-        ) );
-
-        register_post_type( 'quanti_indic', array(
-            'labels' => array(
-                'name' => 'Indicateurs Quantitatifs', 
-                'singular_name' => 'Indicateur Quantitatif',
-                'add_new' => 'Ajouter',
-                'add_new_item' => 'Ajouter un nouvel Indicateur Quantitatif',
-                'edit_item' => 'Editer'
-            ), 
-            'description' => '', 
-            'public' => true,
-            'menu_position' => 25,
-            'menu_icon' => 'dashicons-admin-post',
-        ) );
-
-        register_post_type( 'glossary', array(
-            'labels' => array(
-                'name' => 'Gloassaire', 
-                'singular_name' => 'Gloassaire',
-                'add_new' => 'Ajouter',
-                'add_new_item' => 'Ajouter une nouvelle terminologie',
-                'edit_item' => 'Editer'
-            ), 
-            'description' => '', 
-            'public' => true,
-            'menu_position' => 25,
-            'menu_icon' => 'dashicons-welcome-write-blog',
+            'show_in_menu' => false
         ) );
 
         register_post_type( 'gri', array(
             'labels' => array(
-                'name' => 'Éléments d\'information', 
-                'singular_name' => 'Élément d\'information',
+                'name' => 'Éléments d\'Information', 
+                'singular_name' => 'Élément d\'Information',
                 'add_new' => 'Ajouter',
-                'add_new_item' => 'Ajouter un nouvel élément d\'information',
+                'add_new_item' => 'Ajouter un nouvel élément d\'Information',
                 'edit_item' => 'Editer'
             ), 
             'description' => '', 
             'public' => true,
-            'menu_position' => 25,
+            'menu_position' => 104,
             'menu_icon' => 'dashicons-video-alt',
+            'show_in_menu' => false
         ) );
 
         $dawn_cpts = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
@@ -345,10 +340,56 @@ class Dawn {
                 ), 
                 'description' => $cpt['description'], 
                 'public' => true,
-                'menu_position' => 25,
+                'menu_position' => 105,
                 'menu_icon' => $cpt['icon'],
+                // 'show_in_menu' => false
             ) );    
         endforeach;
+
+        register_post_type( 'quali_indic', array(
+            'labels' => array(
+                'name' => 'Indicateurs Qualitatifs', 
+                'singular_name' => 'Indicateur Qualitatif',
+                'add_new' => 'Ajouter',
+                'add_new_item' => 'Ajouter un nouvel Indicateur Qualitatif',
+                'edit_item' => 'Editer'
+            ), 
+            'description' => '', 
+            'public' => true,
+            'menu_position' => 106,
+            'menu_icon' => 'dashicons-admin-post',
+            'show_in_menu' => false
+        ) );
+
+        register_post_type( 'quanti_indic', array(
+            'labels' => array(
+                'name' => 'Indicateurs Quantitatifs', 
+                'singular_name' => 'Indicateur Quantitatif',
+                'add_new' => 'Ajouter',
+                'add_new_item' => 'Ajouter un nouvel Indicateur Quantitatif',
+                'edit_item' => 'Editer'
+            ), 
+            'description' => '', 
+            'public' => true,
+            'menu_position' => 107,
+            'menu_icon' => 'dashicons-admin-post',
+            'show_in_menu' => false
+        ) );
+
+        register_post_type( 'glossary', array(
+            'labels' => array(
+                'name' => 'Gloassaire', 
+                'singular_name' => 'Gloassaire',
+                'add_new' => 'Ajouter',
+                'add_new_item' => 'Ajouter une nouvelle terminologie',
+                'edit_item' => 'Editer'
+            ), 
+            'description' => '', 
+            'public' => true,
+            'menu_position' => 108,
+            'menu_icon' => 'dashicons-welcome-write-blog',
+            'show_in_menu' => false
+        ) );
     }
 
     function dawn_remove_post_type_editors() {
@@ -360,23 +401,6 @@ class Dawn {
     }
 
     function dawn_register_taxonomies() {
-        // register_taxonomy( 'org_size', 'organization', array(
-        //     'label' => 'Taille de l\'organisation',
-        //     'labels' => array(
-        //         'name' => 'Tailles',
-        //         'single_name' => 'Taille de l\'Organisation',
-        //     )
-        // ) );
-
-        // register_taxonomy( 'org_type', 'organization', array(
-        //     'label' => 'Type de l\'organisation',
-        //     'labels' => array(
-        //         'name' => 'Types',
-        //         'single_name' => 'Type de l\'Organisation',
-        //     )
-        // ) );
-
-
         register_taxonomy( 'org_activity', 'organization', array(
             'label' => 'Secteur d\'activité',
             'labels' => array(
@@ -387,37 +411,13 @@ class Dawn {
             'meta_box_cb' => false
         ) );
 
-        // register_taxonomy( 'langue', 'country', array(
-        //     'label' => 'langue',
-        //     'labels' => array(
-        //         'name' => 'Langues',
-        //         'single_name' => 'Langue',
-        //     )
-        // ) );
-
-        // register_taxonomy( 'region', 'country', array(
-        //     'label' => 'Régions',
-        //     'labels' => array(
-        //         'name' => 'Régions',
-        //         'single_name' => 'Régions',
-        //     )
-        // ) );
-
         register_taxonomy( 'publication_type', 'publication', array(
             'label' => 'Type',
             'labels' => array(
                 'name' => 'Types',
                 'single_name' => 'Type',
-            )
+            ),
         ) );
-
-        // register_taxonomy( 'code_type', array ( 'quali_indic', 'quanti_indic') , array(
-        //     'label' => 'Type de code',
-        //     'labels' => array(
-        //         'name' => 'Types de code',
-        //         'single_name' => 'Type de code',
-        //     )
-        // ) );
 
         register_taxonomy( 'value_type', array ( 'quanti_indic' ), array(
             'label' => 'Type de Donnée',

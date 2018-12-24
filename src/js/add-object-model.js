@@ -67,10 +67,10 @@ addObjectModelButton.addEventListener('click', function() {
                 // xhrFields: {
                 //     withCredentials: true
                 // },
-                crossDomain: true,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('Authorization', makeBaseAuth('mrtest', 'MatRep0rT17'));
-                },
+                // crossDomain: true,
+                // beforeSend: function (xhr) {
+                //     xhr.setRequestHeader('Authorization', makeBaseAuth('mrtest', 'MatRep0rT17'));
+                // },
 
                 data: {
                     'action': 'dawn_save_cpt',
