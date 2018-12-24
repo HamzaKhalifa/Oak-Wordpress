@@ -33,6 +33,8 @@ class Dawn {
         // For Ajax requests
         $this->dawn_ajax_calls();
         
+        update_option( 'dawn_taxonomies', [] );
+
         $this->dawn_contact_form();
     }
 
@@ -102,7 +104,7 @@ class Dawn {
         wp_enqueue_script( 'admin_menu_script', get_template_directory_uri() . '/src/js/admin-menu.js', array('jquery'), false, true );
         wp_localize_script( 'admin_menu_script', 'DATA', array(
             'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
-            'ajaxUrl' => admin_url('admin-ajax.php')
+            // 'ajaxUrl' => admin_url('admin-ajax.php')
         ) );
 
         if ( get_current_screen()->id == 'oak-materiality-reporting_page_dawn_critical_analysis_configuration' ) :
@@ -442,13 +444,15 @@ class Dawn {
 
         $dawn_taxonomies = get_option('dawn_taxonomies') ? get_option('dawn_taxonomies') : [];
         foreach( $dawn_taxonomies as $taxonomy) :
-            register_taxonomy( $taxonomy['slug'], $taxonomy['objectModel'], array(
-                'label' => $taxonomy['name'],
-                'labels' => array(
-                    'name' => $taxonomy['name'],
-                    'single_name' => $taxonomy['singleName']
-                )
-            ) );
+            if ( isset( $taxonomy ) ) :
+                register_taxonomy( $taxonomy['slug'], $taxonomy['objectModel'], array(
+                    'label' => $taxonomy['name'],
+                    'labels' => array(
+                        'name' => $taxonomy['name'],
+                        'single_name' => $taxonomy['singleName']
+                    )
+                ) );
+            endif;
         endforeach;
     }
 
@@ -719,7 +723,9 @@ class Dawn {
     }
 
     function dawn_get_posts() {
-        wp_send_json_success();
+        wp_send_json_success( array(
+            'what' => 'what'
+        ) );
     }
 }
 

@@ -25,7 +25,7 @@ jQuery(document).ready(function() {
         url: DATA.ajaxUrl,
         type: 'POST',
         data: {
-            'action': 'dawn_save_taxonomy',
+            'action': 'dawn_get_posts',
             'data': {}
         },
         success: function(data) {
