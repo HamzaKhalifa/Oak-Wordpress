@@ -33,6 +33,8 @@ class Dawn {
         // For Ajax requests
         $this->dawn_ajax_calls();
 
+        update_option( 'dawn_custom_post_types', [] );
+
         $this->dawn_contact_form();
     }
 
@@ -334,21 +336,23 @@ class Dawn {
 
         $dawn_cpts = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
         foreach( $dawn_cpts as $cpt ) :
-            $name = str_replace( '\\', '', $cpt['name'] );
-            register_post_type( $cpt['slug'], array(
-                'labels' => array(
-                    'name' => $name, 
-                    'singular_name' => $cpt['singleName'],
-                    'add_new' => 'Ajouter',
-                    'add_new_item' => 'Ajouter',
-                    'edit_item' => 'Editer'
-                ), 
-                'description' => $cpt['description'], 
-                'public' => true,
-                'menu_position' => 105,
-                'menu_icon' => $cpt['icon'],
-                // 'show_in_menu' => false
-            ) );    
+            if ( isset( $cpt ) ) : 
+                $name = str_replace( '\\', '', $cpt['name'] );
+                register_post_type( $cpt['slug'], array(
+                    'labels' => array(
+                        'name' => $name, 
+                        'singular_name' => $cpt['singleName'],
+                        'add_new' => 'Ajouter',
+                        'add_new_item' => 'Ajouter',
+                        'edit_item' => 'Editer'
+                    ), 
+                    'description' => $cpt['description'], 
+                    'public' => true,
+                    'menu_position' => 105,
+                    'menu_icon' => $cpt['icon'],
+                    // 'show_in_menu' => false
+                ) );   
+            endif; 
         endforeach;
 
         register_post_type( 'quali_indic', array(
@@ -563,7 +567,6 @@ class Dawn {
             $post_id = $post->ID;
             $selected_contacts_indexes = get_field( 'contacts', $post_id );
             $selected_contacts = [];
-            // var_dump( $selected_contacts_indexes );
             if ( isset( $selected_contacts_indexes ) && is_array( $selected_contacts_indexes )) :
                 foreach ( $selected_contacts_indexes as $selected_contact_index ) :
                     if ( isset( $contacts_object['choices'][ $selected_contact_index ] ) ) :
