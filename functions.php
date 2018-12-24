@@ -54,6 +54,9 @@ class Dawn {
 
         add_action( 'wp_ajax_dawn_delete_cpt', array( $this, 'dawn_delete_cpt') );
         add_action( 'wp_ajax_nopriv_dawn_delete_cpt', array( $this, 'dawn_delete_cpt') );
+
+        add_action( 'wp_ajax_dawn_get_posts', array( $this, 'dawn_get_posts') );
+        add_action( 'wp_ajax_nopriv_dawn_get_posts', array( $this, 'dawn_get_posts') );
     }
 
     function dawn_enqueue_styles() {
@@ -97,6 +100,10 @@ class Dawn {
 
     function dawn_admin_enqueue_scripts( $hook ) { 
         wp_enqueue_script( 'admin_menu_script', get_template_directory_uri() . '/src/js/admin-menu.js', array('jquery'), false, true );
+        wp_localize_script( 'admin_menu_script', 'DATA', array(
+            'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
+            'ajaxUrl' => admin_url('admin-ajax.php')
+        ) );
 
         if ( get_current_screen()->id == 'oak-materiality-reporting_page_dawn_critical_analysis_configuration' ) :
             wp_enqueue_script( 'dawn_critical_analysis_configuration', get_template_directory_uri() . '/src/js/critical-analysis-configuration.js', array('jquery'), false, true);
@@ -153,8 +160,6 @@ class Dawn {
             wp_enqueue_script( 'dawn_add_object_model', get_template_directory_uri() . '/src/js/add-object-model.js', array('jquery'), false, true);
             wp_localize_script( 'dawn_add_object_model', 'DATA', array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
-                // 'ajaxUrl' => 'http://localhost:8888/test/wp-admin/admin-ajax.php',
-                // 'ajaxUrl' => 'https://test.isivalue.com/jörö/wp-admin/admin-ajax.php',
                 'customPostTypes' => $post_types
             ));
         endif;
@@ -214,10 +219,10 @@ class Dawn {
         //     endforeach;
         // endforeach;
 
-        add_submenu_page( 'dawn_materiality_reporting', __( 'Indicateurs Quali', Dawn::$text_domain ), __( 'Indicateurs Qualitatifs', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=quali_indic' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Indicateurs Quali', Dawn::$text_domain ), __( 'Indicateurs Quali', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=quali_indic' );
         add_submenu_page( 'dawn_materiality_reporting', __( 'Ajouter', Dawn::$text_domain ), __( 'Ajouter', Dawn::$text_domain ), 'manage_options', 'post-new.php?post_type=quali_indic' );
 
-        add_submenu_page( 'dawn_materiality_reporting', __( 'Indicateurs Quanti', Dawn::$text_domain ), __( 'Indicateurs Quantitafis', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=quanti_indic' );
+        add_submenu_page( 'dawn_materiality_reporting', __( 'Indicateurs Quanti', Dawn::$text_domain ), __( 'Indicateurs Quanti', Dawn::$text_domain ), 'manage_options', 'edit.php?post_type=quanti_indic' );
         add_submenu_page( 'dawn_materiality_reporting', __( 'Ajouter', Dawn::$text_domain ), __( 'Ajouter', Dawn::$text_domain ), 'manage_options', 'post-new.php?post_type=quanti_indic' );
         add_submenu_page( 'dawn_materiality_reporting', __( 'Types de Données', Dawn::$text_domain ), __( 'Type de Données', Dawn::$text_domain ), 'manage_options', 'edit-tags.php?taxonomy=value_type&post_type=quanti_indic' );
 
@@ -710,6 +715,10 @@ class Dawn {
             endif;
         endforeach;
         update_option('dawn_custom_post_types', $cpts);
+        wp_send_json_success();
+    }
+
+    function dawn_get_posts() {
         wp_send_json_success();
     }
 }

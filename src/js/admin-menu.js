@@ -4,6 +4,7 @@ function manageSubMenus() {
     var allSubMenus = document.querySelectorAll('.wp-submenu');
     for (var i = 0; i < allSubMenus.length; i++) {
         if (allSubMenus[i].parentNode.id == 'toplevel_page_dawn_materiality_reporting') {
+            // allSubMenus[i].style.minWidth = '200px';
             var items = allSubMenus[i].querySelectorAll('li');
             for (var j = 0; j < items.length; j++) {
                 if (items[j].querySelector('a') != null) {
@@ -17,3 +18,21 @@ function manageSubMenus() {
         }
     }
 }
+
+
+jQuery(document).ready(function() {
+    jQuery.ajax({
+        url: DATA.ajaxUrl,
+        type: 'POST',
+        data: {
+            'action': 'dawn_save_taxonomy',
+            'data': {}
+        },
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+})
