@@ -23,11 +23,15 @@ function manageSubMenus() {
 jQuery(document).ready(function() {
     jQuery.ajax({
         url: DATA.ajaxUrl,
+        headers: { 'Access-Control-Allow-Origin': '*' },
         type: 'POST',
         data: {
             'action': 'dawn_get_posts',
             'data': {}
         },
+        // beforeSend: function (xhr) {
+        //     xhr.setRequestHeader ('Authorization', 'Basic ' + btoa(username + ':' + password));
+        // },
         success: function(data) {
             console.log(data);
         },

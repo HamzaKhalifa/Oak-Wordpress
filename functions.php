@@ -32,8 +32,6 @@ class Dawn {
 
         // For Ajax requests
         $this->dawn_ajax_calls();
-        
-        update_option( 'dawn_taxonomies', [] );
 
         $this->dawn_contact_form();
     }
@@ -58,7 +56,7 @@ class Dawn {
         add_action( 'wp_ajax_nopriv_dawn_delete_cpt', array( $this, 'dawn_delete_cpt') );
 
         add_action( 'wp_ajax_dawn_get_posts', array( $this, 'dawn_get_posts') );
-        add_action( 'wp_ajax_nopriv_dawn_get_posts', array( $this, 'dawn_get_posts') );
+        // add_action( 'wp_ajax_nopriv_dawn_get_posts', array( $this, 'dawn_get_posts') );
     }
 
     function dawn_enqueue_styles() {
@@ -172,7 +170,7 @@ class Dawn {
     }
 
     function add_cors_http_header() {
-        // header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
         // header("Access-Control-Allow-Origin: http://localhost:8888/boilerplate/");
         // header('content-type: application/json; charset=utf-8');
         // header("Access-Control-Allow-Credentials: true");

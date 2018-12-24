@@ -63,10 +63,9 @@ addTaxButton.addEventListener('click', function() {
                     doneLoading();
                     allTaxonomies.push(tax);
                     addTaxUI(tax);
-                    // console.log(data);
                 },
                 error: function(error) {
-                    // console.log(error);
+                    console.log(error);
                     doneLoading();
                 }
             });
