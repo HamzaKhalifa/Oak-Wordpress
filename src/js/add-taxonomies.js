@@ -5,11 +5,11 @@ var deletingTaxonomy = false;
 var taxonomyToDelete = '';
 var allTaxonomies = DATA.taxonomies;
 
-var addTaxButton = document.querySelector('.dawn_tax_add_formula__add_button');
+var addTaxButton = document.querySelector('.oak_tax_add_formula__add_button');
 addTaxButton.addEventListener('click', function() {
-    var slug = document.querySelector('.dawn_tax_add_formula_element__slug').value;
-    var name = document.querySelector('.dawn_tax_add_formula_element__name').value;
-    var singleName = document.querySelector('.dawn_tax_add_formula_element__single_name').value;
+    var slug = document.querySelector('.oak_tax_add_formula_element__slug').value;
+    var name = document.querySelector('.oak_tax_add_formula_element__name').value;
+    var singleName = document.querySelector('.oak_tax_add_formula_element__single_name').value;
 
     taxAlreadyExists = false;
     for (i = 0; i < DATA.taxonomies.length; i++) {
@@ -32,14 +32,14 @@ addTaxButton.addEventListener('click', function() {
         singleName.innerHTML = '';
 
         // Lets get the specific fields: 
-        var specificFieldsContainer = document.querySelector('.dawn_tax_add_formula_element__specific_fields_container');
+        var specificFieldsContainer = document.querySelector('.oak_tax_add_formula_element__specific_fields_container');
         var fieldsLabels = specificFieldsContainer.querySelectorAll('label');
         var fields = '';
         for (var i = 0; i < fieldsLabels.length; i++) {
             var types = '';
             if (fieldsLabels[i].innerHTML.indexOf('select') != -1 || fieldsLabels[i].innerHTML.indexOf('Select') != -1) {
                 // This is a select 
-                var typesInputs = document.querySelectorAll('.dawn_tax_add_formula_element_specific_fields_container__single_field_container')[i].querySelectorAll('.dawn_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__');
+                var typesInputs = document.querySelectorAll('.oak_tax_add_formula_element_specific_fields_container__single_field_container')[i].querySelectorAll('.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__');
                 for (var j = 0; j < typesInputs.length; j++) {
                     var delimiterToAdd = j == 0 ? '' : '|';
                     types += delimiterToAdd + typesInputs[j].value;
@@ -48,7 +48,7 @@ addTaxButton.addEventListener('click', function() {
             fields += fieldsLabels[i].innerHTML + ':' + types + ',';
         }
 
-        var objectModel = document.querySelector('.dawn_tax_add_formula_element__select_cpts').value;
+        var objectModel = document.querySelector('.oak_tax_add_formula_element__select_cpts').value;
 
         tax = { slug, name, singleName, objectModel, fields };
         jQuery(document).ready(function() {
@@ -56,7 +56,7 @@ addTaxButton.addEventListener('click', function() {
                 url: DATA.ajaxUrl,
                 type: 'POST',
                 data: {
-                    'action': 'dawn_save_taxonomy',
+                    'action': 'oak_save_taxonomy',
                     'data': tax
                 },
                 success: function(data) {
@@ -74,7 +74,7 @@ addTaxButton.addEventListener('click', function() {
 });
 
 function openModal(title, twoButtons) {
-    var confirmButtonSpan = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container_add_button_container__text');
+    var confirmButtonSpan = document.querySelector('.oak_tax_add_formula_modal_container_modal_buttons_container_add_button_container__text');
     if (addingSpecificField) {
         confirmButtonSpan.innerHTML = 'Ajouter';
     } 
@@ -82,15 +82,15 @@ function openModal(title, twoButtons) {
         confirmButtonSpan.innerHTML = 'Supprimer';
     }
 
-    var modalsContainer = document.querySelector('.dawn_tax_add_formula_modal_container');
-    modalsContainer.classList.add('dawn_tax_add_formula_modal_container__activated');
+    var modalsContainer = document.querySelector('.oak_tax_add_formula_modal_container');
+    modalsContainer.classList.add('oak_tax_add_formula_modal_container__activated');
 
-    var modalTitle = document.querySelector('.dawn_tax_add_formula_modal_container_modal_title_container__title');
+    var modalTitle = document.querySelector('.oak_tax_add_formula_modal_container_modal_title_container__title');
     modalTitle.innerHTML = title;
 
-    var addButtonContainer = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container__add_button_container');
-    var cancelButtonContainer = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container');
-    var okButtonContainer = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container__ok_button_container');
+    var addButtonContainer = document.querySelector('.oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container');
+    var cancelButtonContainer = document.querySelector('.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container');
+    var okButtonContainer = document.querySelector('.oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container');
     if ( twoButtons) {
         addButtonContainer.style.display = 'flex';
         cancelButtonContainer.style.display = 'flex';
@@ -103,7 +103,7 @@ function openModal(title, twoButtons) {
 }
 
 
-var okButtonContainer = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container__ok_button_container');
+var okButtonContainer = document.querySelector('.oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container');
 okButtonContainer.addEventListener('click', function() {
     closeModals();
 }); 
@@ -111,34 +111,34 @@ okButtonContainer.addEventListener('click', function() {
 function closeModals() {
     addingSpecificField = false;
     deletingTaxonomy = false;
-    var modalsContainer = document.querySelector('.dawn_tax_add_formula_modal_container');
-    modalsContainer.classList.remove('dawn_tax_add_formula_modal_container__activated');
+    var modalsContainer = document.querySelector('.oak_tax_add_formula_modal_container');
+    modalsContainer.classList.remove('oak_tax_add_formula_modal_container__activated');
 }
 
 function setLoading() {
     openModal();
-    document.querySelector('.dawn_loader').classList.remove('dawn_hidden');
-    document.querySelector('.dawn_tax_add_formula_modal_container__modal').classList.add('dawn_hidden');
+    document.querySelector('.oak_loader').classList.remove('oak_hidden');
+    document.querySelector('.oak_tax_add_formula_modal_container__modal').classList.add('oak_hidden');
 }
 
 function doneLoading() {
     closeModals();
     setTimeout(function() {
-        document.querySelector('.dawn_loader').classList.add('dawn_hidden');
-        document.querySelector('.dawn_tax_add_formula_modal_container__modal').classList.remove('dawn_hidden');
+        document.querySelector('.oak_loader').classList.add('oak_hidden');
+        document.querySelector('.oak_tax_add_formula_modal_container__modal').classList.remove('oak_hidden');
     }, 1000);
 }
 
 function addTaxUI(taxonomy) {
-    var taxList = document.querySelector('.dawn_tax_list');
+    var taxList = document.querySelector('.oak_tax_list');
     var div = document.createElement('div');
-    div.className = 'dawn_taxt_list__single_taxt';
+    div.className = 'oak_taxt_list__single_taxt';
 
     var taxName = document.createElement('span');
     taxName.innerHTML = taxonomy.slug;
 
     var icon = document.createElement('i');
-    icon.className = 'fas fa-minus dawn_tax_list_delete';
+    icon.className = 'fas fa-minus oak_tax_list_delete';
     icon.addEventListener('click', function() {
         deleteTaxonomy(this);
     });
@@ -160,14 +160,14 @@ function getKeys(obj) {
 
 manageSpecificFields();
 function manageSpecificFields() {
-    var fieldContainers = document.querySelectorAll('.dawn_tax_add_formula_element__field_container');
-    var specificFieldsContainer = document.querySelector('.dawn_tax_add_formula_element__specific_fields_container');
+    var fieldContainers = document.querySelectorAll('.oak_tax_add_formula_element__field_container');
+    var specificFieldsContainer = document.querySelector('.oak_tax_add_formula_element__specific_fields_container');
     for (var i = 0; i < fieldContainers.length; i++) {
         fieldContainers[i].setAttribute('index', i);
         fieldContainers[i].addEventListener('click', function() {
             var index = this.getAttribute('index');
-            fieldContainers[index].classList.add('dawn_tax_add_formula_element__field_container_already_added');
-            var fieldName = fieldContainers[index].querySelector('.dawn_tax_add_formula_element_field_container__field_name').innerHTML;
+            fieldContainers[index].classList.add('oak_tax_add_formula_element__field_container_already_added');
+            var fieldName = fieldContainers[index].querySelector('.oak_tax_add_formula_element_field_container__field_name').innerHTML;
             if (specificFieldsContainer.innerHTML.indexOf(fieldName) != -1) {
                 addingSpecificField = true;
                 specificFieldName = fieldName;
@@ -180,8 +180,8 @@ function manageSpecificFields() {
 }
 
 function addSpecificField(fieldName) {
-    var specificFieldsContainer = document.querySelector('.dawn_tax_add_formula_element__specific_fields_container');
-    var existingFields = specificFieldsContainer.querySelectorAll('.dawn_tax_add_formula_element_specific_fields_container__single_field_container');
+    var specificFieldsContainer = document.querySelector('.oak_tax_add_formula_element__specific_fields_container');
+    var existingFields = specificFieldsContainer.querySelectorAll('.oak_tax_add_formula_element_specific_fields_container__single_field_container');
     var fieldId = existingFields.length + 1;
     specificFieldsContainer.append(specificFieldView(fieldName, fieldId));
     // specificFieldsContainer.innerHTML = specificFieldsContainer.innerHTML + specificFieldView(fieldName, fieldId);
@@ -190,17 +190,17 @@ function addSpecificField(fieldName) {
 function specificFieldView(specificFieldName, fieldId) {
 
     var container = document.createElement('div');
-    container.className = 'dawn_tax_add_formula_element_specific_fields_container__single_field_container';
-    container.setAttribute('field-id', 'dawn-field-' + fieldId);
+    container.className = 'oak_tax_add_formula_element_specific_fields_container__single_field_container';
+    container.setAttribute('field-id', 'oak-field-' + fieldId);
 
     var fieldLabel = document.createElement('label');
-    fieldLabel.className = 'dawn_tax_add_formula_element_specific_field_name'; 
+    fieldLabel.className = 'oak_tax_add_formula_element_specific_field_name'; 
     fieldLabel.setAttribute('for', 'single_name');
 
     fieldLabel.innerHTML = specificFieldName;
 
     var deleteFieldButton = document.createElement('i');
-    deleteFieldButton.className = 'fas fa-minus dawn_tax_add_formula_element_specific_field_delete_button';
+    deleteFieldButton.className = 'fas fa-minus oak_tax_add_formula_element_specific_field_delete_button';
     deleteFieldButton.addEventListener('click', function() {
         this.parentNode.remove();
     });
@@ -210,13 +210,13 @@ function specificFieldView(specificFieldName, fieldId) {
 
     if (specificFieldName.indexOf('select') != -1 || specificFieldName.indexOf('Select') != -1 ) {
         var typesContainer = document.createElement('div');
-        typesContainer.className = 'dawn_tax_add_formula_element_specific_fields_container_single_field_container__types_container';
+        typesContainer.className = 'oak_tax_add_formula_element_specific_fields_container_single_field_container__types_container';
         typesContainer.setAttribute('field-id', fieldId);
 
         container.append(createSingleTypeContainer());
 
-        var addContainer = document.createElement('dawn_tax_add_formula_element_specific_fields_container_single_field_container__plus_container');
-        addContainer.className = 'dawn_tax_add_formula_element_specific_fields_container_single_field_container__plus_container';
+        var addContainer = document.createElement('oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container');
+        addContainer.className = 'oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container';
 
         addContainer.addEventListener('click', function() {
             var singleTypeContainer = createSingleTypeContainer();
@@ -241,10 +241,10 @@ function specificFieldView(specificFieldName, fieldId) {
 
 function createSingleTypeContainer() {
     var singleTypeContainer = document.createElement('div');
-    singleTypeContainer.className = 'dawn_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type';
+    singleTypeContainer.className = 'oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type';
 
     var singleTypeInput = document.createElement('input');
-    singleTypeInput.className = 'dawn_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__';
+    singleTypeInput.className = 'oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__';
     singleTypeInput.type = 'text';
 
     var deleteButton = document.createElement('i');
@@ -261,22 +261,22 @@ function createSingleTypeContainer() {
 }
 
 // This is the selectView: 
-//  <div class="dawn_tax_add_formula_element_specific_fields_container_single_field_container__types_container">
-//         <div class="dawn_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type">
-//             <input type="text" class="dawn_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__">
+//  <div class="oak_tax_add_formula_element_specific_fields_container_single_field_container__types_container">
+//         <div class="oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type">
+//             <input type="text" class="oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__">
 //             <i class="fas fa-minus"></i>
 //         </div>
         
 //     </div>
-//     <div class="dawn_tax_add_formula_element_specific_fields_container_single_field_container__plus_container">
-//         <span><?php _e('Ajouter', Dawn::$text_domain) ?></span>
+//     <div class="oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container">
+//         <span><?php _e('Ajouter', Oak::$text_domain) ?></span>
 //         <i class="fas fa-plus"></i>
 //     </div>
 
 // Handling modal add and cancel buttons: 
 handleModalButtons();
 function handleModalButtons() {
-    var confirmButton = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container__add_button_container');
+    var confirmButton = document.querySelector('.oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function() {
         if (addingSpecificField) {
             addSpecificField(specificFieldName);
@@ -289,12 +289,12 @@ function handleModalButtons() {
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
-                        'action': 'dawn_delete_taxonomy',
+                        'action': 'oak_delete_taxonomy',
                         'data': taxonomyToDelete
                     },
                     success: function(data) {
                         doneLoading();
-                        var taxonomiesContainers = document.querySelectorAll('.dawn_taxt_list__single_taxt');
+                        var taxonomiesContainers = document.querySelectorAll('.oak_taxt_list__single_taxt');
                         for (var i = 0; i < taxonomiesContainers.length; i++) {
                             var taxonomyName = taxonomiesContainers[i].querySelector('span');
                             if (taxonomyName.innerHTML == taxonomyToDelete) {
@@ -311,7 +311,7 @@ function handleModalButtons() {
         }
     });
 
-    var cancelButton = document.querySelector('.dawn_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container');
+    var cancelButton = document.querySelector('.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container');
     cancelButton.addEventListener('click', function() {
         closeModals();
     });
@@ -321,7 +321,7 @@ function handleModalButtons() {
 // Handling deleting taxonomies buttons:
 handleDeleteTaxonomies(); 
 function handleDeleteTaxonomies() {
-    var deleteButtons = document.querySelectorAll('.dawn_tax_list_delete');
+    var deleteButtons = document.querySelectorAll('.oak_tax_list_delete');
     for (var i = 0; i < deleteButtons.length; i++) {
         deleteButtons[i].addEventListener('click', function() {
             deleteTaxonomy(this);

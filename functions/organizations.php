@@ -6,7 +6,7 @@ acf_add_local_field_group( array (
         
         array (
             'key' => 'accro_org',
-            'label' => __( 'Acronyme de l\'organisation', Dawn::$text_domain ),
+            'label' => __( 'Acronyme de l\'organisation', Oak::$text_domain ),
             'name' => 'accro_org',
             'type' => 'text',
             'prefix' => '',
@@ -19,7 +19,7 @@ acf_add_local_field_group( array (
                 'id' => '',
             ),
             'default_value' => '',
-            'placeholder' => __( 'Acronyme de l\'organisation', Dawn::$text_domain )
+            'placeholder' => __( 'Acronyme de l\'organisation', Oak::$text_domain )
             // Specific for field type
         ),
 
@@ -43,7 +43,7 @@ acf_add_local_field_group( array (
 
         array (
             'key' => 'org_description',
-            'label' => __( 'Description de l\'organisation', Dawn::$text_domain ),
+            'label' => __( 'Description de l\'organisation', Oak::$text_domain ),
             'name' => 'org_description',
             'type' => 'textarea',
             'prefix' => '',
@@ -56,7 +56,7 @@ acf_add_local_field_group( array (
                 'id' => '',
             ),
             'default_value' => '',
-            'placeholder' => __( 'Description', Dawn::$text_domain )
+            'placeholder' => __( 'Description', Oak::$text_domain )
             // Specific for field type
         ),
 
@@ -81,7 +81,7 @@ acf_add_local_field_group( array (
 
         array (
             'key' => 'address_country',
-            'label' => __( 'Adresse du siège de l\'Organisation', Dawn::$text_domain ),
+            'label' => __( 'Adresse du siège de l\'Organisation', Oak::$text_domain ),
             'name' => 'address_country',
             'type' => 'text',
             'prefix' => '',
@@ -94,14 +94,14 @@ acf_add_local_field_group( array (
                 'id' => '',
             ),
             'default_value' => '',
-            'placeholder' => __( 'Adresse du siège de l\'organisation', Dawn::$text_domain )
+            'placeholder' => __( 'Adresse du siège de l\'organisation', Oak::$text_domain )
             // Specific for field type
         ),
 
         array (
-            'key' => 'countries',
+            'key' => 'org-countries',
             'label' => 'Pays du siège de l’organisation',
-            'name' => 'countries',
+            'name' => 'org-countries',
             'type' => 'select',
             'prefix' => '',
             // 'instructions' => 'Pays',
@@ -141,7 +141,7 @@ acf_add_local_field_group( array (
 
         array (
             'key' => 'org_type',
-            'label' => __( 'Type', Dawn::$text_domain ),
+            'label' => __( 'Type', Oak::$text_domain ),
             'name' => 'org_type',
             'type' => 'select',
             'prefix' => '',
@@ -163,7 +163,7 @@ acf_add_local_field_group( array (
                 'Partenariat'
             ),
             'default_value' => '',
-            'placeholder' => __( 'Description', Dawn::$text_domain )
+            'placeholder' => __( 'Description', Oak::$text_domain )
             // Specific for field type
         ),
 
@@ -257,7 +257,7 @@ acf_add_local_field_group( array (
             'name' => 'contacts',
             'type' => 'select',
             'prefix' => '',
-            'instructions' => __('Contactes CRM', Dawn::$text_domain),
+            'instructions' => __('Contactes CRM', Oak::$text_domain),
             'required' => 0,
             'conditional_logic' => 0,
             'wrapper' => array (

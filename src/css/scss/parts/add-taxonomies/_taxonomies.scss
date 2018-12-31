@@ -1,39 +1,39 @@
-.dawn_manage_tax_container {
+.oak_manage_tax_container {
     padding-left: 20px;
     display: flex;
     justify-content: space-between;
 }
 
-.dawn_tax_add_formula_container {
+.oak_tax_add_formula_container {
     width: 50%;
     display: flex;
     flex-direction: column;
     margin-right: 10px;
 }
 
-.dawn_tax_list {
+.oak_tax_list {
     width: 50%;
 }
 
-.dawn_tax_add_formula {
+.oak_tax_add_formula {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     align-items: flex-start;
 }
 
-.dawn_tax_add_formula__element, .dawn_tax_add_formula_element__specific_fields_container {
+.oak_tax_add_formula__element, .oak_tax_add_formula_element__specific_fields_container {
     display: flex;
     justify-content: space-between;
     width: 100%;
     flex-wrap: wrap;
 }
 
-.dawn_tax_add_formula_element__specific_fields_container {
+.oak_tax_add_formula_element__specific_fields_container {
     flex-direction: column;
 }
 
-.dawn_tax_add_formula_element__field_container {
+.oak_tax_add_formula_element__field_container {
     background-color: #24E08C;
     width: 200px;
     display: flex;
@@ -44,25 +44,25 @@
     margin-bottom: 10px;
 }
 
-.dawn_tax_add_formula_element__field_container_already_added {
+.oak_tax_add_formula_element__field_container_already_added {
     background-color: #FC394D;
     border-color: #FC394D
 }
 
-.dawn_tax_add_formula_element__field_container:hover {
+.oak_tax_add_formula_element__field_container:hover {
     cursor: pointer;
     background-color: white;
 }
 
-.dawn_tax_add_formula_element__field_container:hover span, .dawn_tax_add_formula_element__field_container:hover i  {
+.oak_tax_add_formula_element__field_container:hover span, .oak_tax_add_formula_element__field_container:hover i  {
     color: #24E08C;
 }
 
-.dawn_tax_add_formula_element__field_container_already_added:hover span, .dawn_tax_add_formula_element__field_container_already_added:hover i {
+.oak_tax_add_formula_element__field_container_already_added:hover span, .oak_tax_add_formula_element__field_container_already_added:hover i {
     color: #FC394D;
 }
 
-.dawn_tax_add_formula_element_field_container__field_name {
+.oak_tax_add_formula_element_field_container__field_name {
     // margin-right: 30px;
     color: white;
     padding: 10px;
@@ -73,26 +73,26 @@
     padding: 10px;
 }
 
-.dawn_tax_add_formula_element_specific_field_name {
+.oak_tax_add_formula_element_specific_field_name {
     margin-bottom: 10px;
 }
 
-.dawn_tax_add_formula_element_specific_field_delete_button {
+.oak_tax_add_formula_element_specific_field_delete_button {
     color: #FC394D;
     position: absolute;
     right: 10px;
 }
 
-.dawn_tax_add_formula_element_specific_field_delete_button:hover, .dawn_tax_list_delete:hover {
+.oak_tax_add_formula_element_specific_field_delete_button:hover, .oak_tax_list_delete:hover {
     cursor: pointer;
 }
 
-.dawn_tax_list_delete {
+.oak_tax_list_delete {
     color: #FC394D;
     margin-left: 10px;
 }
 
-.dawn_taxt_list__single_taxt {
+.oak_taxt_list__single_taxt {
     background-color: white;
     margin-bottom: 10px;
     padding: 10px; 
@@ -103,7 +103,7 @@
 }
 
 
-.dawn_tax_add_formula_element_specific_fields_container__single_field_container {
+.oak_tax_add_formula_element_specific_fields_container__single_field_container {
     margin-bottom: 10px;
     background-color: white;
     padding: 20px;
@@ -111,44 +111,44 @@
     position: relative;
 }
 
-.dawn_tax_add_formula_element_specific_fields_container__single_field_container {
+.oak_tax_add_formula_element_specific_fields_container__single_field_container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-.dawn_tax_add_formula_element_specific_fields_container_single_field_container__plus_container i {
+.oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container i {
     color: black;
     transition: .15 all ease-in-out;
 }
 
-.dawn_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover {
+.oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover {
     cursor: pointer;
 }
 
-.dawn_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover i, .dawn_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover span {
+.oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover i, .oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover span {
     color: #24E08C;
 }
 
-.dawn_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type {
+.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type {
     display: flex;
     align-items: center;
 }
 
-.dawn_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i {
+.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i {
     color: #FC394D;
 }
 
-.dawn_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i:hover {
+.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i:hover {
     cursor: pointer;
 }
 
-.dawn_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__ {
+.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__ {
     margin-right: 10px;
 }
 
 // For the modal
-.dawn_tax_add_formula_modal_container {
+.oak_tax_add_formula_modal_container {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -164,12 +164,12 @@
     justify-content: center;
 }
 
-.dawn_tax_add_formula_modal_container__activated {
+.oak_tax_add_formula_modal_container__activated {
     opacity: 1;
     z-index: 10;
 }
 
-.dawn_tax_add_formula_modal_container__modal {
+.oak_tax_add_formula_modal_container__modal {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -180,11 +180,11 @@
     top: 30%;
 }
 
-.dawn_tax_add_formula_modal_container_modal__title_container {
+.oak_tax_add_formula_modal_container_modal__title_container {
     text-align: center;
 }
 
-.dawn_tax_add_formula_modal_container_modal_buttons_container {
+.oak_tax_add_formula_modal_container_modal_buttons_container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -192,13 +192,13 @@
     margin-top: 20px;
 }
 
-.dawn_tax_add_formula_modal_container_modal__error {
+.oak_tax_add_formula_modal_container_modal__error {
     color: #FC394D;
     margin-top: 5px;
     font-weight: bold;
 }
 
-.dawn_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container, .dawn_tax_add_formula_modal_container_modal_buttons_container__add_button_container, .dawn_tax_add_formula_modal_container_modal_buttons_container__ok_button_container {
+.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container {
     background-color: #24E08C;
     display: flex;
     align-items: center;
@@ -211,25 +211,25 @@
     border: 1px solid #24E08C;
 }
 
-.dawn_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .dawn_tax_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .dawn_tax_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
+.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
     cursor: pointer;
     background-color: white;
 }
 
-.dawn_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container {
+.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container {
     background-color: #FC394D;
     border: 1px solid #FC394D;
 }
 
-.dawn_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
+.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
     color: #FC394D;
 }
 
-.dawn_tax_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .dawn_tax_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
+.oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
     color: #24E08C;
 }
 
-.dawn_tax_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .dawn_tax_add_formula_modal_container_modal_buttons_container_add_button_container__text {
+.oak_tax_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_tax_add_formula_modal_container_modal_buttons_container_add_button_container__text {
     color: white;
 }
 // Done with the modal

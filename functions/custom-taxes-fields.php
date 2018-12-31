@@ -1,5 +1,5 @@
 <?php 
-$custom_taxonomies = get_option('dawn_taxonomies') ? get_option('dawn_taxonomies') : [];
+$custom_taxonomies = get_option('oak_taxonomies') ? get_option('oak_taxonomies') : [];
 foreach ($custom_taxonomies as $custom_taxonomy) :
     $fields = explode( ',', $custom_taxonomy['fields'] );
     $field_group_fields = [];
@@ -17,7 +17,7 @@ foreach ($custom_taxonomies as $custom_taxonomy) :
                 $key = 'slug_parent_' . $custom_taxonomy['slug'] . $numberTimesParent;
                 $field_group_fields[] = array (
                     'key' => $key,
-                    'label' => __('Parent', Dawn::$text_domain),
+                    'label' => __('Parent', Oak::$text_domain),
                     'name' => $key,
                     'name' => 'slug_parent_' . $custom_taxonomy['slug'],
                     'type' => 'taxonomy',
@@ -45,7 +45,7 @@ foreach ($custom_taxonomies as $custom_taxonomy) :
                 $choices = explode( '|', $field_values['1'] );
                 $field_group_fields[] = array (
                     'key' => 'slug_type' . $custom_taxonomy['slug'] . $numberTimesType,
-                    'label' => __('Type', Dawn::$text_domain),
+                    'label' => __('Type', Oak::$text_domain),
                     'name' => 'slug_type' . $custom_taxonomy['slug'] . $numberTimesType,
                     'type' => 'select',
                     'prefix' => '',
@@ -68,7 +68,7 @@ foreach ($custom_taxonomies as $custom_taxonomy) :
                 $numberTimesColor++;
                 $field_group_fields[] = array (
                     'key' => 'slug_color_' . $custom_taxonomy['slug'] . $numberTimesColor,
-                    'label' => __('Couleur', Dawn::$text_domain),
+                    'label' => __('Couleur', Oak::$text_domain),
                     'name' => 'slug_color_' . $custom_taxonomy['slug'] . $numberTimesColor,
                     'type' => 'text',
                     'prefix' => '',

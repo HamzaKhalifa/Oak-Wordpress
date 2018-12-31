@@ -2,18 +2,18 @@ body #wpcontent {
     padding-left: 0px;
 }
 
-.dawn_hidden_information_container {
+.oak_hidden_information_container {
     display: none;
 }
 
-.dawn__admin_analysis {
+.oak__admin_analysis {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.dawn_admin_analysis__chart_container {
+.oak_admin_analysis__chart_container {
     width: 100%;
     background-color: white;
     padding: 10px;
@@ -22,15 +22,15 @@ body #wpcontent {
     border-top: none;
 }
 
-.dawn_admin_analysis__list {
+.oak_admin_analysis__list {
     width: 90%;
 }
 
-.dawn_critical_analysis_configuration__principles {
+.oak_critical_analysis_configuration__principles {
     width: 80%;
 }
 
-.dawn_admin_analysis_list__tile_container {
+.oak_admin_analysis_list__tile_container {
     background-color: #3B414E;
     padding: 10px 20px;
     display: flex;
@@ -38,11 +38,11 @@ body #wpcontent {
     align-items: center;
 }
 
-.dawn_admin_analysis_list_tile_container__tile {
+.oak_admin_analysis_list_tile_container__tile {
     color: white;
 }
 
-.dawn_admin_analysis_list_tile_container__add_analysis_button, .dawn_admin_analysis_modals_container_add_modal__cancel_button, .dawn_admin_analysis_modals_container_add_modal__add_button {
+.oak_admin_analysis_list_tile_container__add_analysis_button, .oak_admin_analysis_modals_container_add_modal__cancel_button, .oak_admin_analysis_modals_container_add_modal__add_button {
     background-color: #24E08C;
     display: flex;
     align-items: center;
@@ -55,20 +55,20 @@ body #wpcontent {
     border: 1px solid #24E08C;
 }
 
-.dawn_admin_analysis_list_tile_container__add_analysis_button:hover, .dawn_admin_analysis_modals_container_add_modal__cancel_button:hover, .dawn_admin_analysis_modals_container_add_modal__add_button:hover {
+.oak_admin_analysis_list_tile_container__add_analysis_button:hover, .oak_admin_analysis_modals_container_add_modal__cancel_button:hover, .oak_admin_analysis_modals_container_add_modal__add_button:hover {
     cursor: pointer;
     background-color: white;
 }
 
-.dawn_admin_analysis_list_tile_container__add_analysis_button:hover span, .dawn_admin_analysis_modals_container_add_modal__add_button:hover span {
+.oak_admin_analysis_list_tile_container__add_analysis_button:hover span, .oak_admin_analysis_modals_container_add_modal__add_button:hover span {
     color: #24E08C;
 }
 
-.dawn_admin_analysis_list_tile_container_add_analysis_button__text, .dawn_admin_analysis_modals_container_add_modal_cancel_button__text, .dawn_admin_analysis_modals_container_add_modal_add_button__text {
+.oak_admin_analysis_list_tile_container_add_analysis_button__text, .oak_admin_analysis_modals_container_add_modal_cancel_button__text, .oak_admin_analysis_modals_container_add_modal_add_button__text {
     color: white;
 }
 
-.dawn_admin_analysis_list__single_analysis {
+.oak_admin_analysis_list__single_analysis {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,7 +76,7 @@ body #wpcontent {
     position: relative;
 }
 
-.dawn_admin_analysis_list_single_analysis__title {
+.oak_admin_analysis_list_single_analysis__title {
     background-color: white;
     width: 100%;
     text-align: center;
@@ -85,18 +85,18 @@ body #wpcontent {
     font-size: 30px;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__upper_content {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria__upper_content {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.dawn_admin_analysis_list_single_analysis__single_principle {
+.oak_admin_analysis_list_single_analysis__single_principle {
     background-color: white;
     width: 100%;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle__principle_title {
+.oak_admin_analysis_list_single_analysis_single_principle__principle_title {
     padding-left: 20px;
     font-size: 30px;
     border: 1px solid #E1E1E1;
@@ -107,68 +107,68 @@ body #wpcontent {
     color: #FC394D;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle__single_criteria {
+.oak_admin_analysis_list_single_analysis_single_principle__single_criteria {
     border: 1px solid #E1E1E1;
     border-top: none;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle__single_criteria {
+.oak_admin_analysis_list_single_analysis_single_principle__single_criteria {
     padding: 0px 20px;
     padding-bottom: 20px;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content__score_container {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content__score_container {
     display: flex;
     align-items: center;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__criteria_title {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria__criteria_title {
     font-size: 25px;
     line-height: 30px;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria_upper_content_score_container__label {
     font-size: 20px;
     margin-right: 10px;
     margin-left: 10px;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark_label {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria__remark_label {
     font-size: 20px;
     margin-bottom: 10px;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__remark, {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria__remark, {
     width: 100%;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria__notes_container {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria__notes_container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note {
     width: 47.5%;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note h4 {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container__single_note h4 {
     margin-top: 0px;
 }
 
-.dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_sustain_textarea, .dawn_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_improve_textarea {
+.oak_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_sustain_textarea, .oak_admin_analysis_list_single_analysis_single_principle_single_criteria_notes_container_single_note__to_improve_textarea {
     width: 100%;
 }
 
-.dawn_admin_analysis_list_single_analysis__delete_button {
+.oak_admin_analysis_list_single_analysis__delete_button {
     position: absolute;
     right: 20px;
     top: 20px;
 }
 
 // For the modal container 
-.dawn_admin_analysis__modals_container {
+.oak_admin_analysis__modals_container {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -185,7 +185,7 @@ body #wpcontent {
     opacity: 0;
 }
 
-.dawn_admin_analysis__modals_container_activated {
+.oak_admin_analysis__modals_container_activated {
     opacity: 1;
     z-index: 10;
 }
@@ -194,7 +194,7 @@ body #wpcontent {
 
 
 // For the add modal itself
-.dawn_admin_analysis_modals_container__add_modal {
+.oak_admin_analysis_modals_container__add_modal {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -205,17 +205,17 @@ body #wpcontent {
     top: 30%;
 }
 
-.dawn_admin_analysis_modals_container_add_modal__title_container {
+.oak_admin_analysis_modals_container_add_modal__title_container {
     text-align: center;
 }
 
-.dawn_admin_analysis_modals_container_add_modal__error {
+.oak_admin_analysis_modals_container_add_modal__error {
     color: #FC394D;
     margin-top: 5px;
     font-weight: bold;
 }
 
-.dawn_admin_analysis_modals_container_add_modal__buttons_container {
+.oak_admin_analysis_modals_container_add_modal__buttons_container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -223,18 +223,18 @@ body #wpcontent {
     margin-top: 20px;
 }
 
-.dawn_admin_analysis_modals_container_add_modal__cancel_button {
+.oak_admin_analysis_modals_container_add_modal__cancel_button {
     background-color: #FC394D;
     border: 1px solid #FC394D;
 }
 
-.dawn_admin_analysis_modals_container_add_modal__cancel_button:hover span {
+.oak_admin_analysis_modals_container_add_modal__cancel_button:hover span {
     color: #FC394D;
 }
 
 // Done with the add modal
 
-.dawn_admin_analysis__save_container {
+.oak_admin_analysis__save_container {
     position: fixed;
     background-color: #389EF0;
     bottom: 30px;
@@ -249,7 +249,7 @@ body #wpcontent {
     z-index: 100;
 }
 
-.dawn_admin_analysis__save_container:hover {
+.oak_admin_analysis__save_container:hover {
     cursor: pointer;
 }
 
@@ -258,6 +258,6 @@ body #wpcontent {
     font-size: 30px;
 }
 
-.dawn_admin_analysis_save_container__text {
+.oak_admin_analysis_save_container__text {
     color: white
 }

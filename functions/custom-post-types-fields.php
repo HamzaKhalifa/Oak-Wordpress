@@ -1,5 +1,5 @@
 <?php 
-$custom_post_types = get_option('dawn_custom_post_types') ? get_option('dawn_custom_post_types') : [];
+$custom_post_types = get_option('oak_custom_post_types') ? get_option('oak_custom_post_types') : [];
 
 foreach ( $custom_post_types as $custom_post_type ) :
     $fields = explode( ',', $custom_post_type['fields'] );

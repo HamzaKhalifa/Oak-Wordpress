@@ -1,14 +1,14 @@
 if (DATA.analysis.principles) {
-    var doughnutChart = document.querySelector('.dawn_final_result_doughnut_chart');
+    var doughnutChart = document.querySelector('.oak_final_result_doughnut_chart');
     var doughnutChartCreator = doughnutChart.getContext('2d');
     
-    var polarAreaChart = document.querySelector('.dawn_final_result_polar_area_chart');
+    var polarAreaChart = document.querySelector('.oak_final_result_polar_area_chart');
     var polarAreaChartCreator = polarAreaChart.getContext('2d');
     
-    var radarChart = document.querySelector('.dawn_final_result_radar_chart');
+    var radarChart = document.querySelector('.oak_final_result_radar_chart');
     var radarChartCreator = radarChart.getContext('2d');
     
-    var barChart = document.querySelector('.dawn_final_result_bar_chart');
+    var barChart = document.querySelector('.oak_final_result_bar_chart');
     var barChartCreator = barChart.getContext('2d');
     
     var colors = ['#389EF0', '#FC394D', '#e67e22', '#f1c40f', '#d35400', '#e74c3c', '#8e44ad', '#34495e',
@@ -105,7 +105,7 @@ if (DATA.analysis.principles) {
     });
     
     for (var i = 0; i < principles.length; i++) {
-        var singlePrincipleChart = document.querySelector('.dawn_principle' + i + '_doughnut_chart');
+        var singlePrincipleChart = document.querySelector('.oak_principle' + i + '_doughnut_chart');
         var singlePrincipleChartCreator = singlePrincipleChart.getContext('2d');
         new Chart(singlePrincipleChartCreator, {
             label: principles[i].principle,

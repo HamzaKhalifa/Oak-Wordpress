@@ -142,7 +142,7 @@ acf_add_local_field_group(
 
             array (
                 'key' => 'desc_quanti_indic',
-                'label' => __( 'Description de la publication', Dawn::$text_domain ),
+                'label' => __( 'Description de la publication', Oak::$text_domain ),
                 'name' => 'desc_quanti_indic',
                 'type' => 'textarea',
                 'prefix' => '',

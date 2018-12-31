@@ -12,7 +12,7 @@
         <input type="text" name="subject" value="<?php echo ( $_GET['subject'] ); ?>">
 
         <label for="content">Content</label>
-        <textarea name="content" id="dawn-contact-content" cols="30" rows="10"><?php echo( $_GET['content'] ); ?></textarea>
+        <textarea name="content" id="oak-contact-content" cols="30" rows="10"><?php echo( $_GET['content'] ); ?></textarea>
 
         <input type="submit" value="Send Email">
     </form>

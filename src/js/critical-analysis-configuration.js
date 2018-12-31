@@ -1,12 +1,12 @@
-var addPrincipleButton = document.querySelector('.dawn_critical_analysis_configuration_principles_title_container__add_principle_button');
-var addPrincipleCancelButton = document.querySelector('.dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button');
-var addPrincipleAddButton = document.querySelector('.dawn_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button');
-var addError = document.querySelector('.dawn_critical_analysis_configuration_modals_container_add_principle_modal__error');
-var addPrincipleInputField = document.querySelector('.dawn_critical_analysis_configuration_modals_container__add_principle_modal__input');
-var loadBasicDataButton = document.querySelector('.dawn_critical_analysis_configuration__load_base_data_button');
-var saveButton = document.querySelector('.dawn_critical_analysis_configuration__save_button');
+var addPrincipleButton = document.querySelector('.oak_critical_analysis_configuration_principles_title_container__add_principle_button');
+var addPrincipleCancelButton = document.querySelector('.oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button');
+var addPrincipleAddButton = document.querySelector('.oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button');
+var addError = document.querySelector('.oak_critical_analysis_configuration_modals_container_add_principle_modal__error');
+var addPrincipleInputField = document.querySelector('.oak_critical_analysis_configuration_modals_container__add_principle_modal__input');
+var loadBasicDataButton = document.querySelector('.oak_critical_analysis_configuration__load_base_data_button');
+var saveButton = document.querySelector('.oak_critical_analysis_configuration__save_button');
 
-var modalsContainer = document.querySelector('.dawn_critical_analysis_configuration__modals_container');
+var modalsContainer = document.querySelector('.oak_critical_analysis_configuration__modals_container');
 
 var addingForPrinciple = true;
 // We store the principle name when we are about to add a criterion to it:
@@ -53,48 +53,48 @@ addPrincipleAddButton.addEventListener('click', function() {
 
 function openModals(addingPrinciple) {
     addPrincipleInputField.value = '';
-    modalsContainer.classList.add('dawn_critical_analysis_configuration__modals_container_activated');
-    var modalTitle = document.querySelector('.dawn_critical_analysis_configuration_modals_container_add_principle_modal_title_container__title'); 
+    modalsContainer.classList.add('oak_critical_analysis_configuration__modals_container_activated');
+    var modalTitle = document.querySelector('.oak_critical_analysis_configuration_modals_container_add_principle_modal_title_container__title'); 
     modalTitle.innerHTML = addingPrinciple ? 'Ajouter un Principe de Reporting' : 'Ajouter un Critère de Principe de Reporting';
     addingForPrinciple = addingPrinciple;
 }
 
 function closeModals() {
-    modalsContainer.classList.remove('dawn_critical_analysis_configuration__modals_container_activated');
+    modalsContainer.classList.remove('oak_critical_analysis_configuration__modals_container_activated');
     addError.innerHTML = '';
 }
 
 function setLoading() {
     openModals();
-    document.querySelector('.dawn_loader').classList.remove('dawn_hidden');
-    document.querySelector('.dawn_critical_analysis_configuration_modals_container__add_principle_modal').classList.add('dawn_hidden');
+    document.querySelector('.oak_loader').classList.remove('oak_hidden');
+    document.querySelector('.oak_critical_analysis_configuration_modals_container__add_principle_modal').classList.add('oak_hidden');
 }
 
 function doneLoading() {
     closeModals();
     setTimeout(function() {
-        document.querySelector('.dawn_loader').classList.add('dawn_hidden');
-        document.querySelector('.dawn_critical_analysis_configuration_modals_container__add_principle_modal').classList.remove('dawn_hidden');
+        document.querySelector('.oak_loader').classList.add('oak_hidden');
+        document.querySelector('.oak_critical_analysis_configuration_modals_container__add_principle_modal').classList.remove('oak_hidden');
     }, 1000);
 }
 
 function addPrinciple(principleName, principleData) {
     var principleDiv = document.createElement('div');
-    principleDiv.className = 'dawn_critical_analysis_configuration_principles__principle';
+    principleDiv.className = 'oak_critical_analysis_configuration_principles__principle';
     principleDiv.id = principleName.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_principle_container';
 
     var principleContainerDiv = document.createElement('div');
-    principleContainerDiv.className = 'dawn_critical_analysis_configuration_principles_principle__container';
+    principleContainerDiv.className = 'oak_critical_analysis_configuration_principles_principle__container';
 
     var principleTitleH3 = document.createElement('h3');
-    principleTitleH3.className = 'dawn_critical_analysis_configuration_principles_principle_container__title';
+    principleTitleH3.className = 'oak_critical_analysis_configuration_principles_principle_container__title';
     principleTitleH3.innerHTML = principleName;
 
     var deleteButton = document.createElement('i');
     deleteButton.className = 'fas fa-trash-alt';
     deleteButton.id =  principleName.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_principle_delete_button';
     deleteButton.addEventListener('click', function() {
-        document.querySelector('.dawn_critical_analysis_configuration__principles').removeChild(document.querySelector('#' + this.getAttribute('id').split('_')[0] + '_principle_container'));
+        document.querySelector('.oak_critical_analysis_configuration__principles').removeChild(document.querySelector('#' + this.getAttribute('id').split('_')[0] + '_principle_container'));
     })
 
     principleContainerDiv.append(principleTitleH3);
@@ -103,11 +103,11 @@ function addPrinciple(principleName, principleData) {
 
     // Added data
     var principleDefinitionLabel = document.createElement('span');
-    principleDefinitionLabel.className = 'dawn_critical_analysis_configuration_principles_principle__definition_label';
+    principleDefinitionLabel.className = 'oak_critical_analysis_configuration_principles_principle__definition_label';
     principleDefinitionLabel.innerHTML = 'Définition du principe';
 
     var definitionTextArea = document.createElement('textarea');
-    definitionTextArea.className = 'dawn_critical_analysis_configuration_principles_principle__textarea'
+    definitionTextArea.className = 'oak_critical_analysis_configuration_principles_principle__textarea'
     definitionTextArea.setAttribute('cols', 30);
     definitionTextArea.setAttribute('rows', 5);
     if (principleData) {
@@ -116,7 +116,7 @@ function addPrinciple(principleName, principleData) {
 
     // For the image
     var principleImageContainerDiv = document.createElement('div');
-    principleImageContainerDiv.className = 'dawn_critical_analysis_configuration_principles_principle_image';
+    principleImageContainerDiv.className = 'oak_critical_analysis_configuration_principles_principle_image';
 
     var principleImageTitleH3 = document.createElement('h3');
     principleImageTitleH3.innerHTML = 'Image: '
@@ -127,7 +127,7 @@ function addPrinciple(principleName, principleData) {
     imageInput.setAttribute('onChange', 'readUrl(this);');
 
     var image = document.createElement('img');
-    image.className = 'dawn_critical_analysis_configuration_principles_principle_image__image';
+    image.className = 'oak_critical_analysis_configuration_principles_principle_image__image';
     image.id = principleName.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_image';
     if (principleData) {
         image.setAttribute('src', principleData.image);
@@ -139,10 +139,10 @@ function addPrinciple(principleName, principleData) {
     // Done with the image
 
     var rolesTitleContainer = document.createElement('div');
-    rolesTitleContainer.className = 'dawn_critical_analysis_configuration_principles_principle__roles_title_container';
+    rolesTitleContainer.className = 'oak_critical_analysis_configuration_principles_principle__roles_title_container';
 
     var rolesTitle = document.createElement('span');
-    rolesTitle.className = 'dawn_critical_analysis_configuration_principles_principle_roles_title_container__label';
+    rolesTitle.className = 'oak_critical_analysis_configuration_principles_principle_roles_title_container__label';
     rolesTitle.innerHTML = 'Roles';
 
     var addRoleButton = document.createElement('i');
@@ -152,12 +152,12 @@ function addPrinciple(principleName, principleData) {
         var roleHeadingContainer = document.querySelector('#' + this.getAttribute('id').split('_')[0] + '_role_heading_container');
         // Creating a role input 
         var singleRole = document.createElement('div');
-        singleRole.className = 'dawn_critical_analysis_configuration_principles_principle__single_role';
+        singleRole.className = 'oak_critical_analysis_configuration_principles_principle__single_role';
         var roleId = makeid();
         singleRole.id = roleId + '_single_role';
 
         var textarea = document.createElement('textarea');
-        textarea.className = 'dawn_critical_analysis_configuration_principles_principle__single_role_textarea';
+        textarea.className = 'oak_critical_analysis_configuration_principles_principle__single_role_textarea';
         textarea.setAttribute('cols', 30);
         textarea.setAttribute('rows', 2);
         
@@ -181,15 +181,15 @@ function addPrinciple(principleName, principleData) {
     rolesTitleContainer.append(addRoleButton);
 
     var roleHeadingContainer = document.createElement('div');
-    roleHeadingContainer.className = 'dawn_critical_analysis_configuration_principles_principle__role_title_container';
+    roleHeadingContainer.className = 'oak_critical_analysis_configuration_principles_principle__role_title_container';
     roleHeadingContainer.id = principleName.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_role_heading_container';
 
     var heading = document.createElement('span');
-    heading.className = 'dawn_critical_analysis_configuration_principles_principle_role_title_container__title';
+    heading.className = 'oak_critical_analysis_configuration_principles_principle_role_title_container__title';
     heading.innerHTML = 'Entête des roles:';
 
     var headingTextArea = document.createElement('textarea');
-    headingTextArea.className = 'dawn_critical_analysis_configuration_principles_principle_role_title_container__textarea';
+    headingTextArea.className = 'oak_critical_analysis_configuration_principles_principle_role_title_container__textarea';
     headingTextArea.setAttribute('cols', 30);
     headingTextArea.setAttribute('rows', 2);
     if (principleData) {
@@ -210,11 +210,11 @@ function addPrinciple(principleName, principleData) {
     if (principleData && principleData.content.roles) {
         for (var i = 0; i < principleData.content.roles.length; i++) {
             var singleRole = document.createElement('div');
-            singleRole.className = 'dawn_critical_analysis_configuration_principles_principle__single_role';
+            singleRole.className = 'oak_critical_analysis_configuration_principles_principle__single_role';
             singleRole.id = principleData.content.roles[i].replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_single_role';
 
             var textarea = document.createElement('textarea');
-            textarea.className = 'dawn_critical_analysis_configuration_principles_principle__single_role_textarea';
+            textarea.className = 'oak_critical_analysis_configuration_principles_principle__single_role_textarea';
             textarea.setAttribute('cols', 30);
             textarea.setAttribute('rows', 2);
             textarea.value = principleData.content.roles[i];
@@ -237,14 +237,14 @@ function addPrinciple(principleName, principleData) {
     }
 
     var principleCriteriaDiv = document.createElement('div');
-    principleCriteriaDiv.className = 'dawn_critical_analysis_configuration_principles_principle__criteria';
+    principleCriteriaDiv.className = 'oak_critical_analysis_configuration_principles_principle__criteria';
     principleCriteriaDiv.id = principleName.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_criteria_container';
 
     var criteriaAddContainerDiv = document.createElement('div');
-    criteriaAddContainerDiv.className = 'dawn_critical_analysis_configuration_principles_principle__add_container';
+    criteriaAddContainerDiv.className = 'oak_critical_analysis_configuration_principles_principle__add_container';
 
     var criteriaAddButtonDiv = document.createElement('div');
-    criteriaAddButtonDiv.className = 'dawn_critical_analysis_configuration_principles_principle_add_container__add_button';
+    criteriaAddButtonDiv.className = 'oak_critical_analysis_configuration_principles_principle_add_container__add_button';
     criteriaAddButtonDiv.id = principleName.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_criteria_button';
     criteriaAddButtonDiv.addEventListener('click', function() {
         openModals(false);
@@ -253,7 +253,7 @@ function addPrinciple(principleName, principleData) {
     })
 
     var criteriaAddSpan = document.createElement('span');
-    criteriaAddSpan.className = 'dawn_critical_analysis_configuration_principles_principle_add_container_add_button__text';
+    criteriaAddSpan.className = 'oak_critical_analysis_configuration_principles_principle_add_container_add_button__text';
     criteriaAddSpan.innerHTML = 'Ajouter un critère';
 
     criteriaAddButtonDiv.append(criteriaAddSpan);
@@ -262,47 +262,47 @@ function addPrinciple(principleName, principleData) {
     principleDiv.append(principleCriteriaDiv);
     principleDiv.append(criteriaAddContainerDiv);
 
-    var principlesContainer = document.querySelector('.dawn_critical_analysis_configuration__principles');
+    var principlesContainer = document.querySelector('.oak_critical_analysis_configuration__principles');
     principlesContainer.append(principleDiv);
 
     closeModals();
 
     // What we are creating here
-    // <div class="dawn_critical_analysis_configuration_principles__principle">
-    //     <div class="dawn_critical_analysis_configuration_principles_principle__container">
-    //         <h3 class="dawn_critical_analysis_configuration_principles_principle_container__title">Implication des parties prenantes</h3>
+    // <div class="oak_critical_analysis_configuration_principles__principle">
+    //     <div class="oak_critical_analysis_configuration_principles_principle__container">
+    //         <h3 class="oak_critical_analysis_configuration_principles_principle_container__title">Implication des parties prenantes</h3>
     //         <i class="fas fa-trash-alt"></i>
     //     </div>
 
-    //     <span class="dawn_critical_analysis_configuration_principles_principle__definition_label">Définition du principe</span>
-    //     <textarea class="dawn_critical_analysis_configuration_principles_principle__textarea" cols="30" rows="5"></textarea>
+    //     <span class="oak_critical_analysis_configuration_principles_principle__definition_label">Définition du principe</span>
+    //     <textarea class="oak_critical_analysis_configuration_principles_principle__textarea" cols="30" rows="5"></textarea>
 
-    //     <div class="dawn_critical_analysis_configuration_principles_principle_image">
+    //     <div class="oak_critical_analysis_configuration_principles_principle_image">
     //         <h3>Image</h3>
     //         <input type="file" src="" onChange="readUrl(this);" alt="">
-    //         <img src="" id="principle_image" class="dawn_critical_analysis_configuration_principles_principle_image__image" alt="">
+    //         <img src="" id="principle_image" class="oak_critical_analysis_configuration_principles_principle_image__image" alt="">
     //     </div>
 
-    //     <div class="dawn_critical_analysis_configuration_principles_principle__roles_title_container">
-    //         <span class="dawn_critical_analysis_configuration_principles_principle_roles_title_container__label">Roles</span>
+    //     <div class="oak_critical_analysis_configuration_principles_principle__roles_title_container">
+    //         <span class="oak_critical_analysis_configuration_principles_principle_roles_title_container__label">Roles</span>
     //         <i class="fas fa-plus-square"></i>
     //     </div>
-    //     <div class="dawn_critical_analysis_configuration_principles_principle__role_title_container">
-    //         <span class="dawn_critical_analysis_configuration_principles_principle_role_title_container__title">Entête des roles:</span>
-    //         <textarea class="dawn_critical_analysis_configuration_principles_principle_role_title_container__textarea" cols="30" rows="2"></textarea>
+    //     <div class="oak_critical_analysis_configuration_principles_principle__role_title_container">
+    //         <span class="oak_critical_analysis_configuration_principles_principle_role_title_container__title">Entête des roles:</span>
+    //         <textarea class="oak_critical_analysis_configuration_principles_principle_role_title_container__textarea" cols="30" rows="2"></textarea>
     //     </div>
-    //     <div class="dawn_critical_analysis_configuration_principles_principle__single_role">
-    //         <textarea class="dawn_critical_analysis_configuration_principles_principle__single_role_textarea" cols="30" rows="2"></textarea>
+    //     <div class="oak_critical_analysis_configuration_principles_principle__single_role">
+    //         <textarea class="oak_critical_analysis_configuration_principles_principle__single_role_textarea" cols="30" rows="2"></textarea>
     //         <i class="fas fa-trash-alt"></i>
     //     </div>
 
 
-    //     <div class="dawn_critical_analysis_configuration_principles_principle__criteria">
+    //     <div class="oak_critical_analysis_configuration_principles_principle__criteria">
     //         <!-- This is where the criteria are gonna be added dynamically.  -->
     //     </div>
-    //     <div class="dawn_critical_analysis_configuration_principles_principle__add_container">
-    //         <div class="dawn_critical_analysis_configuration_principles_principle_add_container__add_button">
-    //             <span class="dawn_critical_analysis_configuration_principles_principle_add_container_add_button__text" >
+    //     <div class="oak_critical_analysis_configuration_principles_principle__add_container">
+    //         <div class="oak_critical_analysis_configuration_principles_principle_add_container__add_button">
+    //             <span class="oak_critical_analysis_configuration_principles_principle_add_container_add_button__text" >
     //                 Ajouter un critère
     //             </span>
     //         </div>
@@ -314,11 +314,11 @@ function addCriterion(criterion) {
     var criteriaContainerDiv = document.querySelector('#' + selectedPrinciple + '_criteria_container');
 
     var criterionDiv = document.createElement('div');
-    criterionDiv.className = 'dawn_critical_analysis_configuration_principles_principle_criteria__criterion';
+    criterionDiv.className = 'oak_critical_analysis_configuration_principles_principle_criteria__criterion';
     criterionDiv.id = criterion.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "") + '_criterion_container';
 
     var criterionTitleH4 = document.createElement('h4');
-    criterionTitleH4.className = 'dawn_critical_analysis_configuration_principles_principle_criteria_criterion__title';
+    criterionTitleH4.className = 'oak_critical_analysis_configuration_principles_principle_criteria_criterion__title';
     criterionTitleH4.innerHTML = criterion.replace(/\\/g, '');
 
     var deleteButton = document.createElement('i');
@@ -337,8 +337,8 @@ function addCriterion(criterion) {
 
     closeModals();
     // What we are creating here: 
-    // <div class="dawn_critical_analysis_configuration_principles_principle_criteria__criterion">
-    //     <h4 class="dawn_critical_analysis_configuration_principles_principle_criteria_criterion__title">Critère 1</h4>
+    // <div class="oak_critical_analysis_configuration_principles_principle_criteria__criterion">
+    //     <h4 class="oak_critical_analysis_configuration_principles_principle_criteria_criterion__title">Critère 1</h4>
     //     <i class="fas fa-minus-square"></i>
     // </div>
 }
@@ -346,13 +346,13 @@ function addCriterion(criterion) {
 
 // To load basic data
 loadBasicDataButton.addEventListener('click', function() {
-    var existingPrinciples = document.getElementsByClassName('dawn_critical_analysis_configuration_principles_principle__container');
+    var existingPrinciples = document.getElementsByClassName('oak_critical_analysis_configuration_principles_principle__container');
     if (existingPrinciples.length > 0) {
-        document.querySelector('.dawn_critical_analysis_configuration__load_default_data_error').innerHTML = 'Veuillez supprimer tous les composants du modèle présent afin de charger le modèle par defaut';
+        document.querySelector('.oak_critical_analysis_configuration__load_default_data_error').innerHTML = 'Veuillez supprimer tous les composants du modèle présent afin de charger le modèle par defaut';
         return;
     }
     setLoading();
-    document.querySelector('.dawn_critical_analysis_configuration__load_default_data_error').innerHTML = '';
+    document.querySelector('.oak_critical_analysis_configuration__load_default_data_error').innerHTML = '';
     var data = DATA.baseData.data;
     for (var i = 0; i < data.length; i++) {
         addPrinciple(data[i].principle, data[i]);
@@ -370,7 +370,7 @@ saveButton.addEventListener('click', function() {
 
     var data = [];
 
-    var principles = document.getElementsByClassName('dawn_critical_analysis_configuration_principles__principle');
+    var principles = document.getElementsByClassName('oak_critical_analysis_configuration_principles__principle');
     for (var i = 0; i < principles.length; i++) {
         var principleData = {
             principle: '',
@@ -384,33 +384,33 @@ saveButton.addEventListener('click', function() {
         };
 
         // Principle title
-        var principleTitle = principles[i].querySelector('.dawn_critical_analysis_configuration_principles_principle_container__title').innerHTML;
+        var principleTitle = principles[i].querySelector('.oak_critical_analysis_configuration_principles_principle_container__title').innerHTML;
         principleData.principle = principleTitle;
 
         // Principle Description
-        var principleDescription = principles[i].querySelector('.dawn_critical_analysis_configuration_principles_principle__textarea').value;
+        var principleDescription = principles[i].querySelector('.oak_critical_analysis_configuration_principles_principle__textarea').value;
         principleData.principleDescription = principleDescription;
 
         // Principle Image 
-        var imageSrc = principles[i].querySelector('.dawn_critical_analysis_configuration_principles_principle_image__image').getAttribute('src');
+        var imageSrc = principles[i].querySelector('.oak_critical_analysis_configuration_principles_principle_image__image').getAttribute('src');
         principleData.image = imageSrc;
 
         // Content title 
-        var contentTitle = principles[i].querySelector('.dawn_critical_analysis_configuration_principles_principle_role_title_container__textarea').value;
+        var contentTitle = principles[i].querySelector('.oak_critical_analysis_configuration_principles_principle_role_title_container__textarea').value;
         principleData.content.title = contentTitle;
 
         // Roles 
-        var roles = principles[i].getElementsByClassName('dawn_critical_analysis_configuration_principles_principle__single_role');
+        var roles = principles[i].getElementsByClassName('oak_critical_analysis_configuration_principles_principle__single_role');
         for (var j = 0; j < roles.length; j++) {
-            principleData.content.roles.push(roles[j].querySelector('.dawn_critical_analysis_configuration_principles_principle__single_role_textarea').value);
+            principleData.content.roles.push(roles[j].querySelector('.oak_critical_analysis_configuration_principles_principle__single_role_textarea').value);
         }
 
         // Principle Criteria
-        var principleCriteria = principles[i].querySelector('.dawn_critical_analysis_configuration_principles_principle__criteria');
-        var criteria = principleCriteria.getElementsByClassName('dawn_critical_analysis_configuration_principles_principle_criteria__criterion');
+        var principleCriteria = principles[i].querySelector('.oak_critical_analysis_configuration_principles_principle__criteria');
+        var criteria = principleCriteria.getElementsByClassName('oak_critical_analysis_configuration_principles_principle_criteria__criterion');
         var criteriaTab = []
         for (var j = 0; j < criteria.length; j++) {
-            criteriaTab.push(criteria[j].querySelector('.dawn_critical_analysis_configuration_principles_principle_criteria_criterion__title').innerHTML);
+            criteriaTab.push(criteria[j].querySelector('.oak_critical_analysis_configuration_principles_principle_criteria_criterion__title').innerHTML);
         }
         principleData.criteria = criteriaTab;
 
@@ -422,7 +422,7 @@ saveButton.addEventListener('click', function() {
             url: DATA.ajaxUrl,
             type: 'POST',
             data: {
-                'action': 'dawn_save_analysis_model',
+                'action': 'oak_save_analysis_model',
                 'data': data
             },
             success: function(data) {

@@ -29,7 +29,7 @@ acf_add_local_field_group(
 
             array (
                 'key' => 'pub_year',
-                'label' => __('Année de la Publication', Dawn::$text_domain),
+                'label' => __('Année de la Publication', Oak::$text_domain),
                 'name' => 'pub_year',
                 'type' => 'number',
                 'prefix' => '',
@@ -46,7 +46,7 @@ acf_add_local_field_group(
                 'return_format' => 'array',
                 'library' => 'all',
                 'min_size' => 0,
-                'placeholder' => __('Exemple: 2019', Dawn::$text_domain)
+                'placeholder' => __('Exemple: 2019', Oak::$text_domain)
             ),
 
             array (
@@ -69,7 +69,7 @@ acf_add_local_field_group(
 
             array (
                 'key' => 'pub_format',
-                'label' => __('Format de publication', Dawn::$text_domain ),
+                'label' => __('Format de publication', Oak::$text_domain ),
                 'name' => 'pub_format',
                 'type' => 'select',
                 'prefix' => '',
@@ -94,7 +94,7 @@ acf_add_local_field_group(
 
             array (
                 'key' => 'pub_url',
-                'label' => __('URL de la publication', Dawn::$text_domain ),
+                'label' => __('URL de la publication', Oak::$text_domain ),
                 'name' => 'pub_url',
                 'type' => 'url',
                 'prefix' => '',
@@ -154,7 +154,7 @@ acf_add_local_field_group(
 
             array (
                 'key' => 'pub_des',
-                'label' => __('Description', Dawn::$text_domain),
+                'label' => __('Description', Oak::$text_domain),
                 'name' => 'pub_des',
                 'type' => 'textarea',
                 'prefix' => '',
@@ -171,7 +171,7 @@ acf_add_local_field_group(
                 'return_format' => 'array',
                 'library' => 'all',
                 'min_size' => 0,
-                'placeholder' => __('Description', Dawn::$text_domain)
+                'placeholder' => __('Description', Oak::$text_domain)
             ),
 
             array (
@@ -180,7 +180,7 @@ acf_add_local_field_group(
                 'name' => 'report_publication',
                 'type' => 'select',
                 'prefix' => '',
-                'instructions' => __('Contactes CRM', Dawn::$text_domain),
+                'instructions' => __('Contactes CRM', Oak::$text_domain),
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array (
@@ -204,7 +204,7 @@ acf_add_local_field_group(
                 'name' => 'type_manager',
                 'type' => 'select',
                 'prefix' => '',
-                'instructions' => __('Contactes CRM', Dawn::$text_domain),
+                'instructions' => __('Contactes CRM', Oak::$text_domain),
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
