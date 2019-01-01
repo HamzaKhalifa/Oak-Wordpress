@@ -1,6 +1,6 @@
 <?php 
 $custom_taxonomies = get_option('oak_taxonomies') ? get_option('oak_taxonomies') : [];
-foreach ($custom_taxonomies as $custom_taxonomy) :
+foreach ( $custom_taxonomies as $custom_taxonomy ) :
     $fields = explode( ',', $custom_taxonomy['fields'] );
     $field_group_fields = [];
 

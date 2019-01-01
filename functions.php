@@ -803,6 +803,7 @@ class Oak {
 
         foreach( $all_publications as $single_publication ) : 
             if ( in_array( $single_publication->ID, $publication_ids ) ) :
+                $single_publication->fields = get_fields( $single_publication->ID );
                 $my_publications[] = $single_publication;
             endif;
         endforeach;
@@ -840,7 +841,7 @@ class Oak {
                     'hide_empty' => false,
                 ) );
                 foreach( $terms as $term ) :
-                    $term->fields = get_fields( $term->term_id );
+                    $term->fields = get_fields( $term );
                     $my_oak_terms[] = $term;
                 endforeach;
             endif;
