@@ -63,15 +63,6 @@ addObjectModelButton.addEventListener('click', function() {
             jQuery.ajax({
                 url: DATA.ajaxUrl,
                 type: 'POST',
-
-                // xhrFields: {
-                //     withCredentials: true
-                // },
-                // crossDomain: true,
-                // beforeSend: function (xhr) {
-                //     xhr.setRequestHeader('Authorization', makeBaseAuth('mrtest', 'MatRep0rT17'));
-                // },
-
                 data: {
                     'action': 'oak_save_cpt',
                     'data': cpt

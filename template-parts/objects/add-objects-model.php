@@ -66,19 +66,16 @@
         <h3 class="acf-fields-select"><?php _e('Champs spécifiques', Oak::$text_domain); ?></h3>
         <div class="oak_object_model_add_formula__element">
             
-            <!-- <div class="oak_object_model_add_formula_element__field_container">
-                <span class="oak_object_model_add_formula_element_field_container__field_name">Selecteur pour type</span>
-                <i class="fas fa-plus"></i>
-            </div> -->
-            <div class="oak_object_model_add_formula_element__field_container">
-                <span class="oak_object_model_add_formula_element_field_container__field_name">Essentiel</span>
-                <i class="fas fa-plus"></i>
-            </div>
-
-            <!-- <div class="oak_object_model_add_formula_element__field_container">
-                <span class="oak_object_model_add_formula_element_field_container__field_name">Couleur</span>
-                <i class="fas fa-plus"></i>
-            </div> -->
+            <?php 
+            $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
+            foreach( $fields as $field ) : ?>
+                <div class="oak_object_model_add_formula_element__field_container">
+                    <span class="oak_object_model_add_formula_element_field_container__field_name"><?php echo( $field['designation'] ); ?></span>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <?php
+            endforeach;
+            ?>
         </div>
 
         <div class="oak_object_model_add_formula_element__specific_fields_container">

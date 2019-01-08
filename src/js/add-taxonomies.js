@@ -49,6 +49,18 @@ addTaxButton.addEventListener('click', function() {
         }
 
         var objectModel = document.querySelector('.oak_tax_add_formula_element__select_cpts').value;
+        var objectModelSelect = document.querySelector('.oak_tax_add_formula_element__select_cpts');
+        var objectModelOptions = objectModelSelect.querySelectorAll('option');
+        var objectModels = [];
+        for (var i = 0; i < objectModelOptions.length; i++) {
+            if (objectModelOptions[i].selected) {
+                objectModels.push(objectModelOptions[i].value);
+            }
+        }
+        console.log('Selected object models: ' + objectModels);
+        var objectModel = objectModels;
+        console.log('Object model: ' + objectModel);
+        
 
         tax = { slug, name, singleName, objectModel, fields };
         jQuery(document).ready(function() {

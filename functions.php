@@ -18,7 +18,7 @@ class Oak {
         add_action( 'init', array( $this, 'oak_register_taxonomies') );
         add_action( 'init', array( $this, 'oak_add_options_page') );
         add_action( 'init', array( $this, 'oak_remove_post_type_editors' ) ); 
-        add_action('init', array( $this, 'add_cors_http_header' ) );
+        add_action( 'init', array( $this, 'add_cors_http_header' ) );
         
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
 
@@ -29,9 +29,13 @@ class Oak {
         add_filter( 'acf/load_field/name=org-countries', array( $this, 'oak_set_countries' ) );
         add_filter( 'acf/load_field/name=language_publication', array( $this, 'oak_set_languages' ) );
 
+        add_action( 'transition_post_status', function ( $new_status, $old_status, $post )  {
+            if( 'publish' == $new_status && 'publish' != $old_status ) {
+                update_post_meta( $post->ID, 'unique_identifier', $this->generateRandomString() );
+            }
+        }, 10, 3 );
         add_action( 'save_post', array( $this, 'oak_set_contacts_organizations') );
-
-        // For Ajax requests
+        
         $this->oak_ajax_calls();
 
         $this->oak_contact_form();
@@ -64,6 +68,15 @@ class Oak {
 
         add_action( 'wp_ajax_oak_corn_import_publications_data', array( $this, 'oak_corn_import_publications_data') );
         add_action( 'wp_ajax_nopriv_oak_corn_import_publications_data', array( $this, 'oak_corn_import_publications_data') );
+
+        add_action( 'wp_ajax_oak_corn_content_library_search', array( $this, 'oak_corn_content_library_search') );
+        add_action( 'wp_ajax_nopriv_oak_corn_content_library_search', array( $this, 'oak_corn_content_library_search') );
+
+        add_action( 'wp_ajax_oak_register_field', array( $this, 'oak_register_field') );
+        add_action( 'wp_ajax_nopriv_oak_register_field', array( $this, 'oak_register_field') );
+
+        add_action( 'wp_ajax_oak_delete_field', array( $this, 'oak_delete_field') );
+        add_action( 'wp_ajax_nopriv_oak_delete_field', array( $this, 'oak_delete_field') );
     }
 
     function oak_enqueue_styles() {
@@ -96,9 +109,9 @@ class Oak {
             || get_current_screen()->id == 'oak-materiality-reporting_page_oak_critical_analysis_configuration' 
             || get_current_screen()->id == 'oak-materiality-reporting_page_oak_add_taxonomies' 
             || get_current_screen()->id == 'oak-materiality-reporting_page_oak_add_object_model' 
+            || get_current_screen()->id == 'oak-materiality-reporting_page_oak_add_field'
         ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
-            // wp_enqueue_style( 'oak_font-awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
             ?>
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
             <?php
@@ -118,14 +131,8 @@ class Oak {
         if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_critical_analysis_configuration' ) :
             wp_enqueue_script( 'oak_critical_analysis_configuration', get_template_directory_uri() . '/src/js/critical-analysis-configuration.js', array('jquery'), false, true);
 
-            // getting base data from file:
-            // $base_data = json_decode( file_get_contents( get_template_directory_uri() . '/src/data/basedata.json' ), true );
-
-            // getting base data from mock: 
-            // http://demo1291769.mockable.io/base_data
             $data = wp_remote_get( 'http://demo1291769.mockable.io/base_data' );
             $base_data = json_decode( $data['body'], true );
-
 
             wp_localize_script( 'oak_critical_analysis_configuration', 'DATA', array (
                 'ajaxUrl' => admin_url('admin-ajax.php'),
@@ -173,21 +180,23 @@ class Oak {
                 'customPostTypes' => $post_types
             ));
         endif;
+
+        if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_add_field' ) :
+            wp_enqueue_script( 'corn_add_field', get_template_directory_uri() . '/src/js/add_field.js', array('jquery'), false, true );
+            wp_localize_script( 'corn_add_field', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'fields' => get_option('oak_custom_fields') ? get_option('oak_custom_fields') : []
+            ) );
+        endif;
     }
 
     function oak_add_theme_support() {
-        add_theme_support( 'menus' );
+        add_theme_support('menus');
     }
 
     function add_cors_http_header() {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Origin: http://localhost:8888/boilerplate/');
-        // header("Access-Control-Allow-Origin: http://localhost:8888/boilerplate/");
-        // header('content-type: application/json; charset=utf-8');
-        // header("Access-Control-Allow-Credentials: true");
-        // header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-        // header('Access-Control-Max-Age: 1000');
-        // header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
     }
 
     function oak_add_options_page() {
@@ -217,19 +226,6 @@ class Oak {
         add_submenu_page( 'oak_materiality_reporting', __( 'Ajouter', Oak::$text_domain ), __( 'Ajouter', Oak::$text_domain ), 'manage_options', 'post-new.php?post_type=gri' );
         add_submenu_page( 'oak_materiality_reporting', __( 'Standards/Series', Oak::$text_domain ), __( 'Standards/Series', Oak::$text_domain ), 'manage_options', 'edit-tags.php?taxonomy=standards_series&post_type=gri' );
 
-        // $oak_cpts = get_option('oak_custom_post_types') ? get_option('oak_custom_post_types') : [];
-        // $oak_taxonomies = get_option('oak_taxonomies') ? get_option('oak_taxonomies') : [];
-        // foreach( $oak_cpts as $cpt ) :
-        //     $name = str_replace( '\\', '', $cpt['name'] );
-        //     add_submenu_page( 'oak_materiality_reporting', $cpt['name'], $cpt['name'], 'manage_options', 'edit.php?post_type=' . $cpt['slug'] );   
-        //     add_submenu_page( 'oak_materiality_reporting', __( 'Ajouter', Oak::$text_domain ), __( 'Ajouter', Oak::$text_domain ), 'manage_options', 'post-new.php?post_type=' . $cpt['slug'] );
-        //     foreach( $oak_taxonomies as $taxonomy) :
-        //         if ( $taxonomy['objectModel'] == $cpt['slug'] ) : 
-        //             add_submenu_page( 'oak_materiality_reporting', $taxonomy['name'], $taxonomy['name'], 'manage_options', 'edit-tags.php?taxonomy=' . $taxonomy['slug'] . '&post_type=' . $cpt['slug'] );
-        //         endif;
-        //     endforeach;
-        // endforeach;
-
         add_submenu_page( 'oak_materiality_reporting', __( 'Indicateurs Quali', Oak::$text_domain ), __( 'Indicateurs Quali', Oak::$text_domain ), 'manage_options', 'edit.php?post_type=quali_indic' );
         add_submenu_page( 'oak_materiality_reporting', __( 'Ajouter', Oak::$text_domain ), __( 'Ajouter', Oak::$text_domain ), 'manage_options', 'post-new.php?post_type=quali_indic' );
 
@@ -246,6 +242,8 @@ class Oak {
         add_submenu_page( 'oak_materiality_reporting', __('Taxonomie', Oak::$text_domain), __('Taxonomie', Oak::$text_domain), 'manage_options', 'oak_add_taxonomies', array( $this, 'oak_add_taxonomies') );
 
         add_submenu_page( 'oak_materiality_reporting', __('Importation', Oak::$text_domain), __('Importation', Oak::$text_domain), 'manage_options', 'oak_import_csv_files', array( $this, 'oak_import_csv_files') );
+
+        add_submenu_page( 'oak_materiality_reporting', __('Ajouter un champ', Oak::$text_domain), __('Ajouter un champ', Oak::$text_domain), 'manage_options', 'oak_add_field', array( $this, 'oak_add_field') );
     }
 
     function add_admin_menu_separator( $position ) {
@@ -362,7 +360,7 @@ class Oak {
                     'menu_position' => 105,
                     'menu_icon' => $cpt['icon'],
                     // 'show_in_menu' => false
-                ) );   
+                ) );
             endif; 
         endforeach;
 
@@ -555,6 +553,16 @@ class Oak {
         return $field;
     }
 
+    function generateRandomString( $length = 20 ) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
     function oak_set_contacts_organizations( $post_id ) {
         if ( !function_exists ('get_field_object') )
             return; 
@@ -736,6 +744,10 @@ class Oak {
         include get_template_directory() . '/template-parts/import-csv-files/import-csv-files.php';
     }
 
+    function oak_add_field() {
+        include get_template_directory() . '/template-parts/fields/add-field.php';
+    }
+
     function oak_get_organizations() {
         $the_query = new WP_Query( array( 'post_type'=> 'organization' ) );
         $organizations = $the_query->posts;
@@ -754,14 +766,33 @@ class Oak {
             endforeach;
         endforeach;
 
-        // $activities_query = get_terms( 'org_activity', array("hide_empty" => false) );
 
         wp_send_json_success( array(
             'organizations' => $the_query->posts,
             'languages' => $languages,
-            // 'countries' => $countries,
-            // 'activities' => $activities_query
         ) );
+    }
+
+    function oak_register_field() {
+        $field = $_POST['data'];
+        $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
+        $fields[] = $field;
+        update_option( 'oak_custom_fields', $fields );
+        wp_send_json_success();
+    }
+
+    function oak_delete_field() {
+        $field_identifier = $_POST['data'];
+        $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
+        $found_it = false;
+        foreach( $fields as $key => $field ) :
+            if ( $field['identifier'] == $field_identifier ) :
+                unset( $fields[ $key ] );
+            endif;
+        endforeach;
+        update_option( 'oak_custom_fields', $fields);
+        
+        wp_send_json_success();
     }
 
     function oak_corn_configuration() {
@@ -777,8 +808,10 @@ class Oak {
             $single_publication->fields = get_fields( $single_publication->ID );
             if ( 
                 ( $conditions['organization'] == '' || $conditions['organization'] == $single_publication->fields['slug_org']['0']->post_title ) 
-                && ( $conditions['reportOrFrame'] == '0' || ( $conditions['reportOrFrame'] != '0' && $conditions['reportOrFrame'] == strval ( $single_publication->fields['report_publication'] + 1 ) ) )
-                && ( $conditions['reportOrFrame'] == '0' || ( $conditions['reportOrFrame'] == '1' && $conditions['reportType'] == '0' ) || ( $conditions['reportOrFrame'] == '1' && $conditions['reportOrFrame'] == strval ( $single_publication->fields['report_publication'] + 1 ) && $conditions['reportType'] == strval ( $single_publication->fields('type_report') + 1 ) ) || ( $conditions['reportOrFrame'] == '2' && $conditions['frameType'] == '0' ) || ( $conditions['reportOrFrame'] == '2' && $conditions['reportOrFrame'] == strval ( $single_publication->fields['report_publication'] + 1 ) && $conditions['frameType'] == strval ( $single_publication->fields['type_manager'] + 1 ) ) )
+                // && ( $conditions['reportOrFrame'] == '0' || ( $conditions['reportOrFrame'] != '0' && $conditions['reportOrFrame'] == strval ( $single_publication->fields['report_publication'] + 1 ) ) )
+                // && ( $conditions['reportOrFrame'] == '0' || ( $conditions['reportOrFrame'] == '1' && $conditions['reportType'] == '0' ) || ( $conditions['reportOrFrame'] == '1' && $conditions['reportOrFrame'] == strval ( $single_publication->fields['report_publication'] + 1 ) && $conditions['reportType'] == strval ( $single_publication->fields('type_report') + 1 ) ) || ( $conditions['reportOrFrame'] == '2' && $conditions['frameType'] == '0' ) || ( $conditions['reportOrFrame'] == '2' && $conditions['reportOrFrame'] == strval ( $single_publication->fields['report_publication'] + 1 ) && $conditions['frameType'] == strval ( $single_publication->fields['type_manager'] + 1 ) ) )
+                && ( $single_publication->fields['report_publication'] == 1 )
+                && ( $conditions['frameType'] == '0' || ( $conditions['frameType'] == strval ( $single_publication->fields['type_manager'] + 1 ) ) )
                 && ( $conditions['year'] == '' || $conditions['year'] == $single_publication->fields['pub_year'] )
                 && ( $conditions['language'] == '0' || $conditions['language'] != '0' && $conditions['language'] == strval ( $single_publication->fields['language_publication'] + 1 ) )
             ) :
@@ -804,6 +837,7 @@ class Oak {
         foreach( $all_publications as $single_publication ) : 
             if ( in_array( $single_publication->ID, $publication_ids ) ) :
                 $single_publication->fields = get_fields( $single_publication->ID );
+                $single_publication->unique_identifier = get_post_meta( $single_publication->ID, 'unique_identifier', true );
                 $my_publications[] = $single_publication;
             endif;
         endforeach;
@@ -818,6 +852,7 @@ class Oak {
                 $posts = $posts_query->posts;
                 foreach( $posts as $post ) :
                     $post->fields = get_fields( $post->ID );
+                    $post->unique_identifier = get_post_meta( $post->ID, 'unique_identifier', true );
                     $my_oak_posts[] = $post;
                 endforeach;
             endif;
@@ -830,7 +865,11 @@ class Oak {
         foreach( $all_oak_taxonomies as $taxonomy ) :
             $exists = false;
             foreach( $my_oak_cpts as $my_single_oak_cpt ) :
-                if ( $my_single_oak_cpt['slug'] == $taxonomy['objectModel'] ) :
+                if ( is_array( $taxonomy['objectModel'] ) ) : 
+                    if ( in_array( $my_single_oak_cpt['slug'], $taxonomy['objectModel'] ) ) :
+                        $exists = true;
+                    endif;
+                elseif ( $my_single_oak_cpt['slug'] == $taxonomy['objectModel'] ) :
                     $exists = true;
                 endif;
             endforeach;
@@ -847,14 +886,137 @@ class Oak {
             endif;
         endforeach;
 
+        // Lets get the posts' terms
+        foreach( $my_oak_posts as $my_oak_post ) :
+            $my_oak_post->taxonomies_terms = [];
+            foreach( $my_oak_taxonomies as $my_oak_taxonomy ) :
+                if ( 
+                    ( is_array( $my_oak_taxonomy['objectModel'] ) && in_array( $my_oak_post->post_type, $my_oak_taxonomy['objectModel'] ) ) 
+                    || ( !is_array( $my_oak_taxonomy['objectModel'] ) && $my_oak_taxonomy['objectModel'] == $my_oak_post->post_type ) 
+                ) :
+                    $terms = wp_get_post_terms( $my_oak_post->ID, $my_oak_taxonomy['slug'] );
+                    foreach( $terms as $term ) :
+                        $my_oak_post->taxonomies_terms[] = $term;
+                    endforeach;
+                endif;
+            endforeach; 
+        endforeach;
+        
+        
+        $glossay_query = new WP_Query( array(
+            'post_type' => 'glossary'
+        ) );
+        $glossaries = $glossay_query->posts;
+        $my_oak_glossaries = [];
+        foreach( $glossaries as $glossary ) :
+            $glossary->fields = get_fields( $glossary->ID );
+            $glossary->unique_identifier = get_post_meta( $glossary->ID, 'unique_identifier', true );
+            $exists = false;
+            foreach( $my_oak_posts as $post ) :
+                if ( $post->ID == $glossary->fields['slug_object_glossary']->ID ) :
+                    $exitsts = true;
+                endif;
+            endforeach;
+            foreach( $my_publications as $publication ) :
+                if ( $publication->ID == $glossary->fields['slug_publication_glossary']->ID ) :
+                    $exists = true;
+                endif;
+            endforeach;
+            if ( $exists ) :
+                $my_oak_glossaries[] = $glossary;
+            endif;
+        endforeach;
+
+        $quali_indicators_query = new WP_Query( array(
+            'post_type' => 'quali_indic'
+        ) );
+        $quali_indicators = $quali_indicators_query->posts;
+        $my_oak_quali_indicators = [];
+        foreach( $quali_indicators as $quali_indic ) :
+            $quali_indic->fields = get_fields( $quali_indic->ID );
+            $quali_indic->unique_identifier = get_post_meta( $quali_indic->ID, 'unique_identifier', true );
+            $exists = false;
+            foreach( $my_oak_posts as $oak_post ) :
+                if ( $oak_post->ID == $quali_indic->fields['slug_object_quali']->ID ) :
+                    $exists = true;
+                endif;
+            endforeach;
+            foreach( $my_publications as $publication ) :
+                if ( $publication->ID == $quali_indic->fields['slug_publication_quali']->ID ) :
+                    $exists = true;
+                endif;
+            endforeach;
+            if ( $exists ) :
+                $my_oak_quali_indicators[] = $quali_indic;
+            endif;
+        endforeach;
+
+        $quanti_indicators_query = new WP_Query( array(
+            'post_type' => 'quanti_indic'
+        ) );
+        $quanti_indicators = $quanti_indicators_query->posts;
+        $my_oak_quanti_indicators = [];
+        foreach( $quanti_indicators as $quanti_indic ) :
+            $quanti_indic->fields = get_fields( $quanti_indic->ID );
+            $quanti_indic->unique_identifier = get_post_meta( $quanti_indic->ID, 'unique_identifier', true );
+            $exists = false;
+            foreach( $my_oak_posts as $oak_post ) :
+                if ( $oak_post->ID == $quanti_indic->fields['slug_object_quanti']->ID ) :
+                    $exists = true;
+                endif;
+            endforeach;
+            foreach( $my_publications as $publication ) :
+                if ( $publication->ID == $quanti_indic->fields['slug_publication_quanti']->ID ) :
+                    $exists = true;
+                endif;
+            endforeach;
+            if ( $exists ) :
+                $my_oak_quanti_indicators[] = $quanti_indic;
+            endif;
+        endforeach;
+
         wp_send_json_success( array(
             'myPublications' => $my_publications,
             'myOakCpts' => $my_oak_cpts,
             'myOakPosts' => $my_oak_posts,
             'myOakTaxonomies' => $my_oak_taxonomies,
-            'myOakTerms' => $my_oak_terms
+            'myOakTerms' => $my_oak_terms,
+            'myOakGlossaries' => $my_oak_glossaries,
+            'myOakQualiIndicators' => $my_oak_quali_indicators,
+            'myOakQuantiIndicators' => $my_oak_quanti_indicators,
         ) );
     }
+
+    function oak_corn_content_library_search() {
+        $conditions = $_GET['conditions'];
+
+        $the_query = new WP_Query( array(
+            'post_type' => 'publication'
+        ) );
+        $filtered_publications = [];
+        $publications = $the_query->posts;
+
+        foreach( $publications as $single_publication ) :
+            $single_publication->fields = get_fields( $single_publication->ID );
+            if ( 
+                ( $conditions['organization'] == '' || $conditions['organization'] == $single_publication->fields['slug_org']['0']->post_title ) 
+                && ( $single_publication->fields['report_publication'] == 0 )
+                && ( $conditions['reportType'] == '0' || ( $conditions['reportType'] == strval ( $single_publication->fields['type_report'] + 1 ) ) )
+                && ( $conditions['year'] == '' || $conditions['year'] == $single_publication->fields['pub_year'] )
+                && ( $conditions['language'] == '0' || $conditions['language'] != '0' && $conditions['language'] == strval ( $single_publication->fields['language_publication'] + 1 ) )
+            ) :
+                $filtered_publications[] = $single_publication;
+            endif;
+        endforeach;
+
+
+        wp_send_json_success( array(
+            'conditions' => $conditions,
+            'unfilteredPublications' => $publications,
+            'filteredPublications' => $filtered_publications,
+        ) );
+    }
+
 }
 
 $oak = new oak();

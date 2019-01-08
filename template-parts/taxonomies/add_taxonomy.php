@@ -20,11 +20,11 @@
             </div>
 
             <div class="oak_tax_add_formula__element">
-                <label class="publications-select" for="single_name"><?php _e('Modèle (CTP/Page):', Oak::$text_domain); ?></label>
+                <label class="publications-select" for="single_name"><?php _e('Modèle (CPT/Page):', Oak::$text_domain); ?></label>
                 <?php
                 $cpts = get_option('oak_custom_post_types') ? get_option('oak_custom_post_types') : [];
                 ?>
-                <select name="cpts-select" class="oak_tax_add_formula_element__select_cpts">
+                <select name="cpts-select" multiple class="oak_tax_add_formula_element__select_cpts">
                     <?php
                     foreach( $cpts as $single_cpt ) :
                         $name = str_replace( '\\', '', $single_cpt['name']);
@@ -38,21 +38,16 @@
 
             <h3 class="acf-fields-select"><?php _e('Champs spécifiques', Oak::$text_domain); ?></h3>
             <div class="oak_tax_add_formula__element">
-                
-                <div class="oak_tax_add_formula_element__field_container">
-                    <span class="oak_tax_add_formula_element_field_container__field_name">Selecteur pour type</span>
-                    <i class="fas fa-plus"></i>
-                </div>
-
-                <div class="oak_tax_add_formula_element__field_container">
-                    <span class="oak_tax_add_formula_element_field_container__field_name">Parent</span>
-                    <i class="fas fa-plus"></i>
-                </div>
-
-                <div class="oak_tax_add_formula_element__field_container">
-                    <span class="oak_tax_add_formula_element_field_container__field_name">Couleur</span>
-                    <i class="fas fa-plus"></i>
-                </div>
+                <?php 
+                $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
+                foreach( $fields as $field ) : ?>
+                    <div class="oak_tax_add_formula_element__field_container">
+                        <span class="oak_tax_add_formula_element_field_container__field_name"><?php echo( $field['designation'] ); ?></span>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <?php
+                endforeach;
+                ?>
             </div>
 
             <div class="oak_tax_add_formula_element__specific_fields_container">
@@ -87,8 +82,6 @@
         ?>
     </div>
 </div>
-
-
 
 <!-- For the modal -->
 <div class="oak_tax_add_formula_modal_container">
