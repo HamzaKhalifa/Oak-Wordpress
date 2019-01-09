@@ -32,7 +32,7 @@ foreach ( $custom_post_types as $custom_post_type ) :
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array (
-                    'width' => $field_properties['width'] . '%',
+                    'width' => '100%',
                     'class' => '',
                     'id' => '',
                 ),

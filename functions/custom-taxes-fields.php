@@ -30,7 +30,7 @@ foreach ( $custom_taxonomies as $custom_taxonomy ) :
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array (
-                    'width' => $field_properties['width'] . '%',
+                    'width' => '100%',
                     'class' => '',
                     'id' => '',
                 ),

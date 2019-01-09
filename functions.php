@@ -77,6 +77,9 @@ class Oak {
 
         add_action( 'wp_ajax_oak_delete_field', array( $this, 'oak_delete_field') );
         add_action( 'wp_ajax_nopriv_oak_delete_field', array( $this, 'oak_delete_field') );
+
+        add_action( 'wp_ajax_oak_update_field', array( $this, 'oak_update_field') );
+        add_action( 'wp_ajax_nopriv_oak_update_field', array( $this, 'oak_update_field') );
     }
 
     function oak_enqueue_styles() {
@@ -109,7 +112,9 @@ class Oak {
             || get_current_screen()->id == 'oak-materiality-reporting_page_oak_critical_analysis_configuration' 
             || get_current_screen()->id == 'oak-materiality-reporting_page_oak_add_taxonomies' 
             || get_current_screen()->id == 'oak-materiality-reporting_page_oak_add_object_model' 
-            || get_current_screen()->id == 'oak-materiality-reporting_page_oak_add_field'
+            || get_current_screen()->id == 'toplevel_page_oak_fields'
+            || get_current_screen()->id == 'toplevel_page_oak_fields_list'
+            || get_current_screen()->id == 'champs_page_oak_add_field'
         ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
             ?>
@@ -181,15 +186,28 @@ class Oak {
             ));
         endif;
 
-        if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_add_field' ) :
+        if ( get_current_screen()->id == 'champs_page_oak_add_field' ) :
+            $current_field = $this->oak_get_current_field();
+
             wp_enqueue_script( 'corn_add_field', get_template_directory_uri() . '/src/js/add_field.js', array('jquery'), false, true );
             wp_localize_script( 'corn_add_field', 'DATA', array(
                 'ajaxUrl' => admin_url ('admin-ajax.php'),
-                'fields' => get_option('oak_custom_fields') ? get_option('oak_custom_fields') : []
+                'fields' => get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [],
+                'currentField' => $current_field,
+                'adminUrl' => admin_url()
+            ) );
+        endif;
+
+        if ( get_current_screen()->id == 'toplevel_page_oak_fields_list' ) :
+            wp_enqueue_script( 'corn_fields_list', get_template_directory_uri() . '/src/js/fields-list.js', array('jquery'), false, true );
+            wp_localize_script( 'corn_fields_list', 'DATA', array(
+                'ajaxUrl' => admin_url( 'admin-ajax.php'),
+                'adminUrl' => admin_url(),
+                'fields' => get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [],
             ) );
         endif;
     }
-
+    
     function oak_add_theme_support() {
         add_theme_support('menus');
     }
@@ -243,7 +261,8 @@ class Oak {
 
         add_submenu_page( 'oak_materiality_reporting', __('Importation', Oak::$text_domain), __('Importation', Oak::$text_domain), 'manage_options', 'oak_import_csv_files', array( $this, 'oak_import_csv_files') );
 
-        add_submenu_page( 'oak_materiality_reporting', __('Ajouter un champ', Oak::$text_domain), __('Ajouter un champ', Oak::$text_domain), 'manage_options', 'oak_add_field', array( $this, 'oak_add_field') );
+        add_menu_page( __( 'Champs', Oak::$text_domain ), 'Champs', 'manage_options', 'oak_fields_list', array ( $this, 'oak_fields_list'), 'dashicons-index-card', 100 );
+        add_submenu_page( 'oak_fields_list', 'Ajouter un Champ', __( 'Ajouter un champ', Oak::$text_domain ), 'manage_options', 'oak_add_field',  array( $this, 'oak_add_field' ) );
     }
 
     function add_admin_menu_separator( $position ) {
@@ -745,7 +764,25 @@ class Oak {
     }
 
     function oak_add_field() {
+        $current_field = $this->oak_get_current_field();
         include get_template_directory() . '/template-parts/fields/add-field.php';
+    }
+
+    function oak_fields_list() {
+        include get_template_directory() . '/template-parts/fields/fields-list.php';
+    }
+
+    function oak_get_current_field() {
+        $current_field = [];
+        if ( isset( $_GET['designation'] ) ) :
+            $oak_fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
+            foreach( $oak_fields as $field ) :
+                if ( $field['designation'] == $_GET['designation'] ) :
+                    $current_field = $field;
+                endif;
+            endforeach;
+        endif; 
+        return $current_field;
     }
 
     function oak_get_organizations() {
@@ -788,6 +825,20 @@ class Oak {
         foreach( $fields as $key => $field ) :
             if ( $field['identifier'] == $field_identifier ) :
                 unset( $fields[ $key ] );
+            endif;
+        endforeach;
+        update_option( 'oak_custom_fields', $fields);
+        
+        wp_send_json_success();
+    }
+
+    function oak_update_field() {
+        $field_identifier = $_POST['field']['identifier'];
+        $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
+        $found_it = false;
+        foreach( $fields as $key => $field ) :
+            if ( $field['identifier'] == $field_identifier ) :
+                $fields[ $key ] = $_POST['field'];
             endif;
         endforeach;
         update_option( 'oak_custom_fields', $fields);

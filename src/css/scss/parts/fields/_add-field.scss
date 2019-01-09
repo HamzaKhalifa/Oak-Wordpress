@@ -1,0 +1,200 @@
+.oak_add_field_container {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right: 20px;
+    flex: 1;
+}
+
+.oak_add_field_container__label_instruction {
+    margin-bottom: 10px;
+}
+
+.oak_add_field_container__label {
+    min-width: 50px;
+}
+
+.oak_add_field_container__field_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.oak_add_field_container__identifier_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: stretch;
+}
+
+.oak_add_field_container__identifier {
+    flex: 1;
+    margin-left: 30px;
+}
+
+.oak_add_field_container__horizontal_container {
+    display: flex;
+    align-items: center;
+}
+
+.oak_add_field_container__type_container, .oak_add_field_container__function_container, .oak_add_field_container__default_value_container, .oak_add_field_container__before_container, .oak_add_field_container__after_container, .oak_add_field_container__max_length_container, .oak_add_field_container__selector_container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.oak_add_field_container__function, .oak_add_field_container__type, .oak_add_field_container__default_value, .oak_add_field_container__before, .oak_add_field_container__after, .oak_add_field_container__max_length, .oak_add_field_container__selector {
+    margin-left: 20px;
+}
+
+.oak_add_field_container__type_container, .oak_add_field_container__before_container, .oak_add_field_container__max_length_container {
+    margin-right: 20px;
+}
+
+.oak_add_field_container__input {
+    flex: 1;
+}
+
+.oak_add_field_container__add_button, .oak_add_field_container__update_button, .oak_add_field_container__register_button, .oak_add_field_container__broadcast_button, .oak_add_field_container__draft_button {
+    border: 1px solid #24E08C;
+    background-color: #24E08C;
+    transition: all .2s ease-in-out;
+    margin-top: 30px;
+    text-align: center;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    align-self: flex-end;
+    margin-left: 10px;
+}
+
+.oak_add_field_container__add_button:hover, .oak_add_field_container__update_button:hover, .oak_add_field_container__register_button:hover, .oak_add_field_container__broadcast_button:hover, .oak_add_field_container__draft_button:hover {
+    cursor: pointer;
+    background-color:white;
+}
+
+.oak_add_field_container__add_button:hover span, .oak_add_field_container__update_button:hover span, .oak_add_field_container__register_button:hover span, .oak_add_field_container__broadcast_button:hover span, .oak_add_field_container__draft_button:hover span {
+    color: #24E08C
+}
+
+.oak_add_field_container__add_button span, .oak_add_field_container__update_button span, .oak_add_field_container__register_button span, .oak_add_field_container__broadcast_button span, .oak_add_field_container__draft_button span {
+    color: white;
+}
+
+.oak_add_field_container__saved_field_container {
+    background-color: white;
+    padding: 20px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.oak_add_field_container__saved_field_container__delete_button {
+    position: absolute;
+    right: 10px;
+    color: #FC394D;
+}
+
+.oak_add_field_container__saved_field_container__delete_button:hover {
+    cursor: pointer;
+}
+
+.oak_add_field_container__designation_container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.oak_add_field_container__label_designation, .oak_add_field_container__label_selector {
+    margin-right: 10px;
+}
+
+.oak_add_field_container__selector {
+    flex: initial;
+    margin-top: 1px!important;
+}
+
+.oak_add_field_container__cancel_button {
+    background-color: #6F6F6F;
+    border: 1px solid #6F6F6F;
+    color: white;
+    transition: all .2s ease-in-out;
+    margin-top: 30px;
+    text-align: center;
+    padding: 5px;
+    width: 100px;
+    align-self: flex-start;
+}
+
+.oak_add_field_container__cancel_button:hover {
+    background-color: white;
+    color: #6F6F6F;
+    cursor: pointer;
+}
+
+.oak_add_field_container__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+// For the tabs
+.oak_add_field_big_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.oak_add_field_big_container__tabs {
+    width: 280px;
+    background-color: white;
+}
+
+.oak_add_field_big_container_tabs_titles__single_title {
+    padding: 20px;
+    margin: 0px;
+    text-align: center;
+}
+
+.oak_add_field_big_container_tabs_titles__single_title:hover {
+    cursor: pointer;
+}
+
+.oak_add_field_big_container_tabs_titles__single_title_selected {
+    border-bottom: 2px solid #1486B8;
+}
+
+.oak_add_field_big_container_tabs__titles {
+    background-color: #F3F4F5;
+}
+
+.oak_add_field_container__title {
+    margin: 0px;
+    padding: 20px;
+    padding-left: 25px;
+    background-color: white;
+}
+
+.oak_add_field_big_container_tabs_single_tab__section {
+    padding: 20px;
+    border-bottom: 1px solid #6F6F6F;
+}
+
+.oak_add_field_big_container_tabs_single_tab_section__title {
+    font-size: 13px;
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+.oak_add_field_big_container_tabs_single_tab_section__state {
+    display: flex;
+    justify-content: space-between;
+}
+
+.oak_add_field_big_container_tabs_single_tab_section_state_label {
+    margin-right: 10px;
+}
+
+.oak_add_field_container_buttons__right_buttons {
+    display: flex;
+}

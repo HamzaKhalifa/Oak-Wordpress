@@ -1,14 +1,117 @@
 // Global variables
 var adding = false;
-var deleting = false;
 var fieldData = {};
-var elementToDelete;
+var canceling = false;
+var updating = false;
 
 // For the add button
 var addButton = document.querySelector('.oak_add_field_container__add_button');
-addButton.addEventListener('click', function() {
+if (addButton) {
+    addButton.addEventListener('click', function() {
+        var ok = checkOk();
+        if (!ok)
+            return;
+        fieldData = createFieldData();
+        fieldData.state = 0;
+        adding = true;
+        openModal('Êtes vous sur de vouloir ajouter ce champ?', true);
+    });    
+}
+
+// For the update button 
+var updateButton = document.querySelector('.oak_add_field_container__update_button');
+if (updateButton) {
+    updateButton.addEventListener('click', function() {
+        fieldData = createFieldData();
+        fieldData.state = DATA.currentField.state;
+        updating = true;
+        openModal('Êtes vous sûr de vouloir modifier ce champ?', true);
+    });
+}
+
+// For the register button
+var registerButton = document.querySelector('.oak_add_field_container__register_button');
+if (registerButton) {
+    registerButton.addEventListener('click', function() {
+        fieldData = createFieldData();
+        fieldData.state = 1;
+        if (!DATA.currentField.designation) {
+            // adding for the first time
+            var ok = checkOk();
+            if (!ok)
+                return;
+            adding = true;
+        } else {
+            updating = true;
+        }
+        openModal('Êtes vous sûr de vouloir ajouter ce champ à la liste des champs enregistrés?', true);
+    });
+}
+
+function checkOk() {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
-    var identifier = document.querySelector('.oak_add_field_container__identifier').value;
+    var identifier = designation.replace(/[^a-zA-Z ]/g, '');
+    identifier = identifier.replace(/\s/g,'');
+
+    ok = true;
+    var designation = document.querySelector('.oak_add_field_container__designation').value;
+    if (designation.trim() == '') {
+        openModal('Veuillez entrer la désignation d\'abord', false);
+        ok = false;
+    } else {
+        for(var i = 0; i < DATA.fields.length; i++) {
+            if (DATA.fields[i].designation == designation) {
+                openModal('Il existe déjà un champ avec la désignation: ' + designation);
+                ok = false;
+            }
+        }
+        if (ok) {
+            var identifierExists = false;
+            for (var j = 0; j < DATA.fields.length; j++) {
+                if (DATA.fields[j].identifier == identifier) {
+                    identifierExists = true;
+                    ok = false;
+                }
+            }
+            if (identifierExists) {
+                openModal('Il existe déjà un champ avec l\'identifiant: ' + identifier);
+            } else {
+                if (identifier.trim() == '') {
+                    openModal('Veuillez entrer la désignation d\'abord', false);
+                    ok = false;
+                }
+            }
+        }
+    }
+    return ok;
+}
+
+// For the broadcast button
+var broadcastButton = document.querySelector('.oak_add_field_container__broadcast_button');
+if (broadcastButton) {
+    broadcastButton.addEventListener('click', function() {
+        fieldData = createFieldData();
+        fieldData.state = 2;
+        updating = true;
+        openModal('Êtes vous sûr de vouloir modifier et diffuser ce champ ?', true);
+    });
+}
+
+// For the back to draft button: 
+var draftButton = document.querySelector('.oak_add_field_container__draft_button');
+if (draftButton) {
+    draftButton.addEventListener('click', function() {
+        fieldData = createFieldData();
+        fieldData.state = 0;
+        updating = true;
+        openModal('Êtes vous sûr de vouloir modifier et renvoyer ce champ à l\'état de Brouillon ?', true);
+    });
+}
+
+function createFieldData() {
+    var designation = document.querySelector('.oak_add_field_container__designation').value;
+    var identifier = designation.replace(/[^a-zA-Z ]/g, '');
+    identifier = identifier.replace(/\s/g,'');
     var type = document.querySelector('.oak_add_field_container__type').value;
     var functionField = document.querySelector('.oak_add_field_container__type').value;
     var defaultValue = document.querySelector('.oak_add_field_container__default_value').value;
@@ -18,75 +121,59 @@ addButton.addEventListener('click', function() {
     var after = document.querySelector('.oak_add_field_container__after').value;
     var maxLength = document.querySelector('.oak_add_field_container__max_length').value;
     var selector = document.querySelector('.oak_add_field_container__selector').value;
-    var width = document.querySelector('.oak_add_field_container__width').value;
 
-    if (designation.trim() == '') {
-        openModal('Veuillez entrer la désignation d\'abord', false);
-    } else { 
-        var designationExists = false;
-        for(var i = 0; i < DATA.fields.length; i++) {
-            if (DATA.fields[i].designation == designation) {
-                designationExists = true;
-            }
-        }
-        if (designationExists) {
-            openModal('Il existe déjà un champ avec la désignation: ' + designation);
-        } else {
-            var identifierExists = false;
-            for (var j = 0; j < DATA.fields.length; j++) {
-                if (DATA.fields[j].identifier == identifier) {
-                    identifierExists = true;
-                }
-            }
-            if (identifierExists) {
-                openModal('Il existe déjà un champ avec l\'identifiant: ' + identifier);
-            } else {
-                if (identifier.trim() == '') {
-                    openModal('Veuillez entrer l\'identifiant d\'abord', false);
-                } else {
-                    fieldData = {
-                        designation,
-                        identifier,
-                        type,
-                        functionField,
-                        defaultValue,
-                        instructions,
-                        placeholder,
-                        before,
-                        after,
-                        maxLength,
-                        selector,
-                        width
-                    }
-                    adding = true;
-                    openModal('Êtes vous sur de vouloir ajouter ce champ?', true);
-                }
-            }
-        }
+    fieldData = {
+        designation,
+        identifier,
+        type,
+        functionField,
+        defaultValue,
+        instructions,
+        placeholder,
+        before,
+        after,
+        maxLength,
+        selector,
+    }
+    return fieldData;
+}
+
+// For the cancel button: 
+var cancelButton = document.querySelector('.oak_add_field_container__cancel_button');
+cancelButton.addEventListener('click', function() {
+    var fieldData = createFieldData();
+    if ( fieldData['designation'] != DATA.currentField.designation 
+    || fieldData['identifier'] != DATA.currentField.identifier 
+    || fieldData['type'] != DATA.currentField.type 
+    || fieldData['functionField'] != DATA.currentField.functionField 
+    || fieldData['defaultValue'] != DATA.currentField.defaultValue 
+    || fieldData['instructions'] != DATA.currentField.instructions 
+    || fieldData['placeholder'] != DATA.currentField.placeholder 
+    || fieldData['before'] != DATA.currentField.before
+    || fieldData['after'] != DATA.currentField.after
+    
+    || fieldData['maxLength'] != DATA.currentField.maxLength
+    || fieldData['selector'] != DATA.currentField.selector
+    
+    ) {
+        canceling = true;
+        openModal('Des modifications ont été ajoutées. Êtes vous sûr de vouloir tout annuler ?', true);
+    } else {
+        backToList();
     }
 });
-
-// For the delete buttons
-manageDeleteButtons();
-function manageDeleteButtons() {
-    var deleteButtons = document.querySelectorAll('.oak_add_field_container__saved_field_container__delete_button');
-    for (var i = 0; i < deleteButtons.length; i++) {
-        deleteButtons[i].addEventListener('click', function() {
-            deleting = true;
-            elementToDelete = this;
-            openModal('Êtes vous sûr de vouloir supprimer le champ selectionné ?', true);
-        });
-    }
-}
 
 // Everything related to our modal:
 function openModal(title, twoButtons) {
     var confirmButtonSpan = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text');
-    if (deleting) {
-        confirmButtonSpan.innerHTML = 'Supprimer';
-    }
+    var cancelButtonSpan = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text');
     if (adding) {
         confirmButtonSpan.innerHTML = 'Ajouter';
+        cancelButtonSpan.innerHTML = 'Annuler';
+    }
+    if (canceling || updating) {
+        confirmButtonSpan.innerHTML = 'Oui';
+        cancelButtonSpan.innerHTML = 'Non';
     }
 
     var confirmButtonSpan = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text');
@@ -119,7 +206,7 @@ okButtonContainer.addEventListener('click', function() {
 function closeModals() {
     var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
     modalsContainer.classList.remove('oak_object_model_add_formula_modal_container__activated');
-    adding = deleting = false;
+    adding = canceling = updating = false;
 }
 
 function setLoading() {
@@ -155,27 +242,6 @@ function handleModalButtons() {
                         console.log(data);
                         DATA.fields.push(fieldData);
                         doneLoading();
-
-                        var fieldContainer = document.createElement('div');
-                        fieldContainer.className = 'oak_add_field_container__saved_field_container';
-
-                        var span = document.createElement('span');
-                        span.innerHTML = fieldData.designation;
-
-                        var i = document.createElement('i');
-                        i.setAttribute('field-identifier', fieldData.identifier);
-                        i.className = 'oak_add_field_container__saved_field_container__delete_button fa fa-minus';
-
-                        fieldContainer.append(span);
-                        fieldContainer.append(i);
-
-                        var fieldsContainer = document.querySelector('.oak_add_field_container__fields_list');
-                        fieldsContainer.append(fieldContainer);
-                        // We are adding this: 
-                        // <div class="oak_add_field_container__saved_field_container">
-                        //     <span><?php echo( $field['designation'] ); ?></span>
-                        //     <i field-identifier='<?php echo( $field['identifier'] ); ?>' class="oak_add_field_container__saved_field_container__delete_button fas fa-minus"></i>
-                        // </div>
                     },
                     error: function(error) {
                         console.log(error);
@@ -184,7 +250,10 @@ function handleModalButtons() {
                 });
             })
         }
-        if (deleting) {
+        if (canceling) {
+            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_fields_list');
+        }
+        if (updating) {
             closeModals();
             setLoading();
             jQuery(document).ready(function() {
@@ -192,20 +261,21 @@ function handleModalButtons() {
                     url: DATA.ajaxUrl,
                     type: 'POST', 
                     data: {
-                        'action': 'oak_delete_field',
-                        'data': elementToDelete.getAttribute('field-identifier')
+                        'action': 'oak_update_field',
+                        'field': fieldData
                     },
                     success: function(data) {
                         console.log(data);
-                        elementToDelete.parentNode.remove();
                         doneLoading();
+                        DATA.currentField = fieldData;
+                        window.location.reload();
                     },
                     error: function(error) {
                         console.log(error);
                         doneLoading();
                     }
                 });
-            });
+            })
         }
     });
 
@@ -213,4 +283,8 @@ function handleModalButtons() {
     cancelButton.addEventListener('click', function() {
         closeModals();
     });
+}
+
+function backToList() {
+    window.location.replace(DATA.adminUrl + 'admin.php?page=oak_fields_list');
 }
