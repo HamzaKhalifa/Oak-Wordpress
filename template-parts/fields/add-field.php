@@ -11,10 +11,10 @@
             <div class="oak_add_field_container__field_container oak_add_field_container__type_container">
                 <label class="oak_add_field_container__label" for="nature"><?php _e( 'Nature du champ: ', Oak::$text_domain ); ?></label> 
                 <select name="nature" type="text" class="oak_add_field_container__input oak_add_field_container__type">
-                    <option value="text">Zone de texte</option>
-                    <option value="textarea">Textarea</option>
-                    <option value="image">Image</option>
-                    <option value="file">Fichier</option>
+                    <option value="Text">Text</option>
+                    <option value="Zone de Texte">Zone De Texte</option>
+                    <option value="Image">Image</option>
+                    <option value="File">Fichier</option>
                 </select>
             </div>
 
@@ -99,7 +99,7 @@
                 <?php
                 else : ?>
                     <div class="oak_add_field_container__add_button">
-                    <span><?php _e( 'Ajouter au Brouillon', Oak::$text_domain ); ?></span>
+                        <span><?php _e( 'Ajouter au Brouillon', Oak::$text_domain ); ?></span>
                     </div>
                 <?php
                 endif; 
@@ -134,7 +134,7 @@
 
         <div class="oak_add_field_big_container_tabs__single_tab">
             <div class="oak_add_field_big_container_tabs_single_tab__section">
-                <h5 class="oak_add_field_big_container_tabs_single_tab_section__title"><?php _e( 'state et Visibilité: ', Oak::$text_domain ); ?></h5>
+                <h5 class="oak_add_field_big_container_tabs_single_tab_section__title"><?php _e( 'Status et Visibilité: ', Oak::$text_domain ); ?></h5>
                 <div class="oak_add_field_big_container_tabs_single_tab_section__state">
                     <span class="oak_add_field_big_container_tabs_single_tab_section_state_label"><?php _e( 'Etat: ', Oak::$text_domain ); ?></span>
                     <?php 
@@ -151,6 +151,45 @@
                     ?>
                     <span><?php echo( $state ); ?></span>
                 </div>
+
+                <div class="oak_add_field_big_container_tabs_single_tab_section__state">
+                    <span class="oak_add_field_big_container_tabs_single_tab_section_state_label"><?php _e( 'Révisions: ', Oak::$text_domain ); ?></span>
+                    <div class="oak_add_field_big_container_tabs_single_tab_section_state__info_container">
+                        <span>
+                            <?php
+                            if ( isset( $_GET['designation'] ) ) :
+                                echo( count( $current_field['revisions'] ) );
+                            else :
+                                echo( '0' );
+                            endif;
+                            ?>
+                        </span>
+                        <span class="oak_add_field_big_container_tabs_single_tab_section_state__browse">
+                            <?php _e( 'Parcrourir', Oak::$text_domain ); ?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="oak_add_field_big_container_tabs_single_tab__section">
+                <h5 class="oak_add_field_big_container_tabs_single_tab_section__title"><?php _e( 'Formulaires: ', Oak::$text_domain ); ?></h5>
+                <div class="oak_add_field_big_container_tabs_single_tab_section__state">
+                    <select class="oak_add_field_big_container_tabs_single_tab_section__formulas_select" name="" id=""></select>
+                </div>
+            </div>
+
+            <div class="oak_add_field_big_container_tabs_single_tab__section">
+                <h5 class="oak_add_field_big_container_tabs_single_tab_section__title"><?php _e( 'Modèles: ', Oak::$text_domain ); ?></h5>
+                <div class="oak_add_field_big_container_tabs_single_tab_section__state">
+                    <select class="oak_add_field_big_container_tabs_single_tab_section__formulas_select" name="" id=""></select>
+                </div>
+            </div>
+
+            <div class="oak_add_field_big_container_tabs_single_tab__section">
+                <h5 class="oak_add_field_big_container_tabs_single_tab_section__title"><?php _e( 'Publications: ', Oak::$text_domain ); ?></h5>
+                <div class="oak_add_field_big_container_tabs_single_tab_section__state">
+                    <select class="oak_add_field_big_container_tabs_single_tab_section__formulas_select" name="" id=""></select>
+                </div>
             </div>
         </div>
     </div>
@@ -163,6 +202,122 @@
         <div class="oak_object_model_add_formula_modal_container_modal__title_container">
             <h3 class="oak_object_model_add_formula_modal_container_modal_title_container__title"></h3>
         </div>
+
+        <div class="oak_object_model_add_formula_modal_container__modal_content">
+
+            <!-- For the browse revisions functionality -->
+            <div class="oak_object_model_add_formula_modal_container_modal_content__revisions_content oak_hidden">
+                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__current">
+                    <h3><?php _e( 'Données Actuelle', Oak::$text_domain); ?></h3>
+                    <!-- List of fields here -->
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="type"><?php _e( 'Type:', Oak::$text_domain ); ?></label>
+
+                        <input name="type" type="text" disabled class="oak_revision_type_field_current" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="function"><?php _e( 'Fonction:', Oak::$text_domain ); ?></label>
+                        <input name="function" type="text" disabled class="oak_revision_function_field_current" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="default-value"><?php _e( 'Valeur par défaut:', Oak::$text_domain ); ?></label>
+                        <input name="default-value" type="text" disabled class="oak_revision_default_value_field_current" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="placeholder"><?php _e( 'Description:', Oak::$text_domain ); ?></label>
+                        <input name="placeholder" type="text" disabled class="oak_revision_placeholder_field_current" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="instructions"><?php _e( 'Instructions:', Oak::$text_domain ); ?></label>
+                        <input name="instructions" type="text" disabled class="oak_revision_instructions_field_current" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="before"><?php _e( 'Avant:', Oak::$text_domain ); ?></label>
+                        <input name="before" type="text" disabled class="oak_revision_before_field_current" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="after"><?php _e( 'Après:', Oak::$text_domain ); ?></label>
+                        <input name="after" type="text" disabled class="oak_revision_after_field_current" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="max-length"><?php _e( 'Nombre de caractères maximum:', Oak::$text_domain ); ?></label>
+                        <input name="max-length" type="text" disabled class="oak_revision_max_length_field_current" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="selector"><?php _e( 'Selecteur cadres RSE:', Oak::$text_domain ); ?></label>
+                        <input name="selector" type="text" disabled class="oak_revision_selector_field_current" value="">
+                    </div>
+
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="state"><?php _e( 'Etat:', Oak::$text_domain ); ?></label>
+                        <input name="state" type="text" disabled class="oak_revision_state_field_current" value="">
+                    </div>
+                </div>
+
+                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container">
+                    <h3><?php _e( 'Données de la révision', Oak::$text_domain); ?></h3>
+                    <!-- Liste of fields here -->
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="type"><?php _e( 'Type:', Oak::$text_domain ); ?></label>
+                        <input name="type" type="text" disabled class="oak_revision_type_field" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="function"><?php _e( 'Fonction:', Oak::$text_domain ); ?></label>
+                        <input name="function" type="text" disabled class="oak_revision_function_field" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="default-value"><?php _e( 'Valeur par défaut:', Oak::$text_domain ); ?></label>
+                        <input name="default-value" type="text" disabled class="oak_revision_default_value_field" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="placeholder"><?php _e( 'Description:', Oak::$text_domain ); ?></label>
+                        <input name="placeholder" type="text" disabled class="oak_revision_placeholder_field" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="instructions"><?php _e( 'Instructions:', Oak::$text_domain ); ?></label>
+                        <input name="instructions" type="text" disabled class="oak_revision_instructions_field" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="before"><?php _e( 'Avant:', Oak::$text_domain ); ?></label>
+                        <input name="before" type="text" disabled class="oak_revision_before_field" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="after"><?php _e( 'Après:', Oak::$text_domain ); ?></label>
+                        <input name="after" type="text" disabled class="oak_revision_after_field" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="max-length"><?php _e( 'Nombre de caractères maximum:', Oak::$text_domain ); ?></label>
+                        <input name="max-length" type="text" disabled class="oak_revision_max_length_field" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="selector"><?php _e( 'Selecteur cadres RSE:', Oak::$text_domain ); ?></label>
+                        <input name="selector" type="text" disabled class="oak_revision_selector_field" value="">
+                    </div>
+                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                        <label for="state"><?php _e( 'Etat:', Oak::$text_domain ); ?></label>
+                        <input name="state" type="text" disabled class="oak_revision_state_field" value="">
+                    </div>
+                </div>
+
+                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__list_of_revisions">
+                    <h3><?php _e( 'Liste des révisions', Oak::$text_domain ); ?></h3>
+                    <?php 
+                    if ( isset( $_GET['designation'] ) ) :
+                        foreach( $current_field['revisions'] as $key => $revision ) : ?>
+                            <div index="<?php echo( $key ) ?>" class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
+                                <span class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision['modificationDate'] ); ?></span>
+                            </div>
+                        <?php 
+                        endforeach;
+                        // var_dump( $current_field['revisions'] );
+                    endif;
+                    ?>
+                </div>
+            </div>
+            <!-- Done with the browse revisions Functionality -->
+
+        </div>
+
         <span class="oak_object_model_add_formula_modal_container_modal__error"></span>
         <div class="oak_object_model_add_formula_modal_container_modal_buttons_container">
             <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container">

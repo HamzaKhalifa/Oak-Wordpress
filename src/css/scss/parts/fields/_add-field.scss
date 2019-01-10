@@ -1,5 +1,4 @@
 .oak_add_field_container {
-    margin: auto;
     display: flex;
     flex-direction: column;
     margin-left: 30px;
@@ -143,6 +142,7 @@
 .oak_add_field_big_container {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
 .oak_add_field_big_container__tabs {
@@ -177,7 +177,7 @@
 
 .oak_add_field_big_container_tabs_single_tab__section {
     padding: 20px;
-    border-bottom: 1px solid #6F6F6F;
+    border-bottom: 1px solid #e2e4e7;
 }
 
 .oak_add_field_big_container_tabs_single_tab_section__title {
@@ -189,6 +189,8 @@
 .oak_add_field_big_container_tabs_single_tab_section__state {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 5px;
+    position: relative;
 }
 
 .oak_add_field_big_container_tabs_single_tab_section_state_label {
@@ -198,3 +200,75 @@
 .oak_add_field_container_buttons__right_buttons {
     display: flex;
 }
+
+.oak_add_field_big_container_tabs_single_tab_section_state__browse {
+    color: #1486B8;
+    margin-left: 5px;
+
+}
+
+.oak_add_field_big_container_tabs_single_tab_section_state__browse:hover {
+    cursor: pointer;
+}
+
+.oak_add_field_big_container_tabs_single_tab_section_state__info_container {
+    display: flex;
+    align-items: center;
+}
+
+.oak_object_model_add_formula_modal_container_modal_content__revisions_content {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container, .oak_object_model_add_formula_modal_container_modal_content_revisions_content__current {
+    // width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container h3, .oak_object_model_add_formula_modal_container_modal_content_revisions_content__current h3, .oak_object_model_add_formula_modal_container_modal_content_revisions_content__list_of_revisions h3 {
+    text-align: center;
+}
+
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content__list_of_revisions {
+    width: 30%;
+}
+
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 2px solid #1486B8;
+}
+
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision_selected {
+    border: 2px solid #24E08C;
+}
+
+
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision:hover {
+    cursor: pointer;
+}
+
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.oak_object_model_add_formula_modal_container__modal_content {
+    overflow: scroll;
+}
+
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content__current input {
+    margin-bottom: 5px;
+}
+
+

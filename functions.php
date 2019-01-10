@@ -815,13 +815,14 @@ class Oak {
         $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
         $fields[] = $field;
         update_option( 'oak_custom_fields', $fields );
-        wp_send_json_success();
+        wp_send_json_success( array(
+            'fields' => get_option('oak_custom_fields')
+        ) );
     }
 
     function oak_delete_field() {
         $field_identifier = $_POST['data'];
         $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
-        $found_it = false;
         foreach( $fields as $key => $field ) :
             if ( $field['identifier'] == $field_identifier ) :
                 unset( $fields[ $key ] );
@@ -835,15 +836,18 @@ class Oak {
     function oak_update_field() {
         $field_identifier = $_POST['field']['identifier'];
         $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
-        $found_it = false;
         foreach( $fields as $key => $field ) :
             if ( $field['identifier'] == $field_identifier ) :
                 $fields[ $key ] = $_POST['field'];
             endif;
         endforeach;
+        
         update_option( 'oak_custom_fields', $fields);
         
-        wp_send_json_success();
+        wp_send_json_success( array(
+            'fields_in_base' => get_option('oak_custom_fields'),
+            'fields' => $fields
+        ) );
     }
 
     function oak_corn_configuration() {

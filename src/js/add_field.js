@@ -108,6 +108,35 @@ if (draftButton) {
     });
 }
 
+function getEnteredData() {
+    var designation = document.querySelector('.oak_add_field_container__designation').value;
+    var identifier = designation.replace(/[^a-zA-Z ]/g, '');
+    identifier = identifier.replace(/\s/g,'');
+    var type = document.querySelector('.oak_add_field_container__type').value;
+    var functionField = document.querySelector('.oak_add_field_container__type').value;
+    var defaultValue = document.querySelector('.oak_add_field_container__default_value').value;
+    var instructions = document.querySelector('.oak_add_field_container__instructions').value;
+    var placeholder = document.querySelector('.oak_add_field_container__placeholder').value;
+    var before  = document.querySelector('.oak_add_field_container__before').value;
+    var after = document.querySelector('.oak_add_field_container__after').value;
+    var maxLength = document.querySelector('.oak_add_field_container__max_length').value;
+    var selector = document.querySelector('.oak_add_field_container__selector').value;
+
+    var fieldData = { designation, identifier, type, functionField, defaultValue,
+        instructions,
+        placeholder,
+        before,
+        after,
+        maxLength,
+        selector,
+        modificationDate: new Date(),
+        revisions: DATA.currentField.revisions,
+        state: DATA.currentField.state
+    }
+
+    return fieldData;
+}
+
 function createFieldData() {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
     var identifier = designation.replace(/[^a-zA-Z ]/g, '');
@@ -122,19 +151,39 @@ function createFieldData() {
     var maxLength = document.querySelector('.oak_add_field_container__max_length').value;
     var selector = document.querySelector('.oak_add_field_container__selector').value;
 
-    fieldData = {
-        designation,
-        identifier,
-        type,
-        functionField,
-        defaultValue,
+    var fieldData = { designation, identifier, type, functionField, defaultValue,
         instructions,
         placeholder,
         before,
         after,
         maxLength,
         selector,
+        modificationDate: new Date()
     }
+
+    if (DATA.currentField.revisions) {
+        var revisions = DATA.currentField.revisions ? DATA.currentField.revisions : [];
+        var currentFieldWithoutRevisions = DATA.currentField;
+        currentFieldWithoutRevisions.revisions = '';
+        revisions.push(currentFieldWithoutRevisions);
+        fieldData.revisions = revisions;
+    } else {
+        fieldData.revisions = [{
+            designation,
+            identifier,
+            type,
+            functionField,
+            defaultValue,
+            instructions,
+            placeholder,
+            before,
+            after,
+            maxLength,
+            selector,
+            modificationDate: new Date()
+        }];
+    }
+
     return fieldData;
 }
 
@@ -162,6 +211,54 @@ cancelButton.addEventListener('click', function() {
         backToList();
     }
 });
+
+// for the browse revisions button:
+browseRevisionsButton = document.querySelector('.oak_add_field_big_container_tabs_single_tab_section_state__browse');
+browseRevisionsButton.addEventListener('click', function() {
+    openModal('Liste des révisions', false);
+    // Changing the modal's width
+    document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.add('oak_object_model_add_formula_modal_container_modal__big_modal');
+    document.querySelector('.oak_object_model_add_formula_modal_container_modal_content__revisions_content').classList.remove('oak_hidden');
+
+    fieldData = getEnteredData();
+
+    document.querySelector('.oak_revision_type_field_current').value = fieldData.type;
+    document.querySelector('.oak_revision_function_field_current').value = fieldData.functionField;
+    document.querySelector('.oak_revision_default_value_field_current').value = fieldData.defaultValue;
+    document.querySelector('.oak_revision_placeholder_field_current').value = fieldData.placeholder;
+    document.querySelector('.oak_revision_instructions_field_current').value = fieldData.instructions;
+    document.querySelector('.oak_revision_before_field_current').value = fieldData.before;
+    document.querySelector('.oak_revision_after_field_current').value = fieldData.after;
+    document.querySelector('.oak_revision_max_length_field_current').value = fieldData.maxLength;
+    document.querySelector('.oak_revision_selector_field_current').value = fieldData.selector;
+    var state = fieldData.state == 0 ? 'Brouillon_current' : fieldData.state == 1 ? 'Enregsitré' : 'Diffusé';
+    document.querySelector('.oak_revision_state_field_current').value = state;
+});
+
+// For the browse revisions select button: 
+var revisionsButtons = document.querySelectorAll('.oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision');
+for( var i = 0; i < revisionsButtons.length; i++ ) {
+    revisionsButtons[i].addEventListener('click', function(){
+        for (var j = 0; j < revisionsButtons.length; j++) {
+            revisionsButtons[j].classList.remove('oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision_selected');
+        }
+        this.classList.add('oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision_selected');
+
+        var selectedRevision = DATA.currentField.revisions[this.getAttribute('index')];
+        document.querySelector('.oak_revision_type_field').value = selectedRevision.type;
+        document.querySelector('.oak_revision_function_field').value = selectedRevision.functionField;
+        document.querySelector('.oak_revision_default_value_field').value = selectedRevision.defaultValue;
+        document.querySelector('.oak_revision_placeholder_field').value = selectedRevision.placeholder;
+        document.querySelector('.oak_revision_instructions_field').value = selectedRevision.instructions;
+        document.querySelector('.oak_revision_before_field').value = selectedRevision.before;
+        document.querySelector('.oak_revision_after_field').value = selectedRevision.after;
+        document.querySelector('.oak_revision_max_length_field').value = selectedRevision.maxLength;
+        document.querySelector('.oak_revision_selector_field').value = selectedRevision.selector;
+        var state = selectedRevision.state == '0' ? 'Brouillon' : selectedRevision.state == '1' ? 'Enregsitré' : 'Diffusé';
+        document.querySelector('.oak_revision_state_field').value = state;
+    });
+}
+
 
 // Everything related to our modal:
 function openModal(title, twoButtons) {
@@ -204,6 +301,12 @@ okButtonContainer.addEventListener('click', function() {
 }); 
 
 function closeModals() {
+    
+    setTimeout(function() {
+        document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.remove('oak_object_model_add_formula_modal_container_modal__big_modal');
+        document.querySelector('.oak_object_model_add_formula_modal_container_modal_content__revisions_content').classList.add('oak_hidden');
+    }, 1000);
+
     var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
     modalsContainer.classList.remove('oak_object_model_add_formula_modal_container__activated');
     adding = canceling = updating = false;
@@ -230,6 +333,7 @@ function handleModalButtons() {
         if (adding) {
             closeModals();
             setLoading();
+            console.log('Field data', fieldData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
@@ -254,6 +358,7 @@ function handleModalButtons() {
             window.location.replace(DATA.adminUrl + 'admin.php?page=oak_fields_list');
         }
         if (updating) {
+            console.log('Field data', fieldData);
             closeModals();
             setLoading();
             jQuery(document).ready(function() {
