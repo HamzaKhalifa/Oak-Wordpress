@@ -80,6 +80,9 @@ class Oak {
 
         add_action( 'wp_ajax_oak_update_field', array( $this, 'oak_update_field') );
         add_action( 'wp_ajax_nopriv_oak_update_field', array( $this, 'oak_update_field') );
+
+        add_action( 'wp_ajax_oak_send_field_to_trash', array( $this, 'oak_send_field_to_trash') );
+        add_action( 'wp_ajax_nopriv_oak_send_field_to_trash', array( $this, 'oak_send_field_to_trash') );
     }
 
     function oak_enqueue_styles() {
@@ -108,6 +111,7 @@ class Oak {
     }
 
     function oak_admin_enqueue_styles( $hook ) {
+        wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
         if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_critical_analysis' 
             || get_current_screen()->id == 'oak-materiality-reporting_page_oak_critical_analysis_configuration' 
             || get_current_screen()->id == 'oak-materiality-reporting_page_oak_add_taxonomies' 
@@ -829,6 +833,25 @@ class Oak {
             endif;
         endforeach;
         update_option( 'oak_custom_fields', $fields);
+        
+        wp_send_json_success();
+    }
+
+    function oak_send_field_to_trash() {
+        $field_to_trash;
+        $field_identifier = $_POST['data'];
+        $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
+        foreach( $fields as $key => $field ) :
+            if ( $field['identifier'] == $field_identifier ) :
+                $field_to_trash = $fields[ $key ];
+                unset( $fields[ $key ] );
+            endif;
+        endforeach;
+        update_option( 'oak_custom_fields', $fields);
+
+        $fields_in_trash = get_option('oak_custom_fields_trash') ? get_option('oak_custom_fields_trash') : [];
+        $fields_in_trash[] = $field_to_trash;
+        update_option( 'oak_custom_fields_trash', $fields_in_trash );
         
         wp_send_json_success();
     }

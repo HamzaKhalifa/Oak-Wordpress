@@ -1,3 +1,7 @@
+<?php
+include get_template_directory() . '/template-parts/oak-admin-header.php'; 
+?>
+
 <h3 class="oak_add_field_container__title"><?php _e( 'Ajouter un champ', Oak::$text_domain ); ?></h3>
 <div class="oak_add_field_big_container">
     <div class="oak_add_field_container">
@@ -11,19 +15,54 @@
             <div class="oak_add_field_container__field_container oak_add_field_container__type_container">
                 <label class="oak_add_field_container__label" for="nature"><?php _e( 'Nature du champ: ', Oak::$text_domain ); ?></label> 
                 <select name="nature" type="text" class="oak_add_field_container__input oak_add_field_container__type">
-                    <option value="Text">Text</option>
-                    <option value="Zone de Texte">Zone De Texte</option>
-                    <option value="Image">Image</option>
-                    <option value="File">Fichier</option>
+                    <?php 
+                    $selected = array('', '', '', '');
+                    if ( isset( $current_field ) ) :
+                        switch ( $current_field['type'] ) :
+                            case 'Text': 
+                                $selected[0] = 'selected';
+                            break;
+                            case 'Zone de Texte':
+                                $selected[1] = 'selected';
+                            break;
+                            case 'Image': 
+                                $selected[2] = 'selected';
+                            break;
+                            case 'File':
+                                $selected[3] = 'selected';
+                            break;
+                        endswitch;
+                    endif;
+                    ?>
+                    <option <?php echo( $selected[0] ); ?> value="Text">Text</option>
+                    <option <?php echo( $selected[1] ); ?> value="Zone de Texte">Zone De Texte</option>
+                    <option <?php echo( $selected[2] ); ?> value="Image">Image</option>
+                    <option <?php echo( $selected[3] ); ?> value="File">Fichier</option>
                 </select>
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__function_container">
                 <label class="oak_add_field_container__label" for="function"><?php _e( 'Fonction: ', Oak::$text_domain ); ?></label> 
                 <select name="function" type="text" class="oak_add_field_container__input oak_add_field_container__function">
-                    <option value="Information/Description">Information/Description</option>
-                    <option value="Exemple">Exempel</option>
-                    <option value="Illustration">Illustration</option>
+                <?php 
+                    $selected = array('', '', '');
+                    if ( isset( $current_field ) ) :
+                        switch ( $current_field['functionField'] ) :
+                            case 'Information/Description': 
+                                $selected[0] = 'selected';
+                            break;
+                            case 'Exemple':
+                                $selected[1] = 'selected';
+                            break;
+                            case 'Illustration': 
+                                $selected[2] = 'selected';
+                            break;
+                        endswitch;
+                    endif;
+                    ?>
+                    <option <?php echo( $selected[0] ); ?> value="Information/Description">Information/Description</option>
+                    <option <?php echo( $selected[1] ); ?>  value="Exemple">Exempel</option>
+                    <option <?php echo( $selected[2] ); ?> value="Illustration">Illustration</option>
                 </select>
             </div>
         </div>
@@ -72,6 +111,15 @@
             </div>
 
             <div class="oak_add_field_container_buttons__right_buttons">
+                <?php 
+                if ( isset( $_GET['designation'] ) ) : ?>
+                    <div class="oak_add_field_container__trash_button">
+                        <span><?php _e( 'Envoyer à la corbeille', Oak::$text_domain ); ?></span>
+                    </div>
+                <?php 
+                endif;
+                ?>
+
                 <?php 
                 if ( isset( $_GET['designation'] ) && $current_field['state'] == 1 ) : ?>
                     <div class="oak_add_field_container__draft_button">
@@ -168,6 +216,59 @@
                             <?php _e( 'Parcrourir', Oak::$text_domain ); ?>
                         </span>
                     </div>
+                </div>
+                <?php
+                    $registration_date = $broadcast_date = $actual_registration_date = $actual_broadcast_date = __( 'Pas encore', Oak::$text_domain ); 
+                    if ( isset( $_GET['designation'] ) ) :
+                        if ( $current_field['state'] >= 1 ) :
+                            if ( $current_field['state'] == 1 ) :
+                                $registration_date = $current_field['modificationDate'];
+                            else :
+                                $broadcast_date = $current_field['modificationDate'];
+                                $found_the_registered_revision = false;
+                                $index = count( $current_field['revisions'] ) - 1;
+                                do {
+                                    if ( $current_field['revisions'][ $index ]['state'] == 1 ) :
+                                        $registration_date = $current_field['revisions'][ $index ]['modificationDate'];
+                                        $found_the_registered_revision = true;
+                                    endif;
+
+                                    $index--;
+                                }
+                                while( $found_the_registered_revision == false && $index > -1 );
+                            endif;
+                        endif;
+                    endif;
+
+                    if ( !strpos( $registration_date, 'encore' ) ) :
+                        $formatted_registration_date = explode( ' ', $registration_date );
+                        $actual_registration_date = '';
+                        for ( $i = 0; $i < 5; $i++) {
+                            $actual_registration_date = $actual_registration_date . $formatted_registration_date[ $i ] . ' ';
+                        }
+                    endif;
+
+                    if ( !strpos( $broadcast_date, 'encore' ) ) :
+                        $formatted_broadcast_date = explode( ' ', $broadcast_date );
+                        $actual_broadcast_date = '';
+                        for ( $i = 0; $i < 5; $i++) {
+                            $actual_broadcast_date = $actual_broadcast_date . $formatted_broadcast_date[ $i ] . ' ';
+                        }
+                    endif;
+                ?>
+                
+                <div class="oak_add_field_big_container_tabs_single_tab_section__state">
+                    <span class="oak_add_field_big_container_tabs_single_tab_section_state_label"><?php _e( 'Enregsitré le: ', Oak::$text_domain ); ?></span>
+                    <?php 
+                    ?>
+                    <span class="oak_add_field_big_container_tabs_single_tab_section_state__info"><?php echo( $actual_registration_date ); ?></span>
+                </div>
+
+                <div class="oak_add_field_big_container_tabs_single_tab_section__state">
+                    <span class="oak_add_field_big_container_tabs_single_tab_section_state_label"><?php _e( 'Diffusé le: ', Oak::$text_domain ); ?></span>
+                    <?php 
+                    ?>
+                    <span class="oak_add_field_big_container_tabs_single_tab_section_state__info"><?php echo( $actual_broadcast_date ); ?></span>
                 </div>
             </div>
 

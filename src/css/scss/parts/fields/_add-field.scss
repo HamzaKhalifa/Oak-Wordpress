@@ -56,7 +56,7 @@
     flex: 1;
 }
 
-.oak_add_field_container__add_button, .oak_add_field_container__update_button, .oak_add_field_container__register_button, .oak_add_field_container__broadcast_button, .oak_add_field_container__draft_button {
+.oak_add_field_container__add_button, .oak_add_field_container__update_button, .oak_add_field_container__register_button, .oak_add_field_container__broadcast_button, .oak_add_field_container__draft_button, .oak_add_field_container__trash_button {
     border: 1px solid #24E08C;
     background-color: #24E08C;
     transition: all .2s ease-in-out;
@@ -69,7 +69,12 @@
     margin-left: 10px;
 }
 
-.oak_add_field_container__add_button:hover, .oak_add_field_container__update_button:hover, .oak_add_field_container__register_button:hover, .oak_add_field_container__broadcast_button:hover, .oak_add_field_container__draft_button:hover {
+.oak_add_field_container__trash_button {
+    border: 1px solid #FC394D;
+    background-color: #FC394D;
+}
+
+.oak_add_field_container__add_button:hover, .oak_add_field_container__update_button:hover, .oak_add_field_container__register_button:hover, .oak_add_field_container__broadcast_button:hover, .oak_add_field_container__draft_button:hover, .oak_add_field_container__trash_button:hover  {
     cursor: pointer;
     background-color:white;
 }
@@ -78,7 +83,11 @@
     color: #24E08C
 }
 
-.oak_add_field_container__add_button span, .oak_add_field_container__update_button span, .oak_add_field_container__register_button span, .oak_add_field_container__broadcast_button span, .oak_add_field_container__draft_button span {
+.oak_add_field_container__trash_button:hover span {
+    color: #FC394D;
+}
+
+.oak_add_field_container__add_button span, .oak_add_field_container__update_button span, .oak_add_field_container__register_button span, .oak_add_field_container__broadcast_button span, .oak_add_field_container__draft_button span, .oak_add_field_container__trash_button span {
     color: white;
 }
 
@@ -267,8 +276,16 @@
     overflow: scroll;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content_revisions_content__current input {
+.oak_object_model_add_formula_modal_container_modal_content_revisions_content__current input, .oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container input {
     margin-bottom: 5px;
+}
+
+.oak_error {
+    border: 1px solid #FC394D!important;
+}
+
+.oak_add_field_big_container_tabs_single_tab_section_state__info {
+    text-align: right;
 }
 
 
