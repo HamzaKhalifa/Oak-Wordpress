@@ -438,6 +438,7 @@ function handleModalButtons() {
                     success: function(data) {
                         DATA.fields.push(fieldData);
                         doneLoading();
+                        window.localStorage.reload();
                     },
                     error: function(error) {
                         console.log(error);
