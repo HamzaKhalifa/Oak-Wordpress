@@ -2,13 +2,13 @@
 include get_template_directory() . '/template-parts/oak-admin-header.php'; 
 ?>
 
-<h3 class="oak_add_field_container__title"><?php _e( 'Ajouter un champ', Oak::$text_domain ); ?></h3>
 <div class="oak_add_field_big_container">
+    
     <div class="oak_add_field_container">
-
+        <h3 class="oak_add_field_container__title"><?php _e( 'Ajouter un champ', Oak::$text_domain ); ?></h3>
         <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
             <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation: ', Oak::$text_domain ); ?></label> 
-            <input name="designation" <?php if ( isset( $current_field['designation'] ) ) : echo('disabled'); endif; ?> type="text" value="<?php if ( isset( $current_field['designation'] ) ) : echo( $current_field['designation'] ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
+            <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->field_designation ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
@@ -17,8 +17,8 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 <select name="nature" type="text" class="oak_add_field_container__input oak_add_field_container__type">
                     <?php 
                     $selected = array('', '', '', '');
-                    if ( isset( $current_field ) ) :
-                        switch ( $current_field['type'] ) :
+                    if ( count( $revisions ) > 0 ) :
+                        switch ( $revisions[ count( $revisions ) - 1 ]->type ) :
                             case 'Text': 
                                 $selected[0] = 'selected';
                             break;
@@ -46,8 +46,8 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 <select name="function" type="text" class="oak_add_field_container__input oak_add_field_container__function">
                 <?php 
                     $selected = array('', '', '');
-                    if ( isset( $current_field ) ) :
-                        switch ( $current_field['functionField'] ) :
+                    if ( count( $revisions ) > 0 ) :
+                        switch ( $revisions[ count( $revisions ) - 1 ]->field_function ) :
                             case 'Information/Description': 
                                 $selected[0] = 'selected';
                             break;
@@ -69,39 +69,39 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
         <div class="oak_add_field_container__field_container oak_add_field_container__default_value_container">
             <label class="oak_add_field_container__label" for="default-value"><?php _e( 'Valeur par défaut: ', Oak::$text_domain ); ?></label> 
-            <input name="default-value" value="<?php if ( isset( $current_field['defaultValue'] ) ) : echo( $current_field['defaultValue'] ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__default_value"></textarea>
+            <input name="default-value" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_default_value ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_default_value ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__default_value"></textarea>
         </div>
 
         <div class="oak_add_field_container__field_container oak_add_field_container__placeholder_container">
             <label class="oak_add_field_container__label" for="placeholder"><?php _e( 'Description du champ: ', Oak::$text_domain ); ?></label> 
-            <input name="placeholder" value="<?php if ( isset( $current_field['placeholder'] ) ) : echo( $current_field['placeholder'] ); endif; ?>"" type="text" class="oak_add_field_container__input oak_add_field_container__placeholder">
+            <input name="placeholder" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_placeholder ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_placeholder ); endif; ?>" type="text" class="oak_add_field_container__input oak_add_field_container__placeholder">
         </div>
 
         <div class="oak_add_field_container__field_container oak_add_field_container__instructions_container">
             <label class="oak_add_field_container__label oak_add_field_container__label_instruction" for="instructions"><?php _e( 'Consignes de remplissage: ', Oak::$text_domain ); ?></label> 
-            <textarea cols="30" rows="2" name="instructions" class="oak_add_field_container__input oak_add_field_container__instructions"><?php if ( isset( $current_field['instructions'] ) ) : echo( $current_field['instructions'] ); endif; ?></textarea>
+            <textarea cols="30" rows="2" name="instructions" class="oak_add_field_container__input oak_add_field_container__instructions"><?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_instructions ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_instructions ); endif; ?></textarea>
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_add_field_container__before_container">
                 <label class="oak_add_field_container__label" for="before"><?php _e( 'Avant: ', Oak::$text_domain ); ?></label> 
-                <input name="before" value="<?php if ( isset( $current_field['before'] ) ) : echo( $current_field['before'] ); endif; ?>"" type="text" class="oak_add_field_container__input oak_add_field_container__before">
+                <input name="before" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_before ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_before ); endif; ?>" type="text" class="oak_add_field_container__input oak_add_field_container__before">
             </div>
             <div class="oak_add_field_container__field_container oak_add_field_container__after_container">
                 <label class="oak_add_field_container__label" for="after"><?php _e( 'Après: ', Oak::$text_domain ); ?></label> 
-                <input name="after" type="text" value="<?php if ( isset( $current_field['after'] ) ) : echo( $current_field['after'] ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__after">
+                <input name="after" type="text" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_after ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_after ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__after">
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_add_field_container__max_length_container">
                 <label class="oak_add_field_container__label" for="max-length"><?php _e( 'Nombre de caractères maximum: ', Oak::$text_domain ); ?></label> 
-                <input name="max-length" type="number" value="<?php if ( isset( $current_field['maxLength'] ) ) : echo( $current_field['maxLength'] ); endif; ?>"" class="oak_add_field_container__input oak_add_field_container__max_length">
+                <input name="max-length" type="number" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_max_length ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_max_length ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__max_length">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__selector_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_selector" for="selector"><?php _e( 'Sélecteur de cadres RSE: ', Oak::$text_domain ); ?></label> 
-                <input name="selector" type="checkbox" <?php if ( isset( $current_field['selector'] ) && $current_field['selector'] == 'on' ) : echo( 'checked' ); endif; ?> class="oak_add_field_container__input oak_add_field_container__selector">
+                <input name="selector" type="checkbox" <?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_selector ) && $revisions[ count( $revisions ) - 1 ]->field_selector == 'on' ) : echo( 'checked' ); endif; ?> class="oak_add_field_container__input oak_add_field_container__selector">
             </div>
         </div>
 
@@ -112,7 +112,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
             <div class="oak_add_field_container_buttons__right_buttons">
                 <?php 
-                if ( isset( $_GET['designation'] ) ) : ?>
+                if ( isset( $_GET['field_identifier'] ) ) : ?>
                     <div class="oak_add_field_container__trash_button">
                         <span><?php _e( 'Envoyer à la corbeille', Oak::$text_domain ); ?></span>
                     </div>
@@ -121,7 +121,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 ?>
 
                 <?php 
-                if ( isset( $_GET['designation'] ) && $current_field['state'] == 1 ) : ?>
+                if ( isset( $_GET['field_identifier'] ) && $revisions[ count( $revisions ) - 1 ]->field_state == 1 ) : ?>
                     <div class="oak_add_field_container__draft_button">
                         <span><?php _e( 'Retour à l\'état de Brouillon', Oak::$text_domain ); ?></span>
                     </div>
@@ -131,11 +131,11 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 
 
                 <?php 
-                if ( isset( $_GET['designation'] ) ) : 
+                if ( isset( $_GET['field_identifier'] ) ) : 
                     $add_text = '';
-                    if ( $current_field['state'] == 0 ) :
+                    if ( $revisions[ count( $revisions ) - 1 ]->field_state == 0 ) :
                         $add_text = 'Sauvegarder le brouillon';
-                    elseif ( $current_field['state'] == 1 ) :
+                    elseif ( $revisions[ count( $revisions ) - 1 ]->field_state == 1 ) :
                         $add_text = 'Enregistrer';
                     else :
                         $add_text = 'Mettre à jour';
@@ -153,10 +153,10 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 endif; 
                 ?>
                 
-                <div class="oak_add_field_container__register_button <?php if ( isset( $_GET['designation'] ) && $current_field['state'] == 1 ) : echo( 'oak_hidden' ); endif; ?>">
+                <div class="oak_add_field_container__register_button <?php if ( isset( $_GET['field_identifier'] ) && $revisions[ count( $revisions ) - 1 ]->field_state == 1 ) : echo( 'oak_hidden' ); endif; ?>">
                     <?php 
                     $text = 'Enregistrer';
-                    if ( isset( $_GET['designation'] ) && $current_field['state'] == '2' ) :
+                    if ( isset( $_GET['field_identifier'] ) && $revisions[ count( $revisions ) - 1 ]->field_state == '2' ) :
                         $text = 'Retour à l\'état enregistré';
                     endif;
                     ?>
@@ -164,7 +164,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 </div>
 
                 <?php
-                if ( isset( $_GET['designation'] ) && $current_field['state'] == '1' ) : ?>
+                if ( isset( $_GET['field_identifier'] ) && $revisions[ count( $revisions ) - 1 ]->field_state == '1' ) : ?>
                     <div class="oak_add_field_container__broadcast_button">
                         <span><?php _e( 'Diffuser', Oak::$text_domain ); ?></span>
                     </div>
@@ -187,10 +187,10 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                     <span class="oak_add_field_big_container_tabs_single_tab_section_state_label"><?php _e( 'Etat: ', Oak::$text_domain ); ?></span>
                     <?php 
                     $state = 'Brouillon';
-                    if ( isset( $_GET['designation'] ) ) :
-                        if ( $current_field['state'] == 0 ) : 
+                    if ( isset( $_GET['field_identifier'] ) ) :
+                        if ( $revisions[ count( $revisions ) - 1 ]->field_state == 0 ) : 
                             $state = 'Brouillon';
-                        elseif ( $current_field['state'] == '1' ) :
+                        elseif ( $revisions[ count( $revisions ) - 1 ]->field_state == '1' ) :
                             $state = 'Enregistré';
                         else : 
                             $state = 'Diffusé';
@@ -203,72 +203,47 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 <div class="oak_add_field_big_container_tabs_single_tab_section__state">
                     <span class="oak_add_field_big_container_tabs_single_tab_section_state_label"><?php _e( 'Révisions: ', Oak::$text_domain ); ?></span>
                     <div class="oak_add_field_big_container_tabs_single_tab_section_state__info_container">
-                        <span>
-                            <?php
-                            if ( isset( $_GET['designation'] ) ) :
-                                echo( count( $current_field['revisions'] ) );
+                        <span><?php 
+                            if ( count( $revisions ) > 0 ) :
+                                echo( count( $revisions ) - 1 );
                             else :
-                                echo( '0' );
-                            endif;
+                                echo('0');
+                            endif; 
                             ?>
                         </span>
                         <span class="oak_add_field_big_container_tabs_single_tab_section_state__browse">
-                            <?php _e( 'Parcrourir', Oak::$text_domain ); ?>
+                            <?php _e( 'Parcourir', Oak::$text_domain ); ?>
                         </span>
                     </div>
                 </div>
                 <?php
-                    $registration_date = $broadcast_date = $actual_registration_date = $actual_broadcast_date = __( 'Pas encore', Oak::$text_domain ); 
-                    if ( isset( $_GET['designation'] ) ) :
-                        if ( $current_field['state'] >= 1 ) :
-                            if ( $current_field['state'] == 1 ) :
-                                $registration_date = $current_field['modificationDate'];
-                            else :
-                                $broadcast_date = $current_field['modificationDate'];
-                                $found_the_registered_revision = false;
-                                $index = count( $current_field['revisions'] ) - 1;
-                                do {
-                                    if ( $current_field['revisions'][ $index ]['state'] == 1 ) :
-                                        $registration_date = $current_field['revisions'][ $index ]['modificationDate'];
-                                        $found_the_registered_revision = true;
-                                    endif;
-
-                                    $index--;
-                                }
-                                while( $found_the_registered_revision == false && $index > -1 );
+                    $registration_date = $broadcast_date = __( 'Pas encore', Oak::$text_domain );
+                    $last_revision = $revisions[ count( $revisions ) - 1 ];
+                    if ( $last_revision->field_state == 1 ) :
+                        $registration_date = $last_revision->field_modification_time;
+                    elseif ( $last_revision->field_state == 2 ) :
+                        $broadcast_date = $last_revision->field_modification_time;
+                        $index = 0;
+                        for ( $i = count( $revisions ) - 2; $i >= 0; $i-- ) :
+                            if ( $revisions[ $i ]->field_state == 1 ) :
+                                $registration_date = $revisions[ $i ]->field_modification_time;
                             endif;
-                        endif;
-                    endif;
-
-                    if ( !strpos( $registration_date, 'encore' ) ) :
-                        $formatted_registration_date = explode( ' ', $registration_date );
-                        $actual_registration_date = '';
-                        for ( $i = 0; $i < 5; $i++) {
-                            $actual_registration_date = $actual_registration_date . $formatted_registration_date[ $i ] . ' ';
-                        }
-                    endif;
-
-                    if ( !strpos( $broadcast_date, 'encore' ) ) :
-                        $formatted_broadcast_date = explode( ' ', $broadcast_date );
-                        $actual_broadcast_date = '';
-                        for ( $i = 0; $i < 5; $i++) {
-                            $actual_broadcast_date = $actual_broadcast_date . $formatted_broadcast_date[ $i ] . ' ';
-                        }
+                        endfor;
                     endif;
                 ?>
                 
                 <div class="oak_add_field_big_container_tabs_single_tab_section__state">
-                    <span class="oak_add_field_big_container_tabs_single_tab_section_state_label"><?php _e( 'Enregsitré le: ', Oak::$text_domain ); ?></span>
+                    <span class="oak_add_field_big_container_tabs_single_tab_section_state_label"><?php _e( 'Enregistré le: ', Oak::$text_domain ); ?></span>
                     <?php 
                     ?>
-                    <span class="oak_add_field_big_container_tabs_single_tab_section_state__info"><?php echo( $actual_registration_date ); ?></span>
+                    <span class="oak_add_field_big_container_tabs_single_tab_section_state__info"><?php echo( $registration_date ); ?></span>
                 </div>
 
                 <div class="oak_add_field_big_container_tabs_single_tab_section__state">
                     <span class="oak_add_field_big_container_tabs_single_tab_section_state_label"><?php _e( 'Diffusé le: ', Oak::$text_domain ); ?></span>
                     <?php 
                     ?>
-                    <span class="oak_add_field_big_container_tabs_single_tab_section_state__info"><?php echo( $actual_broadcast_date ); ?></span>
+                    <span class="oak_add_field_big_container_tabs_single_tab_section_state__info"><?php echo( $broadcast_date ); ?></span>
                 </div>
             </div>
 
@@ -403,15 +378,15 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__list_of_revisions">
                     <h3><?php _e( 'Liste des révisions', Oak::$text_domain ); ?></h3>
                     <?php 
-                    if ( isset( $_GET['designation'] ) ) :
-                        foreach( $current_field['revisions'] as $key => $revision ) : ?>
+                    foreach( $revisions as $key => $revision ) : 
+                        if ( $key != count( $revisions ) - 1 ) :
+                        ?>
                             <div index="<?php echo( $key ) ?>" class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
-                                <span class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision['modificationDate'] ); ?></span>
+                                <span class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision->field_modification_time ); ?></span>
                             </div>
-                        <?php 
-                        endforeach;
-                        // var_dump( $current_field['revisions'] );
-                    endif;
+                        <?php
+                        endif;
+                    endforeach;
                     ?>
                 </div>
             </div>

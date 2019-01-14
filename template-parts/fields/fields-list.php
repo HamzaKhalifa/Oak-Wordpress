@@ -2,12 +2,11 @@
     <h1><?php _e( 'Liste des champs', Oak::$text_domain ); ?></h1>
     <div class="oak_add_field_container__fields_list">
         <?php
-        $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
         foreach( $fields as $field ) : ?>
             <div class="oak_add_field_container__saved_field_container">
                 <i class="oak_add_field_container_saved_field_container__update_button fas fa-cog"></i>
-                <span><?php echo( $field['designation'] ); ?></span>
-                <i field-identifier='<?php echo( $field['identifier'] ); ?>' class="oak_add_field_container__saved_field_container__delete_button fas fa-minus"></i>
+                <span><?php echo( $field->field_designation ); ?></span>
+                <i field-identifier='<?php echo( $field->field_identifier ); ?>' class="oak_add_field_container__saved_field_container__delete_button fas fa-minus"></i>
             </div>
         <?php
         endforeach;

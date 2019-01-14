@@ -2,9 +2,14 @@
 
 class Oak {
     public static $text_domain; 
+    public static $fields_table_name;
+    public static $fields;
 
     function __construct() {
         Oak::$text_domain = 'oak';
+
+        global $wpdb;
+        Oak::$fields_table_name = $wpdb->prefix . 'oak_fields';
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
@@ -128,6 +133,8 @@ class Oak {
     }
 
     function oak_admin_enqueue_scripts( $hook ) { 
+        global $wpdb; 
+
         if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_import_csv_files' ) :
             wp_enqueue_script( 'oak_import_csv_file', get_template_directory_uri() . '/src/js/import-csv-files.js', array('jquery'), false, true );
         endif;
@@ -190,14 +197,20 @@ class Oak {
             ));
         endif;
 
+        $fields_table_name = Oak::$fields_table_name;
+        Oak::$fields = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $fields_table_name
+        " );
+
         if ( get_current_screen()->id == 'champs_page_oak_add_field' ) :
-            $current_field = $this->oak_get_current_field();
+            $revisions = $this->oak_get_revisions();
 
             wp_enqueue_script( 'corn_add_field', get_template_directory_uri() . '/src/js/add_field.js', array('jquery'), false, true );
             wp_localize_script( 'corn_add_field', 'DATA', array(
                 'ajaxUrl' => admin_url ('admin-ajax.php'),
-                'fields' => get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [],
-                'currentField' => $current_field,
+                'fields' => Oak::$fields,
+                'revisions' => $revisions,
                 'adminUrl' => admin_url()
             ) );
         endif;
@@ -207,13 +220,14 @@ class Oak {
             wp_localize_script( 'corn_fields_list', 'DATA', array(
                 'ajaxUrl' => admin_url( 'admin-ajax.php'),
                 'adminUrl' => admin_url(),
-                'fields' => get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [],
+                'fields' => Oak::$fields
             ) );
         endif;
     }
     
     function oak_add_theme_support() {
         add_theme_support('menus');
+        include get_template_directory() . '/functions/tables.php';
     }
 
     function add_cors_http_header() {
@@ -768,25 +782,31 @@ class Oak {
     }
 
     function oak_add_field() {
-        $current_field = $this->oak_get_current_field();
+        $revisions = $this->oak_get_revisions();
+
         include get_template_directory() . '/template-parts/fields/add-field.php';
     }
 
     function oak_fields_list() {
+        global $wpdb;
+        $fields_table_name = Oak::$fields_table_name;
+        $fields = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $fields_table_name
+        " );
         include get_template_directory() . '/template-parts/fields/fields-list.php';
     }
 
-    function oak_get_current_field() {
-        $current_field = [];
-        if ( isset( $_GET['designation'] ) ) :
-            $oak_fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
-            foreach( $oak_fields as $field ) :
-                if ( $field['designation'] == $_GET['designation'] ) :
-                    $current_field = $field;
+    function oak_get_revisions() {
+        $revisions = [];
+        if ( isset( $_GET['field_identifier'] ) ) :
+            foreach( Oak::$fields as $field ) :
+                if ( $field->field_identifier == $_GET['field_identifier'] ) :
+                    $revisions[] = $field;
                 endif;
             endforeach;
-        endif; 
-        return $current_field;
+        endif;
+        return $revisions;
     }
 
     function oak_get_organizations() {
@@ -815,13 +835,31 @@ class Oak {
     }
 
     function oak_register_field() {
+        global $wpdb;
+
         $field = $_POST['data'];
-        $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
-        $fields[] = $field;
-        update_option( 'oak_custom_fields', $fields );
-        wp_send_json_success( array(
-            'fields' => get_option('oak_custom_fields')
-        ) );
+
+        $result = $wpdb->insert(
+            Oak::$fields_table_name, 
+            array(
+                'field_designation' => $field['designation'],
+                'field_identifier' => $field['identifier'],
+                'field_type' => $field['type'],
+                'field_function' => $field['functionField'],
+                'field_default_value' => $field['defaultValue'],
+                'field_instructions' => $field['instructions'],
+                'field_placeholder' => $field['placeholder'],
+                'field_before' => $field['before'],
+                'field_after' => $field['after'],
+                'field_max_length' => $field['maxLength'],
+                'field_selector' => $field['selector'],
+                'field_state' => $field['state'],
+                'field_modification_time' => date("Y-m-d H:i:s"),
+                'field_trashed' => $field['trashed']
+            )
+        );
+
+        wp_send_json_success();
     }
 
     function oak_delete_field() {
@@ -856,22 +894,35 @@ class Oak {
         wp_send_json_success();
     }
 
-    function oak_update_field() {
-        $field_identifier = $_POST['field']['identifier'];
-        $fields = get_option('oak_custom_fields') ? get_option('oak_custom_fields') : [];
-        foreach( $fields as $key => $field ) :
-            if ( $field['identifier'] == $field_identifier ) :
-                $fields[ $key ] = $_POST['field'];
-            endif;
-        endforeach;
+    // function oak_update_field() {
+    //     global $wpdb;
+
+    //     $field = $_POST['field'];
+
+    //     $wpdb->update(
+    //         Oak::$fields_table_name, 
+    //         array(
+    //             'field_designation' => $field['designation'],
+    //             'field_identifier' => $field['identifier'],
+    //             'field_type' => $field['type'],
+    //             'field_function' => $field['functionField'],
+    //             'field_default_value' => $field['defaultValue'],
+    //             'field_instructions' => $field['instructions'],
+    //             'field_placeholder' => $field['placeholder'],
+    //             'field_before' => $field['before'],
+    //             'field_after' => $field['after'],
+    //             'field_max_length' => $field['maxLength'],
+    //             'field_selector' => $field['selector'],
+    //             'field_state' => $field['state'],
+    //             'field_modification_time' => $field['modificationDate']
+    //         ),
+    //         array(
+    //             'field_identifier' => $_POST['field']['identifier']
+    //         )
+    //     );
         
-        update_option( 'oak_custom_fields', $fields);
-        
-        wp_send_json_success( array(
-            'fields_in_base' => get_option('oak_custom_fields'),
-            'fields' => $fields
-        ) );
-    }
+    //     wp_send_json_success();
+    // }
 
     function oak_corn_configuration() {
         $conditions = $_GET['conditions'];

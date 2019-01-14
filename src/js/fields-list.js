@@ -22,23 +22,12 @@ function manageUpdateButtons() {
         updateButtons[i].addEventListener('click', function() {
             var whichField;
             for (var j = 0; j < DATA.fields.length; j++) {
-                if (DATA.fields[j].designation == this.parentNode.querySelector('span').innerHTML) {
+                if (DATA.fields[j].field_designation == this.parentNode.querySelector('span').innerHTML) {
                     whichField = DATA.fields[j];
                 }
             }
             
-            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_field&designation=' + whichField.designation 
-                + '&identifier=' + whichField.identifier 
-                + '&type=' + whichField.type
-                + '&functionField=' + whichField.functionField
-                + '&defaultValue=' + whichField.defaultValue
-                + '&instructions=' + whichField.instructions 
-                + '&placeholder=' + whichField.placeholder 
-                + '&before=' + whichField.before 
-                + '&after=' + whichField.after 
-                + '&maxLength=' + whichField.maxLength 
-                + '&selector=' + whichField.selector 
-            );
+            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_field&field_identifier=' + whichField.field_identifier);
         });
     }
 }

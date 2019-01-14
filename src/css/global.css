@@ -13,3 +13,41 @@
 #wpbody, body {
     background-color: white!important;
 }
+
+/* For the admin header */
+.oak_admin_header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #003366;
+}
+
+.oak_admin_header_button {
+    padding: 20px;
+    transition: all .1s ease-in-out;
+    text-align: center;
+}
+
+.oak_admin_header__icon_button {
+    padding: 15px;
+}
+
+.oak_admin_header_button_border_right {
+    border-right: 1px solid white;
+}
+
+.oak_admin_header_button span {
+    color: white;
+}
+
+.oak_admin_header_button:hover {
+    cursor: pointer;
+    background-color: #f15c3b;
+}
+
+.oak_admin_header__right_part, .oak_admin_header__left_part {
+    display: flex;
+}
+
+.oak_admin_header_icon {
+    width: 25px;
+}

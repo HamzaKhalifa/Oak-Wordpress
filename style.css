@@ -1478,7 +1478,6 @@ body .oak_hidden {
   border: 1px solid #24E08C;
   background-color: #24E08C;
   transition: all 0.2s ease-in-out;
-  margin-top: 30px;
   text-align: center;
   padding: 5px;
   padding-right: 10px;
@@ -1546,7 +1545,6 @@ body .oak_hidden {
   border: 1px solid #6F6F6F;
   color: white;
   transition: all 0.2s ease-in-out;
-  margin-top: 30px;
   text-align: center;
   padding: 5px;
   width: 100px;
@@ -1563,6 +1561,7 @@ body .oak_hidden {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 30px;
 }
 
 .oak_add_field_big_container {
