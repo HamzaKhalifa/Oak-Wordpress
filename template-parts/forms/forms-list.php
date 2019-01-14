@@ -1,21 +1,21 @@
 <div class="oak_fields_list_top_container">
-    <h1><?php _e( 'Liste des champs', Oak::$text_domain ); ?></h1>
+    <h1><?php _e( 'Liste des Formulaires', Oak::$text_domain ); ?></h1>
     <div class="oak_add_field_container__fields_list">
         <?php
-        $added_fields = [];
-        foreach( $fields as $field ) : 
+        $added_forms = [];
+        foreach( $forms as $form ) : 
             $exists = false;
-            foreach( $added_fields as $added_field ) :
-                if ( $field->field_identifier == $added_field->field_identifier ) 
+            foreach( $added_forms as $added_form ) :
+                if ( $form->form_identifier == $added_form->form_identifier ) 
                 $exists = true;
             endforeach;
             if ( !$exists ) :
-                $added_fields[] = $field;
+                $added_form[] = $form;
         ?>
             <div class="oak_add_field_container__saved_field_container">
                 <i class="oak_add_field_container_saved_field_container__update_button fas fa-cog"></i>
-                <span><?php echo( $field->field_designation ); ?></span>
-                <i field-identifier='<?php echo( $field->field_identifier ); ?>' class="oak_add_field_container__saved_field_container__delete_button fas fa-minus"></i>
+                <span><?php echo( $form->form_designation ); ?></span>
+                <i form-identifier='<?php echo( $form->form_identifier ); ?>' class="oak_add_field_container__saved_field_container__delete_button fas fa-minus"></i>
             </div>
         <?php
             endif;

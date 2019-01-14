@@ -2,8 +2,8 @@
 global $wpdb;
 $charset_collate = $wpdb->get_charset_collate();
 
-$table_name = Oak::$fields_table_name;
-$sql = "CREATE TABLE $table_name (
+$fields_table_name = Oak::$fields_table_name;
+$fields_sql = "CREATE TABLE $fields_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     field_designation varchar(55) DEFAULT '' NOT NULL,
     field_identifier varchar(55) DEFAULT '' NOT NULL,
@@ -22,5 +22,20 @@ $sql = "CREATE TABLE $table_name (
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-dbDelta( $sql );
+dbDelta( $fields_sql );
+
+$forms_table_name = Oak::$forms_table_name;
+$forms_sql = "CREATE TABLE $forms_table_name (
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    form_designation varchar(55) DEFAULT '' NOT NULL,
+    form_identifier varchar(55) DEFAULT '' NOT NULL,
+    form_fields_identifiers varchar(555),
+    form_selector varchar(55),
+    form_state varchar(55),
+    form_modification_time datetime,
+    form_trashed boolean,
+    PRIMARY KEY (id)
+) $charset_collate;";
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $forms_sql );
 

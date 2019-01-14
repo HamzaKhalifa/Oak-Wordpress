@@ -1,0 +1,90 @@
+.oak_add_form_fields_list__horizontal {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-top: 10px;
+}
+
+.oak_add_form_fields_list__vertical {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+select {
+    flex: 1;
+}
+
+.oak_add_field_label {
+    margin-bottom: 7px;
+}
+
+.oak_add_form_add_field_button {
+    border: 1px solid #24E08C;
+    background-color: #24E08C;
+    transition: all .2s ease-in-out;
+    text-align: center;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    align-self: flex-end;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.oak_add_form_add_field_button span {
+    color: white;
+}
+
+.oak_add_form_add_field_button:hover {
+    color: #24E08C;
+    background-color: white;
+    cursor: pointer;
+}
+
+.oak_add_form_add_field_button:hover span {
+    color: #24E08C;
+}
+
+.oak_add_form_fields_list__single_field {
+    border-bottom: 1px solid #e2e4e7;
+    padding-bottom: 30px;
+}
+
+.oak_add_form_container_header_icon {
+    width: 15px;
+}
+
+.oak_add_form_fields_list__horizontal_without_margin_top {
+    margin-top: 0px;
+}
+
+.oak_add_field_container__isert_field_title_container {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.oak_add_field_container__isert_field_title {
+    margin: 0px;
+    padding-left: 5px;
+    background-color: white;
+    color: #003366;
+}
+
+.oak_add_form_fields_list__horizontal_very_small {
+    flex: .3;
+    justify-content: space-around;
+}
+
+.oak_add_form_fields_list__horizontal_small {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.oak_add_field_label_width {
+    margin-right: 30px;
+}
+
+.without_margin_bottom {
+    margin-bottom: 0px;
+}

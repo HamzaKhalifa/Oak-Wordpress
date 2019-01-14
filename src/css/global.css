@@ -1,3 +1,7 @@
+.update-nag, #footer-thankyou {
+    display: none!important;
+}
+
 #adminmenu, #adminmenu .wp-submenu, #adminmenuback, #adminmenuwrap, #wpadminbar {
     background-color: #003366;
 }

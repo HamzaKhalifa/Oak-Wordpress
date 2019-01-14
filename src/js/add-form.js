@@ -1,6 +1,6 @@
 // Global variables
 var adding = false;
-var fieldData = {};
+var formData = {};
 var canceling = false;
 var updating = false;
 var browsingRevisions = false;
@@ -13,17 +13,17 @@ if (addButton) {
         var ok = checkOk();
         if (!ok)
             return;
-        fieldData = createFieldData(0);
+        formData = createFormData(0);
         adding = true;
-        openModal('Êtes vous sur de vouloir ajouter ce champ?', true);
-    });    
+        openModal('Êtes vous sur de vouloir ajouter ce formulaire?', true);
+    });
 }
 
 // For the update button 
 var updateButton = document.querySelector('.oak_add_field_container__update_button');
 if (updateButton) {
     updateButton.addEventListener('click', function() {
-        fieldData = createFieldData(DATA.revisions[DATA.revisions.length - 1].field_state);
+        formData = createFormData(DATA.revisions[DATA.revisions.length - 1].field_state);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier ce champ?', true);
     });
@@ -33,7 +33,7 @@ if (updateButton) {
 var registerButton = document.querySelector('.oak_add_field_container__register_button');
 if (registerButton) {
     registerButton.addEventListener('click', function() {
-        fieldData = createFieldData(1);
+        formData = createFormData(1);
         if (DATA.revisions.length == 0) {
             // adding for the first time
             var ok = checkOk();
@@ -89,7 +89,7 @@ function checkOk() {
 var broadcastButton = document.querySelector('.oak_add_field_container__broadcast_button');
 if (broadcastButton) {
     broadcastButton.addEventListener('click', function() {
-        fieldData = createFieldData(2);
+        formData = createFormData(2);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier et diffuser ce champ ?', true);
     });
@@ -99,7 +99,7 @@ if (broadcastButton) {
 var draftButton = document.querySelector('.oak_add_field_container__draft_button');
 if (draftButton) {
     draftButton.addEventListener('click', function() {
-        fieldData = createFieldData(0);
+        formData = createFormData(0);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier et renvoyer ce champ à l\'état de Brouillon ?', true);
     });
@@ -132,6 +132,13 @@ if (trashButton) {
     });
 }
 
+// For the identifier input update
+var designationInput = document.querySelector('.oak_add_field_container__designation');
+var identifierInput = document.querySelector('.oak_add_field_container__identifier');
+designationInput.oninput = function() {
+    identifierInput.value = createIdentifier(designationInput.value);
+}
+
 function getEnteredData() {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
     var identifier = designation.replace(/[^a-zA-Z ]/g, '');
@@ -146,7 +153,7 @@ function getEnteredData() {
     var maxLength = document.querySelector('.oak_add_field_container__max_length').value;
     var selector = document.querySelector('.oak_add_field_container__selector').value;
 
-    var fieldData = { designation, identifier, type, functionField, defaultValue,
+    var formData = { designation, identifier, type, functionField, defaultValue,
         instructions,
         placeholder,
         before,
@@ -157,54 +164,38 @@ function getEnteredData() {
         trashed: DATA.revisions[DATA.revisions.length - 1].field_trashed
     }
 
-    return fieldData;
+    return formData;
 }
 
 // We create while adding the new revision
-function createFieldData(state) {
+function createFormData(state) {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
-    var identifier = designation.replace(/[^a-zA-Z ]/g, '');
-    identifier = identifier.replace(/\s/g,'');
-    var type = document.querySelector('.oak_add_field_container__type').value;
-    var functionField = document.querySelector('.oak_add_field_container__function').value;
-    var defaultValue = document.querySelector('.oak_add_field_container__default_value').value;
-    var instructions = document.querySelector('.oak_add_field_container__instructions').value;
-    var placeholder = document.querySelector('.oak_add_field_container__placeholder').value;
-    var before  = document.querySelector('.oak_add_field_container__before').value;
-    var after = document.querySelector('.oak_add_field_container__after').value;
-    var maxLength = document.querySelector('.oak_add_field_container__max_length').value;
+    var identifier = createIdentifier(designation);
     var selector = document.querySelector('.oak_add_field_container__selector').value;
     var trashed = false;
 
-    var fieldData = { designation, identifier, type, functionField, defaultValue, instructions, placeholder, before, after, maxLength, selector, state, trashed }
+    var fieldsIdentifiers = [];
+    var fieldDesignationsSelects = document.querySelectorAll('.oak_add_form_fields_list_horizontal__designation_select');
+    for (var i = 0; i < fieldDesignationsSelects.length; i++) {
+        fieldsIdentifiers += fieldDesignationsSelects[i].value + '|';
+    }
 
-    return fieldData;
+    var formData = {
+        designation, 
+        identifier,
+        selector, 
+        trashed,
+        fieldsIdentifiers
+    }
+
+    return formData;
 }
 
-// For the cancel button: 
-var cancelButton = document.querySelector('.oak_add_field_container__cancel_button');
-cancelButton.addEventListener('click', function() {
-    var fieldData = createFieldData(DATA.currentField.field_state);
-    if ( fieldData['designation'] != DATA.currentField.field_designation 
-    || fieldData['identifier'] != DATA.currentField.field_identifier 
-    || fieldData['type'] != DATA.currentField.field_type 
-    || fieldData['functionField'] != DATA.currentField.field_function 
-    || fieldData['defaultValue'] != DATA.currentField.field_default_value 
-    || fieldData['instructions'] != DATA.currentField.field_instructions 
-    || fieldData['placeholder'] != DATA.currentField.field_placeholder 
-    || fieldData['before'] != DATA.currentField.field_before
-    || fieldData['after'] != DATA.currentField.field_after
-    
-    || fieldData['maxLength'] != DATA.currentField.field_maxLength
-    || fieldData['selector'] != DATA.currentField.field_selector
-    
-    ) {
-        canceling = true;
-        openModal('Des modifications ont été ajoutées. Êtes vous sûr de vouloir tout annuler ?', true);
-    } else {
-        backToList();
-    }
-});
+function createIdentifier(designation) {
+    var identifier = designation.replace(/[^a-zA-Z ]/g, '');
+    identifier = identifier.replace(/\s/g,'');
+    return identifier
+}
 
 // for the browse revisions button:
 browseRevisionsButton = document.querySelector('.oak_add_field_big_container_tabs_single_tab_section_state__browse');
@@ -213,18 +204,18 @@ browseRevisionsButton.addEventListener('click', function() {
     openModal('Liste des révisions', true);
     // Changing the modal's width
 
-    fieldData = getEnteredData();
+    formData = getEnteredData();
 
-    document.querySelector('.oak_revision_type_field_current').value = fieldData.type;
-    document.querySelector('.oak_revision_function_field_current').value = fieldData.functionField;
-    document.querySelector('.oak_revision_default_value_field_current').value = fieldData.defaultValue;
-    document.querySelector('.oak_revision_placeholder_field_current').value = fieldData.placeholder;
-    document.querySelector('.oak_revision_instructions_field_current').value = fieldData.instructions;
-    document.querySelector('.oak_revision_before_field_current').value = fieldData.before;
-    document.querySelector('.oak_revision_after_field_current').value = fieldData.after;
-    document.querySelector('.oak_revision_max_length_field_current').value = fieldData.maxLength;
-    document.querySelector('.oak_revision_selector_field_current').value = fieldData.selector;
-    var state = fieldData.state == 0 ? 'Brouillon' : fieldData.state == 1 ? 'Enregsitré' : 'Diffusé';
+    document.querySelector('.oak_revision_type_field_current').value = formData.type;
+    document.querySelector('.oak_revision_function_field_current').value = formData.functionField;
+    document.querySelector('.oak_revision_default_value_field_current').value = formData.defaultValue;
+    document.querySelector('.oak_revision_placeholder_field_current').value = formData.placeholder;
+    document.querySelector('.oak_revision_instructions_field_current').value = formData.instructions;
+    document.querySelector('.oak_revision_before_field_current').value = formData.before;
+    document.querySelector('.oak_revision_after_field_current').value = formData.after;
+    document.querySelector('.oak_revision_max_length_field_current').value = formData.maxLength;
+    document.querySelector('.oak_revision_selector_field_current').value = formData.selector;
+    var state = formData.state == 0 ? 'Brouillon' : formData.state == 1 ? 'Enregsitré' : 'Diffusé';
     document.querySelector('.oak_revision_state_field_current').value = state;
 });
 
@@ -265,17 +256,17 @@ for( var i = 0; i < revisionsButtons.length; i++ ) {
         document.querySelector('.oak_revision_state_field').value = state;
 
         // Getting the current revision values;
-        var fieldData = getEnteredData();
+        var formData = getEnteredData();
 
-        checkEquals(fieldData.type , selectedRevision.field_type, revisionTypeField);
-        checkEquals(fieldData.functionField, selectedRevision.field_function, revisionFunctionField);
-        checkEquals(fieldData.defaultValue, selectedRevision.field_default_value, revisionDefaultValueField);
-        checkEquals(fieldData.placeholder, selectedRevision.field_placeholder, revisionPlaceholderField);
-        checkEquals(fieldData.instructions, selectedRevision.field_instructions, revisionInstructionsField);
-        checkEquals(fieldData.before, selectedRevision.field_before, revisionBeforeField);
-        checkEquals(fieldData.after, selectedRevision.field_after, revisionAfterField);
-        checkEquals(fieldData.maxLength, selectedRevision.field_max_length, revisionMaxLengthField);
-        checkEquals(fieldData.selector, selectedRevision.field_selector, revisionSelectorField);
+        checkEquals(formData.type , selectedRevision.field_type, revisionTypeField);
+        checkEquals(formData.functionField, selectedRevision.field_function, revisionFunctionField);
+        checkEquals(formData.defaultValue, selectedRevision.field_default_value, revisionDefaultValueField);
+        checkEquals(formData.placeholder, selectedRevision.field_placeholder, revisionPlaceholderField);
+        checkEquals(formData.instructions, selectedRevision.field_instructions, revisionInstructionsField);
+        checkEquals(formData.before, selectedRevision.field_before, revisionBeforeField);
+        checkEquals(formData.after, selectedRevision.field_after, revisionAfterField);
+        checkEquals(formData.maxLength, selectedRevision.field_max_length, revisionMaxLengthField);
+        checkEquals(formData.selector, selectedRevision.field_selector, revisionSelectorField);
         checkEquals(document.querySelector('.oak_revision_state_field_current').value, document.querySelector('.oak_revision_state_field').value, document.querySelector('.oak_revision_state_field'));
     });
 }
@@ -288,9 +279,53 @@ function checkEquals(value1, value2, field) {
     }
 }
 
-function importRevisionData() {
+// For the add field button
+var addFieldButton = document.querySelector('.oak_add_form_add_field_button');
+addFieldButton.addEventListener('click', function() {
+    var fieldsList = document.querySelector('.oak_add_form_fields_list');
+
+    fieldsList.innerHTML = fieldsList.innerHTML + '<div class="oak_add_field_container__isert_field_title_container oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_without_margin_top">'
+    + '<img class="oak_add_form_container_header_icon" src="' + DATA.templateDirectoryUri + '/src/assets/icons/fields.png" alt="">' 
+    + '<h4 class="oak_add_field_container__isert_field_title">Insérer un champ</h4></div>'
+    + '<div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_without_margin_top">'
+    + '<div class="oak_add_form_fields_list__vertical oak_left_field">'
+    + '<label class="oak_add_field_label" for="type">Nature</label>'
+    + '<select class="oak_add_form_fields_list_horizontal__type_select" name="type" id="">'
+    + '<option value="Text">Text</option> <option value="Zone de Texte">Zone De Texte</option> <option value="Image">Image</option><option value="File">Fichier</option>'
+    + '</select>'
+    + '</div> <div class="oak_add_form_fields_list__vertical"> <label class="oak_add_field_label" for="type">Fonction</label>'
+    + '<select class="oak_add_form_fields_list_horizontal__function_select" name="type" id=""><option value="Information/Description">Information/Description</option><option value="Exemple">Exemple</option><option value="Illustration">Illustration</option>'
+    + '</select></div></div><div class="oak_add_form_fields_list__horizontal"><div class="oak_add_form_fields_list__vertical oak_left_field">'
+    + '<label class="oak_add_field_label" for="field-designation">Désignation</label><select class="oak_add_form_fields_list_horizontal__designation_select" name="field-designation" id=""></select></div>'
+    + '<div class="oak_add_form_fields_list__vertical"><label class="oak_add_field_label" for="field-identifier">Identifiant Unique</label><input disabled name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_form_field_identifier"></div></div>'
+    + '<div class="oak_add_form_fields_list__horizontal"><div class="oak_add_form_fields_list__vertical oak_left_field"><label class="oak_add_field_label" for="field-identifier">Renommer</label><input disabled name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_form_field_identifier"></div>'
+    + '<div class="oak_add_form_fields_list__horizontal"><div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_very_small oak_left_field"><label class="oak_add_field_label without_margin_bottom" for="field-required">Recquis</label><input type="checkbox" class="oak_field_required_input"></div><div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_small"><label class="oak_add_field_label oak_add_field_label_width without_margin_bottom" for="field-required">Largeur</label><input type="text" class="oak_field_width_input">'
+    + '</div></div></div>'
+
+    var designationsSelects = fieldsList.querySelectorAll('.oak_add_form_fields_list_horizontal__designation_select');
+    for (var i = 0; i < designationsSelects.length; i++) {
+        designationsSelects[i].innerHTML = '';
+        var addedFields = [];
+        for (var j = 0; j < DATA.fields.length; j++) {
+            var exists = false;
+            for (var n = 0; n < addedFields.length; n++) {
+                if (addedFields[n].field_identifier == DATA.fields[j].field_identifier) {
+                    exists = true;
+                }
+            }
+            if (!exists) {
+                addedFields.push(DATA.fields[j]);
+                var option = document.createElement('option');
+                option.setAttribute('value', DATA.fields[j].field_identifier);
+                option.innerHTML = DATA.fields[j].field_designation;
+                designationsSelects[i].append(option);
+            }
+        }
+        addedFields = [];
+    }
     
-}
+});
+
 
 // Everything related to our modal:
 function openModal(title, twoButtons) {
@@ -378,6 +413,7 @@ function handleModalButtons() {
     var confirmButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function() {
         if (adding || updating) {
+            console.log('form data', formData);
             closeModals();
             setLoading();
             jQuery(document).ready(function() {
@@ -385,11 +421,11 @@ function handleModalButtons() {
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
-                        'action': 'oak_register_field',
-                        'data': fieldData,
+                        'action': 'oak_register_form',
+                        'data': formData,
                     },
                     success: function(data) {
-                        DATA.fields.push(fieldData);
+                        DATA.forms.push(formData);
                         doneLoading();
                         console.log(data);
                         window.location.reload();
