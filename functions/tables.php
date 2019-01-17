@@ -36,7 +36,7 @@ $forms_sql = "CREATE TABLE $forms_table_name (
     form_trashed boolean,
     form_structure varchar(55),
     form_attributes varchar(100),
-    form_separators varchar(100)
+    form_separators varchar(100),
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -54,7 +54,7 @@ $models_sql = "CREATE TABLE $models_table_name (
     model_separators varchar(100),
     model_state varchar(55),
     model_trashed boolean,
-    model_modification_time datetime
+    model_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
