@@ -268,6 +268,7 @@ for( var i = 0; i < revisionsButtons.length; i++ ) {
         // Updating the selected revision fields:
         var selectedRevision = DATA.revisions[this.getAttribute('index')];
         revision = selectedRevision;
+        console.log('Revision', revision);
 
         var revisionStructureField = document.querySelector('.oak_revision_form_revision_structure');
         var revisionAttributsField = document.querySelector('.oak_revision_form_attributs_revision');
@@ -279,7 +280,7 @@ for( var i = 0; i < revisionsButtons.length; i++ ) {
         revisionAttributsField.value = selectedRevision.form_attributes;
         revisionSelectorField.value = selectedRevision.form_selector;
 
-        var state = selectedRevision.field_state == '0' ? 'Brouillon' : selectedRevision.field_state == '1' ? 'Enregsitré' : 'Diffusé';
+        var state = selectedRevision.form_state == '0' ? 'Brouillon' : selectedRevision.form_state == '1' ? 'Enregsitré' : 'Diffusé';
         revisionStateField.value = state;
 
         // Getting the current revision values;
@@ -288,10 +289,6 @@ for( var i = 0; i < revisionsButtons.length; i++ ) {
         checkEquals(formData.structure, selectedRevision.form_structure, revisionStructureField);
         checkEquals(formData.attributs, selectedRevision.form_attributes, revisionAttributsField);
         checkEquals(formData.selector.toString(), selectedRevision.form_selector.toString(), revisionSelectorField);
-        console.log('form data selector: ' + formData.selector.toString());
-        console.log('Selected revision selector: ' + selectedRevision.form_selector);
-        console.log('Comparision', formData.selector == selectedRevision.form_selector);
-        console.log('Selector field', revisionSelectorField);
 
         checkEquals(document.querySelector('.oak_revision_form_state_current').value, document.querySelector('.oak_revision_form_state_revision').value, document.querySelector('.oak_revision_form_state_revision'));
     });
@@ -616,19 +613,15 @@ function handleModalButtons() {
             window.location.replace(DATA.adminUrl + 'admin.php?page=oak_fields_list');
         }
         if (browsingRevisions) {
-            revision.designation = revision.field_designation;
-            revision.identifier = revision.field_identifier;
-            revision.type = revision.field_identifier;
-            revision.functionField = revision.field_function;
-            revision.defaultValue = revision.field_default_value;
-            revision.instructions = revision.field_instructions;
-            revision.placeholder = revision.field_placeholder;
-            revision.before = revision.field_before;
-            revision.after = revision.field_after;
-            revision.maxLength = revision.field_max_length;
-            revision.selector = revision.field_selector;
-            revision.state = revision.field_state;
-            revision.trashed = revision.field_trashed;
+            revision.designation = revision.form_designation;
+            revision.identifier = revision.form_identifier;
+            revision.fields = revision.form_fields;
+            revision.selector = revision.form_selector;
+            revision.state = revision.form_state;
+            revision.trashed = revision.form_trashed;
+            revision.structure = revision.form_structure;
+            revision.attributs = revision.form_attributes;
+            revision.separators = revision.form_separators;
 
             closeModals();
             setLoading();
@@ -637,7 +630,7 @@ function handleModalButtons() {
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
-                        'action': 'oak_register_field',
+                        'action': 'oak_register_form',
                         'data': revision,
                     },
                     success: function(data) {

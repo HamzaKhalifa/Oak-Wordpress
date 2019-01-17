@@ -105,6 +105,20 @@ if (draftButton) {
     });
 }
 
+// For the identifier input update
+var designationInput = document.querySelector('.oak_add_field_container__designation');
+var identifierInput = document.querySelector('.oak_add_field_container__identifier');
+designationInput.oninput = function() {
+    identifierInput.value = createIdentifier(designationInput.value);
+}
+
+
+function createIdentifier(designation) {
+    var identifier = designation.replace(/[^a-zA-Z ]/g, '');
+    identifier = identifier.replace(/\s/g,'');
+    return identifier
+}
+
 // For the trash button
 var trashButton = document.querySelector('.oak_add_field_container__trash_button');
 if (trashButton) {
