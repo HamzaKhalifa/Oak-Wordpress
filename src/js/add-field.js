@@ -264,7 +264,7 @@ for( var i = 0; i < revisionsButtons.length; i++ ) {
         checkEquals(fieldData.before, selectedRevision.field_before, revisionBeforeField);
         checkEquals(fieldData.after, selectedRevision.field_after, revisionAfterField);
         checkEquals(fieldData.maxLength, selectedRevision.field_max_length, revisionMaxLengthField);
-        checkEquals(fieldData.selector, selectedRevision.field_selector, revisionSelectorField);
+        checkEquals(fieldData.selector.toString(), selectedRevision.field_selector, revisionSelectorField);
         checkEquals(document.querySelector('.oak_revision_state_field_current').value, document.querySelector('.oak_revision_state_field').value, document.querySelector('.oak_revision_state_field'));
     });
 }
