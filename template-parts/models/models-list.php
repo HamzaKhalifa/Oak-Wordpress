@@ -1,7 +1,7 @@
 <div class="oak_fields_list_top_container">
     <div class="oak_list_header">
         <img class="oak_list_header__icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/fields.png' ); ?>" alt="">
-        <h1><?php _e( 'Champs', Oak::$text_domain ); ?></h1>
+        <h1><?php _e( 'Modèles', Oak::$text_domain ); ?></h1>
         <span class="oak_list_header__add_button oak_list_button"><?php _e( 'Ajouter', Oak::$text_domain ); ?></span>
     </div>
     
@@ -9,7 +9,7 @@
         <div class="oak_list_row">
             <div class="oak_list_row__container">
                 <input class="oak_list_titles_container__checkbox" type="checkbox">
-                <span class="oak_list_titles_container__title"><?php _e( 'Nom du champ', Oak::$text_domain ); ?></span>
+                <span class="oak_list_titles_container__title"><?php _e( 'Nom du modèle', Oak::$text_domain ); ?></span>
             </div>
 
             <div class="oak_list_row__container">
@@ -33,37 +33,37 @@
 
         
         <?php
-        $added_fields = [];
-        foreach( $fields as $field ) : 
+        $added_models = [];
+        foreach( $models as $model ) : 
             $exists = false;
-            foreach( $added_fields as $added_field ) :
-                if ( $field->field_identifier == $added_field->field_identifier ) 
+            foreach( $added_models as $added_model ) :
+                if ( $model->model_identifier == $added_model->model_identifier ) 
                     $exists = true;
             endforeach;
             if ( !$exists ) :
-                $added_fields[] = $field;
+                $added_models[] = $model;
         ?>
             <div class="oak_list_row">
                 <div class="oak_list_row__container">
                     <input class="oak_list_titles_container__checkbox" type="checkbox">
-                    <span class="oak_list_titles_container__title"><?php echo( $field->field_designation ); ?></span>
+                    <span class="oak_list_titles_container__title"><?php echo( $model->model_designation ); ?></span>
                 </div>
 
                 <div class="oak_list_row__container">
-                    <span class="oak_list_titles_container__title"><?php echo( $field->field_type ); ?></span>
+                    <span class="oak_list_titles_container__title"><?php echo( $model->model_types ); ?></span>
                 </div>
 
                 <div class="oak_list_row__container">
-                    <span class="oak_list_titles_container__title"><?php echo( $field->field_function ); ?></span>
+                    <span class="oak_list_titles_container__title"><?php echo( $model->model_publications_categories ); ?></span>
                 </div>
                 
                 <div class="oak_list_row__container">
-                    <div class="<?php if ( $field->field_selector ) : echo('oak_dot'); else : echo('oak_dot_false'); endif; ?>"></div>
+                    <div class="<?php if ( $model->model_selector ) : echo('oak_dot'); else : echo('oak_dot_false'); endif; ?>"></div>
                 </div>
 
                 <div class="oak_list_row__container">
-                    <div class="<?php if ( $field->field_selector ) : echo('oak_dot'); else : echo('oak_dot_false'); endif; ?>"></div>
-                    <span field-identifier="<?php echo( $field->field_identifier ); ?>" class="oak_list_header__add_button oak_list_button oak_add_field_container_saved_field_container__update_button"><?php _e( 'Accéder', Oak::$text_domain ); ?></span>
+                    <div class="<?php if ( $model->model_selector ) : echo('oak_dot'); else : echo('oak_dot_false'); endif; ?>"></div>
+                    <span model-identifier="<?php echo( $model->model_identifier ); ?>" class="oak_list_header__add_button oak_list_button oak_add_field_container_saved_field_container__update_button"><?php _e( 'Accéder', Oak::$text_domain ); ?></span>
                 </div>
 
             </div>

@@ -1722,13 +1722,100 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
 }
 
 .oak_fields_list_top_container {
-  width: 80%;
+  width: 90%;
   margin: auto;
   margin-top: 30px;
 }
 
 .oak_add_field_container_saved_field_container__update_button:hover {
   cursor: pointer;
+}
+
+.oak_list_header {
+  display: flex;
+  align-items: center;
+}
+
+.oak_list_header__icon {
+  width: 15px;
+  margin-right: 10px;
+}
+
+.oak_list_button {
+  color: #003366;
+  padding: 12px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border: 1px solid #003366;
+  margin-left: 20px;
+  transition: all 0.1s ease-in-out;
+}
+
+.oak_list_header__add_button:hover {
+  background-color: #003366;
+  color: white;
+  cursor: pointer;
+}
+
+.oak_list_row {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 40px;
+  justify-content: space-between;
+  border-bottom: 1px solid #e2e4e7;
+}
+
+.oak_list_row_container__title {
+  color: #003366;
+}
+
+.oak_add_field_container__fields_list {
+  border: 1px solid #e2e4e7;
+  margin-top: 40px;
+}
+
+.oak_list_row__container {
+  display: flex;
+  align-items: center;
+  width: 200px;
+}
+
+.oak_list_row__container span {
+  color: #003366;
+}
+
+.oak_list_row__container .oak_passiv {
+  color: #7b7b7b;
+}
+
+.oak_list_row__container i {
+  margin-right: 10px;
+  color: #e2e4e7;
+  font-size: 20px;
+}
+
+.oak_list_row_container__img {
+  margin-right: 10px;
+  width: 20px;
+}
+
+.oak_list_titles_container__checkbox {
+  margin-top: 2px !important;
+  margin-right: 20px !important;
+}
+
+.oak_dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 100%;
+  background-color: #24E08C;
+}
+
+.oak_dot_false {
+  background-color: #FC394D;
 }
 
 .oak_add_form_fields_list__horizontal {
@@ -1752,31 +1839,24 @@ select {
   margin-bottom: 7px;
 }
 
-.oak_add_form_add_field_button {
-  border: 1px solid #24E08C;
-  background-color: #24E08C;
+.oak_add_form_add_field_button, .oak_add_form_add_line_button, .oak_add_form_add_space_button, .oak_add_form_field_options__button {
+  border: 1px solid #003366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.2s ease-in-out;
-  text-align: center;
-  padding: 5px;
-  padding-right: 10px;
-  padding-left: 10px;
-  align-self: flex-end;
-  margin-left: 10px;
-  margin-top: 10px;
+  width: 25px;
+  height: 20px;
+  margin-left: 5px;
+  color: #003366;
 }
 
-.oak_add_form_add_field_button span {
-  color: white;
+.oak_add_form_field_options__button i {
+  font-size: 20px;
 }
 
-.oak_add_form_add_field_button:hover {
-  color: #24E08C;
-  background-color: white;
+.oak_add_form_add_field_button:hover, .oak_add_form_add_line_button:hover, .oak_add_form_add_space_button:hover, .oak_add_form_field_options__button:hover {
   cursor: pointer;
-}
-
-.oak_add_form_add_field_button:hover span {
-  color: #24E08C;
 }
 
 .oak_add_form_fields_list__single_field {
@@ -1795,6 +1875,14 @@ select {
 .oak_add_field_container__isert_field_title_container {
   padding-top: 5px;
   padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.oak_add_model_forms_list__horizontal {
+  display: flex;
+  align-items: center;
 }
 
 .oak_add_field_container__isert_field_title {
@@ -1804,12 +1892,12 @@ select {
   color: #003366;
 }
 
-.oak_add_form_fields_list__horizontal_very_small {
+.oak_add_model_forms_list__horizontal_very_small {
   flex: 0.3;
   justify-content: space-around;
 }
 
-.oak_add_form_fields_list__horizontal_small {
+.oak_add_model_forms_list__horizontal_small {
   flex: 1;
   justify-content: flex-end;
 }
@@ -1820,6 +1908,197 @@ select {
 
 .without_margin_bottom {
   margin-bottom: 0px;
+}
+
+.oak_add_form_add_field_button__icons {
+  width: 15px;
+}
+
+.oak_add_form_field_buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.oak_add_form_field_options {
+  justify-content: space-between;
+}
+
+.oak_add_form_fields_list__buttons_container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.oak_add_form_seperator {
+  border: 1px solid #003366;
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  align-items: center;
+  margin-top: 10px;
+  position: relative;
+}
+
+.oak_add_form__delete_separator_button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.oak_add_model_forms_list__horizontal label {
+  margin-bottom: 0px;
+  margin-right: 30px;
+}
+
+.oak_add_model_add_model_button__icons {
+  width: 15px;
+}
+
+.oak_add_model_form_buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.oak_add_model_add_form_button, .oak_add_model_add_line_button, .oak_add_model_add_space_button, .oak_add_model_form_options__button {
+  border: 1px solid #003366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  width: 25px;
+  height: 20px;
+  margin-left: 5px;
+  color: #003366;
+}
+
+.oak_add_model_add_form_button:hover, .oak_add_model_add_line_button:hover, .oak_add_model_add_space_button, .oak_add_model_form_options__button:hover {
+  cursor: pointer;
+}
+
+.oak_add_model_forms_list__single_form {
+  border-bottom: 1px solid #e2e4e7;
+  padding-bottom: 30px;
+}
+
+.oak_add_model_forms_list__horizontal {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-top: 10px;
+}
+
+.oak_add_model_forms_list__vertical {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+select {
+  flex: 1;
+}
+
+.oak_add_model_label {
+  margin-bottom: 7px;
+}
+
+.oak_add_model_and_form_button, .oak_add_model_add_line_button, .oak_add_model_add_space_button, .oak_add_model_field_options__button {
+  border: 1px solid #003366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  width: 25px;
+  height: 20px;
+  margin-left: 5px;
+  color: #003366;
+}
+
+.oak_add_model_form_options__button i {
+  font-size: 20px;
+}
+
+.oak_add_model_and_form_button:hover, .oak_add_model_add_line_button:hover, .oak_add_model_add_space_button:hover, .oak_add_model_field_options__button:hover {
+  cursor: pointer;
+}
+
+.oak_add_model_forms_list__single_form {
+  border-bottom: 1px solid #e2e4e7;
+  padding-bottom: 30px;
+}
+
+.oak_add_model_container_header_icon {
+  width: 15px;
+}
+
+.oak_add_model_forms_list__horizontal_without_margin_top {
+  margin-top: 0px;
+}
+
+.oak_add_form_container__isert_form_title_container {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.oak_add_form_container__isert_form_title {
+  margin: 0px;
+  padding-left: 5px;
+  background-color: white;
+  color: #003366;
+}
+
+.oak_add_model_forms_list__horizontal_very_small {
+  flex: 0.3;
+  justify-content: space-around;
+}
+
+.oak_add_model_forms_list__horizontal_small {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.oak_add_form_label_width {
+  margin-right: 30px;
+}
+
+.without_margin_bottom {
+  margin-bottom: 0px;
+}
+
+.oak_add_model_and_form_button__icons {
+  width: 15px;
+}
+
+.oak_add_model_form_buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.oak_add_model_form_options {
+  justify-content: space-between;
+}
+
+.oak_add_model_forms_list__buttons_container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.oak_add_model_seperator {
+  border: 1px solid #003366;
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  align-items: center;
+  margin-top: 10px;
+  position: relative;
+}
+
+.oak_add_model__delete_separator_button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -21,12 +21,12 @@ function manageUpdateButtons() {
     for (var i = 0; i < updateButtons.length; i++) {
         updateButtons[i].addEventListener('click', function() {
             var whichField;
+
             for (var j = 0; j < DATA.fields.length; j++) {
-                if (DATA.fields[j].field_designation == this.parentNode.querySelector('span').innerHTML) {
+                if (DATA.fields[j].field_identifier == this.getAttribute('field-identifier')) {
                     whichField = DATA.fields[j];
                 }
             }
-            
             window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_field&field_identifier=' + whichField.field_identifier);
         });
     }

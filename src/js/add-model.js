@@ -1,6 +1,6 @@
 // Global variables
 var adding = false;
-var formData = {};
+var modelData = {};
 var canceling = false;
 var updating = false;
 var browsingRevisions = false;
@@ -9,19 +9,19 @@ var revision = {};
 // Removing Revisions from DATA fields
 removeRevisions();
 function removeRevisions() {
-    var addedFields = [];
-    for (var j = 0; j < DATA.fields.length; j++) {
+    var addedForms = [];
+    for (var j = 0; j < DATA.forms.length; j++) {
         var exists = false;
-        for (var n = 0; n < addedFields.length; n++) {
-            if (addedFields[n].field_identifier == DATA.fields[j].field_identifier) {
+        for (var n = 0; n < addedForms.length; n++) {
+            if (addedForms[n].form_identifier == DATA.forms[j].form_identifier) {
                 exists = true;
             }
         }
         if (!exists) {
-            addedFields.push(DATA.fields[j]);
+            addedForms.push(DATA.forms[j]);
         }
     }
-    DATA.fields = addedFields;
+    DATA.forms = addedForms;
 }
 
 // For the add button
@@ -31,9 +31,9 @@ if (addButton) {
         var ok = checkOk();
         if (!ok)
             return;
-        formData = createFormData(0);
+        modelData = createModelData(0);
         adding = true;
-        openModal('Êtes vous sur de vouloir ajouter ce formulaire?', true);
+        openModal('Êtes vous sur de vouloir ajouter ce modèle?', true);
     });
 }
 
@@ -41,7 +41,7 @@ if (addButton) {
 var updateButton = document.querySelector('.oak_add_field_container__update_button');
 if (updateButton) {
     updateButton.addEventListener('click', function() {
-        formData = createFormData(DATA.revisions[DATA.revisions.length - 1].field_state);
+        modelData = createModelData(DATA.revisions[DATA.revisions.length - 1].field_state);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier ce champ?', true);
     });
@@ -51,7 +51,7 @@ if (updateButton) {
 var registerButton = document.querySelector('.oak_add_field_container__register_button');
 if (registerButton) {
     registerButton.addEventListener('click', function() {
-        formData = createFormData(1);
+        modelData = createModelData(1);
         if (DATA.revisions.length == 0) {
             // adding for the first time
             var ok = checkOk();
@@ -107,7 +107,7 @@ function checkOk() {
 var broadcastButton = document.querySelector('.oak_add_field_container__broadcast_button');
 if (broadcastButton) {
     broadcastButton.addEventListener('click', function() {
-        formData = createFormData(2);
+        modelData = createModelData(2);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier et diffuser ce champ ?', true);
     });
@@ -117,7 +117,7 @@ if (broadcastButton) {
 var draftButton = document.querySelector('.oak_add_field_container__draft_button');
 if (draftButton) {
     draftButton.addEventListener('click', function() {
-        formData = createFormData(0);
+        modelData = createModelData(0);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier et renvoyer ce champ à l\'état de Brouillon ?', true);
     });
@@ -152,7 +152,7 @@ if (trashButton) {
 
 // For the identifier input update
 var designationInput = document.querySelector('.oak_add_field_container__designation');
-var identifierInput = document.querySelector('.oak_add_form_container__identifier');
+var identifierInput = document.querySelector('.oak_add_model_container__identifier');
 designationInput.oninput = function() {
     identifierInput.value = createIdentifier(designationInput.value);
 }
@@ -171,7 +171,7 @@ function getEnteredData() {
     var maxLength = document.querySelector('.oak_add_field_container__max_length').value;
     var selector = document.querySelector('.oak_add_field_container__selector').value;
 
-    var formData = { designation, identifier, type, functionField, defaultValue,
+    var modelData = { designation, identifier, type, functionField, defaultValue,
         instructions,
         placeholder,
         before,
@@ -182,48 +182,48 @@ function getEnteredData() {
         trashed: DATA.revisions[DATA.revisions.length - 1].field_trashed
     }
 
-    return formData;
+    return modelData;
 }
 
 // We create while adding the new revision
-function createFormData(state) {
+function createModelData(state) {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
     var identifier = createIdentifier(designation);
-    var structure = document.querySelector('.oak_add_form_container__structure').value;
-    var attributs = document.querySelector('.oak_add_form_container__attributs').value;
-    var selector = document.querySelector('.oak_add_field_container__selector').checked;
+    var types =  jQuery('.oak_add_model_container__types').val();
+    var publicationsCategories = document.querySelector('.oak_add_model_container__publications_categories').value;
+    var selector = document.querySelector('.oak_add_model_container__selector').checked;
     var trashed = false;
 
-    fields = '';
-    var fieldsContainers = document.querySelectorAll('.oak_add_form_fields_list__single_field');
-    for (var i= 0; i < fieldsContainers.length; i++) {
-        var fieldDesignation = fieldsContainers[i].querySelector('.oak_add_form_fields_list_horizontal__designation_select').value;
-        var name = fieldsContainers[i].querySelector('.oak_add_form_field_rename').value;
-        var required = fieldsContainers[i].querySelector('.oak_field_required_input').checked;
-        var width = fieldsContainers[i].querySelector('.oak_field_width_input').value;
-        var whichChildIsIt = whichChild(fieldsContainers[i]);
-        fields += fieldDesignation + ':' + createIdentifier(fieldDesignation) + ':' + name + ':' + required + ':' + width + ':' + whichChildIsIt + '|';
+    forms = '';
+    var formsContainers = document.querySelectorAll('.oak_add_model_forms_list__single_form');
+    for (var i= 0; i < formsContainers.length; i++) {
+        var formDesignation = formsContainers[i].querySelector('.oak_add_model_forms_list_horizontal__designation_select').value;
+        var name = formsContainers[i].querySelector('.oak_add_model_form_rename').value;
+        var gabarit = formsContainers[i].querySelector('.oak_add_model_form_gabarit').value;
+
+        var whichChildIsIt = whichChild(formsContainers[i]);
+        forms += formDesignation + ':' + createIdentifier(formDesignation) + ':' + name + ':' + gabarit + ':' + whichChildIsIt + '|';
     }
 
     var separators = ''
-    var separatorsElements = document.querySelectorAll('.oak_add_form_seperator');
+    var separatorsElements = document.querySelectorAll('.oak_add_model_seperator');
     for (var i = 0; i < separatorsElements.length; i++) {
         separators += separatorsElements[i].querySelector('span').innerHTML + ':' + whichChild(separatorsElements[i]) + '|';
     }
     
-    var formData = {
+    var modelData = {
         designation, 
         identifier,
-        fields,
-        selector, 
-        state,
+        types,
+        publicationsCategories,
+        selector,
         trashed,
-        structure,
-        attributs,
+        forms,
+        state,
         separators
     }
 
-    return formData;
+    return modelData;
 }
 
 function createIdentifier(designation) {
@@ -241,18 +241,19 @@ function whichChild(elem){
 // for the browse revisions button:
 browseRevisionsButton = document.querySelector('.oak_add_field_big_container_tabs_single_tab_section_state__browse');
 browseRevisionsButton.addEventListener('click', function() {
-    browsingRevisions = true;
-    openModal('Liste des révisions', true);
-    // Changing the modal's width
+    if (DATA.revisions.length > 0) {
+        browsingRevisions = true;
+        openModal('Liste des révisions', true);
+        // Changing the modal's width
+        
+        modelData = createModelData(DATA.revisions[DATA.revisions.length - 1].model_state);
     
-    formData = createFormData(DATA.revisions[DATA.revisions.length - 1].form_state);
-
-    document.querySelector('.oak_revision_form_current_structure').value = formData.structure;
-    document.querySelector('.oak_revision_form_attributs_current').value = formData.attributs;
-    document.querySelector('.oak_revision_form_selector_current').value = formData.selector;
-    console.log('Form data state: ' + formData.state);
-    var state = formData.state == 0 ? 'Brouillon' : formData.state == 1 ? 'Enregsitré' : 'Diffusé';
-    document.querySelector('.oak_revision_form_state_current').value = state;
+        document.querySelector('.oak_revision_model_current_types').value = modelData.types;
+        document.querySelector('.oak_revision_model_current_publications_categories').value = modelData.publicationsCategories;
+        document.querySelector('.oak_revision_model_selector_current').value = modelData.selector;
+        var state = modelData.state == 0 ? 'Brouillon' : modelData.state == 1 ? 'Enregsitré' : 'Diffusé';
+        document.querySelector('.oak_revision_model_state_current').value = state;
+    }
 });
 
 // For the browse revisions select button: 
@@ -269,31 +270,26 @@ for( var i = 0; i < revisionsButtons.length; i++ ) {
         var selectedRevision = DATA.revisions[this.getAttribute('index')];
         revision = selectedRevision;
 
-        var revisionStructureField = document.querySelector('.oak_revision_form_revision_structure');
-        var revisionAttributsField = document.querySelector('.oak_revision_form_attributs_revision');
-        var revisionSelectorField = document.querySelector('.oak_revision_form_selector_revision');
-        var revisionStateField = document.querySelector('.oak_revision_form_state_revision');
+        var revisionTypesField = document.querySelector('.oak_revision_model_revision_types');
+        var revisionPublicationsCategoriesField = document.querySelector('.oak_revision_model_revision_publications_categories');
+        var revisionSelectorField = document.querySelector('.oak_revision_model_selector_revision');
+        var revisionStateField = document.querySelector('.oak_revision_model_state_revision');
 
-        // console.log('selected revision', selectedRevision);
-        revisionStructureField.value = selectedRevision.form_structure;
-        revisionAttributsField.value = selectedRevision.form_attributes;
-        revisionSelectorField.value = selectedRevision.form_selector;
+        revisionTypesField.value = selectedRevision.model_types;
+        revisionPublicationsCategoriesField.value = selectedRevision.model_publications_categories;
+        revisionSelectorField.value = selectedRevision.model_selector;
 
-        var state = selectedRevision.field_state == '0' ? 'Brouillon' : selectedRevision.field_state == '1' ? 'Enregsitré' : 'Diffusé';
+        var state = selectedRevision.model_state == '0' ? 'Brouillon' : selectedRevision.model_state == '1' ? 'Enregsitré' : 'Diffusé';
         revisionStateField.value = state;
 
         // Getting the current revision values;
-        var formData = createFormData(DATA.revisions[DATA.revisions.length - 1].form_state);
+        var modelData = createModelData(DATA.revisions[DATA.revisions.length - 1].model_state);
 
-        checkEquals(formData.structure, selectedRevision.form_structure, revisionStructureField);
-        checkEquals(formData.attributs, selectedRevision.form_attributes, revisionAttributsField);
-        checkEquals(formData.selector.toString(), selectedRevision.form_selector.toString(), revisionSelectorField);
-        console.log('form data selector: ' + formData.selector.toString());
-        console.log('Selected revision selector: ' + selectedRevision.form_selector);
-        console.log('Comparision', formData.selector == selectedRevision.form_selector);
-        console.log('Selector field', revisionSelectorField);
+        checkEquals(modelData.structure, selectedRevision.model_structure, revisionPublicationsCategoriesField);
+        checkEquals(modelData.publicationsCategories, selectedRevision.model_publications_categories, revisionPublicationsCategoriesField);
+        checkEquals(modelData.selector.toString(), selectedRevision.model_selector.toString(), revisionSelectorField);
 
-        checkEquals(document.querySelector('.oak_revision_form_state_current').value, document.querySelector('.oak_revision_form_state_revision').value, document.querySelector('.oak_revision_form_state_revision'));
+        checkEquals(document.querySelector('.oak_revision_model_state_current').value, document.querySelector('.oak_revision_model_state_revision').value, document.querySelector('.oak_revision_model_state_revision'));
     });
 }
 
@@ -306,45 +302,57 @@ function checkEquals(value1, value2, field) {
 }
 
 // For the add field button
-var addFieldButton = document.querySelector('.oak_add_form_add_field_button');
-addFieldButton.addEventListener('click', function() {
-    var fieldsList = document.querySelector('.oak_add_form_fields_list')
+var addFormButton = document.querySelector('.oak_add_model_add_form_button');
+addFormButton.addEventListener('click', function() {
+    var formsList = document.querySelector('.oak_add_model_forms_list')
 
     var singleFieldContainer = document.createElement('div');
-    singleFieldContainer.className = 'oak_add_form_fields_list__single_field';
+    singleFieldContainer.className = 'oak_add_model_forms_list__single_form';
     
-    singleFieldContainer.innerHTML = '<div class="oak_add_field_container__isert_field_title_container oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_without_margin_top oak_add_form_field_options">'
-    + '<div class="oak_add_form_fields_list__horizontal">'
-    + '<img class="oak_add_form_container_header_icon" src="' + DATA.templateDirectoryUri + '/src/assets/icons/fields.png" alt="">' 
-    + '<h4 class="oak_add_field_container__isert_field_title">Insérer un champ</h4></div>'
-    + '<div class="oak_add_form_fields_list__buttons_container"><div class="oak_add_form_field_options__button oak_add_form_field_options_button_delete"><i class="fas fa-times"></i></div></div>'
+    singleFieldContainer.innerHTML = '<div class="oak_add_field_container__isert_field_title_container oak_add_model_forms_list__horizontal oak_add_model_forms_list__horizontal_without_margin_top oak_add_model_field_options">'
+    + '<div class="oak_add_model_forms_list__horizontal">'
+    + '<img class="oak_add_model_container_header_icon" src="' + DATA.templateDirectoryUri + '/src/assets/icons/fields.png" alt="">' 
+    + '<h4 class="oak_add_field_container__isert_field_title">Insérer un formulaire</h4></div>'
+    + '<div class="oak_add_model_forms_list__buttons_container"><div class="oak_add_model_field_options__button oak_add_model_field_options_button_delete"><i class="fas fa-times"></i></div></div>'
     + '</div>'
-    + '<div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_without_margin_top">'
-    + '<div class="oak_add_form_fields_list__vertical oak_left_field">'
-    + '<label class="oak_add_field_label" for="type">Nature</label>'
-    + '<select class="oak_add_form_fields_list_horizontal__type_select" name="type" id="">'
-    + '<option value=""></option> <option value="Text">Text</option> <option value="Zone de Texte">Zone De Texte</option> <option value="Image">Image</option><option value="File">Fichier</option>'
+    + '<div class="oak_add_model_forms_list__horizontal oak_add_model_forms_list__horizontal_without_margin_top">'
+    + '<div class="oak_add_model_forms_list__vertical oak_left_field">'
+    + '<label class="oak_add_field_label" for="type">Structure</label>'
+    + '<select class="oak_add_model_form_structure" name="type" id="">'
+    + '<option value=""></option> <option value="fixed">Fixe</option> <option value="semi-structured">Semi-Structuré/Non Structuré</option>'
     + '</select>'
-    + '</div> <div class="oak_add_form_fields_list__vertical"> <label class="oak_add_field_label" for="type">Fonction</label>'
-    + '<select class="oak_add_form_fields_list_horizontal__function_select" name="type" id=""><option value=""></option> <option value="Information/Description">Information/Description</option><option value="Exemple">Exemple</option><option value="Illustration">Illustration</option>'
-    + '</select></div></div><div class="oak_add_form_fields_list__horizontal"><div class="oak_add_form_fields_list__vertical oak_left_field">'
-    + '<label class="oak_add_field_label" for="field-designation">Désignation</label><select class="oak_add_form_fields_list_horizontal__designation_select" name="field-designation" id=""></select></div>'
-    + '<div class="oak_add_form_fields_list__vertical"><label class="oak_add_field_label" for="field-identifier">Identifiant Unique</label><input disabled name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_form_field_identifier"></div></div>'
-    + '<div class="oak_add_form_fields_list__horizontal"><div class="oak_add_form_fields_list__vertical oak_left_field"><label class="oak_add_field_label" for="field-identifier">Renommer</label><input name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_form_field_rename"></div>'
-    + '<div class="oak_add_form_fields_list__horizontal"><div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_very_small oak_left_field"><label class="oak_add_field_label without_margin_bottom" for="field-required">Recquis</label><input type="checkbox" class="oak_field_required_input"></div><div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_small"><label class="oak_add_field_label oak_add_field_label_width without_margin_bottom" for="field-required">Largeur</label><input type="number" class="oak_field_width_input">'
-    + '</div></div></div>'
+    + '</div> <div class="oak_add_model_forms_list__vertical"> <label class="oak_add_field_label" for="type">Attributs</label>'
+    + '<select class="oak_add_model_forms_list_horizontal__attributes_select" name="type" id=""><option value=""></option>'
+    + '</select></div></div><div class="oak_add_model_forms_list__horizontal"><div class="oak_add_model_forms_list__vertical oak_left_field">'
+    + '<label class="oak_add_field_label" for="field-designation">Désignation du formulaire</label><select class="oak_add_model_forms_list_horizontal__designation_select" name="field-designation" id=""></select></div>'
+    + '<div class="oak_add_model_forms_list__vertical"><label class="oak_add_field_label" for="form-identifier">Identifiant Unique</label><input disabled name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_model_field_identifier"></div></div>'
+    + '<div class="oak_add_model_forms_list__horizontal"><div class="oak_add_model_forms_list__horizontal oak_left_field"><label class="oak_add_field_label" for="field-identifier">Renommer</label><input name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_model_form_rename"></div>'
+    + '<div class="oak_add_model_forms_list__horizontal">'
+    + '<label class="oak_add_field_label without_margin_bottom" for="gabarit">Gabarit</label>'
+    + '<select class="oak_add_model_form_gabarit" name="gabarit" id="">'
+    + '<option value="Gabarit 1">Gabarit 1</option>'
+    + '<option value="Gabarit 2">Gabarit 2</option>'
+    + '<option value="Gabarit 3">Gabarit 3</option>'
+    + '</select>'
+    + '</div>'
+    + '</div>'
 
-    fieldsList.append(singleFieldContainer);
+    for (var i = 0; i < DATA.attributes.length; i++) {
+        var option = document.createElement('option');
+        option.setAttribute('value', DATA.attributes[i]);
+        option.innerHTML = DATA.attributes[i];
+        singleFieldContainer.querySelector('.oak_add_model_forms_list_horizontal__attributes_select').append(option);
+    }
 
-    var designationsSelects = fieldsList.querySelectorAll('.oak_add_form_fields_list_horizontal__designation_select');
-    for (var i = 0; i < designationsSelects.length; i++) {
-        designationsSelects[i].innerHTML = '';
-        for (var j = 0; j < DATA.fields.length; j++) {
-            var option = document.createElement('option');
-            option.setAttribute('value', DATA.fields[j].field_identifier);
-            option.innerHTML = DATA.fields[j].field_designation;
-            designationsSelects[i].append(option);
-        }
+    formsList.append(singleFieldContainer);
+
+    var designationsSelects = formsList.querySelectorAll('.oak_add_model_forms_list_horizontal__designation_select');
+    designationsSelects[designationsSelects.length - 1].innerHTML = '';
+    for (var j = 0; j < DATA.forms.length; j++) {
+        var option = document.createElement('option');
+        option.setAttribute('value', DATA.forms[j].form_identifier);
+        option.innerHTML = DATA.forms[j].form_designation;
+        designationsSelects[designationsSelects.length - 1].append(option);
     }
 
     updateFiltersListeners();
@@ -353,22 +361,22 @@ addFieldButton.addEventListener('click', function() {
 });
 
 // For the add line button
-var addLineButton = document.querySelector('.oak_add_form_add_line_button');
+var addLineButton = document.querySelector('.oak_add_model_add_line_button');
 addLineButton.addEventListener('click', function() {
     addSeperator('Ligne');
 });
 
 // For the add space button
-var addSpaceButton = document.querySelector('.oak_add_form_add_space_button');
+var addSpaceButton = document.querySelector('.oak_add_model_add_space_button');
 addSpaceButton.addEventListener('click', function() {
     addSeperator('Espace');
 });
 
 function addSeperator(text) {
-    var fieldsList = document.querySelector('.oak_add_form_fields_list');
+    var formsList = document.querySelector('.oak_add_model_forms_list');
 
     var lineDiv = document.createElement('div');
-    lineDiv.className = 'oak_add_form_seperator';
+    lineDiv.className = 'oak_add_model_seperator';
 
     var span = document.createElement('span');
     span.innerHTML = text;
@@ -376,7 +384,7 @@ function addSeperator(text) {
     lineDiv.append(span);
 
     var deleteButton = document.createElement('div');
-    deleteButton.className = 'oak_add_form_field_options__button oak_add_form__delete_separator_button';
+    deleteButton.className = 'oak_add_model_field_options__button oak_add_model__delete_separator_button';
     var i = document.createElement('i');
     i.className = 'fas fa-times';
     deleteButton.append(i);
@@ -386,12 +394,12 @@ function addSeperator(text) {
     
     lineDiv.append(deleteButton);
 
-    fieldsList.append(lineDiv);
+    formsList.append(lineDiv);
 }
 
 handleSeparatorsDeleteButtons();
 function handleSeparatorsDeleteButtons() {
-    var deleteButtons = document.querySelectorAll('.oak_add_form__delete_separator_button');
+    var deleteButtons = document.querySelectorAll('.oak_add_model__delete_separator_button');
     for (var i = 0; i < deleteButtons.length; i++) {
         deleteButtons[i].addEventListener('click', function() {
             this.parentNode.remove();
@@ -401,53 +409,62 @@ function handleSeparatorsDeleteButtons() {
 
 updateFiltersListeners();
 function updateFiltersListeners() {
-    var fieldsList = document.querySelector('.oak_add_form_fields_list');
-    var fieldsContainers = fieldsList.querySelectorAll('.oak_add_form_fields_list__single_field');
-    for (var i = 0; i < fieldsContainers.length; i++) {
-        var typeSelect = fieldsContainers[i].querySelector('.oak_add_form_fields_list_horizontal__type_select');
-        typeSelect.setAttribute('index', i);
-        var functionSelect = fieldsContainers[i].querySelector('.oak_add_form_fields_list_horizontal__function_select');
-        functionSelect.setAttribute('index', i);
-        typeSelect.addEventListener('change', function() {
-            var designationsSelect = fieldsContainers[this.getAttribute('index')].querySelector('.oak_add_form_fields_list_horizontal__designation_select');
-            var currentFunctionSelect = fieldsContainers[this.getAttribute('index')].querySelector('.oak_add_form_fields_list_horizontal__function_select');
-            updateDesignationsSelect(this, currentFunctionSelect, designationsSelect);
+    var formsList = document.querySelector('.oak_add_model_forms_list');
+    var formsContainers = formsList.querySelectorAll('.oak_add_model_forms_list__single_form');
+    for (var i = 0; i < formsContainers.length; i++) {
+        var structureSelect = formsContainers[i].querySelector('.oak_add_model_form_structure');
+        structureSelect.setAttribute('index', i);
+        var attributesSelect = formsContainers[i].querySelector('.oak_add_model_forms_list_horizontal__attributes_select');
+        attributesSelect.setAttribute('index', i);
+        structureSelect.addEventListener('change', function() {
+            var designationsSelect = formsContainers[this.getAttribute('index')].querySelector('.oak_add_model_forms_list_horizontal__designation_select');
+            var currentattributesSelect = formsContainers[this.getAttribute('index')].querySelector('.oak_add_model_forms_list_horizontal__attributes_select');
+            updateDesignationsSelect(this, currentattributesSelect, designationsSelect);
         });
-        functionSelect.addEventListener('change', function() {
-            var designationsSelect = fieldsContainers[this.getAttribute('index')].querySelector('.oak_add_form_fields_list_horizontal__designation_select');
-            var currentTypeSelect = fieldsContainers[this.getAttribute('index')].querySelector('.oak_add_form_fields_list_horizontal__type_select');
-            updateDesignationsSelect(currentTypeSelect, this, designationsSelect);
+        attributesSelect.addEventListener('change', function() {
+            var designationsSelect = formsContainers[this.getAttribute('index')].querySelector('.oak_add_model_forms_list_horizontal__designation_select');
+            var currentstructureSelect = formsContainers[this.getAttribute('index')].querySelector('.oak_add_model_form_structure');
+            updateDesignationsSelect(currentstructureSelect, this, designationsSelect);
         });
     }
 }
 
-function updateDesignationsSelect(typeSelect, functionSelect, designationsSelect) {
-    var considerType = false;
-    var considerFunction = false;
-    if (typeSelect.value != '') 
-        considerType = true;
-    if (functionSelect.value != '')
-        considerFunction = true;
+function updateDesignationsSelect(structureSelect, attributesSelect, designationsSelect) {
+    var considerStructure = false;
+    var considerAttributes = false;
+    if (structureSelect.value != '') 
+        considerStructure = true;
+    if (attributesSelect.value != '')
+        considerAttributes = true;
 
-    var fieldsToShow = [];
-    for (var i = 0; i < DATA.fields.length; i++) {
+    var formsToShow = [];
+    for (var i = 0; i < DATA.forms.length; i++) {
         var add = true;
-        if (considerType && DATA.fields[i].field_type != typeSelect.value) {
+        if (considerStructure && DATA.forms[i].form_structure != structureSelect.value) {
             add = false;
         }
-        if (considerFunction && DATA.fields[i].field_function != functionSelect.value ) {
-            add = false;
+        if (considerAttributes) {
+            exists = false;
+            var formAttributes = DATA.forms[i].form_attributes.split(',');
+            for (var j = 0; j < formAttributes.length; j++) {
+                if (attributesSelect.value == formAttributes[j]) {
+                    exists = true;
+                }
+            }
+            if (!exists) 
+                add = false;
         }
+
         if (add) {
-            fieldsToShow.push(DATA.fields[i]);
+            formsToShow.push(DATA.forms[i]);
         }
     }
 
     var options = designationsSelect.querySelectorAll('option');
     for (var i = 0; i < options.length; i++) {
         exists = false;
-        for (var j = 0; j < fieldsToShow.length; j++) {
-            if (fieldsToShow[j].field_identifier == options[i].value) {
+        for (var j = 0; j < formsToShow.length; j++) {
+            if (formsToShow[j].form_identifier == options[i].value) {
                 exists = true;
             }
         }
@@ -479,7 +496,7 @@ function updateDesignationsSelect(typeSelect, functionSelect, designationsSelect
 
 updateDeleteFieldsButtonsListeners();
 function updateDeleteFieldsButtonsListeners() {
-    var deleteButtons = document.querySelectorAll('.oak_add_form_field_options_button_delete');
+    var deleteButtons = document.querySelectorAll('.oak_add_model_field_options_button_delete');
     for (var i = 0; i < deleteButtons.length; i++) {
         deleteButtons[i].addEventListener('click', function() {
             var fieldContainer = this.parentNode.parentNode.parentNode;
@@ -492,13 +509,15 @@ function updateDeleteFieldsButtonsListeners() {
 // designation select listener
 handleDesignationSelectsListeners();
 function handleDesignationSelectsListeners() {
-    var designationsSelects = document.querySelectorAll('.oak_add_form_fields_list_horizontal__designation_select');
+    var designationsSelects = document.querySelectorAll('.oak_add_model_forms_list_horizontal__designation_select');
     for (var i = 0; i < designationsSelects.length; i++) {
         designationsSelects[i].setAttribute('index', i);
+        var theParentOfTheParent = designationsSelects[i].parentNode.parentNode;
+        console.log('Designation select value', designationsSelects[i].value);
+        theParentOfTheParent.querySelector('.oak_add_model_field_identifier').value = createIdentifier(designationsSelects[i].value);
         designationsSelects[i].addEventListener('change', function() {
             var theParentOfTheParent = this.parentNode.parentNode;
-            theParentOfTheParent.querySelector('.oak_add_form_field_identifier').value = createIdentifier(this.value);
-            // console.log(theParentOfTheParent);
+            theParentOfTheParent.querySelector('.oak_add_model_field_identifier').value = createIdentifier(this.value);
         });
     }
 }
@@ -589,7 +608,7 @@ function handleModalButtons() {
     var confirmButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function() {
         if (adding || updating) {
-            console.log(formData);
+            console.log(modelData);
             closeModals();
             setLoading();
             jQuery(document).ready(function() {
@@ -597,11 +616,11 @@ function handleModalButtons() {
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
-                        'action': 'oak_register_form',
-                        'data': formData,
+                        'action': 'oak_register_model',
+                        'data': modelData,
                     },
                     success: function(data) {
-                        DATA.forms.push(formData);
+                        DATA.forms.push(modelData);
                         doneLoading();
                         console.log(data);
                         window.location.reload();
@@ -613,22 +632,18 @@ function handleModalButtons() {
             })
         }
         if (canceling) {
-            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_fields_list');
+            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_models_list');
         }
         if (browsingRevisions) {
-            revision.designation = revision.field_designation;
-            revision.identifier = revision.field_identifier;
-            revision.type = revision.field_identifier;
-            revision.functionField = revision.field_function;
-            revision.defaultValue = revision.field_default_value;
-            revision.instructions = revision.field_instructions;
-            revision.placeholder = revision.field_placeholder;
-            revision.before = revision.field_before;
-            revision.after = revision.field_after;
-            revision.maxLength = revision.field_max_length;
-            revision.selector = revision.field_selector;
-            revision.state = revision.field_state;
-            revision.trashed = revision.field_trashed;
+            revision.designation = revision.model_designation;
+            revision.identifier = revision.model_identifier;
+            revision.types = revision.model_types;
+            revision.publicationsCategories = revision.model_publications_categories;
+            revision.selector = revision.model_selector;
+            revision.trashed = revision.model_trashed;
+            revision.forms = revision.model_forms;
+            revision.state = revision.model_state;
+            revision.separators = revision.model_separators;
 
             closeModals();
             setLoading();
@@ -637,7 +652,7 @@ function handleModalButtons() {
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
-                        'action': 'oak_register_field',
+                        'action': 'oak_register_model',
                         'data': revision,
                     },
                     success: function(data) {

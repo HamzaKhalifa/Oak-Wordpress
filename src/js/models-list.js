@@ -1,25 +1,6 @@
 var elementToDelete;
 var deleting = false;
 
-// Removing Revisions from DATA fields
-removeRevisions();
-function removeRevisions() {
-    var addedFields = [];
-    for (var j = 0; j < DATA.fields.length; j++) {
-        var exists = false;
-        for (var n = 0; n < addedFields.length; n++) {
-            if (addedFields[n].field_identifier == DATA.fields[j].field_identifier) {
-                exists = true;
-            }
-        }
-        if (!exists) {
-            addedFields.push(DATA.fields[j]);
-        }
-    }
-    DATA.fields = addedFields;
-}
-
-
 // For the delete buttons
 manageDeleteButtons();
 function manageDeleteButtons() {
@@ -28,7 +9,6 @@ function manageDeleteButtons() {
         deleteButtons[i].addEventListener('click', function() {
             deleting = true;
             elementToDelete = this;
-            console.log(elementToDelete);
             openModal('Êtes vous sûr de vouloir supprimer le champ selectionné ?', true);
         });
     }
@@ -40,13 +20,14 @@ function manageUpdateButtons() {
     var updateButtons = document.querySelectorAll('.oak_add_field_container_saved_field_container__update_button');
     for (var i = 0; i < updateButtons.length; i++) {
         updateButtons[i].addEventListener('click', function() {
-            var whichForm;
-            for (var j = 0; j < DATA.forms.length; j++) {
-                if (DATA.forms[j].form_designation == this.parentNode.querySelector('span').innerHTML) {
-                    whichForm = DATA.forms[j];
+            var whichModel;
+
+            for (var j = 0; j < DATA.fields.length; j++) {
+                if (DATA.models[j].model_identifier == this.getAttribute('model-identifier')) {
+                    whichModel = DATA.models[j];
                 }
             }
-            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_form&form_identifier=' + whichForm.form_identifier);
+            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_model&model_identifier=' + whichModel.model_identifier);
         });
     }
 }
@@ -118,7 +99,7 @@ function handleModalButtons() {
                     type: 'POST', 
                     data: {
                         'action': 'oak_delete_field',
-                        'data': elementToDelete.getAttribute('form-identifier')
+                        'data': elementToDelete.getAttribute('field-identifier')
                     },
                     success: function(data) {
                         console.log(data);

@@ -7,18 +7,20 @@
             $exists = false;
             foreach( $added_forms as $added_form ) :
                 if ( $form->form_identifier == $added_form->form_identifier ) 
-                $exists = true;
+                    $exists = true;
             endforeach;
             if ( !$exists ) :
-                $added_form[] = $form;
+                $added_forms[] = $form;
+            endif;
+        endforeach;
+        foreach( $added_forms as $added_form ) :
         ?>
             <div class="oak_add_field_container__saved_field_container">
                 <i class="oak_add_field_container_saved_field_container__update_button fas fa-cog"></i>
-                <span><?php echo( $form->form_designation ); ?></span>
-                <i form-identifier='<?php echo( $form->form_identifier ); ?>' class="oak_add_field_container__saved_field_container__delete_button fas fa-minus"></i>
+                <span><?php echo( $added_form->form_designation ); ?></span>
+                <i form-identifier='<?php echo( $added_form->form_identifier ); ?>' class="oak_add_field_container__saved_field_container__delete_button fas fa-minus"></i>
             </div>
         <?php
-            endif;
         endforeach;
         ?>
     </div>

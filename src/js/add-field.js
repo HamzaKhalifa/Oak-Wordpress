@@ -144,7 +144,7 @@ function getEnteredData() {
     var before  = document.querySelector('.oak_add_field_container__before').value;
     var after = document.querySelector('.oak_add_field_container__after').value;
     var maxLength = document.querySelector('.oak_add_field_container__max_length').value;
-    var selector = document.querySelector('.oak_add_field_container__selector').value;
+    var selector = document.querySelector('.oak_add_field_container__selector').checked;
 
     var fieldData = { designation, identifier, type, functionField, defaultValue,
         instructions,
@@ -173,7 +173,7 @@ function createFieldData(state) {
     var before  = document.querySelector('.oak_add_field_container__before').value;
     var after = document.querySelector('.oak_add_field_container__after').value;
     var maxLength = document.querySelector('.oak_add_field_container__max_length').value;
-    var selector = document.querySelector('.oak_add_field_container__selector').value;
+    var selector = document.querySelector('.oak_add_field_container__selector').checked;
     var trashed = false;
 
     var fieldData = { designation, identifier, type, functionField, defaultValue, instructions, placeholder, before, after, maxLength, selector, state, trashed }

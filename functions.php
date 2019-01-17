@@ -4,8 +4,11 @@ class Oak {
     public static $text_domain; 
     public static $fields_table_name;
     public static $forms_table_name;
+    public static $models_table_name;
     public static $fields;
     public static $forms;
+    public static $forms_attributes;
+    public static $models;
 
     function __construct() {
         Oak::$text_domain = 'oak';
@@ -13,6 +16,8 @@ class Oak {
         global $wpdb;
         Oak::$fields_table_name = $wpdb->prefix . 'oak_fields';
         Oak::$forms_table_name = $wpdb->prefix . 'oak_forms';
+        Oak::$models_table_name = $wpdb->prefix . 'oak_models';
+        Oak::$forms_attributes = [];
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
@@ -94,6 +99,9 @@ class Oak {
 
         add_action( 'wp_ajax_oak_register_form', array( $this, 'oak_register_form') );
         add_action( 'wp_ajax_nopriv_oak_register_form', array( $this, 'oak_register_form') );
+
+        add_action( 'wp_ajax_oak_register_model', array( $this, 'oak_register_model') );
+        add_action( 'wp_ajax_nopriv_oak_register_model', array( $this, 'oak_register_model') );
     }
 
     function oak_enqueue_styles() {
@@ -132,6 +140,9 @@ class Oak {
             || get_current_screen()->id == 'champs_page_oak_add_field'
             || get_current_screen()->id == 'formes_page_oak_add_form'
             || get_current_screen()->id == 'toplevel_page_oak_forms_list'
+            || get_current_screen()->id == 'modeles_page_oak_add_model'
+            || get_current_screen()->id == 'toplevel_page_oak_models_list'
+            
         ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
             ?>
@@ -174,7 +185,6 @@ class Oak {
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'adminUrl' => admin_url(),
                 'principles' => get_option('oak_principles') ? get_option('oak_principles') : [],
-                // 'baseData' => $base_data,
                 'analyzes' => get_option('oak_analyzes') ? get_option('oak_analyzes') : []
             ));
         endif;
@@ -205,6 +215,7 @@ class Oak {
             ));
         endif;
 
+        // For fields
         $fields_table_name = Oak::$fields_table_name;
         Oak::$fields = $wpdb->get_results ( "
             SELECT * 
@@ -231,13 +242,29 @@ class Oak {
                 'fields' => Oak::$fields
             ) );
         endif;
+        // Done with fields
 
-        if ( get_current_screen()-> id == 'formes_page_oak_add_form' || get_current_screen()->id == 'toplevel_page_oak_forms_list' ) :
+        // For forms
+        if ( get_current_screen()-> id == 'formes_page_oak_add_form' || get_current_screen()->id == 'toplevel_page_oak_forms_list' || get_current_screen()->id == 'modeles_page_oak_add_model' ) :
             $forms_table_name = Oak::$forms_table_name;
             Oak::$forms = $wpdb->get_results ( "
                 SELECT * 
                 FROM  $forms_table_name
             " );
+            
+            foreach( Oak::$forms as $form ) :
+                $form_attributes_Array = explode( ',', $form->form_attributes );
+                foreach( $form_attributes_Array as $attribute ) :
+                    $exists = false;
+                    foreach( Oak::$forms_attributes as $oak_attribute ) :
+                        if ( $oak_attribute == $attribute || $attribute == '' )
+                            $exists = true;
+                    endforeach;
+                    if ( !$exists ) :
+                        Oak::$forms_attributes[] = $attribute;
+                    endif;
+                endforeach;
+            endforeach;
         endif;
 
         if ( get_current_screen()->id == 'formes_page_oak_add_form' ) :
@@ -249,10 +276,10 @@ class Oak {
                     endif;
                 endforeach;
             endif;
-
-            wp_enqueue_script( 'corn_add_form', get_template_directory_uri() . '/src/js/add-form.js', array('jquery'), false, true );
-            wp_localize_script( 'corn_add_form', 'DATA', array(
+            wp_enqueue_script( 'oak_add_form', get_template_directory_uri() . '/src/js/add-form.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_add_form', 'DATA', array(
                 'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'attributes' => Oak::$forms_attributes,
                 'forms' => Oak::$forms,
                 'fields' => Oak::$fields,
                 'revisions' => $revisions,
@@ -260,6 +287,60 @@ class Oak {
                 'templateDirectoryUri' => get_template_directory_uri()
             ) );
         endif;
+
+        if ( get_current_screen()->id == 'toplevel_page_oak_forms_list' ) :
+            wp_enqueue_script( 'oak_forms_list', get_template_directory_uri() . '/src/js/forms-list.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_forms_list', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'forms' => Oak::$forms,
+                'fields' => Oak::$fields,
+                'adminUrl' => admin_url(),
+            ) );
+        endif;
+        // Done with forms
+
+        // For models
+        if ( get_current_screen()-> id == 'modeles_page_oak_add_model' || get_current_screen()->id == 'toplevel_page_oak_models_list' ) :
+            $models_table_name = Oak::$models_table_name;
+            Oak::$models = $wpdb->get_results ( "
+                SELECT * 
+                FROM  $models_table_name
+            " );
+        endif;
+        if ( get_current_screen()->id == 'toplevel_page_oak_models_list' ) :
+            wp_enqueue_script( 'oak_models_list', get_template_directory_uri() . '/src/js/models-list.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_models_list', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'fields' => Oak::$fields,
+                'forms' => Oak::$forms,
+                'models' => Oak::$models,
+                'adminUrl' => admin_url(),
+            ) );
+        endif;
+
+        if ( get_current_screen()->id == 'modeles_page_oak_add_model' ) :
+            $revisions = [];
+            if ( isset( $_GET['model_identifier'] ) ) :
+                foreach( Oak::$models as $model ) :
+                    if ( $model->model_identifier == $_GET['model_identifier'] ) :
+                        $revisions[] = $model;
+                    endif;
+                endforeach;
+            endif;
+            wp_enqueue_script( 'oak_add_model', get_template_directory_uri() . '/src/js/add-model.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_add_model', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'attributes' => Oak::$forms_attributes,
+                'forms' => Oak::$forms,
+                'fields' => Oak::$fields,
+                'models' => Oak::$models,
+                'revisions' => $revisions,
+                'adminUrl' => admin_url(),
+                'templateDirectoryUri' => get_template_directory_uri()
+            ) );
+        endif;
+        // Done with models
+        
     }
     
     function oak_add_theme_support() {
@@ -321,6 +402,9 @@ class Oak {
 
         add_menu_page( __( 'Formes', Oak::$text_domain ), 'Formes', 'manage_options', 'oak_forms_list', array ( $this, 'oak_forms_list'), 'dashicons-index-card', 100 );
         add_submenu_page( 'oak_forms_list', 'Ajouter un formulaire', __( 'Ajouter un formulaire', Oak::$text_domain ), 'manage_options', 'oak_add_form',  array( $this, 'oak_add_form' ) );
+
+        add_menu_page( __( 'Modèles', Oak::$text_domain ), 'Modèles', 'manage_options', 'oak_models_list', array ( $this, 'oak_models_list'), 'dashicons-index-card', 100 );
+        add_submenu_page( 'oak_models_list', 'Ajouter un modèle', __( 'Ajouter un modèle', Oak::$text_domain ), 'manage_options', 'oak_add_model',  array( $this, 'oak_add_model' ) );
     }
 
     function add_admin_menu_separator( $position ) {
@@ -840,6 +924,19 @@ class Oak {
         include get_template_directory() . '/template-parts/forms/add-form.php';
     }
 
+    function oak_add_model() {
+        $revisions = [];
+        if ( isset( $_GET['model_identifier'] ) ) :
+            foreach( Oak::$models as $model ) :
+                if ( $model->model_identifier == $_GET['model_identifier'] ) :
+                    $revisions[] = $model;
+                endif;
+            endforeach;
+        endif;
+
+        include get_template_directory() . '/template-parts/models/add-model.php';
+    }
+
     function oak_fields_list() {
         global $wpdb;
         $fields_table_name = Oak::$fields_table_name;
@@ -870,6 +967,16 @@ class Oak {
             FROM  $forms_table_name
         " );
         include get_template_directory() . '/template-parts/forms/forms-list.php';
+    }
+
+    function oak_models_list() {
+        global $wpdb;
+        $models_table_name = Oak::$models_table_name;
+        $models = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $models_table_name
+        " );
+        include get_template_directory() . '/template-parts/models/models-list.php';
     }
 
     function oak_get_organizations() {
@@ -935,11 +1042,38 @@ class Oak {
             array(
                 'form_designation' => $form['designation'],
                 'form_identifier' => $form['identifier'],
-                'form_fields_identifiers' => $form['fieldsIdentifiers'],
+                'form_fields' => $form['fields'],
                 'form_selector' => $form['selector'],
                 'form_state' => $form['state'],
                 'form_modification_time' => date("Y-m-d H:i:s"),
-                'form_trashed' => $form['trashed']
+                'form_trashed' => $form['trashed'],
+                'form_structure' => $form['structure'],
+                'form_attributes' => $form['attributs'],
+                'form_separators' => $form['separators']
+            )
+        );
+
+        wp_send_json_success();
+    }
+
+    function oak_register_model() {
+        global $wpdb;
+
+        $model = $_POST['data'];
+
+        $result = $wpdb->insert(
+            Oak::$models_table_name, 
+            array(
+                'model_designation' => $model['designation'],
+                'model_identifier' => $model['identifier'],
+                'model_types' => $model['types'],
+                'model_publications_categories' => $model['publicationsCategories'],
+                'model_selector' => $model['selector'],
+                'model_forms' => $model['forms'],
+                'model_separators' => $model['separators'],
+                'model_state' => $model['state'],
+                'model_trashed' =>$model['trashed'],
+                'model_modification_time' => date("Y-m-d H:i:s"),
             )
         );
 
