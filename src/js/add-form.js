@@ -41,7 +41,7 @@ if (addButton) {
 var updateButton = document.querySelector('.oak_add_field_container__update_button');
 if (updateButton) {
     updateButton.addEventListener('click', function() {
-        formData = createFormData(DATA.revisions[DATA.revisions.length - 1].field_state);
+        formData = createFormData(DATA.revisions[DATA.revisions.length - 1].form_state);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier ce champ?', true);
     });
@@ -76,16 +76,16 @@ function checkOk() {
         openModal('Veuillez entrer la désignation d\'abord', false);
         ok = false;
     } else {
-        for(var i = 0; i < DATA.fields.length; i++) {
-            if (DATA.fields[i].designation == designation) {
-                openModal('Il existe déjà un champ avec la désignation: ' + designation);
+        for(var i = 0; i < DATA.forms.length; i++) {
+            if (DATA.forms[i].designation == designation) {
+                openModal('Il existe déjà un formulaire avec la désignation: ' + designation);
                 ok = false;
             }
         }
         if (ok) {
             var identifierExists = false;
-            for (var j = 0; j < DATA.fields.length; j++) {
-                if (DATA.fields[j].identifier == identifier) {
+            for (var j = 0; j < DATA.forms.length; j++) {
+                if (DATA.forms[j].identifier == identifier) {
                     identifierExists = true;
                     ok = false;
                 }

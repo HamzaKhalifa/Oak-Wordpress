@@ -1,28 +1,10 @@
 // Global variables
 var adding = false;
-var modelData = {};
+var organizationData = {};
 var canceling = false;
 var updating = false;
 var browsingRevisions = false;
 var revision = {};
-
-// Removing Revisions from DATA fields
-removeRevisions();
-function removeRevisions() {
-    var addedForms = [];
-    for (var j = 0; j < DATA.forms.length; j++) {
-        var exists = false;
-        for (var n = 0; n < addedForms.length; n++) {
-            if (addedForms[n].form_identifier == DATA.forms[j].form_identifier) {
-                exists = true;
-            }
-        }
-        if (!exists) {
-            addedForms.push(DATA.forms[j]);
-        }
-    }
-    DATA.forms = addedForms;
-}
 
 // For the add button
 var addButton = document.querySelector('.oak_add_field_container__add_button');
@@ -31,9 +13,9 @@ if (addButton) {
         var ok = checkOk();
         if (!ok)
             return;
-        modelData = createModelData(0);
+        organizationData = createOrganizationData(0);
         adding = true;
-        openModal('Êtes vous sur de vouloir ajouter ce modèle?', true);
+        openModal('Êtes vous sur de vouloir ajouter cette Organisation?', true);
     });
 }
 
@@ -41,9 +23,9 @@ if (addButton) {
 var updateButton = document.querySelector('.oak_add_field_container__update_button');
 if (updateButton) {
     updateButton.addEventListener('click', function() {
-        modelData = createModelData(DATA.revisions[DATA.revisions.length - 1].model_state);
+        organizationData = createOrganizationData(DATA.revisions[DATA.revisions.length - 1].organization_state);
         updating = true;
-        openModal('Êtes vous sûr de vouloir modifier ce champ?', true);
+        openModal('Êtes vous sûr de vouloir modifier cette organisation?', true);
     });
 }
 
@@ -51,7 +33,7 @@ if (updateButton) {
 var registerButton = document.querySelector('.oak_add_field_container__register_button');
 if (registerButton) {
     registerButton.addEventListener('click', function() {
-        modelData = createModelData(1);
+        organizationData = createOrganizationData(1);
         if (DATA.revisions.length == 0) {
             // adding for the first time
             var ok = checkOk();
@@ -76,22 +58,22 @@ function checkOk() {
         openModal('Veuillez entrer la désignation d\'abord', false);
         ok = false;
     } else {
-        for(var i = 0; i < DATA.models.length; i++) {
-            if (DATA.models[i].designation == designation) {
-                openModal('Il existe déjà un modèle avec la désignation: ' + designation);
+        for(var i = 0; i < DATA.organizations.length; i++) {
+            if (DATA.organizations[i].designation == designation) {
+                openModal('Il existe déjà une organisation avec la désignation: ' + designation);
                 ok = false;
             }
         }
         if (ok) {
             var identifierExists = false;
-            for (var j = 0; j < DATA.models.length; j++) {
-                if (DATA.models[j].identifier == identifier) {
+            for (var j = 0; j < DATA.organizations.length; j++) {
+                if (DATA.organizations[j].identifier == identifier) {
                     identifierExists = true;
                     ok = false;
                 }
             }
             if (identifierExists) {
-                openModal('Il existe déjà un modèle avec l\'identifiant: ' + identifier);
+                openModal('Il existe déjà un champ avec l\'identifiant: ' + identifier);
             } else {
                 if (identifier.trim() == '') {
                     openModal('Veuillez entrer la désignation d\'abord', false);
@@ -107,7 +89,7 @@ function checkOk() {
 var broadcastButton = document.querySelector('.oak_add_field_container__broadcast_button');
 if (broadcastButton) {
     broadcastButton.addEventListener('click', function() {
-        modelData = createModelData(2);
+        organizationData = createOrganizationData(2);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier et diffuser ce champ ?', true);
     });
@@ -117,7 +99,7 @@ if (broadcastButton) {
 var draftButton = document.querySelector('.oak_add_field_container__draft_button');
 if (draftButton) {
     draftButton.addEventListener('click', function() {
-        modelData = createModelData(0);
+        organizationData = createOrganizationData(0);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier et renvoyer ce champ à l\'état de Brouillon ?', true);
     });
@@ -152,78 +134,45 @@ if (trashButton) {
 
 // For the identifier input update
 var designationInput = document.querySelector('.oak_add_field_container__designation');
-var identifierInput = document.querySelector('.oak_add_model_container__identifier');
+var identifierInput = document.querySelector('.oak_add_organization_container__identifier');
 designationInput.oninput = function() {
     identifierInput.value = createIdentifier(designationInput.value);
 }
 
-function getEnteredData() {
-    var designation = document.querySelector('.oak_add_field_container__designation').value;
-    var identifier = designation.replace(/[^a-zA-Z ]/g, '');
-    identifier = identifier.replace(/\s/g,'');
-    var type = document.querySelector('.oak_add_field_container__type').value;
-    var functionField = document.querySelector('.oak_add_field_container__function').value;
-    var defaultValue = document.querySelector('.oak_add_field_container__default_value').value;
-    var instructions = document.querySelector('.oak_add_field_container__instructions').value;
-    var placeholder = document.querySelector('.oak_add_field_container__placeholder').value;
-    var before  = document.querySelector('.oak_add_field_container__before').value;
-    var after = document.querySelector('.oak_add_field_container__after').value;
-    var maxLength = document.querySelector('.oak_add_field_container__max_length').value;
-    var selector = document.querySelector('.oak_add_field_container__selector').value;
-
-    var modelData = { designation, identifier, type, functionField, defaultValue,
-        instructions,
-        placeholder,
-        before,
-        after,
-        maxLength,
-        selector,
-        state: DATA.revisions[DATA.revisions.length - 1].field_state,
-        trashed: DATA.revisions[DATA.revisions.length - 1].field_trashed
-    }
-
-    return modelData;
-}
-
 // We create while adding the new revision
-function createModelData(state) {
+function createOrganizationData(state) {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
     var identifier = createIdentifier(designation);
-    var types =  jQuery('.oak_add_model_container__types').val();
-    var publicationsCategories = document.querySelector('.oak_add_model_container__publications_categories').value;
-    var selector = document.querySelector('.oak_add_model_container__selector').checked;
-    var trashed = false;
-
-    forms = '';
-    var formsContainers = document.querySelectorAll('.oak_add_model_forms_list__single_form');
-    for (var i= 0; i < formsContainers.length; i++) {
-        var formDesignation = formsContainers[i].querySelector('.oak_add_model_forms_list_horizontal__designation_select').value;
-        var name = formsContainers[i].querySelector('.oak_add_model_form_rename').value;
-        var gabarit = formsContainers[i].querySelector('.oak_add_model_form_gabarit').value;
-
-        var whichChildIsIt = whichChild(formsContainers[i]);
-        forms += formDesignation + ':' + createIdentifier(formDesignation) + ':' + name + ':' + gabarit + ':' + whichChildIsIt + '|';
-    }
-
-    var separators = ''
-    var separatorsElements = document.querySelectorAll('.oak_add_model_seperator');
-    for (var i = 0; i < separatorsElements.length; i++) {
-        separators += separatorsElements[i].querySelector('span').innerHTML + ':' + whichChild(separatorsElements[i]) + '|';
-    }
+    var acronym = document.querySelector('.oak_add_field_container__acronym').value;
+    var logo = document.querySelector('.oak_add_organization_container__logo_img').getAttribute('src');
+    var description = document.querySelector('.oak_add_organization_container__description').value;
+    var url = document.querySelector('.oak_add_organization_container__url').value;
+    var address = document.querySelector('.oak_add_field_container__address').value;
+    var country = document.querySelector('.oak_add_organization_container__country').value;
+    var company = document.querySelector('.oak_add_organization_container__company').checked;
+    var type = document.querySelector('.oak_add_organization_container__type').value;
+    var side = document.querySelector('.oak_add_organization_container__side').checked;
+    var sectors = document.querySelector('.oak_add_organization_container__sectors').value;
+    trashed = false;
     
-    var modelData = {
+    var organizationData = {
         designation, 
         identifier,
-        types,
-        publicationsCategories,
-        selector,
+        acronym,
+        logo,
+        description,
+        url,
+        address,
+        country,
+        company,
+        type,
+        side,
+        sectors,
         trashed,
-        forms,
         state,
-        separators
     }
 
-    return modelData;
+    return organizationData;
 }
 
 function createIdentifier(designation) {
@@ -246,13 +195,20 @@ browseRevisionsButton.addEventListener('click', function() {
         openModal('Liste des révisions', true);
         // Changing the modal's width
         
-        modelData = createModelData(DATA.revisions[DATA.revisions.length - 1].model_state);
-    
-        document.querySelector('.oak_revision_model_current_types').value = modelData.types;
-        document.querySelector('.oak_revision_model_current_publications_categories').value = modelData.publicationsCategories;
-        document.querySelector('.oak_revision_model_selector_current').value = modelData.selector;
-        var state = modelData.state == 0 ? 'Brouillon' : modelData.state == 1 ? 'Enregsitré' : 'Diffusé';
-        document.querySelector('.oak_revision_model_state_current').value = state;
+        organizationData = createOrganizationData(DATA.revisions[DATA.revisions.length - 1].organization_state);
+
+        document.querySelector('.oak_revision_organization_current_acronym').value = organizationData.acronym;
+        document.querySelector('.oak_revision_organization_current_logo').value = organizationData.logo;
+        document.querySelector('.oak_revision_organization_current_description').value = organizationData.description;
+        document.querySelector('.oak_revision_organization_current_url').value = organizationData.url;
+        document.querySelector('.oak_revision_organization_current_address').value = organizationData.address;
+        document.querySelector('.oak_revision_organization_current_country').value = organizationData.country;
+        document.querySelector('.oak_revision_organization_current_company').value = organizationData.company;
+        document.querySelector('.oak_revision_organization_current_type').value = organizationData.type;
+        document.querySelector('.oak_revision_organization_current_side').value = organizationData.side;
+        document.querySelector('.oak_revision_organization_current_sectors').value = organizationData.sectors;
+        var state = organizationData.state == 0 ? 'Brouillon' : organizationData.state == 1 ? 'Enregsitré' : 'Diffusé';
+        document.querySelector('.oak_revision_organization_current_state').value = state;
     }
 });
 
@@ -270,26 +226,49 @@ for( var i = 0; i < revisionsButtons.length; i++ ) {
         var selectedRevision = DATA.revisions[this.getAttribute('index')];
         revision = selectedRevision;
 
-        var revisionTypesField = document.querySelector('.oak_revision_model_revision_types');
-        var revisionPublicationsCategoriesField = document.querySelector('.oak_revision_model_revision_publications_categories');
-        var revisionSelectorField = document.querySelector('.oak_revision_model_selector_revision');
-        var revisionStateField = document.querySelector('.oak_revision_model_state_revision');
+        var revisionAcronymField = document.querySelector('.oak_revision_organization_revision_acronym');
+        var revisionLogoField = document.querySelector('.oak_revision_organization_revision_logo');
+        var revisionDescriptionField = document.querySelector('.oak_revision_organization_revision_description');
+        var revisionUrlField = document.querySelector('.oak_revision_organization_revision_url');
+        var revisionAddressField = document.querySelector('.oak_revision_organization_revision_address');
+        var revisionCountriesField = document.querySelector('.oak_revision_organization_revision_country');
+        var revisionCompanyField = document.querySelector('.oak_revision_organization_revision_company');
+        var revisionTypeField = document.querySelector('.oak_revision_organization_revision_type');
+        var revisionSideField = document.querySelector('.oak_revision_organization_revision_side');
+        var revisionSectorField = document.querySelector('.oak_revision_organization_revision_sectors');
+        var revisionStateField = document.querySelector('.oak_revision_organization_revision_state');
 
-        revisionTypesField.value = selectedRevision.model_types;
-        revisionPublicationsCategoriesField.value = selectedRevision.model_publications_categories;
-        revisionSelectorField.value = selectedRevision.model_selector;
 
-        var state = selectedRevision.model_state == '0' ? 'Brouillon' : selectedRevision.model_state == '1' ? 'Enregsitré' : 'Diffusé';
+        revisionAcronymField.value = selectedRevision.organization_acronym;
+        revisionLogoField.value = selectedRevision.organization_logo;
+        revisionDescriptionField.value = selectedRevision.organization_description;
+        revisionUrlField.value = selectedRevision.organization_url;
+        revisionAddressField.value = selectedRevision.organization_address;
+        revisionCountriesField.value = selectedRevision.organization;
+        revisionCompanyField.value = selectedRevision.organization_country;
+        revisionTypeField.value = selectedRevision.organization_type;
+        revisionSideField.value = selectedRevision.organization_side;
+        revisionSectorField.value = selectedRevision.organization_sectors;
+        
+
+        var state = selectedRevision.organization_state == '0' ? 'Brouillon' : selectedRevision.organization_state == '1' ? 'Enregsitré' : 'Diffusé';
         revisionStateField.value = state;
 
         // Getting the current revision values;
-        var modelData = createModelData(DATA.revisions[DATA.revisions.length - 1].model_state);
+        var organizationData = createOrganizationData(DATA.revisions[DATA.revisions.length - 1].organization_state);
 
-        checkEquals(modelData.structure, selectedRevision.model_structure, revisionPublicationsCategoriesField);
-        checkEquals(modelData.publicationsCategories, selectedRevision.model_publications_categories, revisionPublicationsCategoriesField);
-        checkEquals(modelData.selector.toString(), selectedRevision.model_selector.toString(), revisionSelectorField);
+        checkEquals(organizationData.acronym, selectedRevision.organization_acronym, revisionAcronymField);
+        checkEquals(organizationData.logo, selectedRevision.organization_logo, revisionLogoField);
+        checkEquals(organizationData.description, selectedRevision.organization_description, revisionDescriptionField);
+        checkEquals(organizationData.url, selectedRevision.organization_url, revisionUrlField);
+        checkEquals(organizationData.country, selectedRevision.organization_country, revisionCountriesField);
+        checkEquals(organizationData.company, selectedRevision.organization_company, revisionCompanyField);
+        checkEquals(organizationData.type, selectedRevision.organization_type, revisionTypeField);
+        checkEquals(organizationData.side, selectedRevision.organization_side, revisionSideField);
+        checkEquals(organizationData.sectors, selectedRevision.organization_sectors, revisionSectorField);
+        checkEquals(organizationData.state, selectedRevision.organization_state, revisionStateField);
 
-        checkEquals(document.querySelector('.oak_revision_model_state_current').value, document.querySelector('.oak_revision_model_state_revision').value, document.querySelector('.oak_revision_model_state_revision'));
+        checkEquals(document.querySelector('.oak_revision_organization_current_state').value, document.querySelector('.oak_revision_organization_revision_state').value, document.querySelector('.oak_revision_organization_revision_state'));
     });
 }
 
@@ -301,82 +280,11 @@ function checkEquals(value1, value2, field) {
     }
 }
 
-// For the add field button
-var addFormButton = document.querySelector('.oak_add_model_add_form_button');
-addFormButton.addEventListener('click', function() {
-    var formsList = document.querySelector('.oak_add_model_forms_list')
-
-    var singleFieldContainer = document.createElement('div');
-    singleFieldContainer.className = 'oak_add_model_forms_list__single_form';
-    
-    singleFieldContainer.innerHTML = '<div class="oak_add_field_container__isert_field_title_container oak_add_model_forms_list__horizontal oak_add_model_forms_list__horizontal_without_margin_top oak_add_model_field_options">'
-    + '<div class="oak_add_model_forms_list__horizontal">'
-    + '<img class="oak_add_model_container_header_icon" src="' + DATA.templateDirectoryUri + '/src/assets/icons/fields.png" alt="">' 
-    + '<h4 class="oak_add_field_container__isert_field_title">Insérer un formulaire</h4></div>'
-    + '<div class="oak_add_model_forms_list__buttons_container"><div class="oak_add_model_field_options__button oak_add_model_field_options_button_delete"><i class="fas fa-times"></i></div></div>'
-    + '</div>'
-    + '<div class="oak_add_model_forms_list__horizontal oak_add_model_forms_list__horizontal_without_margin_top">'
-    + '<div class="oak_add_model_forms_list__vertical oak_left_field">'
-    + '<label class="oak_add_field_label" for="type">Structure</label>'
-    + '<select class="oak_add_model_form_structure" name="type" id="">'
-    + '<option value=""></option> <option value="fixed">Fixe</option> <option value="semi-structured">Semi-Structuré/Non Structuré</option>'
-    + '</select>'
-    + '</div> <div class="oak_add_model_forms_list__vertical"> <label class="oak_add_field_label" for="type">Attributs</label>'
-    + '<select class="oak_add_model_forms_list_horizontal__attributes_select" name="type" id=""><option value=""></option>'
-    + '</select></div></div><div class="oak_add_model_forms_list__horizontal"><div class="oak_add_model_forms_list__vertical oak_left_field">'
-    + '<label class="oak_add_field_label" for="field-designation">Désignation du formulaire</label><select class="oak_add_model_forms_list_horizontal__designation_select" name="field-designation" id=""></select></div>'
-    + '<div class="oak_add_model_forms_list__vertical"><label class="oak_add_field_label" for="form-identifier">Identifiant Unique</label><input disabled name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_model_field_identifier"></div></div>'
-    + '<div class="oak_add_model_forms_list__horizontal"><div class="oak_add_model_forms_list__horizontal oak_left_field"><label class="oak_add_field_label" for="field-identifier">Renommer</label><input name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_model_form_rename"></div>'
-    + '<div class="oak_add_model_forms_list__horizontal">'
-    + '<label class="oak_add_field_label without_margin_bottom" for="gabarit">Gabarit</label>'
-    + '<select class="oak_add_model_form_gabarit" name="gabarit" id="">'
-    + '<option value="Gabarit 1">Gabarit 1</option>'
-    + '<option value="Gabarit 2">Gabarit 2</option>'
-    + '<option value="Gabarit 3">Gabarit 3</option>'
-    + '</select>'
-    + '</div>'
-    + '</div>'
-
-    for (var i = 0; i < DATA.attributes.length; i++) {
-        var option = document.createElement('option');
-        option.setAttribute('value', DATA.attributes[i]);
-        option.innerHTML = DATA.attributes[i];
-        singleFieldContainer.querySelector('.oak_add_model_forms_list_horizontal__attributes_select').append(option);
-    }
-
-    formsList.append(singleFieldContainer);
-
-    var designationsSelects = formsList.querySelectorAll('.oak_add_model_forms_list_horizontal__designation_select');
-    designationsSelects[designationsSelects.length - 1].innerHTML = '';
-    for (var j = 0; j < DATA.forms.length; j++) {
-        var option = document.createElement('option');
-        option.setAttribute('value', DATA.forms[j].form_identifier);
-        option.innerHTML = DATA.forms[j].form_designation;
-        designationsSelects[designationsSelects.length - 1].append(option);
-    }
-
-    updateFiltersListeners();
-    handleDesignationSelectsListeners();
-    updateDeleteFieldsButtonsListeners();
-});
-
-// For the add line button
-var addLineButton = document.querySelector('.oak_add_model_add_line_button');
-addLineButton.addEventListener('click', function() {
-    addSeperator('Ligne');
-});
-
-// For the add space button
-var addSpaceButton = document.querySelector('.oak_add_model_add_space_button');
-addSpaceButton.addEventListener('click', function() {
-    addSeperator('Espace');
-});
-
 function addSeperator(text) {
-    var formsList = document.querySelector('.oak_add_model_forms_list');
+    var formsList = document.querySelector('.oak_add_organization_forms_list');
 
     var lineDiv = document.createElement('div');
-    lineDiv.className = 'oak_add_model_seperator';
+    lineDiv.className = 'oak_add_organization_seperator';
 
     var span = document.createElement('span');
     span.innerHTML = text;
@@ -384,7 +292,7 @@ function addSeperator(text) {
     lineDiv.append(span);
 
     var deleteButton = document.createElement('div');
-    deleteButton.className = 'oak_add_model_field_options__button oak_add_model__delete_separator_button';
+    deleteButton.className = 'oak_add_organization_field_options__button oak_add_organization__delete_separator_button';
     var i = document.createElement('i');
     i.className = 'fas fa-times';
     deleteButton.append(i);
@@ -395,38 +303,6 @@ function addSeperator(text) {
     lineDiv.append(deleteButton);
 
     formsList.append(lineDiv);
-}
-
-handleSeparatorsDeleteButtons();
-function handleSeparatorsDeleteButtons() {
-    var deleteButtons = document.querySelectorAll('.oak_add_model__delete_separator_button');
-    for (var i = 0; i < deleteButtons.length; i++) {
-        deleteButtons[i].addEventListener('click', function() {
-            this.parentNode.remove();
-        });
-    }
-}
-
-updateFiltersListeners();
-function updateFiltersListeners() {
-    var formsList = document.querySelector('.oak_add_model_forms_list');
-    var formsContainers = formsList.querySelectorAll('.oak_add_model_forms_list__single_form');
-    for (var i = 0; i < formsContainers.length; i++) {
-        var structureSelect = formsContainers[i].querySelector('.oak_add_model_form_structure');
-        structureSelect.setAttribute('index', i);
-        var attributesSelect = formsContainers[i].querySelector('.oak_add_model_forms_list_horizontal__attributes_select');
-        attributesSelect.setAttribute('index', i);
-        structureSelect.addEventListener('change', function() {
-            var designationsSelect = formsContainers[this.getAttribute('index')].querySelector('.oak_add_model_forms_list_horizontal__designation_select');
-            var currentattributesSelect = formsContainers[this.getAttribute('index')].querySelector('.oak_add_model_forms_list_horizontal__attributes_select');
-            updateDesignationsSelect(this, currentattributesSelect, designationsSelect);
-        });
-        attributesSelect.addEventListener('change', function() {
-            var designationsSelect = formsContainers[this.getAttribute('index')].querySelector('.oak_add_model_forms_list_horizontal__designation_select');
-            var currentstructureSelect = formsContainers[this.getAttribute('index')].querySelector('.oak_add_model_form_structure');
-            updateDesignationsSelect(currentstructureSelect, this, designationsSelect);
-        });
-    }
 }
 
 function updateDesignationsSelect(structureSelect, attributesSelect, designationsSelect) {
@@ -496,7 +372,7 @@ function updateDesignationsSelect(structureSelect, attributesSelect, designation
 
 updateDeleteFieldsButtonsListeners();
 function updateDeleteFieldsButtonsListeners() {
-    var deleteButtons = document.querySelectorAll('.oak_add_model_field_options_button_delete');
+    var deleteButtons = document.querySelectorAll('.oak_add_organization_field_options_button_delete');
     for (var i = 0; i < deleteButtons.length; i++) {
         deleteButtons[i].addEventListener('click', function() {
             var fieldContainer = this.parentNode.parentNode.parentNode;
@@ -509,16 +385,27 @@ function updateDeleteFieldsButtonsListeners() {
 // designation select listener
 handleDesignationSelectsListeners();
 function handleDesignationSelectsListeners() {
-    var designationsSelects = document.querySelectorAll('.oak_add_model_forms_list_horizontal__designation_select');
+    var designationsSelects = document.querySelectorAll('.oak_add_organization_forms_list_horizontal__designation_select');
     for (var i = 0; i < designationsSelects.length; i++) {
         designationsSelects[i].setAttribute('index', i);
         var theParentOfTheParent = designationsSelects[i].parentNode.parentNode;
         console.log('Designation select value', designationsSelects[i].value);
-        theParentOfTheParent.querySelector('.oak_add_model_field_identifier').value = createIdentifier(designationsSelects[i].value);
+        theParentOfTheParent.querySelector('.oak_add_organization_field_identifier').value = createIdentifier(designationsSelects[i].value);
         designationsSelects[i].addEventListener('change', function() {
             var theParentOfTheParent = this.parentNode.parentNode;
-            theParentOfTheParent.querySelector('.oak_add_model_field_identifier').value = createIdentifier(this.value);
+            theParentOfTheParent.querySelector('.oak_add_organization_field_identifier').value = createIdentifier(this.value);
         });
+    }
+}
+
+function readUrl(input) {
+    console.log('dklfkldflk');
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.querySelector('.oak_add_organization_container__logo_img').setAttribute('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
     }
 }
 
@@ -608,7 +495,6 @@ function handleModalButtons() {
     var confirmButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function() {
         if (adding || updating) {
-            console.log(modelData);
             closeModals();
             setLoading();
             jQuery(document).ready(function() {
@@ -616,13 +502,12 @@ function handleModalButtons() {
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
-                        'action': 'oak_register_model',
-                        'data': modelData,
+                        'action': 'oak_register_organization',
+                        'data': organizationData,
                     },
                     success: function(data) {
-                        DATA.models.push(modelData);
+                        DATA.organizations.push(organizationData);
                         doneLoading();
-                        console.log(data);
                         window.location.reload();
                     },
                     error: function(error) {
@@ -632,18 +517,23 @@ function handleModalButtons() {
             })
         }
         if (canceling) {
-            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_models_list');
+            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_organizations_list');
         }
         if (browsingRevisions) {
-            revision.designation = revision.model_designation;
-            revision.identifier = revision.model_identifier;
-            revision.types = revision.model_types;
-            revision.publicationsCategories = revision.model_publications_categories;
-            revision.selector = revision.model_selector;
-            revision.trashed = revision.model_trashed;
-            revision.forms = revision.model_forms;
-            revision.state = revision.model_state;
-            revision.separators = revision.model_separators;
+            revision.designation = revision.organization_designation;
+            revision.identifier = revision.organization_identifier;
+            revision.acronym = revision.organization_acronym;
+            revision.logo = revision.organization_logo;
+            revision.description = revision.organization_description;
+            revision.url = revision.organization_url;
+            revision.address = revision.organization_address;
+            revision.country = revision.organization_country;
+            revision.company = revision.organization_company;
+            revision.type = revision.organization_type;
+            revision.side = revision.organization_side;
+            revision.sectors = revision.organization_sectors;
+            revision.state = revision.organization_state;
+            revision.trashed = revision.organization_trashed;
 
             closeModals();
             setLoading();
@@ -652,7 +542,7 @@ function handleModalButtons() {
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
-                        'action': 'oak_register_model',
+                        'action': 'oak_register_organization',
                         'data': revision,
                     },
                     success: function(data) {

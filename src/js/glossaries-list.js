@@ -20,14 +20,14 @@ function manageUpdateButtons() {
     var updateButtons = document.querySelectorAll('.oak_add_field_container_saved_field_container__update_button');
     for (var i = 0; i < updateButtons.length; i++) {
         updateButtons[i].addEventListener('click', function() {
-            var whichModel;
+            var whichOranization;
 
-            for (var j = 0; j < DATA.models.length; j++) {
-                if (DATA.models[j].model_identifier == this.getAttribute('model-identifier')) {
-                    whichModel = DATA.models[j];
+            for (var j = 0; j < DATA.glossaries.length; j++) {
+                if (DATA.glossaries[j].glossary_identifier == this.getAttribute('glossary-identifier')) {
+                    whichOranization = DATA.glossaries[j];
                 }
             }
-            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_model&model_identifier=' + whichModel.model_identifier);
+            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_glossary&glossary_identifier=' + whichOranization.glossary_identifier);
         });
     }
 }

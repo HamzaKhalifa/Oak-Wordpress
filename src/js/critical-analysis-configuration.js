@@ -427,6 +427,7 @@ saveButton.addEventListener('click', function() {
             },
             success: function(data) {
                 doneLoading();
+                console.log(data);
             },
             error: function(error) {
                 console.log(error);

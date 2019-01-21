@@ -5,10 +5,19 @@ class Oak {
     public static $fields_table_name;
     public static $forms_table_name;
     public static $models_table_name;
+    public static $organizations_table_name;
+    public static $publications_table_name;
+    public static $glossaries_table_name;
+
     public static $fields;
     public static $forms;
     public static $forms_attributes;
+
     public static $models;
+    public static $organizations;
+    public static $publications;
+    public static $glossaries;
+
 
     function __construct() {
         Oak::$text_domain = 'oak';
@@ -17,6 +26,9 @@ class Oak {
         Oak::$fields_table_name = $wpdb->prefix . 'oak_fields';
         Oak::$forms_table_name = $wpdb->prefix . 'oak_forms';
         Oak::$models_table_name = $wpdb->prefix . 'oak_models';
+        Oak::$organizations_table_name = $wpdb->prefix . 'oak_organizations';
+        Oak::$publications_table_name = $wpdb->prefix . 'oak_publications';
+        Oak::$glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
         Oak::$forms_attributes = [];
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
@@ -37,7 +49,7 @@ class Oak {
 
         add_action( 'acf/init', array( $this, 'oak_add_custom_field_groups') );
         add_filter( 'acf/load_field/name=analyzes', array( $this, 'oak_set_analyzes' ) );
-        add_filter( 'acf/load_field/name=contacts', array( $this, 'oak_set_organizations_contacts' ) );
+        // add_filter( 'acf/load_field/name=contacts', array( $this, 'oak_set_organizations_contacts' ) );
         add_filter( 'acf/load_field/name=countries', array( $this, 'oak_set_countries' ) );
         add_filter( 'acf/load_field/name=org-countries', array( $this, 'oak_set_countries' ) );
         add_filter( 'acf/load_field/name=language_publication', array( $this, 'oak_set_languages' ) );
@@ -102,6 +114,15 @@ class Oak {
 
         add_action( 'wp_ajax_oak_register_model', array( $this, 'oak_register_model') );
         add_action( 'wp_ajax_nopriv_oak_register_model', array( $this, 'oak_register_model') );
+
+        add_action( 'wp_ajax_oak_register_organization', array( $this, 'oak_register_organization') );
+        add_action( 'wp_ajax_nopriv_oak_register_organization', array( $this, 'oak_register_organization') );
+
+        add_action( 'wp_ajax_oak_register_publication', array( $this, 'oak_register_publication') );
+        add_action( 'wp_ajax_nopriv_oak_register_publication', array( $this, 'oak_register_publication') );
+
+        add_action( 'wp_ajax_oak_register_glossary', array( $this, 'oak_register_glossary') );
+        add_action( 'wp_ajax_nopriv_oak_register_glossary', array( $this, 'oak_register_glossary') );
     }
 
     function oak_enqueue_styles() {
@@ -142,6 +163,12 @@ class Oak {
             || get_current_screen()->id == 'toplevel_page_oak_forms_list'
             || get_current_screen()->id == 'modeles_page_oak_add_model'
             || get_current_screen()->id == 'toplevel_page_oak_models_list'
+            || get_current_screen()->id == 'organisations_page_oak_add_organization'
+            || get_current_screen()->id == 'toplevel_page_oak_organizations_list'
+            || get_current_screen()->id == 'publications_page_oak_add_publication'
+            || get_current_screen()->id == 'toplevel_page_oak_publications_list'
+            || get_current_screen()->id == 'glossaire_page_oak_add_glossary'
+            || get_current_screen()->id == 'toplevel_page_oak_glossaries_list'
             
         ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
@@ -340,6 +367,118 @@ class Oak {
             ) );
         endif;
         // Done with models
+
+
+        // For organizations
+        if ( get_current_screen()-> id == 'organisations_page_oak_add_organization' || get_current_screen()->id == 'toplevel_page_oak_organizations_list' || get_current_screen()->id == 'publications_page_oak_add_publication' ) :
+            $organizations_table_name = Oak::$organizations_table_name;
+            Oak::$organizations = $wpdb->get_results ( "
+                SELECT * 
+                FROM  $organizations_table_name
+            " );
+        endif;
+        if ( get_current_screen()->id == 'toplevel_page_oak_organizations_list' ) :
+            wp_enqueue_script( 'oak_organizations_list', get_template_directory_uri() . '/src/js/organizations-list.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_organizations_list', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'organizations' => Oak::$organizations,
+                'adminUrl' => admin_url(),
+            ) );
+        endif;
+
+        if ( get_current_screen()->id == 'organisations_page_oak_add_organization' ) :
+            $revisions = [];
+            if ( isset( $_GET['organization_identifier'] ) ) :
+                foreach( Oak::$organizations as $organization ) :
+                    if ( $organization->organization_identifier == $_GET['organization_identifier'] ) :
+                        $revisions[] = $organization;
+                    endif;
+                endforeach;
+            endif;
+            wp_enqueue_script( 'oak_add_organization', get_template_directory_uri() . '/src/js/add-organization.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_add_organization', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'organizations' => Oak::$organizations,
+                'revisions' => $revisions,
+                'adminUrl' => admin_url(),
+                'templateDirectoryUri' => get_template_directory_uri()
+            ) );
+        endif;
+        // Done with organizations
+
+        // For publications
+        if ( get_current_screen()-> id == 'publications_page_oak_add_publication' || get_current_screen()->id == 'toplevel_page_oak_publications_list' || get_current_screen()->id == 'glossaire_page_oak_add_glossary' ) :
+            $publications_table_name = Oak::$publications_table_name;
+            Oak::$publications = $wpdb->get_results ( "
+                SELECT * 
+                FROM  $publications_table_name
+            " );
+        endif;
+        if ( get_current_screen()->id == 'toplevel_page_oak_publications_list' ) :
+            wp_enqueue_script( 'oak_publications_list', get_template_directory_uri() . '/src/js/publications-list.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_publications_list', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'publications' => Oak::$publications,
+                'adminUrl' => admin_url(),
+            ) );
+        endif;
+
+        if ( get_current_screen()->id == 'publications_page_oak_add_publication' ) :
+            $revisions = [];
+            if ( isset( $_GET['publication_identifier'] ) ) :
+                foreach( Oak::$publications as $publication ) :
+                    if ( $publication->publication_identifier == $_GET['publication_identifier'] ) :
+                        $revisions[] = $publication;
+                    endif;
+                endforeach;
+            endif;
+            wp_enqueue_script( 'oak_add_publication', get_template_directory_uri() . '/src/js/add-publication.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_add_publication', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'publications' => Oak::$publications,
+                'revisions' => $revisions,
+                'adminUrl' => admin_url(),
+                'templateDirectoryUri' => get_template_directory_uri()
+            ) );
+        endif;
+        // Done with publications
+
+        // For glossaries
+        if ( get_current_screen()-> id == 'glossaire_page_oak_add_glossary' || get_current_screen()->id == 'toplevel_page_oak_glossaries_list' ) :
+            $glossaries_table_name = Oak::$glossaries_table_name;
+            Oak::$glossaries = $wpdb->get_results ( "
+                SELECT * 
+                FROM $glossaries_table_name
+            " );
+        endif;
+        if ( get_current_screen()->id == 'toplevel_page_oak_glossaries_list' ) :
+            wp_enqueue_script( 'oak_glossaries_list', get_template_directory_uri() . '/src/js/glossaries-list.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_glossaries_list', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'glossaries' => Oak::$glossaries,
+                'adminUrl' => admin_url(),
+            ) );
+        endif;
+
+        if ( get_current_screen()->id == 'glossaire_page_oak_add_glossary' ) :
+            $revisions = [];
+            if ( isset( $_GET['glossary_identifier'] ) ) :
+                foreach( Oak::$glossaries as $glossary ) :
+                    if ( $glossary->glossary_identifier == $_GET['glossary_identifier'] ) :
+                        $revisions[] = $glossary;
+                    endif;
+                endforeach;
+            endif;
+            wp_enqueue_script( 'oak_add_glossary', get_template_directory_uri() . '/src/js/add-glossary.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_add_glossary', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'glossaries' => Oak::$glossaries,
+                'revisions' => $revisions,
+                'adminUrl' => admin_url(),
+                'templateDirectoryUri' => get_template_directory_uri()
+            ) );
+        endif;
+        // Done with glossaries
         
     }
     
@@ -405,6 +544,15 @@ class Oak {
 
         add_menu_page( __( 'Modèles', Oak::$text_domain ), 'Modèles', 'manage_options', 'oak_models_list', array ( $this, 'oak_models_list'), 'dashicons-index-card', 100 );
         add_submenu_page( 'oak_models_list', 'Ajouter un modèle', __( 'Ajouter un modèle', Oak::$text_domain ), 'manage_options', 'oak_add_model',  array( $this, 'oak_add_model' ) );
+
+        add_menu_page( __( 'Organisations', Oak::$text_domain ), 'Organisations', 'manage_options', 'oak_organizations_list', array ( $this, 'oak_organizations_list'), 'dashicons-index-card', 100 );
+        add_submenu_page( 'oak_organizations_list', 'Ajouter une Organisation', __( 'Ajouter une Organisation', Oak::$text_domain ), 'manage_options', 'oak_add_organization',  array( $this, 'oak_add_organization' ) );
+
+        add_menu_page( __( 'Publications', Oak::$text_domain ), 'Publications', 'manage_options', 'oak_publications_list', array ( $this, 'oak_publications_list'), 'dashicons-index-card', 100 );
+        add_submenu_page( 'oak_publications_list', 'Ajouter une Publication', __( 'Ajouter une Publication', Oak::$text_domain ), 'manage_options', 'oak_add_publication',  array( $this, 'oak_add_publication' ) );
+
+        add_menu_page( __( 'Glossaire', Oak::$text_domain ), 'Glossaire', 'manage_options', 'oak_glossaries_list', array ( $this, 'oak_glossaries_list'), 'dashicons-index-card', 100 );
+        add_submenu_page( 'oak_glossaries_list', 'Ajouter une Terminologie', __( 'Ajouter une Terminologie', Oak::$text_domain ), 'manage_options', 'oak_add_glossary',  array( $this, 'oak_add_glossary' ) );
     }
 
     function add_admin_menu_separator( $position ) {
@@ -685,6 +833,32 @@ class Oak {
         return $countries;
     }
 
+    static function oak_get_countries_names() {
+        $country_query_result = wp_remote_get( 'https://restcountries.eu/rest/v2/all' );
+        $countries = json_decode( $country_query_result['body'] );
+        $names = [];
+        foreach( $countries as $country ) :
+            $names[] = $country->name;
+        endforeach;
+        return $names;
+    }
+
+    static function oak_get_languages() {
+        $languages = [];
+        $country_query_result = wp_remote_get( 'https://restcountries.eu/rest/v2/all' );
+        $countries = json_decode( $country_query_result['body'] );
+
+        foreach( $countries as $country ) :
+            foreach( $country->languages as $language ) :
+                if ( !in_array( $language->name, $languages ) )
+                    $languages[] = $language->name;
+            endforeach;
+        endforeach;
+
+ 
+        return $languages;
+    }
+
     function oak_set_countries( $field ) {
         $choices = $field['choices'];
 
@@ -819,7 +993,7 @@ class Oak {
 
         update_option( 'oak_principles', $principles, false );
         wp_send_json_success( array(
-            'image' => $principles['0']['image']
+            'image' => $principles['0']['image'],
         ) );
     }
 
@@ -937,6 +1111,45 @@ class Oak {
         include get_template_directory() . '/template-parts/models/add-model.php';
     }
 
+    function oak_add_organization() {
+        $revisions = [];
+        if ( isset( $_GET['organization_identifier'] ) ) :
+            foreach( Oak::$organizations as $organization ) :
+                if ( $organization->organization_identifier == $_GET['organization_identifier'] ) :
+                    $revisions[] = $organization;
+                endif;
+            endforeach;
+        endif;
+
+        include get_template_directory() . '/template-parts/organizations/add-organization.php';
+    }
+
+    function oak_add_publication() {
+        $revisions = [];
+        if ( isset( $_GET['publication_identifier'] ) ) :
+            foreach( Oak::$publications as $publication ) :
+                if ( $publication->publication_identifier == $_GET['publication_identifier'] ) :
+                    $revisions[] = $publication;
+                endif;
+            endforeach;
+        endif;
+
+        include get_template_directory() . '/template-parts/publications/add-publication.php';
+    }
+
+    function oak_add_glossary() {
+        $revisions = [];
+        if ( isset( $_GET['glossary_identifier'] ) ) :
+            foreach( Oak::$glossaries as $glossary ) :
+                if ( $glossary->glossary_identifier == $_GET['glossary_identifier'] ) :
+                    $revisions[] = $glossary;
+                endif;
+            endforeach;
+        endif;
+
+        include get_template_directory() . '/template-parts/glossaries/add-glossary.php';
+    }
+
     function oak_fields_list() {
         global $wpdb;
         $fields_table_name = Oak::$fields_table_name;
@@ -977,6 +1190,36 @@ class Oak {
             FROM  $models_table_name
         " );
         include get_template_directory() . '/template-parts/models/models-list.php';
+    }
+
+    function oak_organizations_list() {
+        global $wpdb;
+        $organizations_table_name = Oak::$organizations_table_name;
+        $organizations = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $organizations_table_name
+        " );
+        include get_template_directory() . '/template-parts/organizations/organizations-list.php';
+    }
+
+    function oak_publications_list() {
+        global $wpdb;
+        $publications_table_name = Oak::$publications_table_name;
+        $publications = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $publications_table_name
+        " );
+        include get_template_directory() . '/template-parts/publications/publications-list.php';
+    }
+
+    function oak_glossaries_list() {
+        global $wpdb;
+        $glossaries_table_name = Oak::$glossaries_table_name;
+        $glossaries = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $glossaries_table_name
+        " );
+        include get_template_directory() . '/template-parts/glossaries/glossaries-list.php';
     }
 
     function oak_get_organizations() {
@@ -1078,6 +1321,134 @@ class Oak {
         );
 
         wp_send_json_success();
+    }
+
+    function oak_register_organization() {
+        global $wpdb;
+
+        $organization = $_POST['data'];
+
+        $image_url = $this->upload_image( $_POST['logo'] );
+
+        $result = $wpdb->insert(
+            Oak::$organizations_table_name, 
+            array(
+                'organization_designation' => $organization['designation'],
+                'organization_identifier' => $organization['identifier'],
+                'organization_acronym' => $organization['acronym'],
+                'organization_logo' => $image_url,
+                'organization_description' => $organization['description'],
+                'organization_url' => $organization['url'],
+                'organization_address' => $organization['address'],
+                'organization_country' => $organization['country'],
+                'organization_company' => $organization['company'],
+                'organization_type' => $organization['type'],
+                'organization_side' => $organization['side'],
+                'organization_sectors' => $organization['sectors'],
+                'organization_state' => $organization['state'],
+                'organization_trashed' => $organization['trashed'],
+                'organization_modification_time' => date("Y-m-d H:i:s"),
+            )
+        );
+
+        wp_send_json_success(
+            array( 'image url' => $image_url )
+        );
+    }
+
+    function oak_register_publication() {
+        global $wpdb;
+
+        $publication = $_POST['data'];
+
+        $image_url = $this->upload_image( $_POST['headpiece'] );
+
+        $result = $wpdb->insert(
+            Oak::$publications_table_name, 
+            array(
+                'publication_designation' => $publication['designation'],
+                'publication_identifier' => $publication['identifier'],
+                'publication_organization' => $publication['organization'],
+                'publication_year' => $publication['year'],
+                'publication_headpiece' => $image_url,
+                'publication_format' => $publication['format'],
+                'publication_file' => $publication['file'],
+                'publication_description' => $publication['description'],
+                'publication_report_or_frame' => $publication['reportOrFrame'],
+                'publication_local' => $publication['local'],
+                'publication_country' => $publication['country'],
+                'publication_report_type' => $publication['reportType'],
+                'publication_frame_type' => $publication['frameType'],
+                'publication_sectorial_frame' => $publication['sectorialFrame'],
+                'publication_sectors' => $publication['sectors'],
+                'publication_language' => $publication['language'],
+                'publication_gri_type' => $publication['griType'],
+                'publication_sectorial_supplement' => $publication['sectorialSupplement'],
+                'publication_state' => $publication['state'],
+                'publication_trashed' => $publication['trashed'],
+                'publication_modification_time' => date("Y-m-d H:i:s")
+            )
+        );
+
+        wp_send_json_success();
+    }
+
+    function oak_register_glossary() {
+        global $wpdb;
+
+        $glossary = $_POST['data'];
+
+        $result = $wpdb->insert(
+            Oak::$glossaries_table_name, 
+            array(
+                'glossary_designation' => $glossary['designation'],
+                'glossary_identifier' => $glossary['identifier'],
+                'glossary_publication' => $glossary['publication'],
+                'glossary_object' => $glossary['object'],
+                'glossary_depends' => $glossary['depends'],
+                'glossary_parent' => $glossary['parent'],
+                'glossary_definition' => $glossary['definition'],
+                'glossary_close' => $glossary['close'],
+                'glossary_close_indicators' => $glossary['closeIndicators'],
+                'glossary_state' => $glossary['state'],
+                'glossary_trashed' => $glossary['trashed'],
+                'glossary_modification_time' => date("Y-m-d H:i:s")
+            )
+        );
+
+        wp_send_json_success();
+    }
+
+    function upload_image( $image ) {
+        $image_url = '';
+
+        if ( !filter_var( $image, FILTER_VALIDATE_URL ) ) :
+            // Uploading the image
+            $upload_dir  = wp_upload_dir();
+            $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+        
+            $img             = str_replace( 'data:image/png;base64,', '', $image );
+            $img             = str_replace( ' ', '+', $img );
+            $decoded         = base64_decode( $img );
+            $filename        = $single_principle['principle'] . '.jpeg';
+            $file_type       = 'image/jpeg';
+            $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
+            $upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
+            $attachment = array(
+                'post_mime_type' => $file_type,
+                'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $hashed_filename ) ),
+                'post_content'   => '',
+                'post_status'    => 'inherit',
+                'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
+            );
+        
+            $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
+            $url = wp_get_attachment_image_url( $attach_id );
+            $image = $url;
+            $image_url = $image;
+        endif;
+
+        return $image_url;
     }
 
     function oak_delete_field() {
