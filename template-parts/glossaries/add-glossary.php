@@ -34,15 +34,12 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                     ?>
                 </select>
             </div>
-            <?php
-            $objects = get_posts();
-            ?>
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="object"><?php _e( 'L\'objet auquel appartient la terminologie: ', Oak::$text_domain ); ?></label> 
                 <select class="oak_add_field_container__object" name="object" id="">
                     <?php 
                     
-                    foreach( $objects as $object ) : ?>
+                    foreach( Oak::$objects as $object ) : ?>
                         <option value="<?php echo ( $object->ID ); ?>"><?php echo( $object->post_title ); ?></option>
                     <?php
                     endforeach;
@@ -86,7 +83,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="sectors"><?php _e( 'Indicateur(s) proches de l’indicateur en question: ', Oak::$text_domain ); ?></label> 
                 <select multiple class="oak_add_field_container__close_indicators" id="">
                     <?php 
-                        foreach( $glossaries as $glossary ) : ?>
+                        foreach( Oak::$glossaries as $glossary ) : ?>
                             <option <?php if ( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->glossary_parent == $glossary->glossary_identifier ) : echo('selected'); endif; endif; ?> value="<?php echo( $golssary->glossary_identifier ); ?>"><?php echo( $glossary->glossary_designation ); ?></option>
                             <?php
                         endforeach;

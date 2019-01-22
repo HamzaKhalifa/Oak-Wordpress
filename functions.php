@@ -1,22 +1,27 @@
 <?php 
 
 class Oak {
-    public static $text_domain; 
+    public static $text_domain;
     public static $fields_table_name;
     public static $forms_table_name;
     public static $models_table_name;
     public static $organizations_table_name;
     public static $publications_table_name;
     public static $glossaries_table_name;
+    public static $qualis_table_name;
+    public static $quantis_table_name;
 
     public static $fields;
     public static $forms;
     public static $forms_attributes;
+    public static $objects;
 
     public static $models;
     public static $organizations;
     public static $publications;
     public static $glossaries;
+    public static $qualis;
+    public static $quantis;
 
 
     function __construct() {
@@ -29,6 +34,8 @@ class Oak {
         Oak::$organizations_table_name = $wpdb->prefix . 'oak_organizations';
         Oak::$publications_table_name = $wpdb->prefix . 'oak_publications';
         Oak::$glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
+        Oak::$qualis_table_name = $wpdb->prefix . 'oak_qualis';
+        Oak::$quantis_table_name = $wpdb->prefix . 'oak_quantis';
         Oak::$forms_attributes = [];
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
@@ -123,6 +130,12 @@ class Oak {
 
         add_action( 'wp_ajax_oak_register_glossary', array( $this, 'oak_register_glossary') );
         add_action( 'wp_ajax_nopriv_oak_register_glossary', array( $this, 'oak_register_glossary') );
+
+        add_action( 'wp_ajax_oak_register_quali', array( $this, 'oak_register_quali') );
+        add_action( 'wp_ajax_nopriv_oak_register_quali', array( $this, 'oak_register_quali') );
+
+        add_action( 'wp_ajax_oak_register_quanti', array( $this, 'oak_register_quanti') );
+        add_action( 'wp_ajax_nopriv_oak_register_quanti', array( $this, 'oak_register_quanti') );
     }
 
     function oak_enqueue_styles() {
@@ -169,7 +182,10 @@ class Oak {
             || get_current_screen()->id == 'toplevel_page_oak_publications_list'
             || get_current_screen()->id == 'glossaire_page_oak_add_glossary'
             || get_current_screen()->id == 'toplevel_page_oak_glossaries_list'
-            
+            || get_current_screen()->id == 'indicateurs-qualitatifs_page_oak_add_quali'
+            || get_current_screen()->id == 'toplevel_page_oak_qualis_list'
+            || get_current_screen()->id == 'indicateurs-quantitatifs_page_oak_add_quanti'
+            || get_current_screen()->id == 'toplevel_page_oak_quantis_list'
         ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
             ?>
@@ -179,7 +195,7 @@ class Oak {
     }
 
     function oak_admin_enqueue_scripts( $hook ) { 
-        global $wpdb; 
+        global $wpdb;
 
         if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_import_csv_files' ) :
             wp_enqueue_script( 'oak_import_csv_file', get_template_directory_uri() . '/src/js/import-csv-files.js', array('jquery'), false, true );
@@ -407,7 +423,7 @@ class Oak {
         // Done with organizations
 
         // For publications
-        if ( get_current_screen()-> id == 'publications_page_oak_add_publication' || get_current_screen()->id == 'toplevel_page_oak_publications_list' || get_current_screen()->id == 'glossaire_page_oak_add_glossary' ) :
+        if ( get_current_screen()-> id == 'publications_page_oak_add_publication' || get_current_screen()->id == 'toplevel_page_oak_publications_list' || get_current_screen()->id == 'glossaire_page_oak_add_glossary' || get_current_screen()->id == 'indicateurs-qualitatifs_page_oak_add_quali' || get_current_screen()->id == 'indicateurs-quantitatifs_page_oak_add_quanti' ) :
             $publications_table_name = Oak::$publications_table_name;
             Oak::$publications = $wpdb->get_results ( "
                 SELECT * 
@@ -442,6 +458,10 @@ class Oak {
             ) );
         endif;
         // Done with publications
+
+        if ( get_current_screen()-> id == 'glossaire_page_oak_add_glossary' || get_current_screen()-> id == 'indicateurs-qualitatifs_page_oak_add_quali' || get_current_screen()-> id == 'indicateurs-quantitatifs_page_oak_add_quanti' ) :
+            Oak::$objects = get_posts();
+        endif;
 
         // For glossaries
         if ( get_current_screen()-> id == 'glossaire_page_oak_add_glossary' || get_current_screen()->id == 'toplevel_page_oak_glossaries_list' ) :
@@ -479,7 +499,80 @@ class Oak {
             ) );
         endif;
         // Done with glossaries
-        
+
+        // For quali indicators
+        if ( get_current_screen()-> id == 'indicateurs-qualitatifs_page_oak_add_quali' || get_current_screen()->id == 'toplevel_page_oak_qualis_list' ) :
+            $qualis_table_name = Oak::$qualis_table_name;
+            Oak::$qualis = $wpdb->get_results ( "
+                SELECT * 
+                FROM $qualis_table_name
+            " );
+        endif;
+        if ( get_current_screen()->id == 'toplevel_page_oak_qualis_list' ) :
+            wp_enqueue_script( 'oak_qualis_list', get_template_directory_uri() . '/src/js/qualis-list.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_qualis_list', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'qualis' => Oak::$qualis,
+                'adminUrl' => admin_url(),
+            ) );
+        endif;
+
+        if ( get_current_screen()->id == 'indicateurs-qualitatifs_page_oak_add_quali' ) :
+            $revisions = [];
+            if ( isset( $_GET['quali_identifier'] ) ) :
+                foreach( Oak::$qualis as $quali ) :
+                    if ( $quali->quali_identifier == $_GET['quali_identifier'] ) :
+                        $revisions[] = $quali;
+                    endif;
+                endforeach;
+            endif;
+            wp_enqueue_script( 'oak_add_quali', get_template_directory_uri() . '/src/js/add-quali.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_add_quali', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'qualis' => Oak::$qualis,
+                'revisions' => $revisions,
+                'adminUrl' => admin_url(),
+                'templateDirectoryUri' => get_template_directory_uri()
+            ) );
+        endif;
+        // Done with quali indicators
+
+        // For quanti indicators
+        if ( get_current_screen()-> id == 'indicateurs-quantitatifs_page_oak_add_quanti' || get_current_screen()->id == 'toplevel_page_oak_quantis_list' ) :
+            $quantis_table_name = Oak::$quantis_table_name;
+            Oak::$quantis = $wpdb->get_results ( "
+                SELECT * 
+                FROM $quantis_table_name
+            " );
+        endif;
+        if ( get_current_screen()->id == 'toplevel_page_oak_quantis_list' ) :
+            wp_enqueue_script( 'oak_quantis_list', get_template_directory_uri() . '/src/js/quantis-list.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_quantis_list', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'quantis' => Oak::$quantis,
+                'adminUrl' => admin_url(),
+            ) );
+        endif;
+
+        if ( get_current_screen()->id == 'indicateurs-quantitatifs_page_oak_add_quanti' ) :
+            $revisions = [];
+            if ( isset( $_GET['quanti_identifier'] ) ) :
+                foreach( Oak::$quantis as $quanti ) :
+                    if ( $quanti->quanti_identifier == $_GET['quanti_identifier'] ) :
+                        $revisions[] = $quanti;
+                    endif;
+                endforeach;
+            endif;
+            wp_enqueue_script( 'oak_add_quanti', get_template_directory_uri() . '/src/js/add-quanti.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_add_quanti', 'DATA', array(
+                'ajaxUrl' => admin_url ('admin-ajax.php'),
+                'quantis' => Oak::$quantis,
+                'revisions' => $revisions,
+                'adminUrl' => admin_url(),
+                'templateDirectoryUri' => get_template_directory_uri()
+            ) );
+        endif;
+        // Done with quanti indicators
     }
     
     function oak_add_theme_support() {
@@ -553,6 +646,12 @@ class Oak {
 
         add_menu_page( __( 'Glossaire', Oak::$text_domain ), 'Glossaire', 'manage_options', 'oak_glossaries_list', array ( $this, 'oak_glossaries_list'), 'dashicons-index-card', 100 );
         add_submenu_page( 'oak_glossaries_list', 'Ajouter une Terminologie', __( 'Ajouter une Terminologie', Oak::$text_domain ), 'manage_options', 'oak_add_glossary',  array( $this, 'oak_add_glossary' ) );
+
+        add_menu_page( __( 'Indicateurs Qualitatifs', Oak::$text_domain ), 'Indicateurs Qualitatifs', 'manage_options', 'oak_qualis_list', array ( $this, 'oak_qualis_list'), 'dashicons-index-card', 100 );
+        add_submenu_page( 'oak_qualis_list', 'Ajouter un indicateur qualitatif', __( 'Ajouter un indicateur qualitatif', Oak::$text_domain ), 'manage_options', 'oak_add_quali',  array( $this, 'oak_add_quali' ) );
+
+        add_menu_page( __( 'Indicateurs Quantitatifs', Oak::$text_domain ), 'Indicateurs Quantitatifs', 'manage_options', 'oak_quantis_list', array ( $this, 'oak_quantis_list'), 'dashicons-index-card', 100 );
+        add_submenu_page( 'oak_quantis_list', 'Ajouter un indicateur quantitatif', __( 'Ajouter un indicateur quantitatif', Oak::$text_domain ), 'manage_options', 'oak_add_quanti',  array( $this, 'oak_add_quanti' ) );
     }
 
     function add_admin_menu_separator( $position ) {
@@ -1150,6 +1249,32 @@ class Oak {
         include get_template_directory() . '/template-parts/glossaries/add-glossary.php';
     }
 
+    function oak_add_quali() {
+        $revisions = [];
+        if ( isset( $_GET['quali_identifier'] ) ) :
+            foreach( Oak::$qualis as $quali ) :
+                if ( $quali->quali_identifier == $_GET['quali_identifier'] ) :
+                    $revisions[] = $quali;
+                endif;
+            endforeach;
+        endif;
+
+        include get_template_directory() . '/template-parts/qualis/add-quali.php';
+    }
+
+    function oak_add_quanti() {
+        $revisions = [];
+        if ( isset( $_GET['quanti_identifier'] ) ) :
+            foreach( Oak::$quantis as $quanti ) :
+                if ( $quanti->quanti_identifier == $_GET['quanti_identifier'] ) :
+                    $revisions[] = $quanti;
+                endif;
+            endforeach;
+        endif;
+
+        include get_template_directory() . '/template-parts/quantis/add-quanti.php';
+    }
+    
     function oak_fields_list() {
         global $wpdb;
         $fields_table_name = Oak::$fields_table_name;
@@ -1220,6 +1345,26 @@ class Oak {
             FROM  $glossaries_table_name
         " );
         include get_template_directory() . '/template-parts/glossaries/glossaries-list.php';
+    }
+
+    function oak_qualis_list() {
+        global $wpdb;
+        $qualis_table_name = Oak::$qualis_table_name;
+        $qualis = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $qualis_table_name
+        " );
+        include get_template_directory() . '/template-parts/qualis/qualis-list.php';
+    }
+
+    function oak_quantis_list() {
+        global $wpdb;
+        $quantis_table_name = Oak::$quantis_table_name;
+        $quantis = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $quantis_table_name
+        " );
+        include get_template_directory() . '/template-parts/quantis/quantis-list.php';
     }
 
     function oak_get_organizations() {
@@ -1413,6 +1558,74 @@ class Oak {
                 'glossary_state' => $glossary['state'],
                 'glossary_trashed' => $glossary['trashed'],
                 'glossary_modification_time' => date("Y-m-d H:i:s")
+            )
+        );
+
+        wp_send_json_success();
+    }
+
+    function oak_register_quali() {
+        global $wpdb;
+
+        $quali = $_POST['data'];
+
+        $publications = '';
+        foreach( $quali['publication'] as $publication ) :
+            $publications = $publications . ',' . $publication;
+        endforeach;
+
+        $close_indicators = '';
+        foreach( $quali['closeIndicators'] as $indicator ) :
+            $close_indicators = $close_indicators . ',' . $indicator;
+        endforeach;
+
+        $result = $wpdb->insert(
+            Oak::$qualis_table_name, 
+            array (
+                'quali_designation' => $quali['designation'],
+                'quali_identifier' => $quali['identifier'],
+                'quali_publication' => $publications,
+                'quali_object' => $quali['object'],
+                'quali_depends' => $quali['depends'],
+                'quali_parent' => $quali['parent'],
+                'quali_numerotation_type' => $quali['numerotationType'],
+                'quali_numerotation' => $quali['numerotation'],
+                'quali_description' => $quali['description'],
+                'quali_close' => $quali['close'],
+                'quali_close_indicators' => $close_indicators,
+                'quali_state' => $quali['state'],
+                'quali_trashed' => $quali['trashed'],
+                'quali_modification_time' => date("Y-m-d H:i:s")
+            )
+        );
+
+        wp_send_json_success(
+            array( 'quali' => $quali )
+        );
+    }
+
+    function oak_register_quanti() {
+        global $wpdb;
+
+        $quanti = $_POST['data'];
+        
+        $result = $wpdb->insert(
+            Oak::$quantis_table_name, 
+            array (
+                'quanti_designation' => $quanti['designation'],
+                'quanti_identifier' => $quanti['identifier'],
+                'quanti_publication' => $quanti['publication'],
+                'quanti_object' => $quanti['object'],
+                'quanti_depends' => $quanti['depends'],
+                'quanti_parent' => $quanti['parent'],
+                'quanti_numerotation_type' => $quanti['numerotationType'],
+                'quanti_numerotation' => $quanti['numerotation'],
+                'quanti_description' => $quanti['description'],
+                'quanti_close' => $quanti['close'],
+                'quanti_close_indicators' => $quanti['closeIndicators'],
+                'quanti_state' => $quanti['state'],
+                'quanti_trashed' => $quanti['trashed'],
+                'quanti_modification_time' => date("Y-m-d H:i:s")
             )
         );
 

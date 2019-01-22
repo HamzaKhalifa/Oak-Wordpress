@@ -18,7 +18,7 @@ $fields_sql = "CREATE TABLE $fields_table_name (
     field_selector varchar(55),
     field_state varchar(55),
     field_modification_time datetime,
-    field_trashed boolean,
+    field_trashed varchar(55),
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -33,7 +33,7 @@ $forms_sql = "CREATE TABLE $forms_table_name (
     form_selector varchar(55),
     form_state varchar(55),
     form_modification_time datetime,
-    form_trashed boolean,
+    form_trashed varchar(55),
     form_structure varchar(55),
     form_attributes varchar(100),
     form_separators varchar(100),
@@ -53,7 +53,7 @@ $models_sql = "CREATE TABLE $models_table_name (
     model_forms varchar (555),
     model_separators varchar(100),
     model_state varchar(55),
-    model_trashed boolean,
+    model_trashed varchar(55),
     model_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
@@ -71,12 +71,12 @@ $organizations_sql = "CREATE TABLE $organizations_table_name (
     organization_url varchar(55),
     organization_address varchar(55),
     organization_country varchar(55),
-    organization_company boolean,
+    organization_company varchar(55),
     organization_type varchar(55),
-    organization_side boolean,
+    organization_side varchar(55),
     organization_sectors varchar(555),
     organization_state varchar(55),
-    organization_trashed boolean,
+    organization_trashed varchar(55),
     organization_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
@@ -95,17 +95,17 @@ $publications_sql = "CREATE TABLE $publications_table_name (
     publication_file varchar(555),
     publication_description varchar(555),
     publication_report_or_frame varchar(555),
-    publication_local boolean,
+    publication_local varchar(55),
     publication_country varchar(55),
     publication_report_type varchar(55),
     publication_frame_type varchar(55),
-    publication_sectorial_frame boolean,
+    publication_sectorial_frame varchar(55),
     publication_sectors varchar(55),
     publication_language varchar(55),
     publication_gri_type varchar(55),
     publication_sectorial_supplement varchar(55),
     publication_state varchar(55),
-    publication_trashed boolean,
+    publication_trashed varchar(55),
     publication_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
@@ -119,15 +119,59 @@ $glossaries_sql = "CREATE TABLE $glossaries_table_name (
     glossary_identifier varchar(55) DEFAULT '' NOT NULL,
     glossary_publication varchar(55),
     glossary_object varchar(55),
-    glossary_depends boolean,
+    glossary_depends varchar(55),
     glossary_parent varchar(555),
     glossary_definition varchar(555),
     glossary_close varchar(55),
     glossary_close_indicators varchar(55),
     glossary_state varchar(55),
-    glossary_trashed boolean,
+    glossary_trashed varchar(55),
     glossary_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 dbDelta( $glossaries_sql );
+
+$qualis_table_name = Oak::$qualis_table_name;
+$qualis_sql = "CREATE TABLE $qualis_table_name (
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    quali_designation varchar(55) DEFAULT '' NOT NULL,
+    quali_identifier varchar(55) DEFAULT '' NOT NULL,
+    quali_publication varchar(55),
+    quali_object varchar(55),
+    quali_depends varchar(55),
+    quali_parent varchar(555),
+    quali_numerotation_type varchar(55),
+    quali_numerotation varchar(55),
+    quali_description varchar(555),
+    quali_close varchar(55),
+    quali_close_indicators varchar(55),
+    quali_state varchar(55),
+    quali_trashed varchar(55),
+    quali_modification_time datetime,
+    PRIMARY KEY (id)
+) $charset_collate;";
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $qualis_sql );
+
+$quantis_table_name = Oak::$quantis_table_name;
+$quantis_sql = "CREATE TABLE $quantis_table_name (
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    quanti_designation varchar(55) DEFAULT '' NOT NULL,
+    quanti_identifier varchar(55) DEFAULT '' NOT NULL,
+    quanti_publication varchar(55),
+    quanti_object varchar(55),
+    quanti_depends varchar(55),
+    quanti_parent varchar(555),
+    quanti_numerotation_type varchar(55),
+    quanti_numerotation varchar(55),
+    quanti_description varchar(555),
+    quanti_close varchar(55),
+    quanti_close_indicators varchar(55),
+    quanti_state varchar(55),
+    quanti_trashed varchar(55),
+    quanti_modification_time datetime,
+    PRIMARY KEY (id)
+) $charset_collate;";
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $quantis_sql );
