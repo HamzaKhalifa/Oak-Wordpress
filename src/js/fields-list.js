@@ -1,6 +1,124 @@
 var elementToDelete;
 var deleting = false;
 
+// For the add button
+var addButton = document.querySelector('.oak_list_button');
+addButton.addEventListener('click', function() {
+    window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_field');
+});
+
+// Done with the add button
+
+// For the grouped actions select
+var groupedActionsSelect = document.querySelector('.oak_grouped_actions__grouped_actions');
+var applyGroupedActionButton = document.querySelector('.oak_list_grouped_actions_button');
+applyGroupedActionButton.addEventListener('click', function() {
+    if (groupedActionsSelect.value == 'to-trash') {
+        var designationsToDelete = [];
+        var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
+        for (var i = 1; i < checkBoxes.length; i++) {
+            console.log(checkBoxes[i]);
+            if (checkBoxes[i].checked) {
+                designationsToDelete.push(checkBoxes[i].parentNode.querySelector('.oak_list_titles_container__title').innerHTML);
+            }
+        }
+        console.log(designationsToDelete);
+        setLoading();
+        jQuery(document).ready(function() {
+            jQuery.ajax({
+                url: DATA.ajaxUrl,
+                type: 'POST', 
+                data: {
+                    'data': {
+                        whichTable: 'field',
+                        designations: designationsToDelete
+                    },
+                    'action': 'oak_send_to_trash'
+                },
+                success: function(data) {
+                    doneLoading();
+                    console.log(data);
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+        
+    }
+});
+// Done with the grouped action select
+
+// For the select all checkboxes
+var selectAllCheckbox = document.querySelector('.oak_select_all_checkbox');
+selectAllCheckbox.addEventListener('change', function() {
+    var allSelectChecbkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
+    for (var i = 0; i < allSelectChecbkBoxes.length; i++) {
+        allSelectChecbkBoxes[i].checked = selectAllCheckbox.checked;
+    }
+});
+// Done with the select all checkbox
+
+// For the filters
+var allNaturesButton = document.querySelector('.oak_grouped_actions__all_natures');
+var allFunctionsButton = document.querySelector('.oak_grouped_actions__all_functions');
+var naturesContainers = document.querySelectorAll('.oak_list_nature');
+var functionsContainers = document.querySelectorAll('.oak_list_function');
+allNaturesButton.addEventListener('change', function() {
+    filterResult();
+});
+allFunctionsButton.addEventListener('change', function() {
+    filterResult();
+})
+
+function filterResult() {
+    var considerNature = false;
+    var considerFunction = false;
+
+    if (allNaturesButton.value != 'all-natures') 
+        considerNature = true;
+
+    if (allFunctionsButton.value != 'all-functions')
+        considerFunction = true;
+
+    for (var i = 0; i < naturesContainers.length; i++) {
+        var hide = false;
+        
+        if (considerNature && naturesContainers[i].innerHTML != allNaturesButton.value) {
+            hide = true;
+        }
+
+        if (considerFunction && functionsContainers[i].innerHTML != allFunctionsButton.value) {
+            hide = true;
+        }
+
+        if (hide) {
+            naturesContainers[i].parentNode.parentNode.classList.add('oak_hidden');
+        } else {
+            naturesContainers[i].parentNode.parentNode.classList.remove('oak_hidden');
+        }
+    }
+}
+// Done with the all natures button
+
+// For the search button 
+var searchButton = document.querySelector('.oak_list_header_right__search_input');
+searchButton.oninput = function() {
+    var searchedDesignation = document.querySelector('.oak_list_header_right__search_input').value;
+    var allDesignationsSpans = document.querySelectorAll('.oak_list_titles_container__the_title');
+    for (var i = 0; i < allDesignationsSpans.length; i++) {
+        if (allDesignationsSpans[i].innerHTML == searchedDesignation) {
+            allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_list_highlighted');
+            allDesignationsSpans[i].parentNode.parentNode.scrollIntoView();
+            // console.log(allDesignationsSpans[i].scrollTop);
+            
+        } else {
+            allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
+        }
+    }
+}
+
 // For the delete buttons
 manageDeleteButtons();
 function manageDeleteButtons() {

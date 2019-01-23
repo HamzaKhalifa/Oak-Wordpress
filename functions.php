@@ -136,6 +136,10 @@ class Oak {
 
         add_action( 'wp_ajax_oak_register_quanti', array( $this, 'oak_register_quanti') );
         add_action( 'wp_ajax_nopriv_oak_register_quanti', array( $this, 'oak_register_quanti') );
+
+        add_action( 'wp_ajax_oak_send_to_trash', array( $this, 'oak_send_to_trash') );
+        add_action( 'wp_ajax_nopriv_oak_send_to_trash', array( $this, 'oak_send_to_trash') );
+
     }
 
     function oak_enqueue_styles() {
@@ -1662,6 +1666,33 @@ class Oak {
         endif;
 
         return $image_url;
+    }
+
+    function oak_send_to_trash() {
+        $data = $_POST['data'];
+        $which_table = $data['whichTable'];
+        $designations = $data['designations'];
+
+        global $wpdb;
+
+        foreach( $designations as $designation ) :
+        
+            $result = $wpdb->update(
+                $wpdb->prefix . 'oak_' . $which_table . 's',
+                array (
+                    $which_table . '_trashed' => 'true',
+                ),
+                array( 'field_designation' => $designation )
+            );
+
+        endforeach;
+
+        wp_send_json_success(
+            array( 
+                'designations' => $designations,
+                'data' => $data
+            )
+        );
     }
 
     function oak_delete_field() {

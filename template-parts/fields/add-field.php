@@ -28,8 +28,8 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                     <?php 
                     $selected = array('', '', '', '');
                     if ( count( $revisions ) > 0 ) :
-                        switch ( $revisions[ count( $revisions ) - 1 ]->type ) :
-                            case 'Text': 
+                        switch ( $revisions[ count( $revisions ) - 1 ]->field_type ) :
+                            case 'Texte': 
                                 $selected[0] = 'selected';
                             break;
                             case 'Zone de Texte':
@@ -38,16 +38,16 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                             case 'Image': 
                                 $selected[2] = 'selected';
                             break;
-                            case 'File':
+                            case 'Fichier':
                                 $selected[3] = 'selected';
                             break;
                         endswitch;
                     endif;
                     ?>
-                    <option <?php echo( $selected[0] ); ?> value="Text">Text</option>
+                    <option <?php echo( $selected[0] ); ?> value="Texte">Texte</option>
                     <option <?php echo( $selected[1] ); ?> value="Zone de Texte">Zone De Texte</option>
                     <option <?php echo( $selected[2] ); ?> value="Image">Image</option>
-                    <option <?php echo( $selected[3] ); ?> value="File">Fichier</option>
+                    <option <?php echo( $selected[3] ); ?> value="Fichier">Fichier</option>
                 </select>
             </div>
 
@@ -71,7 +71,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                     endif;
                     ?>
                     <option <?php echo( $selected[0] ); ?> value="Information/Description">Information/Description</option>
-                    <option <?php echo( $selected[1] ); ?>  value="Exemple">Exempel</option>
+                    <option <?php echo( $selected[1] ); ?>  value="Exemple">Exemple</option>
                     <option <?php echo( $selected[2] ); ?> value="Illustration">Illustration</option>
                 </select>
             </div>
@@ -111,7 +111,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__selector_container">
-                <label class="oak_add_field_container__label oak_add_field_container__label_selector" for="selector"><?php _e( 'Sélecteur de cadres RSE: ', Oak::$text_domain ); ?></label> 
+                <label class="oak_add_field_container__label oak_add_field_container__label_selector" for="selector"><?php _e( 'Sélecteur de cadres RSE: ', Oak::$text_domain ); ?></label>
                 <input name="selector" type="checkbox" <?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_selector ) && $revisions[ count( $revisions ) - 1 ]->field_selector == 'true' ) : echo( 'checked' ); endif; ?> class="oak_add_field_container__input oak_add_field_container__selector">
             </div>
         </div>

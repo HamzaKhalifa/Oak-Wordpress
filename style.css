@@ -1733,6 +1733,12 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
 .oak_list_header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.oak_list_header_left, .oak_list_header_right {
+  display: flex;
+  align-items: center;
 }
 
 .oak_list_header__icon {
@@ -1747,6 +1753,7 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   padding-bottom: 7px;
   border: 1px solid #003366;
   margin-left: 20px;
+  margin-right: 20px;
   transition: all 0.1s ease-in-out;
 }
 
@@ -1773,7 +1780,7 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
 
 .oak_add_field_container__fields_list {
   border: 1px solid #e2e4e7;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .oak_list_row__container {
@@ -1814,6 +1821,43 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
 }
 
 .oak_dot_false {
+  background-color: #FC394D;
+}
+
+.oak_grouped_actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 40px;
+}
+
+.oak_grouped_actions__element {
+  margin-right: 10px;
+  border-radius: 0px;
+  max-width: 170px;
+  border: 0;
+  outline: 1px solid #003366;
+  height: 35px !important;
+}
+
+.oak_list_button:hover {
+  cursor: pointer;
+  background-color: #003366;
+  color: white;
+}
+
+.oak_grouped_actions__grouped_actions {
+  margin-right: 0px;
+}
+
+.oak_list_grouped_actions_button {
+  margin-left: 5px;
+}
+
+.oak_list_header_right__search_input {
+  height: 35px;
+}
+
+.oak_list_highlighted {
   background-color: #FC394D;
 }
 
