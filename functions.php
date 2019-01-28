@@ -12,11 +12,13 @@ class Oak {
     public static $quantis_table_name;
 
     public static $fields;
+    public static $fields_without_redundancy;
     public static $forms;
+    public static $forms_without_redundancy;
     public static $forms_attributes;
     public static $objects;
-
     public static $models;
+    public static $models_without_redundancy;
     public static $organizations;
     public static $publications;
     public static $glossaries;
@@ -140,6 +142,8 @@ class Oak {
         add_action( 'wp_ajax_oak_send_to_trash', array( $this, 'oak_send_to_trash') );
         add_action( 'wp_ajax_nopriv_oak_send_to_trash', array( $this, 'oak_send_to_trash') );
 
+        add_action( 'wp_ajax_oak_register_object', array( $this, 'oak_register_object') );
+        add_action( 'wp_ajax_nopriv_oak_register_object', array( $this, 'oak_register_object') );
     }
 
     function oak_enqueue_styles() {
@@ -190,6 +194,7 @@ class Oak {
             || get_current_screen()->id == 'toplevel_page_oak_qualis_list'
             || get_current_screen()->id == 'indicateurs-quantitatifs_page_oak_add_quanti'
             || get_current_screen()->id == 'toplevel_page_oak_quantis_list'
+            || strpos( get_current_screen()->id, 'oak_model' ) == true
         ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
             ?>
@@ -263,12 +268,6 @@ class Oak {
         endif;
 
         // For fields
-        $fields_table_name = Oak::$fields_table_name;
-        Oak::$fields = $wpdb->get_results ( "
-            SELECT * 
-            FROM  $fields_table_name
-        " );
-
         if ( get_current_screen()->id == 'champs_page_oak_add_field' ) :
             $revisions = $this->oak_get_revisions();
 
@@ -293,12 +292,6 @@ class Oak {
 
         // For forms
         if ( get_current_screen()-> id == 'formes_page_oak_add_form' || get_current_screen()->id == 'toplevel_page_oak_forms_list' || get_current_screen()->id == 'modeles_page_oak_add_model' ) :
-            $forms_table_name = Oak::$forms_table_name;
-            Oak::$forms = $wpdb->get_results ( "
-                SELECT * 
-                FROM  $forms_table_name
-            " );
-            
             foreach( Oak::$forms as $form ) :
                 $form_attributes_Array = explode( ',', $form->form_attributes );
                 foreach( $form_attributes_Array as $attribute ) :
@@ -347,13 +340,6 @@ class Oak {
         // Done with forms
 
         // For models
-        if ( get_current_screen()-> id == 'modeles_page_oak_add_model' || get_current_screen()->id == 'toplevel_page_oak_models_list' ) :
-            $models_table_name = Oak::$models_table_name;
-            Oak::$models = $wpdb->get_results ( "
-                SELECT * 
-                FROM  $models_table_name
-            " );
-        endif;
         if ( get_current_screen()->id == 'toplevel_page_oak_models_list' ) :
             wp_enqueue_script( 'oak_models_list', get_template_directory_uri() . '/src/js/models-list.js', array('jquery'), false, true );
             wp_localize_script( 'oak_models_list', 'DATA', array(
@@ -577,6 +563,54 @@ class Oak {
             ) );
         endif;
         // Done with quanti indicators
+
+        // For models objects
+        if ( strpos( get_current_screen()->id, 'oak_model' ) == true && $_GET['page'] != 'oak_models_list' ) :
+            $page_name = $_GET['page'];
+            $page_name_array = explode( '_', $page_name );
+            if ( count( $page_name_array ) > 3 ) :
+                $model_identifier = $page_name_array[3];
+            else :
+                $model_identifier = $page_name_array[2];
+            endif;
+            $table_name = $wpdb->prefix . 'oak_' . $model_identifier;
+            Oak::$objects = $wpdb->get_results ( "
+                SELECT * 
+                FROM $table_name
+            " );
+
+            if ( strpos( get_current_screen()->id, 'oak_model_add' ) == true ) :
+                // This is the add page
+                $revisions = [];
+                if ( isset( $_GET['object_identifier'] ) ) :
+                    foreach( Oak::$objects as $object ) :
+                        if ( $object->object_identifier == $_GET['object_identifier'] ) :
+                            $revisions[] = $object;
+                        endif;
+                    endforeach;
+                endif;
+                
+                wp_enqueue_script( 'oak_add_object', get_template_directory_uri() . '/src/js/add-object.js', array('jquery'), false, true );
+                wp_localize_script( 'oak_add_object', 'DATA', array(
+                    'ajaxUrl' => admin_url ('admin-ajax.php'),
+                    'revisions' => $revisions,
+                    'objects' => Oak::$objects,
+                    'adminUrl' => admin_url(),
+                    'templateDirectoryUri' => get_template_directory_uri(),
+                    'modelIdentifier' => $model_identifier
+                ) );
+            else :
+                // This is the list page
+                wp_enqueue_script( 'oak_objects_list', get_template_directory_uri() . '/src/js/objects-list.js', array('jquery'), false, true );
+                wp_localize_script( 'oak_objects_list', 'DATA', array(
+                    'ajaxUrl' => admin_url ('admin-ajax.php'),
+                    'objects' => Oak::$objects,
+                    'adminUrl' => admin_url(),
+                    'modelIdentifier' => $model_identifier
+                ) );
+            endif;
+        endif;  
+        // Done with models objects
     }
     
     function oak_add_theme_support() {
@@ -656,6 +690,24 @@ class Oak {
 
         add_menu_page( __( 'Indicateurs Quantitatifs', Oak::$text_domain ), 'Indicateurs Quantitatifs', 'manage_options', 'oak_quantis_list', array ( $this, 'oak_quantis_list'), 'dashicons-index-card', 100 );
         add_submenu_page( 'oak_quantis_list', 'Ajouter un indicateur quantitatif', __( 'Ajouter un indicateur quantitatif', Oak::$text_domain ), 'manage_options', 'oak_add_quanti',  array( $this, 'oak_add_quanti' ) );
+
+        $added_models = [];
+        foreach( Oak::$models as $model ) :
+            $exists = false;
+            foreach( $added_models as $added_model ) :
+                if ( $added_model->model_identifier == $model->model_identifier ) :
+                    $exists = true;
+                endif;
+            endforeach;
+            if ( !$exists ) :
+                $added_models[] = $model;
+            endif; 
+        endforeach;
+        $reversed_oak_models = array_reverse( $added_models );
+        foreach( $reversed_oak_models as $model ) :
+            add_menu_page( $model->model_designation, $model->model_designation, 'manage_options', 'oak_model_' . $model->model_identifier, array( $this, 'oak_model_objects_list' ), 'dashicons-index-card', 100 );
+            add_submenu_page( 'oak_model_' . $model->model_identifier, 'Ajouter une instance', 'Ajouter', 'manage_options', 'oak_model_add_' . $model->model_identifier, array( $this, 'oak_add_model_object' ) );
+        endforeach;
     }
 
     function add_admin_menu_separator( $position ) {
@@ -1278,7 +1330,92 @@ class Oak {
 
         include get_template_directory() . '/template-parts/quantis/add-quanti.php';
     }
-    
+
+    function oak_add_model_object() {
+        global $wpdb;
+        $page_name = $_GET['page'];
+        $model_identifier = explode( '_', $page_name )[3];
+        $table_name = $wpdb->prefix . 'oak_' . $model_identifier;
+        $objects = $wpdb->get_results ( "
+            SELECT * 
+            FROM $table_name
+        " );
+        
+        $revisions = [];
+        if ( isset( $_GET['object_identifier'] ) ) :
+            foreach( Oak::$objects as $object ) :
+                if ( $object->object_identifier == $_GET['object_identifier'] ) :
+                    $revisions[] = $object;
+                endif;
+            endforeach;
+        endif;
+        
+        $fields_without_repetition = [];
+        foreach( Oak::$fields as $field ) :
+            $exists = false;
+            foreach( $fields_without_repetition as $field_without_repetition ) :
+                if ( $field_without_repetition->field_identifier == $field->field_identifier ) :
+                    $exists = true;
+                endif;
+            endforeach;
+            if ( !$exists ) 
+                $fields_without_repetition[] = $field;
+        endforeach;
+
+        $the_model;
+        foreach( Oak::$models as $model ) :
+            if ( $model->model_identifier == $model_identifier ) :
+                $the_model = $model;
+            endif;
+        endforeach;
+
+        $fields = $this->get_model_fields( $the_model, $fields_without_repetition );
+
+        include get_template_directory() . '/template-parts/models-objects/add-models-objects.php';
+    }
+
+    function get_model_fields( $model, $fields_without_redundancy ) {
+        $reversed_forms = array_reverse( Oak::$forms );
+        $forms_without_redundancy = [];
+        foreach( $reversed_forms as $form ) :
+            $added = false;
+            foreach( $forms_without_redundancy as $form_without_redundancy ) :
+                if ( $form_without_redundancy->form_identifier == $form->form_identifier) :
+                    $added = true;
+                endif;
+            endforeach;
+            if ( !$added ) :
+                $forms_without_redundancy[] = $form;
+            endif;
+        endforeach;
+
+        $tables_fields = [];
+        $model_forms_data = explode( '|', $model->model_forms );
+        foreach( $model_forms_data as $form_data ) :
+            $form_data_array = explode( ':', $form_data );
+            if ( count( $form_data_array ) > 1 ) :
+                $form_identifier = $form_data_array['1'];
+                foreach( $forms_without_redundancy as $form ) :
+                    if ( $form->form_identifier == $form_identifier ) :
+                        $form_fields_data = explode( '|', $form->form_fields );
+                        foreach( $form_fields_data as $form_field_data ) :
+                            $form_field_data_array = explode( ':', $form_field_data );
+                            if ( count( $form_field_data_array ) > 1 ) :
+                                $field_identifier = $form_field_data_array['1'];
+                                foreach( $fields_without_redundancy as $field ) :
+                                    if ( $field->field_identifier == $field_identifier ) :
+                                        $tables_fields[] = $field;
+                                    endif;
+                                endforeach;
+                            endif;
+                        endforeach;
+                    endif;
+                endforeach;
+            endif;
+        endforeach;
+        return $tables_fields;
+    }
+
     function oak_fields_list() {
         global $wpdb;
         $fields_table_name = Oak::$fields_table_name;
@@ -1313,11 +1450,7 @@ class Oak {
 
     function oak_models_list() {
         global $wpdb;
-        $models_table_name = Oak::$models_table_name;
-        $models = $wpdb->get_results ( "
-            SELECT * 
-            FROM  $models_table_name
-        " );
+        $models = Oak::$models;
         include get_template_directory() . '/template-parts/models/models-list.php';
     }
 
@@ -1369,6 +1502,11 @@ class Oak {
             FROM  $quantis_table_name
         " );
         include get_template_directory() . '/template-parts/quantis/quantis-list.php';
+    }
+
+    function oak_model_objects_list() {
+
+        include get_template_directory() . '/template-parts/models-objects/models-objects-list.php';
     }
 
     function oak_get_organizations() {
@@ -1634,6 +1772,49 @@ class Oak {
         );
 
         wp_send_json_success();
+    }
+
+    function oak_register_object() {
+        global $wpdb;
+
+        $object = $_POST['data'];
+        $model_identifier = $_POST['modelIdentifier'];
+        
+        $additional_fields = $_POST['data']['additionalFieldsData'];
+        $additional_arguments = array();
+        $file_data;
+        foreach( $additional_fields as $single_additional_field ) :
+            if ( $single_additional_field['type'] == 'Image' ) :
+                $image_url = $this->upload_image( $single_additional_field['value'] );
+                $additional_arguments[ $single_additional_field['columnName'] ] = $image_url;
+            elseif ( $single_additional_field['type'] == 'Fichier' ) :
+                $file_data = wp_handle_upload( $single_additional_field['value'], array( 'test_form' => FALSE ) );
+                $image_url = $this->upload_image( $single_additional_field['value'] );
+                $additional_arguments[ $single_additional_field['columnName'] ] = $image_url;
+            else:
+                $additional_arguments[ $single_additional_field['columnName'] ] = $single_additional_field['value'];
+            endif;
+                
+        endforeach;
+
+        $arguments = array_merge( array(
+            'object_designation' => $object['designation'],
+            'object_identifier' => $object['identifier'],
+            'object_state' => $object['state'],
+            'object_trashed' => $object['trashed'],
+            'object_modification_time' => date("Y-m-d H:i:s")
+        ), $additional_arguments );
+        
+        $result = $wpdb->insert(
+            $wpdb->prefix . 'oak_' . $model_identifier,
+            $arguments
+        );
+
+        wp_send_json_success( array(
+            'tableName' => $wpdb->prefix . 'oak_' . $model_identifier,
+            'arguments' => $arguments,
+            'fileData' => $file_data
+        ) );
     }
 
     function upload_image( $image ) {

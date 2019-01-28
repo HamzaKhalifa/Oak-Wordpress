@@ -178,7 +178,7 @@ function createOrganizationData(state) {
 function createIdentifier(designation) {
     var identifier = designation.replace(/[^a-zA-Z ]/g, '');
     identifier = identifier.replace(/\s/g,'');
-    return identifier
+    return identifier.toLowerCase();
 }
 
 function whichChild(elem){

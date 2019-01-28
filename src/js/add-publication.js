@@ -190,7 +190,7 @@ function createPublicationData(state) {
 function createIdentifier(designation) {
     var identifier = designation.replace(/[^a-zA-Z ]/g, '');
     identifier = identifier.replace(/\s/g, '');
-    return identifier
+    return identifier.toLowerCase();
 }
 
 function whichChild(elem) {
@@ -331,6 +331,54 @@ function handleDesignationSelectsListeners() {
         });
     }
 }
+
+// For the report or frame select
+var reportOrFrameSelect = document.querySelector('.oak_add_field_container__report_or_frame');
+reportOrFrameSelect.addEventListener('change', function() {
+    var reportType = document.querySelector('.oak_add_field_container__report_type_container');
+    var frameType = document.querySelector('.oak_add_field_container__frame_type_container');
+    var sectorialFrame = document.querySelector('.oak_add_field_container__sectorial_frame_container');
+    var sectors = document.querySelector('.oak_add_field_container__sectors_container');
+    var griType = document.querySelector('.oak_add_field_container__gri_type_container');
+    var sectorialSupplement = document.querySelector('.oak_add_field_container__sectorial_supplement_container');
+    if (reportOrFrameSelect.value == 'report') {
+        reportType.classList.remove('oak_hidden');
+        griType.classList.remove('oak_hidden');
+        sectorialSupplement.classList.remove('oak_hidden');
+        frameType.classList.add('oak_hidden');
+        sectorialFrame.classList.add('oak_hidden');
+        sectors.classList.add('oak_hidden');
+    } else {
+        reportType.classList.add('oak_hidden');
+        griType.classList.add('oak_hidden');
+        sectorialSupplement.classList.add('oak_hidden');
+        frameType.classList.remove('oak_hidden');
+        sectorialFrame.classList.remove('oak_hidden');
+        sectors.classList.remove('oak_hidden');
+    }
+});
+
+// For the local publication listener 
+var localPublication = document.querySelector('.oak_add_field_container__local');
+localPublication.addEventListener('change', function() {
+    var countrySelect = document.querySelector('.oak_country_select_container');
+    if (localPublication.checked) {
+        countrySelect.classList.remove('oak_hidden');
+    } else {
+        countrySelect.classList.add('oak_hidden');
+    }
+});
+
+// For the sectorial frame listener:
+var sectorialFrameCheckbox = document.querySelector('.oak_add_field_container__sectorial_frame');
+sectorialFrameCheckbox.addEventListener('change', function() {
+    var sectorsSelectorContainer = document.querySelector('.oak_add_field_container__sectors_container');
+    if (this.checked) {
+        sectorsSelectorContainer.classList.remove('oak_hidden');
+    } else {
+        sectorsSelectorContainer.classList.add('oak_hidden');
+    }
+});
 
 function readUrl(input) {
     if (input.files && input.files[0]) {

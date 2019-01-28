@@ -1,15 +1,15 @@
-.oak_add_publication_add_publication_button__icons {
+.oak_add_object_add_object_button__icons {
     width: 15px;
 }
 
-.oak_add_publication_form_buttons {
+.oak_add_object_form_buttons {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     margin-top: 10px;
 }
 
-.oak_add_publication_add_form_button, .oak_add_publication_add_line_button, .oak_add_publication_add_space_button, .oak_add_publication_form_options__button {
+.oak_add_object_add_form_button, .oak_add_object_add_line_button, .oak_add_object_add_space_button, .oak_add_object_form_options__button {
     border: 1px solid #003366;
     display: flex;
     align-items: center;
@@ -21,23 +21,23 @@
     color: #003366;
 }
 
-.oak_add_publication_add_form_button:hover, .oak_add_publication_add_line_button:hover, .oak_add_publication_add_space_button, .oak_add_publication_form_options__button:hover {
+.oak_add_object_add_form_button:hover, .oak_add_object_add_line_button:hover, .oak_add_object_add_space_button, .oak_add_object_form_options__button:hover {
     cursor: pointer;
 }
 
-.oak_add_publication_forms_list__single_form {
+.oak_add_object_forms_list__single_form {
     border-bottom: 1px solid #e2e4e7;
     padding-bottom: 30px;
 }
 
-.oak_add_publication_forms_list__horizontal {
+.oak_add_object_forms_list__horizontal {
     display: flex;
     align-items: center;
     flex: 1;
     margin-top: 10px;
 }
 
-.oak_add_publication_forms_list__vertical {
+.oak_add_object_forms_list__vertical {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -47,11 +47,11 @@ select {
     flex: 1;
 }
 
-.oak_add_publication_label {
+.oak_add_object_label {
     margin-bottom: 7px;
 }
 
-.oak_add_publication_and_form_button, .oak_add_publication_add_line_button, .oak_add_publication_add_space_button, .oak_add_publication_field_options__button {
+.oak_add_object_and_form_button, .oak_add_object_add_line_button, .oak_add_object_add_space_button, .oak_add_object_field_options__button {
     border: 1px solid #003366;
     display: flex;
     align-items: center;
@@ -64,24 +64,24 @@ select {
     color: #003366;
 }
 
-.oak_add_publication_form_options__button i {
+.oak_add_object_form_options__button i {
     font-size: 20px;
 }
 
-.oak_add_publication_and_form_button:hover, .oak_add_publication_add_line_button:hover, .oak_add_publication_add_space_button:hover, .oak_add_publication_field_options__button:hover {
+.oak_add_object_and_form_button:hover, .oak_add_object_add_line_button:hover, .oak_add_object_add_space_button:hover, .oak_add_object_field_options__button:hover {
     cursor: pointer;
 }
 
-.oak_add_publication_forms_list__single_form {
+.oak_add_object_forms_list__single_form {
     border-bottom: 1px solid #e2e4e7;
     padding-bottom: 30px;
 }
 
-.oak_add_publication_container_header_icon {
+.oak_add_object_container_header_icon {
     width: 15px;
 }
 
-.oak_add_publication_forms_list__horizontal_without_margin_top {
+.oak_add_object_forms_list__horizontal_without_margin_top {
     margin-top: 0px;
 }
 
@@ -97,12 +97,12 @@ select {
     color: #003366;
 }
 
-.oak_add_publication_forms_list__horizontal_very_small {
+.oak_add_object_forms_list__horizontal_very_small {
     flex: .3;
     justify-content: space-around;
 }
 
-.oak_add_publication_forms_list__horizontal_small {
+.oak_add_object_forms_list__horizontal_small {
     flex: 1;
     justify-content: flex-end;
 }
@@ -115,26 +115,26 @@ select {
     margin-bottom: 0px;
 }
 
-.oak_add_publication_and_form_button__icons {
+.oak_add_object_and_form_button__icons {
     width: 15px;
 }
 
-.oak_add_publication_form_buttons {
+.oak_add_object_form_buttons {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
 }
 
-.oak_add_publication_form_options {
+.oak_add_object_form_options {
     justify-content: space-between;
 }
 
-.oak_add_publication_forms_list__buttons_container {
+.oak_add_object_forms_list__buttons_container {
     display: flex;
     justify-content: flex-end;
 }
 
-.oak_add_publication_seperator {
+.oak_add_object_seperator {
     border: 1px solid #003366;
     display: flex;
     justify-content: center;
@@ -144,13 +144,13 @@ select {
     position: relative;
 }
 
-.oak_add_publication__delete_separator_button {
+.oak_add_object__delete_separator_button {
     position: absolute;
     right: 10px;
     top: 10px;
 }
 
-.oak_add_publication_container__logo_img {
+.oak_add_object_container__logo_img {
     width: 200px;
 }
 
@@ -159,8 +159,9 @@ select {
     height: auto;
 }
 
-.oak_add_field_container__sectorial_frame_container, .oak_add_field_container__sectors_container {
-    flex: 1;
+.oak_add_object_model_image {
+    width: 200px;
+    height: auto;
 }
 
 

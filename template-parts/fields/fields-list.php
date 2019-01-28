@@ -7,8 +7,9 @@
         </div>
 
         <div class="oak_list_header_right">
-            <input class="oak_list_header_right__search_input" type="text">
-            <span class="oak_list_button"><?php _e( 'Rechercher un champ', Oak::$text_domain ); ?></span>
+            <input placeholder="<?php _e( 'Rechercher un champ', Oak::$text_domain ); ?>" class="oak_list_header_right__search_input" type="text">
+            <i class="oak_list_header_right__icon_button oak_list_header_right_download_button fas fa-download"></i>
+            <i class="oak_list_header_right__icon_button oak_list_header_right_upload_button fas fa-upload"></i>
         </div>
     </div>
 

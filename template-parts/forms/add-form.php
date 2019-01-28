@@ -93,7 +93,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                             <label class="oak_add_field_label" for="type">Nature</label>
                                             <select class="oak_add_form_fields_list_horizontal__type_select" name="type" id="">
                                                 <option value=""></option>
-                                                <option value="Text">Text</option>
+                                                <option value="Texte">Texte</option>
                                                 <option value="Zone de Texte">Zone De Texte</option>
                                                 <option value="Image">Image</option>
                                                 <option value="File">Fichier</option>

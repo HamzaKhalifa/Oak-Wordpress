@@ -1,6 +1,6 @@
 // Global variables
 var adding = false;
-var qualiData = {};
+var objectData = {};
 var canceling = false;
 var updating = false;
 var browsingRevisions = false;
@@ -13,7 +13,7 @@ if (addButton) {
         var ok = checkOk();
         if (!ok)
             return;
-        qualiData = createqualiData(0);
+        objectData = createObjectData(0);
         adding = true;
         openModal('Êtes vous sur de vouloir ajouter cette terminologie?', true);
     });
@@ -23,7 +23,7 @@ if (addButton) {
 var updateButton = document.querySelector('.oak_add_field_container__update_button');
 if (updateButton) {
     updateButton.addEventListener('click', function () {
-        qualiData = createqualiData(DATA.revisions[DATA.revisions.length - 1].quali_state);
+        objectData = createObjectData(DATA.revisions[DATA.revisions.length - 1].object_state);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier cette terminologie?', true);
     });
@@ -33,7 +33,7 @@ if (updateButton) {
 var registerButton = document.querySelector('.oak_add_field_container__register_button');
 if (registerButton) {
     registerButton.addEventListener('click', function () {
-        qualiData = createqualiData(1);
+        objectData = createObjectData(1);
         if (DATA.revisions.length == 0) {
             // adding for the first time
             var ok = checkOk();
@@ -58,16 +58,16 @@ function checkOk() {
         openModal('Veuillez entrer la désignation d\'abord', false);
         ok = false;
     } else {
-        for (var i = 0; i < DATA.qualis.length; i++) {
-            if (DATA.qualis[i].designation == designation) {
+        for (var i = 0; i < DATA.objects.length; i++) {
+            if (DATA.objects[i].designation == designation) {
                 openModal('Il existe déjà une organisation avec la désignation: ' + designation);
                 ok = false;
             }
         }
         if (ok) {
             var identifierExists = false;
-            for (var j = 0; j < DATA.qualis.length; j++) {
-                if (DATA.qualis[j].identifier == identifier) {
+            for (var j = 0; j < DATA.objects.length; j++) {
+                if (DATA.objects[j].identifier == identifier) {
                     identifierExists = true;
                     ok = false;
                 }
@@ -89,7 +89,7 @@ function checkOk() {
 var broadcastButton = document.querySelector('.oak_add_field_container__broadcast_button');
 if (broadcastButton) {
     broadcastButton.addEventListener('click', function () {
-        qualiData = createqualiData(2);
+        objectData = createObjectData(2);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier et diffuser ce champ ?', true);
     });
@@ -99,7 +99,7 @@ if (broadcastButton) {
 var draftButton = document.querySelector('.oak_add_field_container__draft_button');
 if (draftButton) {
     draftButton.addEventListener('click', function () {
-        qualiData = createqualiData(0);
+        objectData = createObjectData(0);
         updating = true;
         openModal('Êtes vous sûr de vouloir modifier et renvoyer ce champ à l\'état de Brouillon ?', true);
     });
@@ -140,37 +140,33 @@ designationInput.oninput = function () {
 }
 
 // We create while adding the new revision
-function createqualiData(state) {
+function createObjectData(state) {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
     var identifier = createIdentifier(designation);
-    var publication =  jQuery('.oak_add_field_container__publication').val();
-    var object = document.querySelector('.oak_add_field_container__object').value;
-    var depends = document.querySelector('.oak_add_field_container__depends').checked;
-    var parent = document.querySelector('.oak_add_field_container__parent').value;
-    var numerotationType = document.querySelector('.oak_add_field_container__numerotation_type').value;
-    var numerotation = document.querySelector('.oak_add_field_container__numerotation').value;
-    var description = document.querySelector('.oak_add_field_container__description').value;
-    var close = document.querySelector('.oak_add_field_container__close').checked;
-    var closeIndicators = jQuery('.oak_add_field_container__close_indicators').val();
     var trashed = false;
 
-    var qualiData = {
-        designation,
-        identifier,
-        publication,
-        object,
-        depends,
-        parent,
-        numerotationType,
-        numerotation,
-        description,
-        close,
-        closeIndicators,
-        state,
-        trashed
+    var additionalFields = document.querySelectorAll('.oak_additional_field');
+    var additionalFieldsData = [];
+    for (var i = 0; i < additionalFields.length; i++) {
+        var columnName = additionalFields[i].getAttribute('column-name');
+        var type = additionalFields[i].getAttribute('field-type');
+        var value = type == 'Image' ? additionalFields[i].parentNode.querySelector('img').getAttribute('src') : type == 'Fichier' ? additionalFields[i].getAttribute('value') : additionalFields[i].value;
+        additionalFieldsData.push({
+            columnName,
+            value,
+            type
+        });
     }
 
-    return qualiData;
+    var objectData = {
+        designation,
+        identifier,
+        state,
+        trashed,
+        additionalFieldsData
+    }
+
+    return objectData;
 }
 
 function createIdentifier(designation) {
@@ -193,19 +189,18 @@ browseRevisionsButton.addEventListener('click', function () {
         openModal('Liste des révisions', true);
         // Changing the modal's width
 
-        qualiData = createqualiData(DATA.revisions[DATA.revisions.length - 1].quali_state);
+        objectData = createObjectData(DATA.revisions[DATA.revisions.length - 1].object_state);
 
-        document.querySelector('.oak_revision_quali_current_publication').value = qualiData.publication;
-        document.querySelector('.oak_revision_quali_current_object').value = qualiData.object;
-        document.querySelector('.oak_revision_quali_current_depends').value = qualiData.depends;
-        document.querySelector('.oak_revision_quali_current_parent').value = qualiData.parent;
-        document.querySelector('.oak_revision_quali_current_numerotation_type').value = qualiData.numerotationType;
-        document.querySelector('.oak_revision_quali_current_numerotation').value = qualiData.numerotation;
-        document.querySelector('.oak_revision_quali_current_description').value = qualiData.description;
-        document.querySelector('.oak_revision_quali_current_close').value = qualiData.close;
-        document.querySelector('.oak_revision_quali_current_close_indicators').value = qualiData.closeIndicators;
-        var state = qualiData.state == 0 ? 'Brouillon' : qualiData.state == 1 ? 'Enregsitré' : 'Diffusé';
-        document.querySelector('.oak_revision_quali_current_state').value = state;
+        var additionalFields = document.querySelectorAll('.oak_additional_field');
+        var additionalFieldsCurrent = document.querySelectorAll('.oak_additional_field_current');
+        for (var i = 0; i < additionalFields.length; i++) {
+            additionalFieldsCurrent[i].value = additionalFields[i].value;
+        }
+
+        // document.querySelector('.oak_revision_object_current_publication').value = objectData.publication;
+
+        var state = objectData.state == 0 ? 'Brouillon' : objectData.state == 1 ? 'Enregsitré' : 'Diffusé';
+        document.querySelector('.oak_revision_object_current_state').value = state;
     }
 });
 
@@ -222,46 +217,24 @@ for (var i = 0; i < revisionsButtons.length; i++) {
         // Updating the selected revision fields:
         var selectedRevision = DATA.revisions[this.getAttribute('index')];
         revision = selectedRevision;
-        console.log('revision', revision);
 
-        var revisionPublicationField = document.querySelector('.oak_revision_quali_revision_publication');
-        var revisionObjectField = document.querySelector('.oak_revision_quali_revision_object');
-        var revisionDependsField = document.querySelector('.oak_revision_quali_revision_depends');
-        var revisionParentField = document.querySelector('.oak_revision_quali_revision_parent');
-        var revisionNumerotationTypeField = document.querySelector('.oak_revision_quali_revision_numerotation_type');
-        var revisionNumerotationField = document.querySelector('.oak_revision_quali_revision_numerotation');
-        var revisionDescriptionField = document.querySelector('.oak_revision_quali_revision_description');
-        var revisionCloseField = document.querySelector('.oak_revision_quali_revision_close');
-        var revisionCloseIndicatorsField = document.querySelector('.oak_revision_quali_revision_close_indicators');
-        var revisionStateField = document.querySelector('.oak_revision_quali_revision_state');
+        var revisionStateField = document.querySelector('.oak_revision_object_revision_state');
 
-        revisionPublicationField.value = selectedRevision.quali_publication;
-        revisionObjectField.value = selectedRevision.quali_object;
-        revisionDependsField.value = selectedRevision.quali_depends;
-        revisionParentField.value = selectedRevision.quali_parent;
-        revisionNumerotationTypeField.value = selectedRevision.quali_numerotation_type;
-        revisionNumerotationField.value = selectedRevision.quali_numerotation;
-        revisionDescriptionField.value = selectedRevision.quali_description;
-        revisionCloseField.value = selectedRevision.quali_close;
-        revisionCloseIndicatorsField.value = selectedRevision.quali_close_indicators;
+        var additionalFieldsCurrent = document.querySelectorAll('.oak_additional_field_current');
+        var additionalFieldsRevision = document.querySelectorAll('.additional_field_revision');
+        for (var i = 0; i < additionalFieldsRevision.length; i++) {
+            var columnName = additionalFieldsRevision[i].getAttribute('column-name');
+            additionalFieldsRevision[i].value = selectedRevision[columnName];
+        }
 
-        var state = selectedRevision.quali_state == '0' ? 'Brouillon' : selectedRevision.quali_state == '1' ? 'Enregsitré' : 'Diffusé';
+        for (var i = 0; i < additionalFieldsCurrent.length; i++) {
+            checkEquals(additionalFieldsCurrent[i].value, additionalFieldsRevision[i].value, additionalFieldsRevision[i]);
+        }
+
+        var state = selectedRevision.object_state == '0' ? 'Brouillon' : selectedRevision.object_state == '1' ? 'Enregsitré' : 'Diffusé';
         revisionStateField.value = state;
 
-        // Getting the current revision values;
-        var qualiData = createqualiData(DATA.revisions[DATA.revisions.length - 1].quali_state);
-
-        checkEquals(qualiData.publication == null ? '' : qualiData.publication, selectedRevision.quali_publication, revisionPublicationField);
-        checkEquals(qualiData.object, selectedRevision.quali_object, revisionObjectField);
-        checkEquals(qualiData.depends.toString(), selectedRevision.quali_depends, revisionDependsField);
-        checkEquals(qualiData.parent, selectedRevision.quali_parent, revisionParentField);
-        checkEquals(qualiData.numerotationType, selectedRevision.quali_numerotation_type, revisionNumerotationTypeField);
-        checkEquals(qualiData.numerotation, selectedRevision.quali_numerotation, revisionNumerotationField);
-        checkEquals(qualiData.description, selectedRevision.quali_description, revisionDescriptionField);
-        checkEquals(qualiData.close.toString(), selectedRevision.quali_close.toString(), revisionCloseField);
-        checkEquals(qualiData.closeIndicators == null ? '' : qualidData.closeIndicators, selectedRevision.quali_close_indicators, revisionCloseIndicatorsField);
-
-        checkEquals(document.querySelector('.oak_revision_quali_current_state').value, document.querySelector('.oak_revision_quali_revision_state').value, document.querySelector('.oak_revision_quali_revision_state'));
+        checkEquals(document.querySelector('.oak_revision_object_current_state').value, document.querySelector('.oak_revision_object_revision_state').value, document.querySelector('.oak_revision_object_revision_state'));
     });
 }
 
@@ -273,43 +246,32 @@ function checkEquals(value1, value2, field) {
     }
 }
 
-// Checkboxes listeners: 
-var parentIndicatorCheckbox = document.querySelector('.oak_add_field_container__depends');
-if (parentIndicatorCheckbox.checked) {
-    document.querySelector('.oak_add_field_container__parent').parentNode.classList.remove('oak_hidden');
-}
-parentIndicatorCheckbox.addEventListener('change', function() {
-    if (this.checked) {
-        document.querySelector('.oak_add_field_container__parent').parentNode.classList.remove('oak_hidden');
-    } else {
-        document.querySelector('.oak_add_field_container__parent').parentNode.classList.add('oak_hidden');
-    }
-});
-
-var closeIndicatorCheckbox = document.querySelector('.oak_add_field_container__close');
-if (closeIndicatorCheckbox.checked) {
-    document.querySelector('.oak_add_field_container__close_indicators').parentNode.classList.remove('oak_hidden');
-}
-closeIndicatorCheckbox.addEventListener('change', function() {
-    if (this.checked) {
-        document.querySelector('.oak_add_field_container__close_indicators').parentNode.classList.remove('oak_hidden');
-    } else {
-        document.querySelector('.oak_add_field_container__close_indicators').parentNode.classList.add('oak_hidden');
-    }
-});
-
 // designation select listener
 handleDesignationSelectsListeners();
 function handleDesignationSelectsListeners() {
-    var designationsSelects = document.querySelectorAll('.oak_add_quali_forms_list_horizontal__designation_select');
+    var designationsSelects = document.querySelectorAll('.oak_add_object_forms_list_horizontal__designation_select');
     for (var i = 0; i < designationsSelects.length; i++) {
         designationsSelects[i].setAttribute('index', i);
         var theParentOfTheParent = designationsSelects[i].parentNode.parentNode;
-        theParentOfTheParent.querySelector('.oak_add_quali_field_identifier').value = createIdentifier(designationsSelects[i].value);
+        theParentOfTheParent.querySelector('.oak_add_object_field_identifier').value = createIdentifier(designationsSelects[i].value);
         designationsSelects[i].addEventListener('change', function () {
             var theParentOfTheParent = this.parentNode.parentNode;
-            theParentOfTheParent.querySelector('.oak_add_quali_field_identifier').value = createIdentifier(this.value);
+            theParentOfTheParent.querySelector('.oak_add_object_field_identifier').value = createIdentifier(this.value);
         });
+    }
+}
+
+function readUrl(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            if (input.getAttribute('field-type') == 'Image') {
+                input.parentNode.querySelector('img').setAttribute('src', e.target.result);
+            } else if (input.getAttribute('field-type') == 'Fichier') {
+                input.setAttribute('value', e.target.result);
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
     }
 }
 
@@ -399,21 +361,23 @@ function handleModalButtons() {
     var confirmButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function () {
         if (adding || updating) {
+            console.log(objectData);
             closeModals();
             setLoading();
-            console.log(qualiData);
             jQuery(document).ready(function () {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
-                        'action': 'oak_register_quali',
-                        'data': qualiData,
+                        'action': 'oak_register_object',
+                        'data': objectData,
+                        'modelIdentifier': DATA.modelIdentifier
                     },
                     success: function (data) {
-                        DATA.qualis.push(qualiData);
+                        DATA.objects.push(objectData);
                         doneLoading();
-                        window.location.reload();
+                        console.log(data);
+                        // window.location.reload();
                     },
                     error: function (error) {
                         doneLoading();
@@ -422,20 +386,24 @@ function handleModalButtons() {
             })
         }
         if (canceling) {
-            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_qualis_list');
+            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_objects_list');
         }
         if (browsingRevisions) {
-            revision.designation = revision.quali_designation;
-            revision.identifier = revision.quali_identifier;
-            revision.publication = revision.quali_publication;
-            revision.object = revision.quali_object;
-            revision.depends = revision.quali_depends;
-            revision.parent = revision.quali_parent;
-            revision.description = revision.quali_description;
-            revision.close = revision.quali_close;
-            revision.closeIndicators = revision.quali_close_indicators;
-            revision.state = revision.quali_state;
-            revision.trashed = revision.quali_trashed;
+            revision.designation = revision.object_designation;
+            revision.identifier = revision.object_identifier;
+            revision.state = revision.object_state;
+            revision.trashed = revision.object_trashed;
+            revision.additionalFieldsData = [];
+            var additionalFieldsRevision = document.querySelectorAll('.additional_field_revision');
+            for (var i = 0; i < additionalFieldsRevision.length; i++) {
+                var type = additionalFieldsRevision[i].getAttribute('field-type');
+                var value = type == 'Image' ? additionalFieldsRevision[i].parentNode.querySelector('img').getAttribute('src') : type == 'Fichier' ? additionalFieldsRevision[i].getAttribute('value') : additionalFieldsRevision[i].value;
+                revision.additionalFieldsData.push({
+                    columnName: additionalFieldsRevision[i].getAttribute('column-name'),
+                    value,
+                    type
+                });
+            }
             closeModals();
             setLoading();
             jQuery(document).ready(function () {
@@ -443,8 +411,9 @@ function handleModalButtons() {
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
-                        'action': 'oak_register_quali',
+                        'action': 'oak_register_object',
                         'data': revision,
+                        'modelIdentifier': DATA.modelIdentifier
                     },
                     success: function (data) {
                         doneLoading();

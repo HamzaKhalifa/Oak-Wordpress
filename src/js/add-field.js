@@ -116,7 +116,7 @@ designationInput.oninput = function() {
 function createIdentifier(designation) {
     var identifier = designation.replace(/[^a-zA-Z ]/g, '');
     identifier = identifier.replace(/\s/g,'');
-    return identifier
+    return identifier.toLowerCase();
 }
 
 // For the trash button
@@ -177,8 +177,7 @@ function getEnteredData() {
 // We create while adding the new revision
 function createFieldData(state) {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
-    var identifier = designation.replace(/[^a-zA-Z ]/g, '');
-    identifier = identifier.replace(/\s/g,'');
+    var identifier = createIdentifier(designation);
     var type = document.querySelector('.oak_add_field_container__type').value;
     var functionField = document.querySelector('.oak_add_field_container__function').value;
     var defaultValue = document.querySelector('.oak_add_field_container__default_value').value;

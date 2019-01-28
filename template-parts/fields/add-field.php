@@ -260,14 +260,77 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             <div class="oak_add_field_big_container_tabs_single_tab__section">
                 <h5 class="oak_add_field_big_container_tabs_single_tab_section__title"><?php _e( 'Formulaires: ', Oak::$text_domain ); ?></h5>
                 <div class="oak_add_field_big_container_tabs_single_tab_section__state">
-                    <select class="oak_add_field_big_container_tabs_single_tab_section__formulas_select" name="" id=""></select>
+                    <select class="oak_add_field_big_container_tabs_single_tab_section__formulas_select" name="" id="">
+                        <?php 
+                        if ( count( $revisions ) > 0 ) :
+                            $found_field = false;
+                            $forms_counter = 0;
+                            do {
+                                $form_fields_array = explode( '|', Oak::$forms_without_redundancy[ $forms_counter ]->form_fields );
+                                $form_fields_counter = 0;
+                                do {
+                                    $field_data = explode( ':', $form_fields_array[ $form_fields_counter ] );
+                                    if ( count( $field_data ) > 1 ) :
+                                        if ( $field_data[1] == $revisions[ count( $revisions ) - 1 ]->field_identifier ) : 
+                                            $found_field = true;
+                                        ?>
+                                            <option value="<?php Oak::$forms_without_redundancy[ $forms_counter ]->form_identifier ?>"><?php echo( Oak::$forms_without_redundancy[ $forms_counter ]->form_designation ); ?></option>
+                                        <?php
+                                        endif;
+                                    endif;
+                                    $form_fields_counter++;
+                                } while( !$found_field && $form_fields_counter < count( $form_fields_array ) );
+                                $forms_counter++;
+                            } while ( $forms_counter < count( Oak::$forms_without_redundancy ) );
+                        endif;
+                        ?>
+                    </select>
+
+                    <span class="oak_select_go_button"><?php _e( 'Accéder', Oak::$text_domain ); ?></span>
                 </div>
             </div>
 
             <div class="oak_add_field_big_container_tabs_single_tab__section">
                 <h5 class="oak_add_field_big_container_tabs_single_tab_section__title"><?php _e( 'Modèles: ', Oak::$text_domain ); ?></h5>
                 <div class="oak_add_field_big_container_tabs_single_tab_section__state">
-                    <select class="oak_add_field_big_container_tabs_single_tab_section__formulas_select" name="" id=""></select>
+                    <select class="oak_add_field_big_container_tabs_single_tab_section__formulas_select" name="" id="">
+                    <?php 
+                        if ( count( $revisions ) > 0 ) :
+                            foreach( Oak::$models_without_redundancy as $model ) :
+                                $model_forms_array = explode( '|', $model->model_forms );
+                                $model_forms_counter = 0;
+                                $found_field = false;
+                                do {
+                                    $form_data = explode( ':', $model_forms_array[ $model_forms_counter ] );
+                                    if ( count( $form_data ) > 0 ) :
+                                        $form_identifier = $form_data[1];
+                                        $oak_forms_counter = 0;
+                                        do {
+                                            if ( Oak::$forms_without_redundancy[ $oak_forms_counter ]->form_identifier == $form_identifier ) :
+                                                $form_fields_array = explode( '|', Oak::$forms_without_redundancy[ $oak_forms_counter ]->form_fields );
+                                                $form_fields_counter = 0;
+                                                do {
+                                                    $fields_data = explode( ':', $form_fields_array[ $form_fields_counter ] );
+                                                    if ( count( $fields_data ) > 1 ) :
+                                                        if ( $fields_data[1] == $revisions[ count( $revisions ) - 1 ]->field_identifier ) : 
+                                                            $found_field = true;
+                                                        ?>
+                                                            <option value="<?php $model->model_identifier ?>"><?php echo( $model->model_designation ); ?></option>
+                                                        <?php
+                                                        endif;
+                                                    endif;
+                                                    $form_fields_counter++;
+                                                } while ( !$found_field && $form_fields_counter < count( $form_fields_array ) );
+                                            endif;
+                                            $oak_forms_counter++;
+                                        } while ( !$found_field && $oak_forms_counter < count ( Oak::$forms_without_redundancy ) );
+                                    endif;
+                                    $model_forms_counter++;
+                                } while ( !$found_field && $model_forms_counter < count( $model_forms_array ) );
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
                 </div>
             </div>
 

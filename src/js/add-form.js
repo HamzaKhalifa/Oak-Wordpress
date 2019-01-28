@@ -229,7 +229,7 @@ function createFormData(state) {
 function createIdentifier(designation) {
     var identifier = designation.replace(/[^a-zA-Z ]/g, '');
     identifier = identifier.replace(/\s/g,'');
-    return identifier
+    return identifier.toLowerCase();
 }
 
 function whichChild(elem){
@@ -320,7 +320,7 @@ addFieldButton.addEventListener('click', function() {
     + '<div class="oak_add_form_fields_list__vertical oak_left_field">'
     + '<label class="oak_add_field_label" for="type">Nature</label>'
     + '<select class="oak_add_form_fields_list_horizontal__type_select" name="type" id="">'
-    + '<option value=""></option> <option value="Text">Text</option> <option value="Zone de Texte">Zone De Texte</option> <option value="Image">Image</option><option value="File">Fichier</option>'
+    + '<option value=""></option> <option value="Texte">Texte</option> <option value="Zone de Texte">Zone De Texte</option> <option value="Image">Image</option><option value="File">Fichier</option>'
     + '</select>'
     + '</div> <div class="oak_add_form_fields_list__vertical"> <label class="oak_add_field_label" for="type">Fonction</label>'
     + '<select class="oak_add_form_fields_list_horizontal__function_select" name="type" id=""><option value=""></option> <option value="Information/Description">Information/Description</option><option value="Exemple">Exemple</option><option value="Illustration">Illustration</option>'

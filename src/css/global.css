@@ -55,3 +55,7 @@
 .oak_admin_header_icon {
     width: 25px;
 }
+
+#adminmenuback {
+    display: none!important;
+}

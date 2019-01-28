@@ -95,8 +95,11 @@ function filterResult() {
 
         if (hide) {
             naturesContainers[i].parentNode.parentNode.classList.add('oak_hidden');
+            naturesContainers[i].parentNode.parentNode.setAttribute('filtered', true);
+
         } else {
             naturesContainers[i].parentNode.parentNode.classList.remove('oak_hidden');
+            naturesContainers[i].parentNode.parentNode.setAttribute('filtered', false);
         }
     }
 }
@@ -108,27 +111,24 @@ searchButton.oninput = function() {
     var searchedDesignation = document.querySelector('.oak_list_header_right__search_input').value;
     var allDesignationsSpans = document.querySelectorAll('.oak_list_titles_container__the_title');
     for (var i = 0; i < allDesignationsSpans.length; i++) {
-        if (allDesignationsSpans[i].innerHTML == searchedDesignation) {
-            allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_list_highlighted');
-            allDesignationsSpans[i].parentNode.parentNode.scrollIntoView();
-            // console.log(allDesignationsSpans[i].scrollTop);
-            
-        } else {
-            allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
+        console.log(allDesignationsSpans[i].innerHTML);
+        if (!allDesignationsSpans[i].parentNode.parentNode.getAttribute('filtered')) {
+            if (searchedDesignation == '') {
+                allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
+                allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_hidden');
+            } else {
+                if (allDesignationsSpans[i].innerHTML.indexOf(searchedDesignation) != -1) {
+                    // if (allDesignationsSpans[i].innerHTML == searchedDesignation) {
+                    allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_list_highlighted');
+                    allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_hidden');
+                    allDesignationsSpans[i].parentNode.parentNode.scrollIntoView();
+                } else {
+                    allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
+                    allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_hidden');
+                }
+            }
         }
-    }
-}
-
-// For the delete buttons
-manageDeleteButtons();
-function manageDeleteButtons() {
-    var deleteButtons = document.querySelectorAll('.oak_add_field_container__saved_field_container__delete_button');
-    for (var i = 0; i < deleteButtons.length; i++) {
-        deleteButtons[i].addEventListener('click', function() {
-            deleting = true;
-            elementToDelete = this;
-            openModal('Êtes vous sûr de vouloir supprimer le champ selectionné ?', true);
-        });
+        
     }
 }
 

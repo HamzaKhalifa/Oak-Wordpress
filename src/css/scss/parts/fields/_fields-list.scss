@@ -135,8 +135,27 @@
 
 .oak_list_header_right__search_input {
     height: 35px;
+    margin-right: 10px;
 }
 
 .oak_list_highlighted {
     background-color: #FC394D;
+}
+
+.oak_list_header_right__icon_button {
+    padding: 10px;
+    border: 1px solid #003366;
+    color: #003366;
+    margin-right: 5px;
+    transition: all .1s ease-in-out;
+}
+
+.oak_list_header_right__icon_button:hover {
+    color: white;
+    background-color: #003366;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+    
 }
