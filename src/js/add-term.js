@@ -153,8 +153,7 @@ function createTermData(state) {
     var description = document.querySelector('.oak_add_field_container__description').value;
     // var color = document.querySelector('.oak_add_field_container__color').value;
     var color = document.querySelector('.oak_add_field_container__color').value;
-    console.log('color', color);
-    var logo = document.querySelector('.oak_add_field_container__logo').value;
+    var logo = document.querySelector('.oak_add_field_container__logo').getAttribute('src');
     var trashed = false;
 
     var termData = {
@@ -170,6 +169,16 @@ function createTermData(state) {
     }
 
     return termData;
+}
+
+function readUrl(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            input.parentNode.querySelector('img').setAttribute('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
 function createIdentifier(designation) {

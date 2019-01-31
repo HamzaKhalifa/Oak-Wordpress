@@ -59,7 +59,8 @@ endforeach;
         <div class="oak_add_field_container__horizontal_container <?php if ( $which_taxonomy->taxonomy_logo != 'true' ) : echo('oak_hidden'); endif; ?> ">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation"><?php _e( 'Logo du terme: ', Oak::$text_domain ); ?></label> 
-                <input class="oak_add_field_container__input oak_add_field_container__logo" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->term_logo ); endif; ?>">
+                <input onChange="readUrl(this)" type="file" class="oak_add_field_container__logo_input">
+                <img class="oak_add_field_container__logo" src="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->term_logo ); endif; ?>" alt="">
             </div>
         </div>
         

@@ -1566,6 +1566,11 @@ class Oak {
         $term = $_POST['data'];
         $taxonomy_identifier = $_POST['taxonomyIdentifier'];
 
+        $term_logo = '';
+        if ( $term['logo'] != '' ) : 
+            $term_logo = $this->upload_image( $term['logo'] );
+        endif;
+
         $arguments = array(
             'term_designation' => $term['designation'],
             'term_identifier' => $term['identifier'],
@@ -1573,7 +1578,7 @@ class Oak {
             'term_title' => $term['title'],
             'term_description' => $term['description'],
             'term_color' => $term['color'],
-            'term_logo' => $term['logo'],
+            'term_logo' => $term_logo,
             'term_state' => $term['state'],
             'term_trashed' => $term['trashed'],
             'term_modification_time' => date("Y-m-d H:i:s")
@@ -1584,7 +1589,10 @@ class Oak {
             $arguments
         );
 
-        wp_send_json_success();
+        wp_send_json_success(array(
+            'data' => $arguments,
+            'term_logo' => $term_logo
+        ));
     }
 
     function upload_image( $image ) {

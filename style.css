@@ -3428,6 +3428,10 @@ select {
   margin-top: 10px;
 }
 
+.oak_add_field_container__logo {
+  width: 200px;
+}
+
 .oak_add_term_forms_list__vertical {
   display: flex;
   flex-direction: column;

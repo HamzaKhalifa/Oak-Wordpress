@@ -367,7 +367,7 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
         term_title varchar(55),
         term_description varchar(55),
         term_color varchar(55),
-        term_logo varchar(55),
+        term_logo varchar(555),
         term_state varchar(55),
         term_trashed varchar(55),
         term_modification_time datetime,
