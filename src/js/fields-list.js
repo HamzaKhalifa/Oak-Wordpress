@@ -17,12 +17,10 @@ applyGroupedActionButton.addEventListener('click', function() {
         var designationsToDelete = [];
         var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
         for (var i = 1; i < checkBoxes.length; i++) {
-            console.log(checkBoxes[i]);
             if (checkBoxes[i].checked) {
                 designationsToDelete.push(checkBoxes[i].parentNode.querySelector('.oak_list_titles_container__title').innerHTML);
             }
         }
-        console.log(designationsToDelete);
         setLoading();
         jQuery(document).ready(function() {
             jQuery.ajax({
@@ -37,7 +35,6 @@ applyGroupedActionButton.addEventListener('click', function() {
                 },
                 success: function(data) {
                     doneLoading();
-                    console.log(data);
                     window.location.reload();
                 },
                 error: function(error) {
@@ -112,7 +109,7 @@ searchButton.oninput = function() {
     var allDesignationsSpans = document.querySelectorAll('.oak_list_titles_container__the_title');
     for (var i = 0; i < allDesignationsSpans.length; i++) {
         console.log(allDesignationsSpans[i].innerHTML);
-        if (!allDesignationsSpans[i].parentNode.parentNode.getAttribute('filtered')) {
+        if (allDesignationsSpans[i].parentNode.parentNode.getAttribute('filtered') != 'true') {
             if (searchedDesignation == '') {
                 allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
                 allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_hidden');
@@ -208,29 +205,6 @@ handleModalButtons();
 function handleModalButtons() {
     var confirmButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function() {
-        if (deleting) {
-            closeModals();
-            setLoading();
-            jQuery(document).ready(function() {
-                jQuery.ajax({
-                    url: DATA.ajaxUrl,
-                    type: 'POST', 
-                    data: {
-                        'action': 'oak_delete_field',
-                        'data': elementToDelete.getAttribute('field-identifier')
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        elementToDelete.parentNode.remove();
-                        doneLoading();
-                    },
-                    error: function(error) {
-                        console.log(error);
-                        doneLoading();
-                    }
-                });
-            });
-        }
     });
 
     var cancelButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container');

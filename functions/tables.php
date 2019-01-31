@@ -60,6 +60,27 @@ $models_sql = "CREATE TABLE $models_table_name (
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 dbDelta( $models_sql );
 
+$taxonomies_table_name = Oak::$taxonomies_table_name;
+$taxonomies_sql = "CREATE TABLE $taxonomies_table_name (
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    taxonomy_designation varchar(55) DEFAULT '' NOT NULL,
+    taxonomy_identifier varchar(55) DEFAULT '' NOT NULL,
+    taxonomy_description varchar(555),
+    taxonomy_structure varchar(55),
+    taxonomy_numerotation varchar(55),
+    taxonomy_title varchar(55),
+    taxonomy_term_description varchar(55),
+    taxonomy_color varchar(55),
+    taxonomy_logo varchar(55),
+    taxonomy_publication varchar(55),
+    taxonomy_state varchar(55),
+    taxonomy_trashed varchar(55),
+    taxonomy_modification_time datetime,
+    PRIMARY KEY (id)
+) $charset_collate;";
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $taxonomies_sql );
+
 $organizations_table_name = Oak::$organizations_table_name;
 $organizations_sql = "CREATE TABLE $organizations_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -237,6 +258,26 @@ foreach( Oak::$models as $model ) :
 endforeach;
 Oak::$models_without_redundancy = $models_without_redundancy;
 
+$publications_table_name = Oak::$publications_table_name;
+Oak::$publications = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $publications_table_name
+" );
+$reversed_publications = array_reverse( Oak::$publications );
+$publications_without_redundancy = [];
+foreach( $reversed_publications as $publication ) :
+    $added = false;
+    foreach( $publications_without_redundancy as $publication_without_redundancy ) :
+        if ( $publication_without_redundancy->publication_identifier == $publication->publication_identifier) :
+            $added = true;
+        endif;
+    endforeach;
+    if ( !$added ) :
+        $publications_without_redundancy[] = $publication;
+    endif;
+endforeach;
+Oak::$publications_without_redundancy = $publications_without_redundancy;
+
 // Lets get the fields that are gonna be in the table
 foreach( $models_without_redundancy as $key => $model ) :
     $tables_fields = [];
@@ -293,5 +334,46 @@ foreach( $models_without_redundancy as $key => $model ) :
 
     endforeach;
 
+endforeach;
+
+// For taxonomies
+$taxonomies_table_name = Oak::$taxonomies_table_name;
+Oak::$taxonomies = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $taxonomies_table_name
+" );
+$reversed_taxonomies = array_reverse( Oak::$taxonomies );
+$taxonomies_without_redundancy = [];
+foreach( $reversed_taxonomies as $taxonomy ) :
+    $added = false;
+    foreach( $taxonomies_without_redundancy as $taxonomy_without_redundancy ) :
+        if ( $taxonomy_without_redundancy->taxonomy_identifier == $taxonomy->taxonomy_identifier) :
+            $added = true;
+        endif;
+    endforeach;
+    if ( !$added ) :
+        $taxonomies_without_redundancy[] = $taxonomy;
+    endif;
+endforeach;
+Oak::$taxonomies_without_redundancy = $taxonomies_without_redundancy;
+
+foreach( $taxonomies_without_redundancy as $taxonomy ) :
+    $table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy->taxonomy_identifier;
+    $terms_sql = "CREATE TABLE $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        term_designation varchar(55) DEFAULT '' NOT NULL,
+        term_identifier varchar(55) DEFAULT '' NOT NULL,
+        term_numerotation varchar(55),
+        term_title varchar(55),
+        term_description varchar(55),
+        term_color varchar(55),
+        term_logo varchar(55),
+        term_state varchar(55),
+        term_trashed varchar(55),
+        term_modification_time datetime,
+        PRIMARY KEY (id)
+    ) $charset_collate;";
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $terms_sql );
 endforeach;
 

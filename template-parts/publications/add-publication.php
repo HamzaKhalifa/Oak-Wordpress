@@ -72,7 +72,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="report-or-frame"><?php _e( 'Rapport d’entreprise ou Cadre RSE: ', Oak::$text_domain ); ?></label>
                 <select name="report-or-frame" class="oak_add_field_container__input oak_add_field_container__report_or_frame">
                     <option <?php if ( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->publication_report_or_frame == 'report' ) : echo('selected'); endif; endif; ?> value="report"><?php _e( 'Rapport d\'entreprise', Oak::$text_domain ) ?></option>
@@ -81,7 +81,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             </div>
         </div>
 
-        <div class="oak_add_field_container__horizontal_container oak_add_field_container__frame_type_container oak_hidden">
+        <div class="oak_add_field_container__horizontal_container oak_add_field_container__frame_type_container <?php if ( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->publication_report_or_frame != 'frame' ) : echo('oak_hidden'); endif; endif; if( count( $revisions ) <= 0 ) : echo('oak_hidden'); endif; ?>" >
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
             <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="frame-type"><?php _e( 'Type de cadre: ', Oak::$text_domain ); ?></label>
                 <select name="frame-type" type="text" class="oak_add_field_container__input oak_add_field_container__frame_type">
@@ -94,7 +94,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             </div>
         </div>
 
-        <div class="oak_add_field_container__horizontal_container oak_add_field_container__report_type_container">
+        <div class="oak_add_field_container__horizontal_container oak_add_field_container__report_type_container <?php if ( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->publication_report_or_frame == 'frame' ) : echo('oak_hidden'); endif; endif; ?>">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
             <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="frame-type"><?php _e( 'Type de rapport: ', Oak::$text_domain ); ?></label>
                 <select name="frame-type" type="text" class="oak_add_field_container__input oak_add_field_container__report_type">
@@ -107,32 +107,32 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             </div>
         </div>
 
-        <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container oak_hidden oak_add_field_container__sectorial_frame_container">
+        <div class="oak_add_field_container__horizontal_container oak_add_field_container__sectorial_frame_container <?php if ( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->publication_report_or_frame != 'frame' ) : echo('oak_hidden'); endif; endif; if( count( $revisions ) <= 0 ) : echo('oak_hidden'); endif;?>">
+            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="frame-type"><?php _e( 'Cadre sectoriel ? ', Oak::$text_domain ); ?></label>
-                    <input type="checkbox" class="oak_add_field_container__sectorial_frame">
+                    <input <?php if ( count( $revisions ) > 0 ) : if( $revisions[ count( $revisions ) - 1 ]->publication_sectorial_frame == 'true' ) : echo('checked'); endif; endif; ?> type="checkbox" class="oak_add_field_container__sectorial_frame">
                 </div>
             </div>
 
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container oak_hidden oak_hidden oak_add_field_container__sectors_container">
+            <div class="oak_add_field_container__field_container oak_add_field_container__designation_container oak_add_field_container__sectors_container <?php if( count( $revisions ) > 0 ) : if( $revisions[ count( $revisions ) - 1 ]->publication_sectorial_frame != 'true' ) : echo('oak_hidden'); endif; else : echo('oak_hidden'); endif; ?> ">
                 <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="sectors"><?php _e( 'Secteur d\'activité du Cadre: ', Oak::$text_domain ); ?></label>
-                    <input type="text" class="oak_add_field_container__sectors">
+                    <input value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->publication_sectors ); endif; ?>" type="text" class="oak_add_field_container__sectors">
                 </div>
             </div>
         </div>
 
         
         <div class="oak_add_field_container__horizontal_container oak_add_field_container__local_container">
-            <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container oak_add_field_container__designation_container oak_left_field">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="local"><?php _e( 'Publication locale ? ', Oak::$text_domain ); ?></label> 
                 <input name="local" type="checkbox" <?php if ( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->publication_local == 'true' ) : echo('checked'); endif; ?> class="oak_add_field_container__input oak_add_field_container__local">
             </div>
             <?php 
             $countries = Oak::oak_get_countries_names();
             ?>
-            <div class="oak_add_field_container__field_container oak_add_field_container__designation_container oak_country_select_container oak_hidden">
+            <div class="oak_add_field_container__field_container oak_add_field_container__designation_container oak_country_select_container <?php if ( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->publication_local != 'true' ) : echo('oak_hidden'); endif; if( count( $revisions ) <= 0 ) : echo('oak_hidden'); endif; ?>">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="sectors"><?php _e( 'Pays de la publication: ', Oak::$text_domain ); ?></label> 
                 <select class="oak_add_field_container__country" id="">
                     <?php 
@@ -163,7 +163,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             </div>
         </div>
 
-        <div class="oak_add_field_container__horizontal_container oak_add_field_container__gri_type_container">
+        <div class="oak_add_field_container__horizontal_container oak_add_field_container__gri_type_container <?php if ( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->publication_report_or_frame == 'frame' ) : echo('oak_hidden'); endif; endif; ?>">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
             <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="gri-type"><?php _e( 'Type GRI de rapport', Oak::$text_domain ); ?></label>
                 <select class="oak_add_field_container__gri_type" id="">
@@ -176,9 +176,9 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             </div>
         </div>
 
-        <div class="oak_add_field_container__horizontal_container oak_add_field_container__sectorial_supplement_container">
+        <div class="oak_add_field_container__horizontal_container oak_add_field_container__sectorial_supplement_container <?php if ( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->publication_report_or_frame == 'frame' ) : echo('oak_hidden'); endif; endif; ?>">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
-            <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="gri-type"><?php _e( 'Supplément sectoriel', Oak::$text_domain ); ?></label>
+            <label class="oak_add_field_container__label oak_add_field_container__label_designation"><?php _e( 'Supplément sectoriel', Oak::$text_domain ); ?></label>
                 <select class="oak_add_field_container__sectorial_supplement" id="">
                     <option value=""></option>
                     <option <?php if( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->publication_sectorial_supplement == 'euss' ) : echo('selected'); endif; endif; ?> value="euss"><?php _e( 'Services d’électricité (EUSS)' ); ?></option>

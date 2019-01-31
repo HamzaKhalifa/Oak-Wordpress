@@ -154,7 +154,7 @@ function createPublicationData(state) {
     var country = document.querySelector('.oak_add_field_container__country').value;
     var reportType = document.querySelector('.oak_add_field_container__report_type').value;
     var frameType = document.querySelector('.oak_add_field_container__frame_type').value;
-    var sectorialFrame = document.querySelector('.oak_add_field_container__sectorial_frame').value;
+    var sectorialFrame = document.querySelector('.oak_add_field_container__sectorial_frame').checked;
     var sectors = document.querySelector('.oak_add_field_container__sectors').value;
     var language = document.querySelector('.oak_add_field_container__language').value;
     var griType = document.querySelector('.oak_add_field_container__gri_type').value;
@@ -298,7 +298,7 @@ for (var i = 0; i < revisionsButtons.length; i++) {
         checkEquals(publicationData.country, selectedRevision.publication_country, revisionCountryField);
         checkEquals(publicationData.reportType, selectedRevision.publication_report_type, revisionReportTypeField);
         checkEquals(publicationData.frameType, selectedRevision.publication_frame_type, revisionFrameTypeField);
-        checkEquals(publicationData.sectorialFrame, selectedRevision.publication_sectorial_frame, revisionSectorialFrameField);
+        checkEquals(publicationData.sectorialFrame.toString(), selectedRevision.publication_sectorial_frame.toString(), revisionSectorialFrameField);
         checkEquals(publicationData.sectors, selectedRevision.publication_sectors, revisionSectorsField);
         checkEquals(publicationData.language, selectedRevision.publication_language, revisionLanguageField);
         checkEquals(publicationData.griType, selectedRevision.publication_gri_type, revisionGriTypeField);
@@ -338,7 +338,6 @@ reportOrFrameSelect.addEventListener('change', function() {
     var reportType = document.querySelector('.oak_add_field_container__report_type_container');
     var frameType = document.querySelector('.oak_add_field_container__frame_type_container');
     var sectorialFrame = document.querySelector('.oak_add_field_container__sectorial_frame_container');
-    var sectors = document.querySelector('.oak_add_field_container__sectors_container');
     var griType = document.querySelector('.oak_add_field_container__gri_type_container');
     var sectorialSupplement = document.querySelector('.oak_add_field_container__sectorial_supplement_container');
     if (reportOrFrameSelect.value == 'report') {
@@ -347,14 +346,12 @@ reportOrFrameSelect.addEventListener('change', function() {
         sectorialSupplement.classList.remove('oak_hidden');
         frameType.classList.add('oak_hidden');
         sectorialFrame.classList.add('oak_hidden');
-        sectors.classList.add('oak_hidden');
     } else {
         reportType.classList.add('oak_hidden');
         griType.classList.add('oak_hidden');
         sectorialSupplement.classList.add('oak_hidden');
         frameType.classList.remove('oak_hidden');
         sectorialFrame.classList.remove('oak_hidden');
-        sectors.classList.remove('oak_hidden');
     }
 });
 
@@ -364,8 +361,10 @@ localPublication.addEventListener('change', function() {
     var countrySelect = document.querySelector('.oak_country_select_container');
     if (localPublication.checked) {
         countrySelect.classList.remove('oak_hidden');
+        this.parentNode.classList.add('oak_left_field');
     } else {
         countrySelect.classList.add('oak_hidden');
+        this.parentNode.classList.remove('oak_left_field');
     }
 });
 
@@ -375,8 +374,10 @@ sectorialFrameCheckbox.addEventListener('change', function() {
     var sectorsSelectorContainer = document.querySelector('.oak_add_field_container__sectors_container');
     if (this.checked) {
         sectorsSelectorContainer.classList.remove('oak_hidden');
+        this.parentNode.parentNode.classList.add('oak_left_field');
     } else {
         sectorsSelectorContainer.classList.add('oak_hidden');
+        this.parentNode.parentNode.classList.remove('oak_left_field');
     }
 });
 
