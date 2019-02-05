@@ -1,0 +1,17 @@
+.oak_import_page {
+    width: 90%;
+    margin: auto;
+    margin-top: 40px;
+}
+
+.oak_import_page_button {
+    color: #003366;
+    border: 1px solid #003366;
+    transition: all .2s ease-in-out;
+}
+
+.oak_import_page_button:hover {
+    cursor: pointer;
+    background-color: #003366;
+    color: white;
+}

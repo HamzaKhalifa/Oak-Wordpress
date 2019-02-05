@@ -12,12 +12,12 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation du modèle: ', Oak::$text_domain ); ?></label> 
-                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->model_designation ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
+                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->model_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="identifier"><?php _e( 'Identifiant Unique: ', Oak::$text_domain ); ?></label> 
-                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->model_identifier ); endif; ?>" class="oak_add_field_container__input oak_add_model_container__identifier">
+                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->model_identifier ) ); endif; ?>" class="oak_add_field_container__input oak_add_model_container__identifier">
             </div>
         </div>
 
@@ -34,7 +34,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="categories"><?php _e( 'Catégories de publications: ', Oak::$text_domain ); ?></label> 
-                <input name="categories" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->model_publications_categories ); endif; ?>" class="oak_add_field_container__input oak_add_model_container__publications_categories">
+                <input name="categories" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->model_publications_categories ) ); endif; ?>" class="oak_add_field_container__input oak_add_model_container__publications_categories">
             </div>
         </div>
 

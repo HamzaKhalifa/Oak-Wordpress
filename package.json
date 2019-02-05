@@ -10,6 +10,7 @@
   "author": "Hamza Khalifa",
   "license": "ISC",
   "dependencies": {
+    "csv-writer": "^1.2.0",
     "node-sass": "^4.9.3"
   }
 }

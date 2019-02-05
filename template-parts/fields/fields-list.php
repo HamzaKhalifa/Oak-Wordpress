@@ -17,6 +17,7 @@
         <select class="oak_grouped_actions__element oak_grouped_actions__grouped_actions" name="" id="">
             <option value="grouped-actions"><?php _e( 'Action groupées', Oak::$text_domain ); ?></option>
             <option value="to-trash"><?php _e( 'Supprimer', Oak::$text_domain ); ?></option>
+            <option value="export"><?php _e( 'Exporter', Oak::$text_domain ); ?></option>
         </select>
 
         <span class="oak_list_button oak_list_grouped_actions_button"><?php _e( 'Appliquer', Oak::$text_domain ); ?></span>  
@@ -83,15 +84,15 @@
             <div class="oak_list_row">
                 <div class="oak_list_row__container">
                     <input class="oak_list_titles_container__checkbox" type="checkbox">
-                    <span class="oak_list_titles_container__title oak_list_titles_container__the_title"><?php echo( $field->field_designation ); ?></span>
+                    <span class="oak_list_titles_container__title oak_list_titles_container__the_title"><?php echo( esc_attr( $field->field_designation ) ); ?></span>
                 </div>
 
                 <div class="oak_list_row__container">
-                    <span class="oak_list_titles_container__title oak_list_nature"><?php echo( $field->field_type ); ?></span>
+                    <span class="oak_list_titles_container__title oak_list_nature"><?php echo( esc_attr( $field->field_type ) ); ?></span>
                 </div>
 
                 <div class="oak_list_row__container">
-                    <span class="oak_list_titles_container__title oak_list_function"><?php echo( $field->field_function ); ?></span>
+                    <span class="oak_list_titles_container__title oak_list_function"><?php echo( esc_attr( $field->field_function ) ); ?></span>
                 </div>
                 
                 <div class="oak_list_row__container">
@@ -100,7 +101,7 @@
 
                 <div class="oak_list_row__container">
                     <div class="<?php if ( $field->field_selector ) : echo('oak_dot'); else : echo('oak_dot oak_dot_false'); endif; ?>"></div>
-                    <span field-identifier="<?php echo( $field->field_identifier ); ?>" class="oak_list_header__add_button oak_list_button oak_add_field_container_saved_field_container__update_button"><?php _e( 'Accéder', Oak::$text_domain ); ?></span>
+                    <span field-identifier="<?php echo( esc_attr( $field->field_identifier ) ); ?>" class="oak_list_header__add_button oak_list_button oak_add_field_container_saved_field_container__update_button"><?php _e( 'Accéder', Oak::$text_domain ); ?></span>
                 </div>
 
             </div>

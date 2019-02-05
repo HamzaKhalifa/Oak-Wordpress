@@ -12,12 +12,12 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation du formulaire: ', Oak::$text_domain ); ?></label> 
-                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->form_designation ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
+                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->form_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="identifier"><?php _e( 'Identifiant Unique: ', Oak::$text_domain ); ?></label> 
-                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->form_identifier ); endif; ?>" class="oak_add_field_container__input oak_add_form_container__identifier">
+                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->form_identifier ) ); endif; ?>" class="oak_add_field_container__input oak_add_form_container__identifier">
             </div>
         </div>
 
@@ -32,7 +32,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="identifier"><?php _e( 'Attributs: ', Oak::$text_domain ); ?></label> 
-                <input name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->form_attributes ); endif; ?>" class="oak_add_field_container__input oak_add_form_container__attributs">
+                <input name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->form_attributes ) ); endif; ?>" class="oak_add_field_container__input oak_add_form_container__attributs">
             </div>
         </div>
 
@@ -69,9 +69,6 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                         $info = explode( ':', $fiel_or_separator );
                         if ( count( $info ) > 2 ) :
                             if ( $info[5] == $index ) : 
-                                // echo('<pre>');
-                                // var_dump( $info );
-                                // echo('</pre>');
                             ?>
                                 <div class="oak_add_form_fields_list__single_field">
 
@@ -127,7 +124,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                                     if ( !$exists ) : 
                                                         $added_fields[] = $field;
                                                 ?>
-                                                        <option <?php if( $info[1] == $field->field_identifier ) : echo('selected'); endif; ?> value="<?php echo ( $field->field_identifier ); ?>"><?php echo( $field->field_designation ); ?></option>
+                                                        <option <?php if( $info[1] == $field->field_identifier ) : echo('selected'); endif; ?> value="<?php echo ( esc_attr( $field->field_identifier ) ); ?>"><?php echo( esc_attr( $field->field_designation ) ); ?></option>
                                                 <?php 
                                                     endif;
                                                 endforeach;

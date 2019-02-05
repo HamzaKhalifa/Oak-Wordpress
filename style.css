@@ -3645,4 +3645,65 @@ select {
   color: white;
 }
 
+.oak_configuration_page_field_container {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.oak_configuration_page_save_central_url_button {
+  color: #003366;
+  border: 1px solid #003366;
+  transition: all 0.2s ease-in-out;
+  padding: 10px;
+}
+
+.oak_configuration_page_save_central_url_button:hover {
+  cursor: pointer;
+  background-color: #003366;
+  color: white;
+}
+
+.oak_configuration_page__title {
+  margin-bottom: 30px;
+}
+
+.oak_configuration_page {
+  margin-left: 30px;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.oak_configuration_page__label {
+  margin-right: 5px;
+}
+
+.oak_configuration_page_checkbox {
+  margin-top: 1px;
+}
+
+.oak_configuration_page_field_container__url_input {
+  width: 400px;
+}
+
+.oak_import_page {
+  width: 90%;
+  margin: auto;
+  margin-top: 40px;
+}
+
+.oak_import_page_button {
+  color: #003366;
+  border: 1px solid #003366;
+  transition: all 0.2s ease-in-out;
+}
+
+.oak_import_page_button:hover {
+  cursor: pointer;
+  background-color: #003366;
+  color: white;
+}
+
 /*# sourceMappingURL=style.css.map */

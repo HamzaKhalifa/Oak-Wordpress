@@ -12,12 +12,12 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation de la terminologie: ', Oak::$text_domain ); ?></label> 
-                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->glossary_designation ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
+                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->glossary_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="identifier"><?php _e( 'Identifiant Unique: ', Oak::$text_domain ); ?></label> 
-                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->glossary_identifier ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__identifier">
+                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->glossary_identifier ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__identifier">
             </div>
         </div>
 
@@ -26,9 +26,9 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="publication"><?php _e( 'Publication(s) dont est issue la terminologie: ', Oak::$text_domain ); ?></label> 
                 <select multiple class="oak_add_field_container__publication" name="publication" id="">
                     <?php 
-                    
-                    foreach( Oak::$publications as $publication ) : ?>
-                        <option value="<?php $publication->publication_identifier ?>"><?php echo( $publication->publication_designation ); ?></option>
+                    var_dump( $revisions[ count( $revisions ) - 1 ] );
+                    foreach( Oak::$publications_without_redundancy as $publication ) : ?>
+                        <option value="<?php echo( $publication->publication_identifier ) ?>"><?php echo( $publication->publication_designation ); ?></option>
                     <?php
                     endforeach;
                     ?>
@@ -69,7 +69,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="definition"><?php _e( 'Définition de la terminologie: ', Oak::$text_domain ); ?></label> 
-                <textarea class="oak_add_field_container__input oak_add_field_container__definition" name="definition" id="" cols="30" rows="10"><?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->glossary_definition ); endif; ?></textarea>
+                <textarea class="oak_add_field_container__input oak_add_field_container__definition" name="definition" id="" cols="30" rows="10"><?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->glossary_definition ) ); endif; ?></textarea>
             </div>
         </div>
 

@@ -12,46 +12,46 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation de l\'Organisation: ', Oak::$text_domain ); ?></label> 
-                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->organization_designation ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
+                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->organization_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="identifier"><?php _e( 'Identifiant Unique: ', Oak::$text_domain ); ?></label> 
-                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->organization_identifier ); endif; ?>" class="oak_add_field_container__input oak_add_organization_container__identifier">
+                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->organization_identifier ) ); endif; ?>" class="oak_add_field_container__input oak_add_organization_container__identifier">
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="acronym"><?php _e( 'Acronyme de l\'Organisation: ', Oak::$text_domain ); ?></label> 
-                <input name="acronym" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->organization_acronym ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__acronym">
+                <input name="acronym" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->organization_acronym ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__acronym">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="logo"><?php _e( 'Logo: ', Oak::$text_domain ); ?></label> 
                 <input type="file" class="oak_add_logo" onChange="readUrl(this)">
-                <img src="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->organization_logo ); endif; ?>" class="oak_add_organization_container__logo_img" alt="">
+                <img src="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->organization_logo ) ); endif; ?>" class="oak_add_organization_container__logo_img" alt="">
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="description"><?php _e( 'Identifiant de l’entreprise: ', Oak::$text_domain ); ?></label> 
-                <textarea class="oak_add_field_container__input oak_add_organization_container__description" name="description" id="" cols="30" rows="10"><?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->organization_description ); endif; ?></textarea>
+                <textarea class="oak_add_field_container__input oak_add_organization_container__description" name="description" id="" cols="30" rows="10"><?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->organization_description ) ); endif; ?></textarea>
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="url"><?php _e( 'Site Internet de l\'Organisation: ', Oak::$text_domain ); ?></label> 
-                <input name="url" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->organization_url ); endif; ?>" class="oak_add_field_container__input oak_add_organization_container__url">
+                <input name="url" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->organization_url ) ); endif; ?>" class="oak_add_field_container__input oak_add_organization_container__url">
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="address"><?php _e( 'Adresse du siège de l\'Organisation: ', Oak::$text_domain ); ?></label>
-                <input name="address" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->organization_address ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__address">
+                <input name="address" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->organization_address ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__address">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">

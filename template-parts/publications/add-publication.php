@@ -12,12 +12,12 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation de la publication: ', Oak::$text_domain ); ?></label> 
-                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->publication_designation ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
+                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->publication_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="identifier"><?php _e( 'Identifiant Unique: ', Oak::$text_domain ); ?></label> 
-                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->publication_identifier ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__identifier">
+                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->publication_identifier ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__identifier">
             </div>
         </div>
 
@@ -36,7 +36,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="year"><?php _e( 'Année de la publication: ', Oak::$text_domain ); ?></label> 
-                <input name="year" type="number" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->publication_year ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__year">
+                <input name="year" type="number" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->publication_year ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__year">
             </div>
         </div>
 
@@ -44,7 +44,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="headpiece"><?php _e( 'Vignette: ', Oak::$text_domain ); ?></label> 
                 <input name="headpiece" type="file" class="oak_add_logo" onChange="readUrl(this)">
-                <img src="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->publication_headpiece ); endif; ?>" class="oak_add_field_container__headpiece_img" alt="">
+                <img src="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->publication_headpiece ) ); endif; ?>" class="oak_add_field_container__headpiece_img" alt="">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
@@ -60,14 +60,14 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="file"><?php _e( 'Fichier de la publication: ', Oak::$text_domain ); ?></label> 
-                <input name="file" type="file" src="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->publication_file ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__file">
+                <input name="file" type="file" src="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->publication_file ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__file">
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="description"><?php _e( 'Description: ', Oak::$text_domain ); ?></label> 
-                <textarea class="oak_add_field_container__input oak_add_field_container__description" name="description" id="" cols="30" rows="10"><?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->publication_description ); endif; ?></textarea>
+                <textarea class="oak_add_field_container__input oak_add_field_container__description" name="description" id="" cols="30" rows="10"><?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->publication_description ) ); endif; ?></textarea>
             </div>
         </div>
 
@@ -118,7 +118,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container oak_add_field_container__sectors_container <?php if( count( $revisions ) > 0 ) : if( $revisions[ count( $revisions ) - 1 ]->publication_sectorial_frame != 'true' ) : echo('oak_hidden'); endif; else : echo('oak_hidden'); endif; ?> ">
                 <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="sectors"><?php _e( 'Secteur d\'activité du Cadre: ', Oak::$text_domain ); ?></label>
-                    <input value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->publication_sectors ); endif; ?>" type="text" class="oak_add_field_container__sectors">
+                    <input value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->publication_sectors ) ); endif; ?>" type="text" class="oak_add_field_container__sectors">
                 </div>
             </div>
         </div>

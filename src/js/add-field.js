@@ -368,6 +368,7 @@ function handleModalButtons() {
         if (adding || updating) {
             closeModals();
             setLoading();
+            console.log('field data', fieldData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,

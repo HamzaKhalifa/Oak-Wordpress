@@ -19,40 +19,40 @@ endforeach;
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation du terme: ', Oak::$text_domain ); ?></label> 
-                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->term_designation ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
+                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->term_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="identifier"><?php _e( 'Identifiant Unique: ', Oak::$text_domain ); ?></label> 
-                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->term_identifier ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__identifier">
+                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->term_identifier ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__identifier">
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container <?php if ( $which_taxonomy->taxonomy_numerotation != 'true' ) : echo('oak_hidden'); endif; ?>">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation"><?php _e( 'Numerotation du terme: ', Oak::$text_domain ); ?></label> 
-                <input class="oak_add_field_container__input oak_add_field_container__numerotation" type="number" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->term_numerotation ); endif; ?>">
+                <input class="oak_add_field_container__input oak_add_field_container__numerotation" type="number" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->term_numerotation ) ); endif; ?>">
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container <?php if ( $which_taxonomy->taxonomy_title != 'true' ) : echo('oak_hidden'); endif; ?> ">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation"><?php _e( 'Titre du terme: ', Oak::$text_domain ); ?></label> 
-                <input class="oak_add_field_container__input oak_add_field_container__term_title" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->term_title ); endif; ?>">
+                <input class="oak_add_field_container__input oak_add_field_container__term_title" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->term_title ) ); endif; ?>">
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container <?php if ( $which_taxonomy->taxonomy_term_description != 'true' ) : echo('oak_hidden'); endif; ?>">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="description"><?php _e( 'Description du terme: ', Oak::$text_domain ); ?></label> 
-                <textarea class="oak_add_field_container__input oak_add_field_container__description" name="description" id="" cols="30" rows="10"><?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->term_description ); endif; ?></textarea>
+                <textarea class="oak_add_field_container__input oak_add_field_container__description" name="description" id="" cols="30" rows="10"><?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->term_description ) ); endif; ?></textarea>
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container <?php if ( $which_taxonomy->taxonomy_color != 'true' ) : echo('oak_hidden'); endif; ?> ">
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation"><?php _e( 'Couleur du terme: ', Oak::$text_domain ); ?></label> 
-                <input type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->term_color ); else : echo('#bada55'); endif; ?>" class="oak_add_field_container__color" />
+                <input type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->term_color ) ); else : echo('#bada55'); endif; ?>" class="oak_add_field_container__color" />
             </div>
         </div>
 
@@ -60,7 +60,7 @@ endforeach;
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation"><?php _e( 'Logo du terme: ', Oak::$text_domain ); ?></label> 
                 <input onChange="readUrl(this)" type="file" class="oak_add_field_container__logo_input">
-                <img class="oak_add_field_container__logo" src="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->term_logo ); endif; ?>" alt="">
+                <img class="oak_add_field_container__logo" src="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->term_logo ) ); endif; ?>" alt="">
             </div>
         </div>
         

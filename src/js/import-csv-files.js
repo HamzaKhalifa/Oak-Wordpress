@@ -1,5 +1,3 @@
-console.log('I\'m here!');
-
 function readUrl(input) {
     var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
     if (regex.test(input.value.toLowerCase())) {

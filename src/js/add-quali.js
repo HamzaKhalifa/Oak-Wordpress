@@ -143,7 +143,18 @@ designationInput.oninput = function () {
 function createqualiData(state) {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
     var identifier = createIdentifier(designation);
-    var publication =  jQuery('.oak_add_field_container__publication').val();
+    var publications =  jQuery('.oak_add_field_container__publication').val();
+    var publication = '';
+    if (publications != null) {
+        for(var i = 0; i < publications.length; i++) {
+            var delimiter = '|';
+            if ( i == publications.length - 1 )
+                delimiter = '';
+
+            publication += publications[i] + delimiter;
+        }
+    }
+    console.log('publications', publication);
     var object = document.querySelector('.oak_add_field_container__object').value;
     var depends = document.querySelector('.oak_add_field_container__depends').checked;
     var parent = document.querySelector('.oak_add_field_container__parent').value;

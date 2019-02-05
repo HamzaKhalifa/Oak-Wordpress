@@ -12,12 +12,12 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation du champ: ', Oak::$text_domain ); ?></label> 
-                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->field_designation ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
+                <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->field_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="identifier"><?php _e( 'Identifiant Unique: ', Oak::$text_domain ); ?></label> 
-                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->field_identifier ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__identifier">
+                <input disabled name="identifier" type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->field_identifier ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__identifier">
             </div>
         </div>
 
@@ -44,10 +44,10 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                         endswitch;
                     endif;
                     ?>
-                    <option <?php echo( $selected[0] ); ?> value="Texte">Texte</option>
-                    <option <?php echo( $selected[1] ); ?> value="Zone de Texte">Zone De Texte</option>
-                    <option <?php echo( $selected[2] ); ?> value="Image">Image</option>
-                    <option <?php echo( $selected[3] ); ?> value="Fichier">Fichier</option>
+                    <option <?php echo( esc_attr( $selected[0] ) ); ?> value="Texte">Texte</option>
+                    <option <?php echo( esc_attr( $selected[1] ) ); ?> value="Zone de Texte">Zone De Texte</option>
+                    <option <?php echo( esc_attr( $selected[2] ) ); ?> value="Image">Image</option>
+                    <option <?php echo( esc_attr( $selected[3] ) ); ?> value="Fichier">Fichier</option>
                 </select>
             </div>
 
@@ -70,44 +70,44 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                         endswitch;
                     endif;
                     ?>
-                    <option <?php echo( $selected[0] ); ?> value="Information/Description">Information/Description</option>
-                    <option <?php echo( $selected[1] ); ?>  value="Exemple">Exemple</option>
-                    <option <?php echo( $selected[2] ); ?> value="Illustration">Illustration</option>
+                    <option <?php echo( esc_attr( $selected[0] ) ); ?> value="Information/Description">Information/Description</option>
+                    <option <?php echo( esc_attr( $selected[1] ) ); ?>  value="Exemple">Exemple</option>
+                    <option <?php echo( esc_attr( $selected[2] ) ); ?> value="Illustration">Illustration</option>
                 </select>
             </div>
         </div>
 
         <div class="oak_add_field_container__field_container oak_add_field_container__default_value_container">
             <label class="oak_add_field_container__label" for="default-value"><?php _e( 'Valeur par défaut: ', Oak::$text_domain ); ?></label> 
-            <input name="default-value" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_default_value ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_default_value ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__default_value"></textarea>
+            <input name="default-value" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_default_value ) ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->field_default_value ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__default_value"></textarea>
         </div>
 
         <div class="oak_add_field_container__field_container oak_add_field_container__placeholder_container">
             <label class="oak_add_field_container__label" for="placeholder"><?php _e( 'Description du champ: ', Oak::$text_domain ); ?></label> 
-            <input name="placeholder" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_placeholder ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_placeholder ); endif; ?>" type="text" class="oak_add_field_container__input oak_add_field_container__placeholder">
+            <input name="placeholder" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_placeholder ) ) : echo( esc_attr ( $revisions[ count( $revisions ) - 1 ]->field_placeholder ) ); endif; ?>" type="text" class="oak_add_field_container__input oak_add_field_container__placeholder">
         </div>
 
         <div class="oak_add_field_container__field_container oak_add_field_container__instructions_container">
             <label class="oak_add_field_container__label oak_add_field_container__label_instruction" for="instructions"><?php _e( 'Consignes de remplissage: ', Oak::$text_domain ); ?></label> 
-            <textarea cols="30" rows="2" name="instructions" class="oak_add_field_container__input oak_add_field_container__instructions"><?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_instructions ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_instructions ); endif; ?></textarea>
+            <textarea cols="30" rows="2" name="instructions" class="oak_add_field_container__input oak_add_field_container__instructions"><?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_instructions ) ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->field_instructions ) ); endif; ?></textarea>
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__before_container">
                 <label class="oak_add_field_container__label" for="before"><?php _e( 'Avant: ', Oak::$text_domain ); ?></label> 
-                <input name="before" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_before ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_before ); endif; ?>" type="text" class="oak_add_field_container__input oak_add_field_container__before">
+                <input name="before" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_before ) ) : echo( esc_attr ( $revisions[ count( $revisions ) - 1 ]->field_before ) ); endif; ?>" type="text" class="oak_add_field_container__input oak_add_field_container__before">
             </div>
             
             <div class="oak_add_field_container__field_container oak_add_field_container__max_length_container">
                 <label class="oak_add_field_container__label" for="max-length"><?php _e( 'Nombre maximum de caractères: ', Oak::$text_domain ); ?></label> 
-                <input name="max-length" type="number" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_max_length ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_max_length ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__max_length">
+                <input name="max-length" type="number" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_max_length ) ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->field_max_length ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__max_length">
             </div>
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
             <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__after_container">
                 <label class="oak_add_field_container__label" for="after"><?php _e( 'Après: ', Oak::$text_domain ); ?></label> 
-                <input name="after" type="text" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_after ) ) : echo( $revisions[ count( $revisions ) - 1 ]->field_after ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__after">
+                <input name="after" type="text" value="<?php if ( isset( $revisions[ count( $revisions ) - 1 ]->field_after ) ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->field_after ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__after">
             </div>
 
             <div class="oak_add_field_container__field_container oak_add_field_container__selector_container">
@@ -274,7 +274,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                         if ( $field_data[1] == $revisions[ count( $revisions ) - 1 ]->field_identifier ) : 
                                             $found_field = true;
                                         ?>
-                                            <option value="<?php Oak::$forms_without_redundancy[ $forms_counter ]->form_identifier ?>"><?php echo( Oak::$forms_without_redundancy[ $forms_counter ]->form_designation ); ?></option>
+                                            <option value="<?php Oak::$forms_without_redundancy[ $forms_counter ]->form_identifier ?>"><?php echo( esc_attr( Oak::$forms_without_redundancy[ $forms_counter ]->form_designation ) ); ?></option>
                                         <?php
                                         endif;
                                     endif;
@@ -315,7 +315,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                                         if ( $fields_data[1] == $revisions[ count( $revisions ) - 1 ]->field_identifier ) : 
                                                             $found_field = true;
                                                         ?>
-                                                            <option value="<?php $model->model_identifier ?>"><?php echo( $model->model_designation ); ?></option>
+                                                            <option value="<?php $model->model_identifier ?>"><?php echo( esc_attr( $model->model_designation ) ); ?></option>
                                                         <?php
                                                         endif;
                                                     endif;
@@ -455,7 +455,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                         if ( $key != count( $revisions ) - 1 ) :
                         ?>
                             <div index="<?php echo( $key ) ?>" class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
-                                <span class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision->field_modification_time ); ?></span>
+                                <span class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( esc_attr( $revision->field_modification_time ) ); ?></span>
                             </div>
                         <?php
                         endif;
