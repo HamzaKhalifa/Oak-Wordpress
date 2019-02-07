@@ -11,6 +11,7 @@ class Oak {
     public static $qualis_table_name;
     public static $quantis_table_name;
     public static $taxonomies_table_name;
+    public static $terms_and_objects_table_name;
 
     public static $fields;
     public static $fields_without_redundancy;
@@ -21,6 +22,8 @@ class Oak {
 
     public static $objects;
     public static $terms;
+    public static $all_objects;
+    public static $all_objects_without_redundancy = [];
 
     public static $models;
     public static $models_without_redundancy;
@@ -51,7 +54,10 @@ class Oak {
         Oak::$glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
         Oak::$qualis_table_name = $wpdb->prefix . 'oak_qualis';
         Oak::$quantis_table_name = $wpdb->prefix . 'oak_quantis';
+        Oak::$terms_and_objects_table_name = $wpdb->prefix . 'oak_terms_and_objects';
+
         Oak::$forms_attributes = [];
+        Oak::$all_objects = [];
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
@@ -133,6 +139,9 @@ class Oak {
 
         add_action('wp_ajax_oak_get_all_data_for_corn', array( $this, 'oak_get_all_data_for_corn') );
         add_action('wp_ajax_nopriv_oak_get_all_data_for_corn', array( $this, 'oak_get_all_data_for_corn') );
+
+        add_action('wp_ajax_corn_save_data', array( $this, 'corn_save_data') );
+        add_action('wp_ajax_nopriv_corn_save_data', array( $this, 'corn_save_data') );
     }
 
     function oak_enqueue_styles() {
@@ -200,6 +209,11 @@ class Oak {
     function oak_admin_enqueue_scripts( $hook ) { 
         global $wpdb;
 
+        wp_enqueue_script( 'admin_menu_script', get_template_directory_uri() . '/src/js/admin-menu.js', array('jquery'), false, true );
+        wp_localize_script( 'admin_menu_script', 'DATA', array(
+            'ajaxUrl' => admin_url('admin-ajax.php')
+        ) );
+
         if ( get_current_screen()->id == 'toplevel_page_oak_materiality_reporting' ) :
             wp_enqueue_script( 'oak_configuration_script', get_template_directory_uri() . '/src/js/configuration-page.js', array('jquery'), false, true );
             wp_localize_script( 'oak_configuration_script', 'DATA', array(
@@ -207,23 +221,20 @@ class Oak {
             ) );
         endif;
 
+        $corn = get_option( 'oak_corn' ) != false ? get_option('oak_corn') : true;
+        $central_url = get_option( 'oak_central_url' ) != false ? get_option('oak_central_url') : true;
         if ( get_current_screen()->id == 'toplevel_page_oak_import_page' ) :
             wp_enqueue_script( 'oak_import_script', get_template_directory_uri() . '/src/js/import-page.js', array('jquery'), false, true );
             wp_localize_script( 'oak_import_script', 'DATA', array(
-                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
                 'corn' => get_option('oak_corn'),
-                'centralUrl' => get_option('oak_central_url')
+                'centralUrl' => $central_url,
+                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
             ) );
         endif;
 
         if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_import_csv_files' ) :
             wp_enqueue_script( 'oak_import_csv_file', get_template_directory_uri() . '/src/js/import-csv-files.js', array('jquery'), false, true );
         endif;
-
-        wp_enqueue_script( 'admin_menu_script', get_template_directory_uri() . '/src/js/admin-menu.js', array('jquery'), false, true );
-        wp_localize_script( 'admin_menu_script', 'DATA', array(
-            'ajaxUrl' => admin_url('admin-ajax.php')
-        ) );
 
         if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_critical_analysis_configuration' ) :
             wp_enqueue_script( 'oak_critical_analysis_configuration', get_template_directory_uri() . '/src/js/critical-analysis-configuration.js', array('jquery'), false, true);
@@ -610,7 +621,8 @@ class Oak {
                     'objects' => Oak::$objects,
                     'adminUrl' => admin_url(),
                     'templateDirectoryUri' => get_template_directory_uri(),
-                    'modelIdentifier' => $model_identifier
+                    'modelIdentifier' => $model_identifier,
+                    'allObjectsWithoutRedundancy' => Oak::$all_objects_without_redundancy
                 ) );
             else :
                 // This is the list page
@@ -1374,7 +1386,7 @@ class Oak {
                 'model_forms' => $this->oak_filter_word( $model['forms'] ),
                 'model_separators' => $this->oak_filter_word( $model['separators'] ),
                 'model_state' => $this->oak_filter_word( $model['state'] ),
-                'model_trashed' =>$$this->oak_filter_word( $model['trashed'] ),
+                'model_trashed' => $this->oak_filter_word( $model['trashed'] ),
                 'model_modification_time' => date("Y-m-d H:i:s"),
             )
         );
@@ -1394,14 +1406,14 @@ class Oak {
                 'taxonomy_identifier' => $this->oak_filter_word( $taxonomy['identifier'] ),
                 'taxonomy_description' => $this->oak_filter_word( $taxonomy['description'] ),
                 'taxonomy_structure' => $this->oak_filter_word( $taxonomy['structure'] ),
-                'taxonomy_numerotation' => $this->oak_filter_word( $taxonomy['numerotation'] ),
-                'taxonomy_title' => $this->oak_filter_word( $taxonomy['title'] ),
-                'taxonomy_term_description' => $this->oak_filter_word( $taxonomy['termDescription'] ),
-                'taxonomy_color' => $this->oak_filter_word( $taxonomy['color'] ),
-                'taxonomy_logo' => $this->oak_filter_word( $taxonomy['logo'] ),
+                'taxonomy_numerotation' => $taxonomy['numerotation'],
+                'taxonomy_title' => $taxonomy['title'],
+                'taxonomy_term_description' => $taxonomy['termDescription'],
+                'taxonomy_color' => $taxonomy['color'],
+                'taxonomy_logo' => $taxonomy['logo'],
                 'taxonomy_publication' => $this->oak_filter_word( $taxonomy['publication'] ),
                 'taxonomy_state' => $this->oak_filter_word( $taxonomy['state'] ),
-                'taxonomy_trashed' =>$$this->oak_filter_word( $taxonomy['rashed'] ),
+                'taxonomy_trashed' => $taxonomy['rashed'],
                 'taxonomy_modification_time' => date("Y-m-d H:i:s"),
             )
         );
@@ -1959,12 +1971,31 @@ class Oak {
 
     function oak_get_all_data_for_corn() {
         global $wpdb;
+
+        $table_name = $wpdb->prefix . 'oak_organizations';
+        $organizations = $wpdb->get_results ( "
+            SELECT * 
+            FROM $table_name
+        " );
+        $organizations_without_redundancy = [];
+        $reversed_organizations = array_reverse( $organizations );
+        foreach ( $reversed_organizations as $organization ) :
+            $exists = false;
+            foreach( $organizations_without_redundancy as $organization_without_redundancy ) :
+                if ( $organization_without_redundancy->organization_identifier == $organization->organization_identifier ) :
+                    $exists = true;
+                endif;
+            endforeach;
+            if ( !$exists ) :
+                $organizations_without_redundancy[] = $organization;
+            endif;
+        endforeach; 
+
         $table_name = $wpdb->prefix . 'oak_publications';
         $publications = $wpdb->get_results ( "
             SELECT * 
             FROM $table_name
         " );
-
         $publications_without_redundancy = [];
         $reversed_publications = array_reverse( $publications );
         foreach ( $reversed_publications as $publication ) :
@@ -2168,6 +2199,12 @@ class Oak {
             endif;
         endforeach;
 
+        $terms_and_objects_table_name = Oak::$terms_and_objects_table_name;
+        $terms_and_objects = $wpdb->get_results ( "
+            SELECT * 
+            FROM $terms_and_objects_table_name
+        " );
+
         wp_send_json_success( array(
             'fields' => $fields,
             'fieldsWithoutRedundancy' => $fields_without_redundancy,
@@ -2179,6 +2216,8 @@ class Oak {
             'taxonomiesWithoutRedundancy' => $taxonomies_without_redundancy,
             'publications' => $publications,
             'publicationsWithoutRedundancy' => $publications_without_redundancy,
+            'organizations' => $organizations,
+            'organizationsWithoutRedundancy' => $organizations_without_redundancy,
             'allTerms' => $all_terms,
             'allObjects' => $all_objects,
             'qualis' => $qualis,
@@ -2187,6 +2226,14 @@ class Oak {
             'quantisWithoutRedundancy' => $quantis_without_redundancy,
             'glossaries' => $glossaries,
             'glossariesWithoutRedundancy' => $glossaries_without_redundancy,
+            'termsAndObjects' => $terms_and_objects
+        ) );
+    }
+
+    function corn_save_data() {
+        $selected_data = $_POST['data'];
+        wp_send_json_success( array( 
+            'selected data' => $selected_data
         ) );
     }
 }

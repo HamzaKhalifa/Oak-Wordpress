@@ -388,7 +388,7 @@ function handleModalButtons() {
                         DATA.glossaries.push(glossaryData);
                         doneLoading();
                         console.log(data);
-                        // window.location.reload();
+                        window.location.reload();
                     },
                     error: function (error) {
                         doneLoading();

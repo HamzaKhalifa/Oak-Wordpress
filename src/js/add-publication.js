@@ -143,7 +143,7 @@ designationInput.oninput = function () {
 function createPublicationData(state) {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
     var identifier = createIdentifier(designation);
-    var organization = document.querySelector('.oak_add_field_container__designation').value;
+    var organization = document.querySelector('.oak_add_field_container__organization').value;
     var year = document.querySelector('.oak_add_field_container__year').value;
     var headpiece = document.querySelector('.oak_add_field_container__headpiece_img').getAttribute('src');
     var format = document.querySelector('.oak_add_field_container__format').value;

@@ -13,9 +13,14 @@ if (addButton) {
         var ok = checkOk();
         if (!ok)
             return;
-        objectData = createObjectData(0);
-        adding = true;
-        openModal('Êtes vous sur de vouloir ajouter cette terminologie?', true);
+        
+        if (testIdentifierExists()) 
+            openModal('L’identifiant que vous venez d\'entrer a déjà été utilisé pour un autre objet !');
+        else {
+            objectData = createObjectData(0);
+            adding = true;
+            openModal('Êtes vous sur de vouloir ajouter cette terminologie?', true);
+        }
     });
 }
 
@@ -23,9 +28,13 @@ if (addButton) {
 var updateButton = document.querySelector('.oak_add_field_container__update_button');
 if (updateButton) {
     updateButton.addEventListener('click', function () {
-        objectData = createObjectData(DATA.revisions[DATA.revisions.length - 1].object_state);
-        updating = true;
-        openModal('Êtes vous sûr de vouloir modifier cette terminologie?', true);
+        if (testIdentifierExists()) 
+            openModal('L’identifiant que vous venez d\'entrer a déjà été utilisé pour un autre objet !');
+        else {
+            objectData = createObjectData(DATA.revisions[DATA.revisions.length - 1].object_state);
+            updating = true;
+            openModal('Êtes vous sûr de vouloir modifier cette terminologie?', true);
+        }
     });
 }
 
@@ -33,17 +42,21 @@ if (updateButton) {
 var registerButton = document.querySelector('.oak_add_field_container__register_button');
 if (registerButton) {
     registerButton.addEventListener('click', function () {
-        objectData = createObjectData(1);
-        if (DATA.revisions.length == 0) {
-            // adding for the first time
-            var ok = checkOk();
-            if (!ok)
-                return;
-            adding = true;
-        } else {
-            updating = true;
+        if (testIdentifierExists()) 
+            openModal('L’identifiant que vous venez d\'entrer a déjà été utilisé pour un autre objet !');
+        else {
+            objectData = createObjectData(1);
+            if (DATA.revisions.length == 0) {
+                // adding for the first time
+                var ok = checkOk();
+                if (!ok)
+                    return;
+                adding = true;
+            } else {
+                updating = true;
+            }
+            openModal('Êtes vous sûr de vouloir ajouter ce champ à la liste des champs enregistrés?', true);
         }
-        openModal('Êtes vous sûr de vouloir ajouter ce champ à la liste des champs enregistrés?', true);
     });
 }
 
@@ -89,9 +102,13 @@ function checkOk() {
 var broadcastButton = document.querySelector('.oak_add_field_container__broadcast_button');
 if (broadcastButton) {
     broadcastButton.addEventListener('click', function () {
-        objectData = createObjectData(2);
-        updating = true;
-        openModal('Êtes vous sûr de vouloir modifier et diffuser ce champ ?', true);
+        if (testIdentifierExists()) 
+            openModal('L’identifiant que vous venez d\'entrer a déjà été utilisé pour un autre objet !');
+        else {
+            objectData = createObjectData(2);
+            updating = true;
+            openModal('Êtes vous sûr de vouloir modifier et diffuser ce champ ?', true);
+        }
     });
 }
 
@@ -99,9 +116,13 @@ if (broadcastButton) {
 var draftButton = document.querySelector('.oak_add_field_container__draft_button');
 if (draftButton) {
     draftButton.addEventListener('click', function () {
-        objectData = createObjectData(0);
-        updating = true;
-        openModal('Êtes vous sûr de vouloir modifier et renvoyer ce champ à l\'état de Brouillon ?', true);
+        if (testIdentifierExists()) 
+            openModal('L’identifiant que vous venez d\'entrer a déjà été utilisé pour un autre objet !');
+        else {
+            objectData = createObjectData(0);
+            updating = true;
+            openModal('Êtes vous sûr de vouloir modifier et renvoyer ce champ à l\'état de Brouillon ?', true);
+        }
     });
 }
 
@@ -119,7 +140,6 @@ if (trashButton) {
                     'action': 'oak_send_field_to_trash',
                 },
                 success: function (data) {
-                    console.log(data);
                     doneLoading();
                     window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_field');
                 },
@@ -139,10 +159,26 @@ designationInput.oninput = function () {
     identifierInput.value = createIdentifier(designationInput.value);
 }
 
+function testIdentifierExists() {
+    var designation = document.querySelector('.oak_add_field_container__designation').value;
+    var identifier = createIdentifier(designation);
+
+    if (DATA.revisions.length == 0) {
+        for(var i = 0; i < DATA.allObjectsWithoutRedundancy.length; i++) {
+            console.log(DATA.allObjectsWithoutRedundancy[i].object_identifier);
+            if (DATA.allObjectsWithoutRedundancy[i].object_identifier == identifier) {
+                return true
+            }
+        }
+    }
+    return false;
+}
+
 // We create while adding the new revision
 function createObjectData(state) {
     var designation = document.querySelector('.oak_add_field_container__designation').value;
     var identifier = createIdentifier(designation);
+
     var trashed = false;
 
     var additionalFields = document.querySelectorAll('.oak_additional_field');
@@ -377,7 +413,7 @@ function handleModalButtons() {
                         DATA.objects.push(objectData);
                         doneLoading();
                         console.log(data);
-                        // window.location.reload();
+                        window.location.reload();
                     },
                     error: function (error) {
                         doneLoading();

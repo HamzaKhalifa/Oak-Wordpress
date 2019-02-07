@@ -197,6 +197,16 @@ $quantis_sql = "CREATE TABLE $quantis_table_name (
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 dbDelta( $quantis_sql );
 
+$terms_and_objects_table_name = Oak::$terms_and_objects_table_name;
+$terms_and_objects_sql= "CREATE TABLE $terms_and_objects_table_name (
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    term_identifier varchar(555) DEFAULT '' NOT NULL,
+    object_identifier varchar(555) DEFAULT '' NOT NULL,
+    PRIMARY KEY (id)
+) $charset_collate;";
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $terms_and_objects_sql );
+
 $fields_table_name = Oak::$fields_table_name;
 Oak::$fields = $wpdb->get_results ( "
     SELECT * 
@@ -376,4 +386,25 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $terms_sql );
 endforeach;
+
+// To get all objects associated to all models
+foreach( Oak::$models as $model ) :
+    $table_name = $wpdb->prefix . 'oak_' . $model->model_identifier;
+    $model_objects = $wpdb->get_results ( "
+        SELECT * 
+        FROM $table_name
+    " );
+    Oak::$all_objects = array_merge( Oak::$all_objects, $model_objects );
+endforeach;
+
+foreach( Oak::$all_objects as $object ) :
+    $exists = false;
+    foreach( Oak::$all_objects_without_redundancy as $object_without_redundancy) :
+        if ( $object_without_redundancy->object_identifier == $object->object_identifier ) 
+            $exists = true;
+    endforeach;
+    if ( !$exists )
+        Oak::$all_objects_without_redundancy[] = $object;
+endforeach;
+
 

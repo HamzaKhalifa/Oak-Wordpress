@@ -4,7 +4,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
 <div class="oak_add_field_container__header">
     <img class="oak_add_field_container_header_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/fields.png' ); ?>" alt="">
-    <h3 class="oak_add_field_container__title"><?php _e( 'Ajouter une Organisation', Oak::$text_domain ); ?></h3>
+    <h3 class="oak_add_field_container__title"><?php _e( 'Ajouter une Publication', Oak::$text_domain ); ?></h3>
 </div>
     
 <div class="oak_add_field_big_container">
@@ -27,7 +27,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 <select class="oak_add_field_container__organization" name="" id="">
                     <?php 
                     foreach( Oak::$organizations as $organization ) : ?>
-                        <option value="<?php $organization->organization_identifier ?>"><?php echo( $organization->organization_designation ); ?></option>
+                        <option <?php if( count( $revisions ) > 1 ) : if( $revisions[ count( $revisions ) - 1 ]->publication_organization == $organization->organization_identifier ) : echo('selected'); endif; endif; ?> value="<?php echo ( $organization->organization_identifier ) ?>"><?php echo( $organization->organization_designation ); ?></option>
                     <?php
                     endforeach;
                     ?>

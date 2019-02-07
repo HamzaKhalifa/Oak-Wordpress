@@ -368,6 +368,7 @@ function handleModalButtons() {
     confirmButton.addEventListener('click', function () {
         if (adding || updating) {
             closeModals();
+            console.log(taxonomyData);
             setLoading();
             jQuery(document).ready(function () {
                 jQuery.ajax({

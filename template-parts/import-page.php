@@ -1,5 +1,42 @@
 <div class="oak_import_page">
-    <div class="oak_import_page_field">
+    <div class="import_header">
+        <div class="import_header__left_side">
+            <i class="import_header_left_side__menu_icon fas fa-bars"></i>
+            <h4 class="import_header_left_side__title"><?php _e( 'Configuration', Oak::$text_domain ); ?></h4>
+        </div>
+        <div class="import_header__right_side">
+            <i class="import_header_right_side__search_icon fas fa-search"></i>
+            <i class="import_header_right_side__right_menu_icon fas fa-ellipsis-v"></i>
+        </div>
+    </div>
+
+    <div class="import_header import_header_screen_title_container">
+        <div class="import_header__left_side">
+            <i class="import_header_right_side__search_icon fas fa-times"></i>
+            <h4 class="import_header_left_side__title screen_title"><?php _e( 'Organisations', Oak::$text_domain ); ?></h4>
+        </div>
+    </div>
+
+    <div class="import_container">
+        <div class="import_container__line">
+            <div class="import_container_line__checkbox_container">
+                <input type="checkbox" class="import_container__element_checkbox">
+                <h4 class="import_container_line_column_value import_container_line__title"><?php _e( 'Nom de l\'organisation', Oak::$text_domain ); ?></h4>
+            </div>
+            <h4 class="import_container_line_column_value import_container_line__title"><?php _e( 'Pays du siège', Oak::$text_domain ); ?></h4>
+            <h4 class="import_container_line_column_value import_container_line__title"><?php _e( 'Type', Oak::$text_domain ); ?></h4>
+            <h4 class="import_container_line_column_value import_container_line__title"><?php _e( 'Secteur d\'activité', Oak::$text_domain ); ?></h4>
+        </div>
+    </div>
+
+    <div class="next_button_container">
+        <span class="next_button_container_next oak_hidden"><?php _e( 'Etape suivante', Oak::$text_domain ); ?></span>
+    </div>
+
+
+
+
+    <!-- <div class="oak_import_page_field">
         <label for="publications-select"><?php _e( 'Publications', Oak::$text_domain ); ?></label>
         <select class="oak_import_page__publications_select" multiple name="publications-select" id="">
         </select>
@@ -7,7 +44,7 @@
         <span class="oak_import_page_button oak_import_page_field__import_button"><?php _e( 'Importer', Oak::$text_domain ); ?></span>
         <span class="some_selector">
         </span>
-    </div>
+    </div> -->
 </div>
 
 
