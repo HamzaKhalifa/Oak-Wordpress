@@ -332,133 +332,133 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
 
 <!-- For the modal -->
-<div class="oak_object_model_add_formula_modal_container">
-    <div class="oak_object_model_add_formula_modal_container__modal">
-        <div class="oak_object_model_add_formula_modal_container_modal__title_container">
-            <h3 class="oak_object_model_add_formula_modal_container_modal_title_container__title"></h3>
+<div class="oak_add_element_modal_container">
+    <div class="oak_add_element_modal_container__modal">
+        <div class="oak_add_element_modal_container_modal__title_container">
+            <h3 class="oak_add_element_modal_container_modal_title_container__title"></h3>
         </div>
 
-        <div class="oak_object_model_add_formula_modal_container__modal_content">
+        <div class="oak_add_element_modal_container_modal__content">
 
             <!-- For the browse revisions functionality -->
-            <div class="oak_object_model_add_formula_modal_container_modal_content__revisions_content oak_hidden">
-                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__current">
+            <div class="oak_add_element_modal_container_modal_content__revisions_content oak_hidden">
+                <div class="oak_add_element_modal_container_modal_content__revisions_content__current">
                     <h3><?php _e( 'Données Actuelle', Oak::$text_domain); ?></h3>
                     <!-- List of fields here -->
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="publication"><?php _e( 'Publication(s) dont est issue l\'Indicateur:', Oak::$text_domain ); ?></label>
                         <input name="publication" type="text" disabled class="oak_revision_quanti_current_publication" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="object"><?php _e( 'L\'objet auquel appartient l\'Idicateur:', Oak::$text_domain ); ?></label>
                         <input name="object" type="text" disabled class="oak_revision_quanti_current_object" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="depends"><?php _e( 'Indicateur dépendant d’un autre:', Oak::$text_domain ); ?></label>
                         <input name="depends" type="text" disabled class="oak_revision_quanti_current_depends" value="">
                     </div>
                     
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="parent"><?php _e( 'Indicateur de niveau supérieur:', Oak::$text_domain ); ?></label>
                         <input name="parent" type="text" disabled class="oak_revision_quanti_current_parent" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="numerotation-type"><?php _e( 'Type de numérotation:', Oak::$text_domain ); ?></label>
                         <input name="numerotation-type" type="text" disabled class="oak_revision_quanti_current_numerotation_type" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="numerotation"><?php _e( 'Numérotation:', Oak::$text_domain ); ?></label>
                         <input name="numerotation" type="text" disabled class="oak_revision_quanti_current_numerotation" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="description"><?php _e( 'Description de l\'Idicateur:', Oak::$text_domain ); ?></label>
                         <input name="description" type="text" disabled class="oak_revision_quanti_current_description" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="close"><?php _e( 'Indicateur(s) proche(s) de l\'Idicateur défnie:', Oak::$text_domain ); ?></label>
                         <input name="close" type="text" disabled class="oak_revision_quanti_current_close" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="close-indicators"><?php _e( 'Indicateur(s) proche(s) de l\'Idicateur défnie:', Oak::$text_domain ); ?></label>
                         <input name="close-indicators" type="text" disabled class="oak_revision_quanti_current_close_indicators" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="state"><?php _e( 'Etat:', Oak::$text_domain ); ?></label>
                         <input name="state" type="text" disabled class="oak_revision_quanti_current_state" value="">
                     </div>
                 </div>
 
-                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container">
+                <div class="oak_add_element_modal_container_modal_content_revisions_content__revision_data_container">
                     <h3><?php _e( 'Données de la révision', Oak::$text_domain); ?></h3>
                     <!-- List of forms here -->
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="publication"><?php _e( 'Publication(s) dont est issue l\'Idicateur:', Oak::$text_domain ); ?></label>
                         <input name="publication" type="text" disabled class="oak_revision_quanti_revision_publication" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="object"><?php _e( 'L\'objet auquel appartient l\'Idicateur:', Oak::$text_domain ); ?></label>
                         <input name="object" type="text" disabled class="oak_revision_quanti_revision_object" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="depends"><?php _e( 'Indicateur dépendante d’une autre:', Oak::$text_domain ); ?></label>
                         <input name="depends" type="text" disabled class="oak_revision_quanti_revision_depends" value="">
                     </div>
                     
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="parent"><?php _e( 'Indicateur de niveau supérieur:', Oak::$text_domain ); ?></label>
                         <input name="parent" type="text" disabled class="oak_revision_quanti_revision_parent" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="numerotation-type"><?php _e( 'Type de numérotation:', Oak::$text_domain ); ?></label>
                         <input name="numerotation-type" type="text" disabled class="oak_revision_quanti_revision_numerotation_type" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="numerotation"><?php _e( 'Numérotation:', Oak::$text_domain ); ?></label>
                         <input value="" name="numerotation" type="text" disabled class="oak_revision_quanti_revision_numerotation">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="description"><?php _e( 'Description de l\'Idicateur:', Oak::$text_domain ); ?></label>
                         <input name="description" type="text" disabled class="oak_revision_quanti_revision_description" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="close"><?php _e( 'Indicateur(s) proche(s) de l\'Idicateur défnie:', Oak::$text_domain ); ?></label>
                         <input name="close" type="text" disabled class="oak_revision_quanti_revision_close" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="close-indicators"><?php _e( 'Indicateur(s) proche(s) de l\'Idicateur défnie:', Oak::$text_domain ); ?></label>
                         <input name="close-indicators" type="text" disabled class="oak_revision_quanti_revision_close_indicators" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="state"><?php _e( 'Etat:', Oak::$text_domain ); ?></label>
                         <input name="state" type="text" disabled class="oak_revision_quanti_revision_state" value="">
                     </div>
                     
                 </div>
 
-                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__list_of_revisions">
+                <div class="oak_add_element_modal_container_modal_content_revisions_content__list_of_revisions">
                     <h3><?php _e( 'Liste des révisions', Oak::$text_domain ); ?></h3>
                     <?php 
                     foreach( $revisions as $key => $revision ) : 
                         if ( $key != count( $revisions ) - 1 ) :
                         ?>
-                            <div index="<?php echo( $key ) ?>" class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
-                                <span class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision->quanti_modification_time ); ?></span>
+                            <div index="<?php echo( $key ) ?>" class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
+                                <span class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision->quanti_modification_time ); ?></span>
                             </div>
                         <?php
                         endif;
@@ -469,22 +469,22 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             <!-- Done with the browse revisions Functionality -->
         </div>
 
-        <span class="oak_object_model_add_formula_modal_container_modal__error"></span>
-        <div class="oak_object_model_add_formula_modal_container_modal_buttons_container">
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text" >
+        <span class="oak_add_element_modal_container_modal__error"></span>
+        <div class="oak_add_element_modal_container_modal__buttons_container">
+            <div class="oak_add_element_modal_container_modal_buttons_container__cancel_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text" >
                     Annuler
                 </span>
             </div>
             
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text" >
+            <div class="oak_add_element_modal_container_modal_buttons_container__add_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_add_button_container__text" >
                     Ajouter
                 </span>
             </div>
 
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text" >
+            <div class="oak_add_element_modal_container_modal_buttons_container__ok_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_add_button_container__text" >
                     Ok
                 </span>
             </div>

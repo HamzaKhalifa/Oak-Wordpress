@@ -40,14 +40,14 @@
 })();
 
 function openModal(title, twoButtons) {
-    var confirmButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
-    var cancelButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container');
-    var okButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container');
+    var confirmButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
+    var cancelButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__cancel_button_container');
+    var okButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__ok_button_container');
 
-    var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
+    var modalsContainer = document.querySelector('.oak_add_element_modal_container');
     modalsContainer.classList.add('oak_object_model_add_formula_modal_container__activated');
 
-    var modalTitle = document.querySelector('.oak_object_model_add_formula_modal_container_modal_title_container__title');
+    var modalTitle = document.querySelector('.oak_add_element_modal_container_modal_title_container__title');
     modalTitle.innerHTML = title;
 
     if ( twoButtons) {
@@ -63,23 +63,23 @@ function openModal(title, twoButtons) {
 
 function closeModals() {
     setTimeout(function() {
-        document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.remove('oak_object_model_add_formula_modal_container_modal__big_modal');
+        document.querySelector('.oak_add_element_modal_container__modal').classList.remove('oak_object_model_add_formula_modal_container_modal__big_modal');
     }, 500);
 
-    var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
+    var modalsContainer = document.querySelector('.oak_add_element_modal_container');
     modalsContainer.classList.remove('oak_object_model_add_formula_modal_container__activated');
 }
 
 function setLoading() {
     openModal();
     document.querySelector('.oak_loader').classList.remove('oak_hidden');
-    document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.add('oak_hidden');
+    document.querySelector('.oak_add_element_modal_container__modal').classList.add('oak_hidden');
 }
 
 function doneLoading() {
     closeModals();
     setTimeout(function() {
         document.querySelector('.oak_loader').classList.add('oak_hidden');
-        document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.remove('oak_hidden');
+        document.querySelector('.oak_add_element_modal_container__modal').classList.remove('oak_hidden');
     }, 1000);
 }

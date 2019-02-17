@@ -343,73 +343,73 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
 
 <!-- For the modal -->
-<div class="oak_object_model_add_formula_modal_container">
-    <div class="oak_object_model_add_formula_modal_container__modal">
-        <div class="oak_object_model_add_formula_modal_container_modal__title_container">
-            <h3 class="oak_object_model_add_formula_modal_container_modal_title_container__title"></h3>
+<div class="oak_add_element_modal_container">
+    <div class="oak_add_element_modal_container__modal">
+        <div class="oak_add_element_modal_container_modal__title_container">
+            <h3 class="oak_add_element_modal_container_modal_title_container__title"></h3>
         </div>
 
-        <div class="oak_object_model_add_formula_modal_container__modal_content">
+        <div class="oak_add_element_modal_container_modal__content">
 
             <!-- For the browse revisions functionality -->
-            <div class="oak_object_model_add_formula_modal_container_modal_content__revisions_content oak_hidden">
-                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__current">
+            <div class="oak_add_element_modal_container_modal_content__revisions_content oak_hidden">
+                <div class="oak_add_element_modal_container_modal_content__revisions_content__current">
                     <h3><?php _e( 'Données Actuelle', Oak::$text_domain); ?></h3>
                     <!-- List of fields here -->
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="types"><?php _e( 'Structure:', Oak::$text_domain ); ?></label>
                         <input name="types" type="text" disabled class="oak_revision_model_current_types" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="publications-categories"><?php _e( 'Attributs:', Oak::$text_domain ); ?></label>
                         <input type="text" name="publications-categories" disabled class="oak_revision_model_current_publications_categories">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="function"><?php _e( 'Sélecteur de cadres RSE:', Oak::$text_domain ); ?></label>
                         <input name="function" type="text" disabled class="oak_revision_model_selector_current" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="function"><?php _e( 'Status:', Oak::$text_domain ); ?></label>
                         <input name="function" type="text" disabled class="oak_revision_model_state_current" value="">
                     </div>
 
                 </div>
 
-                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container">
+                <div class="oak_add_element_modal_container_modal_content_revisions_content__revision_data_container">
                     <h3><?php _e( 'Données de la révision', Oak::$text_domain); ?></h3>
                     <!-- List of forms here -->
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="types"><?php _e( 'Types:', Oak::$text_domain ); ?></label>
                         <input name="types" type="text" disabled class="oak_revision_model_revision_types" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for=""><?php _e( 'Attributs:', Oak::$text_domain ); ?></label>
                         <input type="text" disabled class="oak_revision_model_revision_publications_categories">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="selector"><?php _e( 'Sélecteur de cadres RSE:', Oak::$text_domain ); ?></label>
                         <input name="selector" type="text" disabled class="oak_revision_model_selector_revision" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="function"><?php _e( 'Status:', Oak::$text_domain ); ?></label>
                         <input name="function" type="text" disabled class="oak_revision_model_state_revision" value="">
                     </div>
                 </div>
 
-                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__list_of_revisions">
+                <div class="oak_add_element_modal_container_modal_content_revisions_content__list_of_revisions">
                     <h3><?php _e( 'Liste des révisions', Oak::$text_domain ); ?></h3>
                     <?php 
                     foreach( $revisions as $key => $revision ) : 
                         if ( $key != count( $revisions ) - 1 ) :
                         ?>
-                            <div index="<?php echo( $key ) ?>" class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
-                                <span class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision->model_modification_time ); ?></span>
+                            <div index="<?php echo( $key ) ?>" class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
+                                <span class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision->model_modification_time ); ?></span>
                             </div>
                         <?php
                         endif;
@@ -420,22 +420,22 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             <!-- Done with the browse revisions Functionality -->
         </div>
 
-        <span class="oak_object_model_add_formula_modal_container_modal__error"></span>
-        <div class="oak_object_model_add_formula_modal_container_modal_buttons_container">
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text" >
+        <span class="oak_add_element_modal_container_modal__error"></span>
+        <div class="oak_add_element_modal_container_modal__buttons_container">
+            <div class="oak_add_element_modal_container_modal_buttons_container__cancel_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text" >
                     Annuler
                 </span>
             </div>
             
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text" >
+            <div class="oak_add_element_modal_container_modal_buttons_container__add_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_add_button_container__text" >
                     Ajouter
                 </span>
             </div>
 
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text" >
+            <div class="oak_add_element_modal_container_modal_buttons_container__ok_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_add_button_container__text" >
                     Ok
                 </span>
             </div>

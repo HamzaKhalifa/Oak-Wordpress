@@ -1,0 +1,383 @@
+.oak_system_bar {
+    background-color: #000c3b;
+}
+
+.oak_system_bar__content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: auto;
+    width: 90%;
+}
+
+.oak_system_bar_icon {
+    width: 25px;
+    height: auto;
+    transition: all .1s ease-in-out;
+    padding: 0px 5px 0px 5px;
+}
+
+.oak_app_bar, .oak_app_bar__right_content, .oak_app_bar__left_content {
+    display: flex;
+    background-color: #003366;
+    align-items: center;
+    color: white;
+}
+
+.oak_app_bar {
+    justify-content: space-between;
+}
+
+.oak_app_bar i {
+    color: white;
+    transition: all .1s ease-in-out;
+}
+
+.oak_app_bar__title {
+    color: white;
+}
+
+.oak_app_bar i:hover, .oak_system_bar_icon:hover {
+    background-color: #ca4a1f;
+    cursor: pointer
+}
+
+.oak_list_header_title {
+    color: white;
+    margin: 0px;
+    margin-left: 100px;
+    font-size: 15px;
+}
+
+.oak_menu_search_icon {
+    margin-right: 50px;
+    width: 15px;
+}
+
+.oak_menu_icon {
+    padding: 10px 20px 10px 20px;
+    font-size: 20px;
+}
+
+.oak_menu_icon:hover {
+    background-color: #ca4a1f;
+    cursor: pointer;
+}
+
+.oak_elements_list_top_container {
+    width: 100%;
+    margin: auto;
+}
+
+.wp-admin select {
+    padding: 0px;
+    margin: 0px;
+    text-align-last: center;
+    height: 50px;
+    padding: 0px 10px 0px 10px;
+}
+
+.wp-admin select:focus {
+    outline: none;
+}
+
+.oak_add_field_container_saved_field_container__update_button:hover {
+    cursor: pointer;
+}
+
+.oak_list_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #003366;
+}
+
+.oak_list_header i {
+    color: white;
+}
+
+.oak_list_header_left, .oak_list_header_right {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.oak_list_header__icon {
+    width: 15px;
+    margin-right: 10px;
+}
+
+.oak_list_add_button {
+    color: #003366;
+    background-color: #94CDF2;
+    transition: all 0.1s ease-in-out;
+    position: absolute;
+    left: 70px;
+    top: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transition: all .1s ease-in-out;
+}
+
+.oak_list_add_button:hover {
+    cursor: pointer;
+    background-color: #000c3b;
+    color: white;
+}
+
+.oak_list_header__add_button:hover {
+    background-color: #003366;
+    color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+.oak_list_row {
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 40px;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e4e7;
+}
+
+
+.oak_list_row_container__title {
+    color: #003366;
+}
+
+.oak_elements_list {
+    margin: auto;
+    margin-top: 20px;
+    width: 90%;
+}
+
+.oak_list_row__container {
+    display: flex;
+    align-items: center;
+    width: 200px;
+}
+
+.oak_list_row__container span {
+    color: #003366;
+}
+
+.oak_list_row__container .oak_passiv {
+    color: #7b7b7b;
+    border-color: #7b7b7b;
+}
+
+.oak_list_row__selected {
+    background-color: #bcc7d9;
+}
+
+.oak_list_header_at_least_one_selected {
+    background-color: #bcc7d9;
+}
+
+.fa-plus {
+    color: white;
+}
+
+.oak_list_header_at_least_one_selected i, .oak_list_header_at_least_one_selected h3 {
+    color: #000c3b;
+}
+
+.oak_menu_smaller_icon {
+    padding: 10px 10px 10px 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.oak_list_row__container i {
+    margin-right: 10px;
+    color: #e2e4e7;
+    font-size: 20px;
+}
+
+.oak_list_row_container__img {
+    margin-right: 10px;
+    width: 20px;
+}
+
+.oak_list_titles_container__checkbox {
+    margin-top: 2px!important;
+    margin-right: 20px!important;
+}
+
+.oak_dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 100%;
+    background-color: #24E08C;
+}
+
+.oak_dot_false {
+    background-color: #FC394D;
+}
+
+.oak_grouped_actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 40px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    background-color: #003366;
+    align-items: center;
+}
+
+.oak_grouped_actions__element {
+    margin-right: 10px;
+    border-radius: 0px;
+    max-width: 170px;
+    border: 0;
+    -webkit-appearance: none;
+    text-align: center;
+    background-color: #003366;
+    color: white;
+}
+
+.oak_grouped_actions__element:hover {
+    cursor: pointer;
+    background-color: #ca4a1f;
+}
+
+.oak_list_button:hover {
+    cursor: pointer;
+    background-color: #003366;
+    color: white;
+}
+
+.oak_grouped_actions__grouped_actions {
+    margin-right: 0px;
+}
+
+.oak_trash_list_select {
+    color: white;
+    line-height: 50px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.oak_trash_list_select:hover {
+    background-color: #ca4a1f;
+}
+
+.oak_menu_burger {
+    margin-right: 30px;
+}
+
+.oak_list_header_right__search_input {
+    margin-right: 10px;
+    height: 25px;
+    width: 600px;
+}
+
+.oak_list_highlighted {
+    background-color: #FC394D;
+}
+
+.oak_list_row__first_row {
+    border-top: none;
+}
+
+// For the modal
+.oak_add_element_modal_container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    right: 0px;
+    top: 0px;
+    transition: all .3s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    z-index: -10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.oak_object_model_add_formula_modal_container__activated {
+    opacity: 1;
+    z-index: 10;
+}
+
+.oak_add_element_modal_container__modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 40%;
+    background-color: white;
+    padding: 20px;
+    position: fixed;
+    top: 30%;
+    z-index: 4;
+}
+
+.oak_object_model_add_formula_modal_container_modal__big_modal {
+    width: 70%;
+    top: 5%;
+    height: 80%
+}
+
+.oak_add_element_modal_container_modal__title_container {
+    text-align: center;
+}
+
+.oak_add_element_modal_container_modal__buttons_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.oak_add_element_modal_container_modal__error {
+    color: #FC394D;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.oak_add_element_modal_container_modal_buttons_container__cancel_button_container, .oak_add_element_modal_container_modal_buttons_container__add_button_container, .oak_add_element_modal_container_modal_buttons_container__ok_button_container {
+    background-color: #24E08C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    border-radius: 10px;
+    transition: all .2s ease-in-out;
+    border: 1px solid #24E08C;
+}
+
+.oak_add_element_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_add_element_modal_container_modal_buttons_container__add_button_container:hover, .oak_add_element_modal_container_modal_buttons_container__ok_button_container:hover {
+    cursor: pointer;
+    background-color: white;
+}
+
+.oak_add_element_modal_container_modal_buttons_container__cancel_button_container {
+    background-color: #FC394D;
+    border: 1px solid #FC394D;
+}
+
+.oak_add_element_modal_container_modal_buttons_container__cancel_button_container:hover span {
+    color: #FC394D;
+}
+
+.oak_add_element_modal_container_modal_buttons_container__add_button_container:hover span, .oak_add_element_modal_container_modal_buttons_container__ok_button_container:hover span {
+    color: #24E08C;
+}
+
+.oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text, .oak_add_element_modal_container_modal_buttons_container_add_button_container__text {
+    color: white;
+}
+// Done with the modal

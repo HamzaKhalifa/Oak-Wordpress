@@ -655,724 +655,7 @@ body .oak_hidden {
   text-align: center;
 }
 
-.oak_manage_tax_container {
-  padding-left: 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.oak_tax_add_formula_container {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  margin-right: 10px;
-}
-
-.oak_tax_list {
-  width: 50%;
-}
-
-.oak_tax_add_formula {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-
-.oak_tax_add_formula__element, .oak_tax_add_formula_element__specific_fields_container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.oak_tax_add_formula_element__specific_fields_container {
-  flex-direction: column;
-}
-
-.oak_tax_add_formula_element__field_container {
-  background-color: #24E08C;
-  width: 200px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #24E08C;
-  transition: 0.2s all ease-in-out;
-  margin-bottom: 10px;
-}
-
-.oak_tax_add_formula_element__field_container_already_added {
-  background-color: #FC394D;
-  border-color: #FC394D;
-}
-
-.oak_tax_add_formula_element__field_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_tax_add_formula_element__field_container:hover span, .oak_tax_add_formula_element__field_container:hover i {
-  color: #24E08C;
-}
-
-.oak_tax_add_formula_element__field_container_already_added:hover span, .oak_tax_add_formula_element__field_container_already_added:hover i {
-  color: #FC394D;
-}
-
-.oak_tax_add_formula_element_field_container__field_name {
-  color: white;
-  padding: 10px;
-}
-
-.fa-plus {
-  color: white;
-  padding: 10px;
-}
-
-.oak_tax_add_formula_element_specific_field_name {
-  margin-bottom: 10px;
-}
-
-.oak_tax_add_formula_element_specific_field_delete_button {
-  color: #FC394D;
-  position: absolute;
-  right: 10px;
-}
-
-.oak_tax_add_formula_element_specific_field_delete_button:hover, .oak_tax_list_delete:hover {
-  cursor: pointer;
-}
-
-.oak_tax_list_delete {
-  color: #FC394D;
-  margin-left: 10px;
-}
-
-.oak_taxt_list__single_taxt {
-  background-color: white;
-  margin-bottom: 10px;
-  padding: 10px;
-  width: 80%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.oak_tax_add_formula_element_specific_fields_container__single_field_container {
-  margin-bottom: 10px;
-  background-color: white;
-  padding: 20px;
-  padding-bottom: 5px;
-  position: relative;
-}
-
-.oak_tax_add_formula_element_specific_fields_container__single_field_container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container i {
-  color: black;
-  transition: 0.15 all ease-in-out;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover {
-  cursor: pointer;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover i, .oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover span {
-  color: #24E08C;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type {
-  display: flex;
-  align-items: center;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i {
-  color: #FC394D;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i:hover {
-  cursor: pointer;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__ {
-  margin-right: 10px;
-}
-
-.oak_tax_add_formula_modal_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  top: 0px;
-  transition: all 0.3s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  z-index: -10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.oak_tax_add_formula_modal_container__activated {
-  opacity: 1;
-  z-index: 10;
-}
-
-.oak_tax_add_formula_modal_container__modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 40%;
-  background-color: white;
-  padding: 20px;
-  position: fixed;
-  top: 30%;
-}
-
-.oak_tax_add_formula_modal_container_modal__title_container {
-  text-align: center;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.oak_tax_add_formula_modal_container_modal__error {
-  color: #FC394D;
-  margin-top: 5px;
-  font-weight: bold;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container {
-  background-color: #24E08C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-  width: 100px;
-  text-align: center;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
-  color: #FC394D;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
-  color: #24E08C;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_tax_add_formula_modal_container_modal_buttons_container_add_button_container__text {
-  color: white;
-}
-
-.oak_manage_tax_container {
-  padding-left: 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.oak_tax_add_formula_container {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  margin-right: 10px;
-}
-
-.oak_tax_list {
-  width: 50%;
-}
-
-.oak_tax_add_formula {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-
-.oak_tax_add_formula__element, .oak_tax_add_formula_element__specific_fields_container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.oak_tax_add_formula_element__specific_fields_container {
-  flex-direction: column;
-}
-
-.oak_tax_add_formula_element__field_container {
-  background-color: #24E08C;
-  width: 200px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #24E08C;
-  transition: 0.2s all ease-in-out;
-  margin-bottom: 10px;
-}
-
-.oak_tax_add_formula_element__field_container_already_added {
-  background-color: #FC394D;
-  border-color: #FC394D;
-}
-
-.oak_tax_add_formula_element__field_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_tax_add_formula_element__field_container:hover span, .oak_tax_add_formula_element__field_container:hover i {
-  color: #24E08C;
-}
-
-.oak_tax_add_formula_element__field_container_already_added:hover span, .oak_tax_add_formula_element__field_container_already_added:hover i {
-  color: #FC394D;
-}
-
-.oak_tax_add_formula_element_field_container__field_name {
-  color: white;
-  padding: 10px;
-}
-
-.fa-plus {
-  color: white;
-  padding: 10px;
-}
-
-.oak_tax_add_formula_element_specific_field_name {
-  margin-bottom: 10px;
-}
-
-.oak_tax_add_formula_element_specific_field_delete_button {
-  color: #FC394D;
-  position: absolute;
-  right: 10px;
-}
-
-.oak_tax_add_formula_element_specific_field_delete_button:hover, .oak_tax_list_delete:hover {
-  cursor: pointer;
-}
-
-.oak_tax_list_delete {
-  color: #FC394D;
-  margin-left: 10px;
-}
-
-.oak_taxt_list__single_taxt {
-  background-color: white;
-  margin-bottom: 10px;
-  padding: 10px;
-  width: 80%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.oak_tax_add_formula_element_specific_fields_container__single_field_container {
-  margin-bottom: 10px;
-  background-color: white;
-  padding: 20px;
-  padding-bottom: 5px;
-  position: relative;
-}
-
-.oak_tax_add_formula_element_specific_fields_container__single_field_container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container i {
-  color: black;
-  transition: 0.15 all ease-in-out;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover {
-  cursor: pointer;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover i, .oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover span {
-  color: #24E08C;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type {
-  display: flex;
-  align-items: center;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i {
-  color: #FC394D;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i:hover {
-  cursor: pointer;
-}
-
-.oak_tax_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__ {
-  margin-right: 10px;
-}
-
-.oak_tax_add_formula_modal_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  top: 0px;
-  transition: all 0.3s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  z-index: -10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.oak_tax_add_formula_modal_container__activated {
-  opacity: 1;
-  z-index: 10;
-}
-
-.oak_tax_add_formula_modal_container__modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 40%;
-  background-color: white;
-  padding: 20px;
-  position: fixed;
-  top: 30%;
-}
-
-.oak_tax_add_formula_modal_container_modal__title_container {
-  text-align: center;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.oak_tax_add_formula_modal_container_modal__error {
-  color: #FC394D;
-  margin-top: 5px;
-  font-weight: bold;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container {
-  background-color: #24E08C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-  width: 100px;
-  text-align: center;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
-  color: #FC394D;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_tax_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
-  color: #24E08C;
-}
-
-.oak_tax_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_tax_add_formula_modal_container_modal_buttons_container_add_button_container__text {
-  color: white;
-}
-
-.oak_object_model {
-  width: 90%;
-  margin: auto;
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.oak_object_model__custom_post_types_lists {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-}
-
-.oak_object_model__custom_post_types_lists__single_post_type_container {
-  background-color: white;
-  margin-bottom: 10px;
-  padding: 10px;
-  width: 80%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.oak_object_model__custom_post_types_lists_single_post_type_container__name {
-  margin-right: 10px;
-}
-
-.oak_object_model__custom_post_types_lists_single_post_type_container__delete_button {
-  color: #FC394D;
-}
-
-.oak_object_model__custom_post_types_lists_single_post_type_container__delete_button:hover {
-  cursor: pointer;
-}
-
-.oak_object_model_add_formula__element {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  margin-right: 10px;
-}
-
-.oak_object_model_custom_post_types_lists__title {
-  margin-bottom: 10px;
-  line-height: 25px;
-}
-
-.oak_object_model_add_formula_element__label {
-  width: 300px;
-}
-
-.oak_object_model_add_formula_element__field_container {
-  background-color: #24E08C;
-  width: 200px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #24E08C;
-  transition: 0.2s all ease-in-out;
-  margin-bottom: 10px;
-  margin-right: 10px;
-}
-
-.oak_object_model_add_formula_element__field_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_object_model_add_formula_element__field_container span {
-  color: white;
-}
-
-.oak_object_model_add_formula_element_field_container__field_name {
-  color: white;
-  padding: 10px;
-}
-
-.oak_object_model_add_formula_element__field_container:hover span, .oak_object_model_add_formula_element__field_container:hover i {
-  color: #24E08C;
-}
-
-.oak_object_model_add_formula_element__field_container_already_added {
-  background-color: #FC394D;
-  border-color: #FC394D;
-}
-
-.oak_object_model_add_formula_element__field_container_already_added:hover span, .oak_object_model_add_formula_element__field_container_already_added:hover i {
-  color: #FC394D;
-}
-
-.oak_object_model_add_formula_element_specific_fields_container__single_field_container {
-  margin-bottom: 10px;
-  background-color: white;
-  padding: 20px;
-  padding-bottom: 5px;
-  position: relative;
-}
-
-.oak_object_model_add_formula_element_specific_fields_container__single_field_container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.oak_object_model_add_formula_element_specific_field_name {
-  margin-bottom: 10px;
-}
-
-.oak_tax_add_formula_element_specific_field_delete_button {
-  color: #FC394D;
-  position: absolute;
-  right: 10px;
-}
-
-.oak_object_model_add_formula_element_specific_field_delete_button:hover, .oak_object_model_list_delete:hover {
-  cursor: pointer;
-}
-
-.oak_object_model_add_formula_element_specific_fields_container_single_field_container__plus_container i {
-  color: black;
-  transition: 0.15 all ease-in-out;
-}
-
-.oak_object_model_add_formula_element_specific_fields_container_single_field_container__plus_container:hover {
-  cursor: pointer;
-}
-
-.oak_object_model_add_formula_element_specific_fields_container_single_field_container__plus_container:hover i, .oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover span {
-  color: #24E08C;
-}
-
-.oak_object_model_add_formula_element_specific_fields_container_single_field_container_types_container__single_type {
-  display: flex;
-  align-items: center;
-}
-
-.oak_object_model_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i {
-  color: #FC394D;
-}
-
-.oak_object_model_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i:hover {
-  cursor: pointer;
-}
-
-.oak_object_model_add_formula_element_specific_fields_container_single_field_container_types_container_single_type__ {
-  margin-right: 10px;
-}
-
-.oak_object_model_add_formula_element_specific_field_delete_button {
-  color: #FC394D;
-  position: absolute;
-  right: 10px;
-}
-
-.oak_object_model_add_formula_element_specific_field_delete_button:hover, .oak_object_model_list_delete:hover {
-  cursor: pointer;
-}
-
-.oak_object_model_add_formula_modal_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  top: 0px;
-  transition: all 0.3s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  z-index: -10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.oak_object_model_add_formula_modal_container__activated {
-  opacity: 1;
-  z-index: 10;
-}
-
-.oak_object_model_add_formula_modal_container__modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 40%;
-  background-color: white;
-  padding: 20px;
-  position: fixed;
-  top: 30%;
-  z-index: 4;
-}
-
-.oak_object_model_add_formula_modal_container_modal__big_modal {
-  width: 70%;
-  top: 5%;
-  height: 80%;
-}
-
-.oak_object_model_add_formula_modal_container_modal__title_container {
-  text-align: center;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.oak_object_model_add_formula_modal_container_modal__error {
-  color: #FC394D;
-  margin-top: 5px;
-  font-weight: bold;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container {
-  background-color: #24E08C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-  width: 100px;
-  text-align: center;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
-  color: #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
-  color: #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text {
-  color: white;
-}
-
-.oak_add_field_container {
+.oak_add_element_container {
   display: flex;
   flex-direction: column;
   margin-left: 30px;
@@ -1380,60 +663,197 @@ body .oak_hidden {
   flex: 1;
 }
 
-.oak_add_field_container__label_instruction {
+.oak_add_element_container__label_instruction {
   margin-bottom: 10px;
 }
 
-.oak_add_field_container__label {
+.oak_add_element_container__label {
   min-width: 50px;
   color: #003366;
   margin-bottom: 10px;
 }
 
-.oak_add_field_container__field_container {
+.oak_add_element_container__field_container {
   display: flex;
   flex: 1;
   flex-direction: column;
   margin-top: 20px;
 }
 
-.oak_add_field_container__identifier_container {
+.oak_add_element_container__identifier_container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
 }
 
-.oak_add_field_container__identifier {
+.oak_add_element_container__identifier {
   flex: 1;
 }
 
-.oak_add_field_container__horizontal_container {
+.oak_add_element_container__horizontal_container {
   display: flex;
   align-items: center;
   padding-bottom: 15px;
-  border-bottom: 1px solid #e2e4e7;
 }
 
-.oak_add_field_container__type_container, .oak_add_field_container__function_container, .oak_add_field_container__default_value_container, .oak_add_field_container__before_container, .oak_add_field_container__after_container, .oak_add_field_container__max_length_container, .oak_add_field_container__selector_container {
+.oak_add_element_container__type_container, .oak_add_element_container__function_container, .oak_add_element_container__default_value_container, .oak_add_element_container__before_container, .oak_add_element_container__after_container, .oak_add_element_container__max_length_container, .oak_add_element_container__selector_container {
   display: flex;
   flex-direction: column;
 }
 
-.oak_add_field_container__type_container, .oak_add_field_container__before_container, .oak_add_field_container__after_container, .oak_add_field_container__max_length_container {
+.oak_add_element_container__type_container, .oak_add_element_container__before_container, .oak_add_element_container__after_container, .oak_add_element_container__max_length_container {
   margin-right: 20px;
 }
 
-input[type=checkbox], input[type=color], input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=radio], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week], select, textarea, .oak_add_field_container__input {
-  border-color: #003366;
-  border-width: 0.5px;
-}
-
-.oak_add_field_container__input {
+.oak_text_field_container, .oak_text_field_container_identifier {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  position: relative;
+  background-color: #e5e9ef;
+  padding-top: 5px;
   flex: 1;
+  margin-right: 25px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.oak_add_field_container__add_button, .oak_add_field_container__update_button, .oak_add_field_container__register_button, .oak_add_field_container__broadcast_button, .oak_add_field_container__draft_button, .oak_add_field_container__trash_button {
+.oak_text_field_container_identifier {
+  padding-bottom: 3px;
+}
+
+.oak_text_field_container_identifier input {
+  margin-top: 0px;
+}
+
+.oak_checkbox_container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  position: relative;
+  padding-top: 5px;
+  flex: 0.5;
+  margin-right: 25px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.oak_checkbox_container__container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.oak_text_field_container:hover {
+  cursor: text;
+}
+
+.oak_text_field, .oak_text_field:focus {
+  -webkit-appearance: none;
+  border: none !important;
+  box-shadow: none !important;
+  position: relative !important;
+  overflow: visible !important;
+  background-color: #e5e9ef !important;
+  margin-top: 3px;
+  width: 100%;
+}
+
+.text_field_line {
+  background-color: #000c3b;
+  width: 0%;
+  height: 1px;
+  transition: all 0.15s ease-in-out;
+}
+
+.text_field_line_focused {
+  background-color: #f06648;
+  width: 100%;
+  height: 1px;
+}
+
+.text_field_line_not_focused_but_something_written {
+  background-color: #000c3b;
+  width: 100%;
+  height: 1px;
+}
+
+.input_line {
+  background-color: #000c3b;
+  width: 100%;
+  height: 1px;
+}
+
+.checkbox_line {
+  background-color: #000c3b;
+  width: 100%;
+  height: 1px;
+}
+
+.oak_text_field_placeholder {
+  position: absolute;
+  color: #abb7cc;
+  left: 5px;
+  bottom: 8px;
+  transition: all 0.1s ease-in-out;
+}
+
+.oak_text_field_checkbox_description {
+  color: #000c3b;
+  transition: all 0.1s ease-in-out;
+}
+
+.text_field_description {
+  position: absolute;
+  bottom: -15px;
+  color: #000c3b;
+  font-size: 10px;
+  margin-left: 7px;
+  white-space: nowrap;
+}
+
+.oak_text_field_placeholder_focused {
+  top: -4px;
+  font-size: 10px;
+  left: 5px;
+  color: #f06648;
+  height: 5px;
+}
+
+.oak_text_field_placeholder_not_focused_but_something_written {
+  top: -4px;
+  font-size: 10px;
+  color: #000c3b;
+  left: 5px;
+}
+
+.oak_select_container {
+  flex: 1;
+  position: relative;
+  margin-right: 25px;
+}
+
+.oak_select_container select {
+  width: 100%;
+  border: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+  text-align-last: left !important;
+  height: inherit !important;
+}
+
+.oak_select_container__bottom_arrow {
+  position: absolute;
+  right: 10px;
+  top: 25px;
+  top: 10px;
+}
+
+.oak_add_element_container__add_button, .oak_add_element_container__update_button, .oak_add_element_container__register_button, .oak_add_element_container__broadcast_button, .oak_add_element_container__draft_button, .oak_add_element_container__trash_button {
   border: 1px solid #24E08C;
   background-color: #24E08C;
   transition: all 0.2s ease-in-out;
@@ -1445,59 +865,59 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   margin-left: 10px;
 }
 
-.oak_add_field_container__trash_button {
+.oak_add_element_container__trash_button {
   border: 1px solid #FC394D;
   background-color: #FC394D;
 }
 
-.oak_add_field_container__add_button:hover, .oak_add_field_container__update_button:hover, .oak_add_field_container__register_button:hover, .oak_add_field_container__broadcast_button:hover, .oak_add_field_container__draft_button:hover, .oak_add_field_container__trash_button:hover {
+.oak_add_element_container__add_button:hover, .oak_add_element_container__update_button:hover, .oak_add_element_container__register_button:hover, .oak_add_element_container__broadcast_button:hover, .oak_add_element_container__draft_button:hover, .oak_add_element_container__trash_button:hover {
   cursor: pointer;
   background-color: white;
 }
 
-.oak_add_field_container__add_button:hover span, .oak_add_field_container__update_button:hover span, .oak_add_field_container__register_button:hover span, .oak_add_field_container__broadcast_button:hover span, .oak_add_field_container__draft_button:hover span {
+.oak_add_element_container__add_button:hover span, .oak_add_element_container__update_button:hover span, .oak_add_element_container__register_button:hover span, .oak_add_element_container__broadcast_button:hover span, .oak_add_element_container__draft_button:hover span {
   color: #24E08C;
 }
 
-.oak_add_field_container__trash_button:hover span {
+.oak_add_element_container__trash_button:hover span {
   color: #FC394D;
 }
 
-.oak_add_field_container__add_button span, .oak_add_field_container__update_button span, .oak_add_field_container__register_button span, .oak_add_field_container__broadcast_button span, .oak_add_field_container__draft_button span, .oak_add_field_container__trash_button span {
+.oak_add_element_container__add_button span, .oak_add_element_container__update_button span, .oak_add_element_container__register_button span, .oak_add_element_container__broadcast_button span, .oak_add_element_container__draft_button span, .oak_add_element_container__trash_button span {
   color: white;
 }
 
-.oak_add_field_container__saved_field_container {
+.oak_add_element_container__saved_field_container {
   background-color: white;
   padding: 20px;
   margin-top: 10px;
   position: relative;
 }
 
-.oak_add_field_container__saved_field_container__delete_button {
+.oak_add_element_container__saved_field_container__delete_button {
   position: absolute;
   right: 10px;
   color: #FC394D;
 }
 
-.oak_add_field_container__saved_field_container__delete_button:hover {
+.oak_add_element_container__saved_field_container__delete_button:hover {
   cursor: pointer;
 }
 
-.oak_add_field_container__designation_container {
+.oak_add_element_container__designation_container {
   display: flex;
 }
 
-.oak_add_field_container__label_designation, .oak_add_field_container__label_selector {
+.oak_add_element_container__label_designation, .oak_add_element_container__label_selector {
   margin-right: 10px;
 }
 
-.oak_add_field_container__selector {
+.oak_add_element_container__selector {
   flex: initial;
   margin-top: 1px !important;
 }
 
-.oak_add_field_container__cancel_button {
+.oak_add_element_container__cancel_button {
   background-color: #6F6F6F;
   border: 1px solid #6F6F6F;
   color: white;
@@ -1508,49 +928,49 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   align-self: flex-start;
 }
 
-.oak_add_field_container__cancel_button:hover {
+.oak_add_element_container__cancel_button:hover {
   background-color: white;
   color: #6F6F6F;
   cursor: pointer;
 }
 
-.oak_add_field_container__buttons {
+.oak_add_element_container__buttons {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 30px;
 }
 
-.oak_add_field_big_container {
+.oak_add_element_big_container {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
-.oak_add_field_big_container__tabs {
+.oak_add_element_big_container__tabs {
   width: 280px;
   background-color: white;
 }
 
-.oak_add_field_big_container_tabs_titles__single_title {
+.oak_add_element_big_container_tabs_titles__single_title {
   padding: 20px;
   margin: 0px;
   text-align: center;
 }
 
-.oak_add_field_big_container_tabs_titles__single_title:hover {
+.oak_add_element_big_container_tabs_titles__single_title:hover {
   cursor: pointer;
 }
 
-.oak_add_field_big_container_tabs_titles__single_title_selected {
+.oak_add_element_big_container_tabs_titles__single_title_selected {
   border-bottom: 2px solid #f15c3b;
 }
 
-.oak_add_field_big_container_tabs__titles {
-  background-color: #F3F4F5;
+.oak_add_element_big_container_tabs__titles {
+  background-color: #e5e9ef;
 }
 
-.oak_add_field_container__title {
+.oak_add_element_container__title {
   margin: 0px;
   padding: 20px;
   padding-left: 5px;
@@ -1558,66 +978,66 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   color: #003366;
 }
 
-.oak_add_field_big_container_tabs_single_tab__section {
+.oak_add_element_big_container_tabs_single_tab__section {
   padding: 20px;
   border-bottom: 1px solid #e2e4e7;
 }
 
-.oak_add_field_big_container_tabs_single_tab_section__title {
+.oak_add_element_big_container_tabs_single_tab_section__title {
   font-size: 13px;
   margin: 0px;
   margin-bottom: 10px;
 }
 
-.oak_add_field_big_container_tabs_single_tab_section__state {
+.oak_add_element_big_container_tabs_single_tab_section__state {
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
   position: relative;
 }
 
-.oak_add_field_big_container_tabs_single_tab_section_state_label {
+.oak_add_element_big_container_tabs_single_tab_section_state_label {
   margin-right: 10px;
 }
 
-.oak_add_field_container_buttons__right_buttons {
+.oak_add_element_container_buttons__right_buttons {
   display: flex;
 }
 
-.oak_add_field_big_container_tabs_single_tab_section_state__browse {
+.oak_add_element_big_container_tabs_single_tab_section_state__browse {
   color: #1486B8;
   margin-left: 5px;
 }
 
-.oak_add_field_big_container_tabs_single_tab_section_state__browse:hover {
+.oak_add_element_big_container_tabs_single_tab_section_state__browse:hover {
   cursor: pointer;
 }
 
-.oak_add_field_big_container_tabs_single_tab_section_state__info_container {
+.oak_add_element_big_container_tabs_single_tab_section_state__info_container {
   display: flex;
   align-items: center;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content__revisions_content {
+.oak_add_element_modal_container_modal_content__revisions_content {
   display: flex;
   justify-content: space-between;
   height: 100%;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container, .oak_object_model_add_formula_modal_container_modal_content_revisions_content__current {
+.oak_add_element_modal_container_modal_content_revisions_content__revision_data_container, .oak_add_element_modal_container_modal_content__revisions_content__current {
   display: flex;
   flex-direction: column;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container h3, .oak_object_model_add_formula_modal_container_modal_content_revisions_content__current h3, .oak_object_model_add_formula_modal_container_modal_content_revisions_content__list_of_revisions h3 {
+.oak_add_element_modal_container_modal_content_revisions_content__revision_data_container h3, .oak_add_element_modal_container_modal_content__revisions_content__current h3, .oak_add_element_modal_container_modal_content_revisions_content__list_of_revisions h3 {
   text-align: center;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content_revisions_content__list_of_revisions {
+.oak_add_element_modal_container_modal_content_revisions_content__list_of_revisions {
   width: 30%;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision {
+.oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision {
   text-align: center;
   padding: 5px;
   margin-bottom: 10px;
@@ -1628,26 +1048,26 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   border: 2px solid #24E08C;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision:hover {
+.oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision:hover {
   cursor: pointer;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data {
+.oak_add_element_modal_container_modal_content_revisions_data_content__single_data {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container {
+.oak_add_element_modal_container_modal_content_revisions_content__revision_data_container {
   margin-right: 20px;
   margin-left: 20px;
 }
 
-.oak_object_model_add_formula_modal_container__modal_content {
+.oak_add_element_modal_container_modal__content {
   overflow: scroll;
 }
 
-.oak_object_model_add_formula_modal_container_modal_content_revisions_content__current input, .oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container input {
+.oak_add_element_modal_container_modal_content__revisions_content__current input, .oak_add_element_modal_container_modal_content_revisions_content__revision_data_container input {
   margin-bottom: 5px;
 }
 
@@ -1655,17 +1075,17 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   border: 1px solid #FC394D !important;
 }
 
-.oak_add_field_big_container_tabs_single_tab_section_state__info {
+.oak_add_element_big_container_tabs_single_tab_section_state__info {
   text-align: right;
 }
 
-.oak_add_field_container__header {
+.oak_add_element_container__header {
   display: flex;
   align-items: center;
   border-bottom: 1px solid #e2e4e7;
 }
 
-.oak_add_field_container_header_icon {
+.oak_add_element_container_header_icon {
   width: 15px;
   margin-left: 25px;
 }
@@ -1676,10 +1096,87 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   margin-right: 20px;
 }
 
-.oak_fields_list_top_container {
-  width: 90%;
+.oak_system_bar {
+  background-color: #000c3b;
+}
+
+.oak_system_bar__content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   margin: auto;
-  margin-top: 30px;
+  width: 90%;
+}
+
+.oak_system_bar_icon {
+  width: 25px;
+  height: auto;
+  transition: all 0.1s ease-in-out;
+  padding: 0px 5px 0px 5px;
+}
+
+.oak_app_bar, .oak_app_bar__right_content, .oak_app_bar__left_content {
+  display: flex;
+  background-color: #003366;
+  align-items: center;
+  color: white;
+}
+
+.oak_app_bar {
+  justify-content: space-between;
+}
+
+.oak_app_bar i {
+  color: white;
+  transition: all 0.1s ease-in-out;
+}
+
+.oak_app_bar__title {
+  color: white;
+}
+
+.oak_app_bar i:hover, .oak_system_bar_icon:hover {
+  background-color: #ca4a1f;
+  cursor: pointer;
+}
+
+.oak_list_header_title {
+  color: white;
+  margin: 0px;
+  margin-left: 100px;
+  font-size: 15px;
+}
+
+.oak_menu_search_icon {
+  margin-right: 50px;
+  width: 15px;
+}
+
+.oak_menu_icon {
+  padding: 10px 20px 10px 20px;
+  font-size: 20px;
+}
+
+.oak_menu_icon:hover {
+  background-color: #ca4a1f;
+  cursor: pointer;
+}
+
+.oak_elements_list_top_container {
+  width: 100%;
+  margin: auto;
+}
+
+.wp-admin select {
+  padding: 0px;
+  margin: 0px;
+  text-align-last: center;
+  height: 50px;
+  padding: 0px 10px 0px 10px;
+}
+
+.wp-admin select:focus {
+  outline: none;
 }
 
 .oak_add_field_container_saved_field_container__update_button:hover {
@@ -1690,11 +1187,17 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: #003366;
+}
+
+.oak_list_header i {
+  color: white;
 }
 
 .oak_list_header_left, .oak_list_header_right {
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .oak_list_header__icon {
@@ -1702,28 +1205,40 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   margin-right: 10px;
 }
 
-.oak_list_button {
+.oak_list_add_button {
   color: #003366;
-  padding: 12px;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  border: 1px solid #003366;
-  margin-left: 20px;
-  margin-right: 20px;
+  background-color: #94CDF2;
   transition: all 0.1s ease-in-out;
+  position: absolute;
+  left: 70px;
+  top: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  transition: all 0.1s ease-in-out;
+}
+
+.oak_list_add_button:hover {
+  cursor: pointer;
+  background-color: #000c3b;
+  color: white;
 }
 
 .oak_list_header__add_button:hover {
   background-color: #003366;
   color: white;
   cursor: pointer;
+  position: relative;
 }
 
 .oak_list_row {
   display: flex;
   align-items: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 40px;
   justify-content: space-between;
@@ -1734,9 +1249,10 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   color: #003366;
 }
 
-.oak_add_field_container__fields_list {
-  border: 1px solid #e2e4e7;
+.oak_elements_list {
+  margin: auto;
   margin-top: 20px;
+  width: 90%;
 }
 
 .oak_list_row__container {
@@ -1751,6 +1267,29 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
 
 .oak_list_row__container .oak_passiv {
   color: #7b7b7b;
+  border-color: #7b7b7b;
+}
+
+.oak_list_row__selected {
+  background-color: #bcc7d9;
+}
+
+.oak_list_header_at_least_one_selected {
+  background-color: #bcc7d9;
+}
+
+.fa-plus {
+  color: white;
+}
+
+.oak_list_header_at_least_one_selected i, .oak_list_header_at_least_one_selected h3 {
+  color: #000c3b;
+}
+
+.oak_menu_smaller_icon {
+  padding: 10px 10px 10px 10px;
+  width: 20px;
+  text-align: center;
 }
 
 .oak_list_row__container i {
@@ -1784,6 +1323,11 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   display: flex;
   justify-content: flex-start;
   margin-top: 40px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  background-color: #003366;
+  align-items: center;
 }
 
 .oak_grouped_actions__element {
@@ -1791,8 +1335,15 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   border-radius: 0px;
   max-width: 170px;
   border: 0;
-  outline: 1px solid #003366;
-  height: 35px !important;
+  -webkit-appearance: none;
+  text-align: center;
+  background-color: #003366;
+  color: white;
+}
+
+.oak_grouped_actions__element:hover {
+  cursor: pointer;
+  background-color: #ca4a1f;
 }
 
 .oak_list_button:hover {
@@ -1805,472 +1356,36 @@ input[type=checkbox], input[type=color], input[type=date], input[type=datetime-l
   margin-right: 0px;
 }
 
-.oak_list_grouped_actions_button {
-  margin-left: 5px;
+.oak_trash_list_select {
+  color: white;
+  line-height: 50px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.oak_trash_list_select:hover {
+  background-color: #ca4a1f;
+}
+
+.oak_menu_burger {
+  margin-right: 30px;
 }
 
 .oak_list_header_right__search_input {
-  height: 35px;
   margin-right: 10px;
+  height: 25px;
+  width: 600px;
 }
 
 .oak_list_highlighted {
   background-color: #FC394D;
 }
 
-.oak_list_header_right__icon_button {
-  padding: 10px;
-  border: 1px solid #003366;
-  color: #003366;
-  margin-right: 5px;
-  transition: all 0.1s ease-in-out;
+.oak_list_row__first_row {
+  border-top: none;
 }
 
-.oak_list_header_right__icon_button:hover {
-  color: white;
-  background-color: #003366;
-  cursor: pointer;
-}
-
-.oak_add_form_fields_list__horizontal {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.oak_add_form_fields_list__vertical {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-select {
-  flex: 1;
-}
-
-.oak_add_field_label {
-  margin-bottom: 7px;
-}
-
-.oak_add_form_add_field_button, .oak_add_form_add_line_button, .oak_add_form_add_space_button, .oak_add_form_field_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_form_field_options__button i {
-  font-size: 20px;
-}
-
-.oak_add_form_add_field_button:hover, .oak_add_form_add_line_button:hover, .oak_add_form_add_space_button:hover, .oak_add_form_field_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_form_fields_list__single_field {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_form_container_header_icon {
-  width: 15px;
-}
-
-.oak_add_form_fields_list__horizontal_without_margin_top {
-  margin-top: 0px;
-}
-
-.oak_add_field_container__isert_field_title_container {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.oak_add_model_forms_list__horizontal {
-  display: flex;
-  align-items: center;
-}
-
-.oak_add_field_container__isert_field_title {
-  margin: 0px;
-  padding-left: 5px;
-  background-color: white;
-  color: #003366;
-}
-
-.oak_add_model_forms_list__horizontal_very_small {
-  flex: 0.3;
-  justify-content: space-around;
-}
-
-.oak_add_model_forms_list__horizontal_small {
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.oak_add_field_label_width {
-  margin-right: 30px;
-}
-
-.without_margin_bottom {
-  margin-bottom: 0px;
-}
-
-.oak_add_form_add_field_button__icons {
-  width: 15px;
-}
-
-.oak_add_form_field_buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.oak_add_form_field_options {
-  justify-content: space-between;
-}
-
-.oak_add_form_fields_list__buttons_container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.oak_add_form_seperator {
-  border: 1px solid #003366;
-  display: flex;
-  justify-content: center;
-  height: 40px;
-  align-items: center;
-  margin-top: 10px;
-  position: relative;
-}
-
-.oak_add_form__delete_separator_button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.oak_add_model_forms_list__horizontal label {
-  margin-bottom: 0px;
-  margin-right: 30px;
-}
-
-.oak_add_model_add_model_button__icons {
-  width: 15px;
-}
-
-.oak_add_model_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.oak_add_model_add_form_button, .oak_add_model_add_line_button, .oak_add_model_add_space_button, .oak_add_model_form_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_model_add_form_button:hover, .oak_add_model_add_line_button:hover, .oak_add_model_add_space_button, .oak_add_model_form_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_model_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_model_forms_list__horizontal {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.oak_add_model_forms_list__vertical {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-select {
-  flex: 1;
-}
-
-.oak_add_model_label {
-  margin-bottom: 7px;
-}
-
-.oak_add_model_and_form_button, .oak_add_model_add_line_button, .oak_add_model_add_space_button, .oak_add_model_field_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_model_form_options__button i {
-  font-size: 20px;
-}
-
-.oak_add_model_and_form_button:hover, .oak_add_model_add_line_button:hover, .oak_add_model_add_space_button:hover, .oak_add_model_field_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_model_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_model_container_header_icon {
-  width: 15px;
-}
-
-.oak_add_model_forms_list__horizontal_without_margin_top {
-  margin-top: 0px;
-}
-
-.oak_add_form_container__isert_form_title_container {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.oak_add_form_container__isert_form_title {
-  margin: 0px;
-  padding-left: 5px;
-  background-color: white;
-  color: #003366;
-}
-
-.oak_add_model_forms_list__horizontal_very_small {
-  flex: 0.3;
-  justify-content: space-around;
-}
-
-.oak_add_model_forms_list__horizontal_small {
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.oak_add_form_label_width {
-  margin-right: 30px;
-}
-
-.without_margin_bottom {
-  margin-bottom: 0px;
-}
-
-.oak_add_model_and_form_button__icons {
-  width: 15px;
-}
-
-.oak_add_model_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.oak_add_model_form_options {
-  justify-content: space-between;
-}
-
-.oak_add_model_forms_list__buttons_container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.oak_add_model_seperator {
-  border: 1px solid #003366;
-  display: flex;
-  justify-content: center;
-  height: 40px;
-  align-items: center;
-  margin-top: 10px;
-  position: relative;
-}
-
-.oak_add_model__delete_separator_button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.oak_add_organization_add_organization_button__icons {
-  width: 15px;
-}
-
-.oak_add_organization_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.oak_add_organization_add_form_button, .oak_add_organization_add_line_button, .oak_add_organization_add_space_button, .oak_add_organization_form_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_organization_add_form_button:hover, .oak_add_organization_add_line_button:hover, .oak_add_organization_add_space_button, .oak_add_organization_form_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_organization_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_organization_forms_list__horizontal {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.oak_add_organization_forms_list__vertical {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-select {
-  flex: 1;
-}
-
-.oak_add_organization_label {
-  margin-bottom: 7px;
-}
-
-.oak_add_organization_and_form_button, .oak_add_organization_add_line_button, .oak_add_organization_add_space_button, .oak_add_organization_field_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_organization_form_options__button i {
-  font-size: 20px;
-}
-
-.oak_add_organization_and_form_button:hover, .oak_add_organization_add_line_button:hover, .oak_add_organization_add_space_button:hover, .oak_add_organization_field_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_organization_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_organization_container_header_icon {
-  width: 15px;
-}
-
-.oak_add_organization_forms_list__horizontal_without_margin_top {
-  margin-top: 0px;
-}
-
-.oak_add_form_container__isert_form_title_container {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.oak_add_form_container__isert_form_title {
-  margin: 0px;
-  padding-left: 5px;
-  background-color: white;
-  color: #003366;
-}
-
-.oak_add_organization_forms_list__horizontal_very_small {
-  flex: 0.3;
-  justify-content: space-around;
-}
-
-.oak_add_organization_forms_list__horizontal_small {
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.oak_add_form_label_width {
-  margin-right: 30px;
-}
-
-.without_margin_bottom {
-  margin-bottom: 0px;
-}
-
-.oak_add_organization_and_form_button__icons {
-  width: 15px;
-}
-
-.oak_add_organization_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.oak_add_organization_form_options {
-  justify-content: space-between;
-}
-
-.oak_add_organization_forms_list__buttons_container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.oak_add_organization_seperator {
-  border: 1px solid #003366;
-  display: flex;
-  justify-content: center;
-  height: 40px;
-  align-items: center;
-  margin-top: 10px;
-  position: relative;
-}
-
-.oak_add_organization__delete_separator_button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.oak_add_organization_container__logo_img {
-  width: 200px;
-}
-
-.oak_object_model_add_formula_modal_container {
+.oak_add_element_modal_container {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -2291,7 +1406,7 @@ select {
   z-index: 10;
 }
 
-.oak_object_model_add_formula_modal_container__modal {
+.oak_add_element_modal_container__modal {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -2309,11 +1424,11 @@ select {
   height: 80%;
 }
 
-.oak_object_model_add_formula_modal_container_modal__title_container {
+.oak_add_element_modal_container_modal__title_container {
   text-align: center;
 }
 
-.oak_object_model_add_formula_modal_container_modal_buttons_container {
+.oak_add_element_modal_container_modal__buttons_container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -2321,13 +1436,13 @@ select {
   margin-top: 20px;
 }
 
-.oak_object_model_add_formula_modal_container_modal__error {
+.oak_add_element_modal_container_modal__error {
   color: #FC394D;
   margin-top: 5px;
   font-weight: bold;
 }
 
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container {
+.oak_add_element_modal_container_modal_buttons_container__cancel_button_container, .oak_add_element_modal_container_modal_buttons_container__add_button_container, .oak_add_element_modal_container_modal_buttons_container__ok_button_container {
   background-color: #24E08C;
   display: flex;
   align-items: center;
@@ -2340,1308 +1455,25 @@ select {
   border: 1px solid #24E08C;
 }
 
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
+.oak_add_element_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_add_element_modal_container_modal_buttons_container__add_button_container:hover, .oak_add_element_modal_container_modal_buttons_container__ok_button_container:hover {
   cursor: pointer;
   background-color: white;
 }
 
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container {
+.oak_add_element_modal_container_modal_buttons_container__cancel_button_container {
   background-color: #FC394D;
   border: 1px solid #FC394D;
 }
 
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
+.oak_add_element_modal_container_modal_buttons_container__cancel_button_container:hover span {
   color: #FC394D;
 }
 
-.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
+.oak_add_element_modal_container_modal_buttons_container__add_button_container:hover span, .oak_add_element_modal_container_modal_buttons_container__ok_button_container:hover span {
   color: #24E08C;
 }
 
-.oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text {
-  color: white;
-}
-
-.oak_add_publication_add_publication_button__icons {
-  width: 15px;
-}
-
-.oak_add_publication_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.oak_add_publication_add_form_button, .oak_add_publication_add_line_button, .oak_add_publication_add_space_button, .oak_add_publication_form_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_publication_add_form_button:hover, .oak_add_publication_add_line_button:hover, .oak_add_publication_add_space_button, .oak_add_publication_form_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_publication_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_publication_forms_list__horizontal {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.oak_add_publication_forms_list__vertical {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-select {
-  flex: 1;
-}
-
-.oak_add_publication_label {
-  margin-bottom: 7px;
-}
-
-.oak_add_publication_and_form_button, .oak_add_publication_add_line_button, .oak_add_publication_add_space_button, .oak_add_publication_field_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_publication_form_options__button i {
-  font-size: 20px;
-}
-
-.oak_add_publication_and_form_button:hover, .oak_add_publication_add_line_button:hover, .oak_add_publication_add_space_button:hover, .oak_add_publication_field_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_publication_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_publication_container_header_icon {
-  width: 15px;
-}
-
-.oak_add_publication_forms_list__horizontal_without_margin_top {
-  margin-top: 0px;
-}
-
-.oak_add_form_container__isert_form_title_container {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.oak_add_form_container__isert_form_title {
-  margin: 0px;
-  padding-left: 5px;
-  background-color: white;
-  color: #003366;
-}
-
-.oak_add_publication_forms_list__horizontal_very_small {
-  flex: 0.3;
-  justify-content: space-around;
-}
-
-.oak_add_publication_forms_list__horizontal_small {
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.oak_add_form_label_width {
-  margin-right: 30px;
-}
-
-.without_margin_bottom {
-  margin-bottom: 0px;
-}
-
-.oak_add_publication_and_form_button__icons {
-  width: 15px;
-}
-
-.oak_add_publication_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.oak_add_publication_form_options {
-  justify-content: space-between;
-}
-
-.oak_add_publication_forms_list__buttons_container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.oak_add_publication_seperator {
-  border: 1px solid #003366;
-  display: flex;
-  justify-content: center;
-  height: 40px;
-  align-items: center;
-  margin-top: 10px;
-  position: relative;
-}
-
-.oak_add_publication__delete_separator_button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.oak_add_publication_container__logo_img {
-  width: 200px;
-}
-
-.oak_add_field_container__headpiece_img {
-  width: 200px;
-  height: auto;
-}
-
-.oak_add_field_container__sectors_container {
-  flex: 1;
-}
-
-.oak_object_model_add_formula_modal_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  top: 0px;
-  transition: all 0.3s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  z-index: -10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.oak_object_model_add_formula_modal_container__activated {
-  opacity: 1;
-  z-index: 10;
-}
-
-.oak_object_model_add_formula_modal_container__modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 40%;
-  background-color: white;
-  padding: 20px;
-  position: fixed;
-  top: 30%;
-  z-index: 4;
-}
-
-.oak_object_model_add_formula_modal_container_modal__big_modal {
-  width: 70%;
-  top: 5%;
-  height: 80%;
-}
-
-.oak_object_model_add_formula_modal_container_modal__title_container {
-  text-align: center;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.oak_object_model_add_formula_modal_container_modal__error {
-  color: #FC394D;
-  margin-top: 5px;
-  font-weight: bold;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container {
-  background-color: #24E08C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-  width: 100px;
-  text-align: center;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
-  color: #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
-  color: #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text {
-  color: white;
-}
-
-.oak_add_glossary_add_glossary_button__icons {
-  width: 15px;
-}
-
-.oak_add_glossary_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.oak_add_glossary_add_form_button, .oak_add_glossary_add_line_button, .oak_add_glossary_add_space_button, .oak_add_glossary_form_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_glossary_add_form_button:hover, .oak_add_glossary_add_line_button:hover, .oak_add_glossary_add_space_button, .oak_add_glossary_form_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_glossary_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_glossary_forms_list__horizontal {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.oak_add_glossary_forms_list__vertical {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-select {
-  flex: 1;
-}
-
-.oak_add_glossary_label {
-  margin-bottom: 7px;
-}
-
-.oak_add_glossary_and_form_button, .oak_add_glossary_add_line_button, .oak_add_glossary_add_space_button, .oak_add_glossary_field_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_glossary_form_options__button i {
-  font-size: 20px;
-}
-
-.oak_add_glossary_and_form_button:hover, .oak_add_glossary_add_line_button:hover, .oak_add_glossary_add_space_button:hover, .oak_add_glossary_field_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_glossary_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_glossary_container_header_icon {
-  width: 15px;
-}
-
-.oak_add_glossary_forms_list__horizontal_without_margin_top {
-  margin-top: 0px;
-}
-
-.oak_add_form_container__isert_form_title_container {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.oak_add_form_container__isert_form_title {
-  margin: 0px;
-  padding-left: 5px;
-  background-color: white;
-  color: #003366;
-}
-
-.oak_add_glossary_forms_list__horizontal_very_small {
-  flex: 0.3;
-  justify-content: space-around;
-}
-
-.oak_add_glossary_forms_list__horizontal_small {
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.oak_add_form_label_width {
-  margin-right: 30px;
-}
-
-.without_margin_bottom {
-  margin-bottom: 0px;
-}
-
-.oak_add_glossary_and_form_button__icons {
-  width: 15px;
-}
-
-.oak_add_glossary_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.oak_add_glossary_form_options {
-  justify-content: space-between;
-}
-
-.oak_add_glossary_forms_list__buttons_container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.oak_add_glossary_seperator {
-  border: 1px solid #003366;
-  display: flex;
-  justify-content: center;
-  height: 40px;
-  align-items: center;
-  margin-top: 10px;
-  position: relative;
-}
-
-.oak_add_glossary__delete_separator_button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.oak_add_glossary_container__logo_img {
-  width: 200px;
-}
-
-.oak_add_field_container__headpiece_img {
-  width: 200px;
-  height: auto;
-}
-
-.oak_object_model_add_formula_modal_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  top: 0px;
-  transition: all 0.3s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  z-index: -10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.oak_object_model_add_formula_modal_container__activated {
-  opacity: 1;
-  z-index: 10;
-}
-
-.oak_object_model_add_formula_modal_container__modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 40%;
-  background-color: white;
-  padding: 20px;
-  position: fixed;
-  top: 30%;
-  z-index: 4;
-}
-
-.oak_object_model_add_formula_modal_container_modal__big_modal {
-  width: 70%;
-  top: 5%;
-  height: 80%;
-}
-
-.oak_object_model_add_formula_modal_container_modal__title_container {
-  text-align: center;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.oak_object_model_add_formula_modal_container_modal__error {
-  color: #FC394D;
-  margin-top: 5px;
-  font-weight: bold;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container {
-  background-color: #24E08C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-  width: 100px;
-  text-align: center;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
-  color: #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
-  color: #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text {
-  color: white;
-}
-
-.oak_add_object_add_object_button__icons {
-  width: 15px;
-}
-
-.oak_add_object_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.oak_add_object_add_form_button, .oak_add_object_add_line_button, .oak_add_object_add_space_button, .oak_add_object_form_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_object_add_form_button:hover, .oak_add_object_add_line_button:hover, .oak_add_object_add_space_button, .oak_add_object_form_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_object_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_object_forms_list__horizontal {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.oak_add_object_forms_list__vertical {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-select {
-  flex: 1;
-}
-
-.oak_add_object_label {
-  margin-bottom: 7px;
-}
-
-.oak_add_object_and_form_button, .oak_add_object_add_line_button, .oak_add_object_add_space_button, .oak_add_object_field_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_object_form_options__button i {
-  font-size: 20px;
-}
-
-.oak_add_object_and_form_button:hover, .oak_add_object_add_line_button:hover, .oak_add_object_add_space_button:hover, .oak_add_object_field_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_object_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_object_container_header_icon {
-  width: 15px;
-}
-
-.oak_add_object_forms_list__horizontal_without_margin_top {
-  margin-top: 0px;
-}
-
-.oak_add_form_container__isert_form_title_container {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.oak_add_form_container__isert_form_title {
-  margin: 0px;
-  padding-left: 5px;
-  background-color: white;
-  color: #003366;
-}
-
-.oak_add_object_forms_list__horizontal_very_small {
-  flex: 0.3;
-  justify-content: space-around;
-}
-
-.oak_add_object_forms_list__horizontal_small {
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.oak_add_form_label_width {
-  margin-right: 30px;
-}
-
-.without_margin_bottom {
-  margin-bottom: 0px;
-}
-
-.oak_add_object_and_form_button__icons {
-  width: 15px;
-}
-
-.oak_add_object_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.oak_add_object_form_options {
-  justify-content: space-between;
-}
-
-.oak_add_object_forms_list__buttons_container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.oak_add_object_seperator {
-  border: 1px solid #003366;
-  display: flex;
-  justify-content: center;
-  height: 40px;
-  align-items: center;
-  margin-top: 10px;
-  position: relative;
-}
-
-.oak_add_object__delete_separator_button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.oak_add_object_container__logo_img {
-  width: 200px;
-}
-
-.oak_add_field_container__headpiece_img {
-  width: 200px;
-  height: auto;
-}
-
-.oak_add_object_model_image {
-  width: 200px;
-  height: auto;
-}
-
-.oak_object_model_add_formula_modal_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  top: 0px;
-  transition: all 0.3s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  z-index: -10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.oak_object_model_add_formula_modal_container__activated {
-  opacity: 1;
-  z-index: 10;
-}
-
-.oak_object_model_add_formula_modal_container__modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 40%;
-  background-color: white;
-  padding: 20px;
-  position: fixed;
-  top: 30%;
-  z-index: 4;
-}
-
-.oak_object_model_add_formula_modal_container_modal__big_modal {
-  width: 70%;
-  top: 5%;
-  height: 80%;
-}
-
-.oak_object_model_add_formula_modal_container_modal__title_container {
-  text-align: center;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.oak_object_model_add_formula_modal_container_modal__error {
-  color: #FC394D;
-  margin-top: 5px;
-  font-weight: bold;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container {
-  background-color: #24E08C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-  width: 100px;
-  text-align: center;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
-  color: #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
-  color: #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text {
-  color: white;
-}
-
-.oak_add_taxonomy_add_taxonomy_button__icons {
-  width: 15px;
-}
-
-.oak_add_taxonomy_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.oak_add_taxonomy_add_form_button, .oak_add_taxonomy_add_line_button, .oak_add_taxonomy_add_space_button, .oak_add_taxonomy_form_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_taxonomy_add_form_button:hover, .oak_add_taxonomy_add_line_button:hover, .oak_add_taxonomy_add_space_button, .oak_add_taxonomy_form_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_taxonomy_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_taxonomy_forms_list__horizontal {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.oak_add_taxonomy_forms_list__vertical {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-select {
-  flex: 1;
-}
-
-.oak_add_taxonomy_label {
-  margin-bottom: 7px;
-}
-
-.oak_add_taxonomy_and_form_button, .oak_add_taxonomy_add_line_button, .oak_add_taxonomy_add_space_button, .oak_add_taxonomy_field_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_taxonomy_form_options__button i {
-  font-size: 20px;
-}
-
-.oak_add_taxonomy_and_form_button:hover, .oak_add_taxonomy_add_line_button:hover, .oak_add_taxonomy_add_space_button:hover, .oak_add_taxonomy_field_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_taxonomy_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_taxonomy_container_header_icon {
-  width: 15px;
-}
-
-.oak_add_taxonomy_forms_list__horizontal_without_margin_top {
-  margin-top: 0px;
-}
-
-.oak_add_form_container__isert_form_title_container {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.oak_add_form_container__isert_form_title {
-  margin: 0px;
-  padding-left: 5px;
-  background-color: white;
-  color: #003366;
-}
-
-.oak_add_taxonomy_forms_list__horizontal_very_small {
-  flex: 0.3;
-  justify-content: space-around;
-}
-
-.oak_add_taxonomy_forms_list__horizontal_small {
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.oak_add_form_label_width {
-  margin-right: 30px;
-}
-
-.without_margin_bottom {
-  margin-bottom: 0px;
-}
-
-.oak_add_taxonomy_and_form_button__icons {
-  width: 15px;
-}
-
-.oak_add_taxonomy_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.oak_add_taxonomy_form_options {
-  justify-content: space-between;
-}
-
-.oak_add_taxonomy_forms_list__buttons_container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.oak_add_taxonomy_seperator {
-  border: 1px solid #003366;
-  display: flex;
-  justify-content: center;
-  height: 40px;
-  align-items: center;
-  margin-top: 10px;
-  position: relative;
-}
-
-.oak_add_taxonomy__delete_separator_button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.oak_add_taxonomy_container__logo_img {
-  width: 200px;
-}
-
-.oak_add_field_container__headpiece_img {
-  width: 200px;
-  height: auto;
-}
-
-.oak_add_taxonomy_fields_title {
-  color: #003366;
-}
-
-.oak_add_taxonomy_checkboxes_container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.oak_object_model_add_formula_modal_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  top: 0px;
-  transition: all 0.3s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  z-index: -10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.oak_object_model_add_formula_modal_container__activated {
-  opacity: 1;
-  z-index: 10;
-}
-
-.oak_object_model_add_formula_modal_container__modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 40%;
-  background-color: white;
-  padding: 20px;
-  position: fixed;
-  top: 30%;
-  z-index: 4;
-}
-
-.oak_object_model_add_formula_modal_container_modal__big_modal {
-  width: 70%;
-  top: 5%;
-  height: 80%;
-}
-
-.oak_object_model_add_formula_modal_container_modal__title_container {
-  text-align: center;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.oak_object_model_add_formula_modal_container_modal__error {
-  color: #FC394D;
-  margin-top: 5px;
-  font-weight: bold;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container {
-  background-color: #24E08C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-  width: 100px;
-  text-align: center;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
-  color: #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
-  color: #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text {
-  color: white;
-}
-
-.oak_add_term_add_term_button__icons {
-  width: 15px;
-}
-
-.oak_add_term_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.oak_add_term_add_form_button, .oak_add_term_add_line_button, .oak_add_term_add_space_button, .oak_add_term_form_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_term_add_form_button:hover, .oak_add_term_add_line_button:hover, .oak_add_term_add_space_button, .oak_add_term_form_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_term_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_term_forms_list__horizontal {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin-top: 10px;
-}
-
-.oak_add_field_container__logo {
-  width: 200px;
-}
-
-.oak_add_term_forms_list__vertical {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-select {
-  flex: 1;
-}
-
-.oak_add_term_label {
-  margin-bottom: 7px;
-}
-
-.oak_add_term_and_form_button, .oak_add_term_add_line_button, .oak_add_term_add_space_button, .oak_add_term_field_options__button {
-  border: 1px solid #003366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  width: 25px;
-  height: 20px;
-  margin-left: 5px;
-  color: #003366;
-}
-
-.oak_add_term_form_options__button i {
-  font-size: 20px;
-}
-
-.oak_add_term_and_form_button:hover, .oak_add_term_add_line_button:hover, .oak_add_term_add_space_button:hover, .oak_add_term_field_options__button:hover {
-  cursor: pointer;
-}
-
-.oak_add_term_forms_list__single_form {
-  border-bottom: 1px solid #e2e4e7;
-  padding-bottom: 30px;
-}
-
-.oak_add_term_container_header_icon {
-  width: 15px;
-}
-
-.oak_add_term_forms_list__horizontal_without_margin_top {
-  margin-top: 0px;
-}
-
-.oak_add_form_container__isert_form_title_container {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.oak_add_form_container__isert_form_title {
-  margin: 0px;
-  padding-left: 5px;
-  background-color: white;
-  color: #003366;
-}
-
-.oak_add_term_forms_list__horizontal_very_small {
-  flex: 0.3;
-  justify-content: space-around;
-}
-
-.oak_add_term_forms_list__horizontal_small {
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.oak_add_form_label_width {
-  margin-right: 30px;
-}
-
-.without_margin_bottom {
-  margin-bottom: 0px;
-}
-
-.oak_add_term_and_form_button__icons {
-  width: 15px;
-}
-
-.oak_add_term_form_buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.oak_add_term_form_options {
-  justify-content: space-between;
-}
-
-.oak_add_term_forms_list__buttons_container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.oak_add_term_seperator {
-  border: 1px solid #003366;
-  display: flex;
-  justify-content: center;
-  height: 40px;
-  align-items: center;
-  margin-top: 10px;
-  position: relative;
-}
-
-.oak_add_term__delete_separator_button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.oak_add_term_container__logo_img {
-  width: 200px;
-}
-
-.oak_add_field_container__headpiece_img {
-  width: 200px;
-  height: auto;
-}
-
-.oak_object_model_add_formula_modal_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  top: 0px;
-  transition: all 0.3s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  z-index: -10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.oak_object_model_add_formula_modal_container__activated {
-  opacity: 1;
-  z-index: 10;
-}
-
-.oak_object_model_add_formula_modal_container__modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 40%;
-  background-color: white;
-  padding: 20px;
-  position: fixed;
-  top: 30%;
-  z-index: 4;
-}
-
-.oak_object_model_add_formula_modal_container_modal__big_modal {
-  width: 70%;
-  top: 5%;
-  height: 80%;
-}
-
-.oak_object_model_add_formula_modal_container_modal__title_container {
-  text-align: center;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.oak_object_model_add_formula_modal_container_modal__error {
-  color: #FC394D;
-  margin-top: 5px;
-  font-weight: bold;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container {
-  background-color: #24E08C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-  width: 100px;
-  text-align: center;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
-  cursor: pointer;
-  background-color: white;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container:hover span {
-  color: #FC394D;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container:hover span, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
-  color: #24E08C;
-}
-
-.oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text, .oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text {
+.oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text, .oak_add_element_modal_container_modal_buttons_container_add_button_container__text {
   color: white;
 }
 

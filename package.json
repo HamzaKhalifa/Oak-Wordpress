@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "csv-writer": "^1.2.0",
+    "material-components-web": "^0.44.0",
     "node-sass": "^4.9.3"
   }
 }

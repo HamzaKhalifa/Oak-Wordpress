@@ -1,11 +1,11 @@
-<div class="oak_fields_list_top_container">
+<div class="oak_elements_list_top_container">
     <div class="oak_list_header">
         <img class="oak_list_header__icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/fields.png' ); ?>" alt="">
         <h1><?php _e( 'Termes', Oak::$text_domain ); ?></h1>
         <span class="oak_list_header__add_button oak_list_button"><?php _e( 'Ajouter', Oak::$text_domain ); ?></span>
     </div>
     
-    <div class="oak_add_field_container__fields_list">
+    <div class="oak_elements_list">
         <div class="oak_list_row">
             <div class="oak_list_row__container">
                 <input class="oak_list_titles_container__checkbox" type="checkbox">
@@ -77,27 +77,27 @@
 
 
 <!-- For the modal -->
-<div class="oak_object_model_add_formula_modal_container">
-    <div class="oak_object_model_add_formula_modal_container__modal">
-        <div class="oak_object_model_add_formula_modal_container_modal__title_container">
-            <h3 class="oak_object_model_add_formula_modal_container_modal_title_container__title"></h3>
+<div class="oak_add_element_modal_container">
+    <div class="oak_add_element_modal_container__modal">
+        <div class="oak_add_element_modal_container_modal__title_container">
+            <h3 class="oak_add_element_modal_container_modal_title_container__title"></h3>
         </div>
-        <span class="oak_object_model_add_formula_modal_container_modal__error"></span>
-        <div class="oak_object_model_add_formula_modal_container_modal_buttons_container">
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text" >
+        <span class="oak_add_element_modal_container_modal__error"></span>
+        <div class="oak_add_element_modal_container_modal__buttons_container">
+            <div class="oak_add_element_modal_container_modal_buttons_container__cancel_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text" >
                     Annuler
                 </span>
             </div>
             
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text" >
+            <div class="oak_add_element_modal_container_modal_buttons_container__add_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_add_button_container__text" >
                     Ajouter
                 </span>
             </div>
 
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text" >
+            <div class="oak_add_element_modal_container_modal_buttons_container__ok_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_add_button_container__text" >
                     Ok
                 </span>
             </div>

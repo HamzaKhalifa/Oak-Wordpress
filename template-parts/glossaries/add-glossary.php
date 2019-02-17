@@ -26,9 +26,12 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="publication"><?php _e( 'Publication(s) dont est issue la terminologie: ', Oak::$text_domain ); ?></label> 
                 <select multiple class="oak_add_field_container__publication" name="publication" id="">
                     <?php 
-                    var_dump( $revisions[ count( $revisions ) - 1 ] );
+                    $publications = [];
+                    if ( count( $revisions ) > 0 ) :
+                        $publications = explode( '|', $revisions[ count( $revisions ) - 1 ]->glossary_publication );
+                    endif;
                     foreach( Oak::$publications_without_redundancy as $publication ) : ?>
-                        <option value="<?php echo( $publication->publication_identifier ) ?>"><?php echo( $publication->publication_designation ); ?></option>
+                        <option <?php if ( count( $revisions ) > 0 ) : if( in_array( $publication->publication_identifier, $publications ) ) : echo('selected'); endif; endif; ?> value="<?php echo( $publication->publication_identifier ) ?>"><?php echo( $publication->publication_designation ); ?></option>
                     <?php
                     endforeach;
                     ?>
@@ -37,8 +40,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="object"><?php _e( 'L\'objet auquel appartient la terminologie: ', Oak::$text_domain ); ?></label> 
                 <select class="oak_add_field_container__object" name="object" id="">
-                    <?php 
-                    
+                    <?php
                     foreach( Oak::$objects as $object ) : ?>
                         <option value="<?php echo ( $object->ID ); ?>"><?php echo( $object->post_title ); ?></option>
                     <?php
@@ -259,114 +261,114 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
 
 <!-- For the modal -->
-<div class="oak_object_model_add_formula_modal_container">
-    <div class="oak_object_model_add_formula_modal_container__modal">
-        <div class="oak_object_model_add_formula_modal_container_modal__title_container">
-            <h3 class="oak_object_model_add_formula_modal_container_modal_title_container__title"></h3>
+<div class="oak_add_element_modal_container">
+    <div class="oak_add_element_modal_container__modal">
+        <div class="oak_add_element_modal_container_modal__title_container">
+            <h3 class="oak_add_element_modal_container_modal_title_container__title"></h3>
         </div>
 
-        <div class="oak_object_model_add_formula_modal_container__modal_content">
+        <div class="oak_add_element_modal_container_modal__content">
 
             <!-- For the browse revisions functionality -->
-            <div class="oak_object_model_add_formula_modal_container_modal_content__revisions_content oak_hidden">
-                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__current">
+            <div class="oak_add_element_modal_container_modal_content__revisions_content oak_hidden">
+                <div class="oak_add_element_modal_container_modal_content__revisions_content__current">
                     <h3><?php _e( 'Données Actuelle', Oak::$text_domain); ?></h3>
                     <!-- List of fields here -->
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="publication"><?php _e( 'Publication(s) dont est issue la terminologie:', Oak::$text_domain ); ?></label>
                         <input name="publication" type="text" disabled class="oak_revision_glossary_current_publication" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="object"><?php _e( 'L\'objet auquel appartient la terminologie:', Oak::$text_domain ); ?></label>
                         <input name="object" type="text" disabled class="oak_revision_glossary_current_object" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="depends"><?php _e( 'Terminologie dépendante d’une autre:', Oak::$text_domain ); ?></label>
                         <input name="depends" type="text" disabled class="oak_revision_glossary_current_depends" value="">
                     </div>
                     
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="parent"><?php _e( 'Terminologie de niveau supérieur:', Oak::$text_domain ); ?></label>
                         <input name="parent" type="text" disabled class="oak_revision_glossary_current_parent" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="definition"><?php _e( 'Défnition de la terminologie:', Oak::$text_domain ); ?></label>
                         <input name="definition" type="text" disabled class="oak_revision_glossary_current_definition" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="close"><?php _e( 'Terminologie(s) proche(s) de la terminologie défnie:', Oak::$text_domain ); ?></label>
                         <input name="close" type="text" disabled class="oak_revision_glossary_current_close" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="close-indicators"><?php _e( 'Terminologie(s) proche(s) de la terminologie défnie:', Oak::$text_domain ); ?></label>
                         <input name="close-indicators" type="text" disabled class="oak_revision_glossary_current_close_indicators" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="state"><?php _e( 'Etat:', Oak::$text_domain ); ?></label>
                         <input name="state" type="text" disabled class="oak_revision_glossary_current_state" value="">
                     </div>
 
                 </div>
 
-                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__revision_data_container">
+                <div class="oak_add_element_modal_container_modal_content_revisions_content__revision_data_container">
                     <h3><?php _e( 'Données de la révision', Oak::$text_domain); ?></h3>
                     <!-- List of forms here -->
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="publication"><?php _e( 'Publication(s) dont est issue la terminologie:', Oak::$text_domain ); ?></label>
                         <input name="publication" type="text" disabled class="oak_revision_glossary_revision_publication" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="object"><?php _e( 'L\'objet auquel appartient la terminologie:', Oak::$text_domain ); ?></label>
                         <input name="object" type="text" disabled class="oak_revision_glossary_revision_object" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="depends"><?php _e( 'Terminologie dépendante d’une autre:', Oak::$text_domain ); ?></label>
                         <input name="depends" type="text" disabled class="oak_revision_glossary_revision_depends" value="">
                     </div>
                     
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="parent"><?php _e( 'Terminologie de niveau supérieur:', Oak::$text_domain ); ?></label>
                         <input name="parent" type="text" disabled class="oak_revision_glossary_revision_parent" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="definition"><?php _e( 'Défnition de la terminologie:', Oak::$text_domain ); ?></label>
                         <input name="definition" type="text" disabled class="oak_revision_glossary_revision_definition" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="close"><?php _e( 'Terminologie(s) proche(s) de la terminologie défnie:', Oak::$text_domain ); ?></label>
                         <input name="close" type="text" disabled class="oak_revision_glossary_revision_close" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="close-indicators"><?php _e( 'Terminologie(s) proche(s) de la terminologie défnie:', Oak::$text_domain ); ?></label>
                         <input name="close-indicators" type="text" disabled class="oak_revision_glossary_revision_close_indicators" value="">
                     </div>
 
-                    <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_revision_data_container__single_data">
+                    <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                         <label for="state"><?php _e( 'Etat:', Oak::$text_domain ); ?></label>
                         <input name="state" type="text" disabled class="oak_revision_glossary_revision_state" value="">
                     </div>
                     
                 </div>
 
-                <div class="oak_object_model_add_formula_modal_container_modal_content_revisions_content__list_of_revisions">
+                <div class="oak_add_element_modal_container_modal_content_revisions_content__list_of_revisions">
                     <h3><?php _e( 'Liste des révisions', Oak::$text_domain ); ?></h3>
                     <?php 
                     foreach( $revisions as $key => $revision ) : 
                         if ( $key != count( $revisions ) - 1 ) :
                         ?>
-                            <div index="<?php echo( $key ) ?>" class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
-                                <span class="oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision->glossary_modification_time ); ?></span>
+                            <div index="<?php echo( $key ) ?>" class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
+                                <span class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( $revision->glossary_modification_time ); ?></span>
                             </div>
                         <?php
                         endif;
@@ -377,22 +379,22 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
             <!-- Done with the browse revisions Functionality -->
         </div>
 
-        <span class="oak_object_model_add_formula_modal_container_modal__error"></span>
-        <div class="oak_object_model_add_formula_modal_container_modal_buttons_container">
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text" >
+        <span class="oak_add_element_modal_container_modal__error"></span>
+        <div class="oak_add_element_modal_container_modal__buttons_container">
+            <div class="oak_add_element_modal_container_modal_buttons_container__cancel_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text" >
                     Annuler
                 </span>
             </div>
             
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text" >
+            <div class="oak_add_element_modal_container_modal_buttons_container__add_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_add_button_container__text" >
                     Ajouter
                 </span>
             </div>
 
-            <div class="oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container">
-                <span class="oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text" >
+            <div class="oak_add_element_modal_container_modal_buttons_container__ok_button_container">
+                <span class="oak_add_element_modal_container_modal_buttons_container_add_button_container__text" >
                     Ok
                 </span>
             </div>

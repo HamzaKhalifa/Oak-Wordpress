@@ -1,24 +1,21 @@
 <?php 
 global $wpdb;
 $charset_collate = $wpdb->get_charset_collate();
-
 $fields_table_name = Oak::$fields_table_name;
 $fields_sql = "CREATE TABLE $fields_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     field_designation varchar(555) DEFAULT '' NOT NULL,
     field_identifier varchar(555) DEFAULT '' NOT NULL,
-    field_type varchar(555),
-    field_function varchar(555),
-    field_default_value varchar(555),
-    field_instructions varchar(555),
-    field_placeholder varchar(555),
-    field_before varchar(555),
-    field_after varchar(555),
-    field_max_length varchar(555),
     field_selector varchar(555),
+    field_locked varchar(555),
+    field_trashed varchar(555),
     field_state varchar(555),
     field_modification_time datetime,
-    field_trashed varchar(555),
+    field_type varchar(555),
+    field_function varchar(555),
+    field_tag varchar(555),
+    field_help varchar(555),
+    field_description varchar(555),
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -29,11 +26,12 @@ $forms_sql = "CREATE TABLE $forms_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     form_designation varchar(555) DEFAULT '' NOT NULL,
     form_identifier varchar(555) DEFAULT '' NOT NULL,
-    form_fields varchar(555),
     form_selector varchar(555),
+    form_locked varchar(555),
+    form_trashed varchar(555),
     form_state varchar(555),
     form_modification_time datetime,
-    form_trashed varchar(555),
+    form_fields varchar(555),
     form_structure varchar(555),
     form_attributes varchar(100),
     form_separators varchar(100),
@@ -47,14 +45,15 @@ $models_sql = "CREATE TABLE $models_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     model_designation varchar(555) DEFAULT '' NOT NULL,
     model_identifier varchar(555) DEFAULT '' NOT NULL,
+    model_selector varchar(555),
+    model_locked varchar(555),
+    model_trashed varchar(555),
+    model_state varchar(555),
+    model_modification_time datetime,
     model_types varchar(555),
     model_publications_categories varchar(555),
-    model_selector varchar(555),
     model_forms varchar (555),
     model_separators varchar(100),
-    model_state varchar(555),
-    model_trashed varchar(555),
-    model_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -65,6 +64,11 @@ $taxonomies_sql = "CREATE TABLE $taxonomies_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     taxonomy_designation varchar(555) DEFAULT '' NOT NULL,
     taxonomy_identifier varchar(555) DEFAULT '' NOT NULL,
+    taxonomy_selector varchar(555),
+    taxonomy_locked varchar(555),
+    taxonomy_trashed varchar(555),
+    taxonomy_state varchar(555),
+    taxonomy_modification_time datetime,
     taxonomy_description varchar(555),
     taxonomy_structure varchar(555),
     taxonomy_numerotation varchar(555),
@@ -73,9 +77,6 @@ $taxonomies_sql = "CREATE TABLE $taxonomies_table_name (
     taxonomy_color varchar(555),
     taxonomy_logo varchar(555),
     taxonomy_publication varchar(555),
-    taxonomy_state varchar(555),
-    taxonomy_trashed varchar(555),
-    taxonomy_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -86,6 +87,11 @@ $organizations_sql = "CREATE TABLE $organizations_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     organization_designation varchar(555) DEFAULT '' NOT NULL,
     organization_identifier varchar(555) DEFAULT '' NOT NULL,
+    organization_selector varchar(555),
+    organization_locked varchar(555),
+    organization_trashed varchar(555),
+    organization_state varchar(555),
+    organization_modification_time datetime,
     organization_acronym varchar(555),
     organization_logo varchar(555),
     organization_description varchar(555),
@@ -96,9 +102,6 @@ $organizations_sql = "CREATE TABLE $organizations_table_name (
     organization_type varchar(555),
     organization_side varchar(555),
     organization_sectors varchar(555),
-    organization_state varchar(555),
-    organization_trashed varchar(555),
-    organization_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -109,6 +112,11 @@ $publications_sql = "CREATE TABLE $publications_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     publication_designation varchar(555) DEFAULT '' NOT NULL,
     publication_identifier varchar(555) DEFAULT '' NOT NULL,
+    publication_selector varchar(555),
+    publication_locked varchar(555),
+    publication_trashed varchar(555),
+    publication_state varchar(555),
+    publication_modification_time datetime,
     publication_organization varchar(555),
     publication_year varchar(555),
     publication_headpiece varchar(555),
@@ -125,9 +133,6 @@ $publications_sql = "CREATE TABLE $publications_table_name (
     publication_language varchar(555),
     publication_gri_type varchar(555),
     publication_sectorial_supplement varchar(555),
-    publication_state varchar(555),
-    publication_trashed varchar(555),
-    publication_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -138,6 +143,11 @@ $glossaries_sql = "CREATE TABLE $glossaries_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     glossary_designation varchar(555) DEFAULT '' NOT NULL,
     glossary_identifier varchar(555) DEFAULT '' NOT NULL,
+    glossary_selector varchar(555),
+    glossary_locked varchar(555),
+    glossary_trashed varchar(555),
+    glossary_state varchar(555),
+    glossary_modification_time datetime,
     glossary_publication varchar(555),
     glossary_object varchar(555),
     glossary_depends varchar(555),
@@ -145,9 +155,6 @@ $glossaries_sql = "CREATE TABLE $glossaries_table_name (
     glossary_definition varchar(555),
     glossary_close varchar(555),
     glossary_close_indicators varchar(555),
-    glossary_state varchar(555),
-    glossary_trashed varchar(555),
-    glossary_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -155,9 +162,14 @@ dbDelta( $glossaries_sql );
 
 $qualis_table_name = Oak::$qualis_table_name;
 $qualis_sql = "CREATE TABLE $qualis_table_name (
-    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    id mediumint(9) NOT NULL AUTO_INCREMENT, NOT NULL,
     quali_designation varchar(555) DEFAULT '' NOT NULL,
     quali_identifier varchar(555) DEFAULT '' NOT NULL,
+    quali_selector varchar(555),
+    quali_locked varchar(555),
+    quali_trashed varchar(555),
+    quali_state varchar(555),
+    quali_modification_time datetime,
     quali_publication varchar(555),
     quali_object varchar(555),
     quali_depends varchar(555),
@@ -167,9 +179,6 @@ $qualis_sql = "CREATE TABLE $qualis_table_name (
     quali_description varchar(555),
     quali_close varchar(555),
     quali_close_indicators varchar(555),
-    quali_state varchar(555),
-    quali_trashed varchar(555),
-    quali_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -180,6 +189,11 @@ $quantis_sql = "CREATE TABLE $quantis_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     quanti_designation varchar(555) DEFAULT '' NOT NULL,
     quanti_identifier varchar(555) DEFAULT '' NOT NULL,
+    quanti_selector varchar(555),
+    quanti_locked varchar(555),
+    quanti_trashed varchar(555),
+    quanti_state varchar(555),
+    quanti_modification_time datetime,
     quanti_publication varchar(555),
     quanti_object varchar(555),
     quanti_depends varchar(555),
@@ -189,9 +203,6 @@ $quantis_sql = "CREATE TABLE $quantis_table_name (
     quanti_description varchar(555),
     quanti_close varchar(555),
     quanti_close_indicators varchar(555),
-    quanti_state varchar(555),
-    quanti_trashed varchar(555),
-    quanti_modification_time datetime,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -206,6 +217,8 @@ $terms_and_objects_sql= "CREATE TABLE $terms_and_objects_table_name (
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 dbDelta( $terms_and_objects_sql );
+
+// Done creating tables. Now getting data from tables. 
 
 $fields_table_name = Oak::$fields_table_name;
 Oak::$fields = $wpdb->get_results ( "
@@ -244,29 +257,21 @@ foreach( $reversed_forms as $form ) :
     if ( !$added ) :
         $forms_without_redundancy[] = $form;
     endif;
-endforeach;
-Oak::$forms_without_redundancy = $forms_without_redundancy;
 
-
-$models_table_name = Oak::$models_table_name;
-Oak::$models = $wpdb->get_results ( "
-    SELECT * 
-    FROM  $models_table_name
-" );
-$reversed_models = array_reverse( Oak::$models );
-$models_without_redundancy = [];
-foreach( Oak::$models as $model ) :
-    $added = false;
-    foreach( $models_without_redundancy as $model_without_redundancy ) :
-        if ( $model_without_redundancy->model_identifier == $model->model_identifier ) :
-            $added = true;
+    // For form attributes:
+    $form_attributes_Array = explode( ',', $form->form_attributes );
+    foreach( $form_attributes_Array as $attribute ) :
+        $exists = false;
+        foreach( Oak::$forms_attributes as $oak_attribute ) :
+            if ( $oak_attribute == $attribute || $attribute == '' )
+                $exists = true;
+        endforeach;
+        if ( !$exists ) :
+            Oak::$forms_attributes[] = $attribute;
         endif;
     endforeach;
-    if ( !$added ) :
-        $models_without_redundancy[] = $model;
-    endif;
 endforeach;
-Oak::$models_without_redundancy = $models_without_redundancy;
+Oak::$forms_without_redundancy = $forms_without_redundancy;
 
 $publications_table_name = Oak::$publications_table_name;
 Oak::$publications = $wpdb->get_results ( "
@@ -287,6 +292,106 @@ foreach( $reversed_publications as $publication ) :
     endif;
 endforeach;
 Oak::$publications_without_redundancy = $publications_without_redundancy;
+
+$organizations_table_name = Oak::$organizations_table_name;
+Oak::$organizations = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $organizations_table_name
+" );
+$reversed_organizations = array_reverse( Oak::$organizations );
+$organizations_without_redundancy = [];
+foreach( $reversed_organizations as $organization ) :
+    $added = false;
+    foreach( $organizations_without_redundancy as $organization_without_redundancy ) :
+        if ( $organization_without_redundancy->organization_identifier == $organization->organization_identifier) :
+            $added = true;
+        endif;
+    endforeach;
+    if ( !$added ) :
+        $organizations_without_redundancy[] = $organization;
+    endif;
+endforeach;
+Oak::$organizations_without_redundancy = $organizations_without_redundancy;
+
+$quantis_table_name = Oak::$quantis_table_name;
+Oak::$quantis = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $quantis_table_name
+" );
+$reversed_quantis = array_reverse( Oak::$quantis );
+$quantis_without_redundancy = [];
+foreach( $reversed_quantis as $quanti ) :
+    $added = false;
+    foreach( $quantis_without_redundancy as $quanti_without_redundancy ) :
+        if ( $quanti_without_redundancy->quanti_identifier == $quanti->quanti_identifier) :
+            $added = true;
+        endif;
+    endforeach;
+    if ( !$added ) :
+        $quantis_without_redundancy[] = $quanti;
+    endif;
+endforeach;
+Oak::$quantis_without_redundancy = $quantis_without_redundancy;
+
+$qualis_table_name = Oak::$qualis_table_name;
+Oak::$qualis = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $qualis_table_name
+" );
+$reversed_qualis = array_reverse( Oak::$qualis );
+$qualis_without_redundancy = [];
+foreach( $reversed_qualis as $quali ) :
+    $added = false;
+    foreach( $qualis_without_redundancy as $quali_without_redundancy ) :
+        if ( $quali_without_redundancy->quali_identifier == $quali->quali_identifier) :
+            $added = true;
+        endif;
+    endforeach;
+    if ( !$added ) :
+        $qualis_without_redundancy[] = $quali;
+    endif;
+endforeach;
+Oak::$qualis_without_redundancy = $qualis_without_redundancy;
+
+$glossaries_table_name = Oak::$glossaries_table_name;
+Oak::$glossaries = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $glossaries_table_name
+" );
+$reversed_glossaries = array_reverse( Oak::$glossaries );
+$glossaries_without_redundancy = [];
+foreach( $reversed_glossaries as $glossary ) :
+    $added = false;
+    foreach( $glossaries_without_redundancy as $glossary_without_redundancy ) :
+        if ( $glossary_without_redundancy->glossary_identifier == $glossary->glossary_identifier) :
+            $added = true;
+        endif;
+    endforeach;
+    if ( !$added ) :
+        $glossaries_without_redundancy[] = $glossary;
+    endif;
+endforeach;
+Oak::$glossaries_without_redundancy = $glossaries_without_redundancy;
+
+$models_table_name = Oak::$models_table_name;
+Oak::$models = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $models_table_name
+" );
+$reversed_models = array_reverse( Oak::$models );
+$models_without_redundancy = [];
+foreach( Oak::$models as $model ) :
+    $added = false;
+    foreach( $models_without_redundancy as $model_without_redundancy ) :
+        if ( $model_without_redundancy->model_identifier == $model->model_identifier ) :
+            $added = true;
+        endif;
+    endforeach;
+    if ( !$added ) :
+        $models_without_redundancy[] = $model;
+    endif;
+endforeach;
+Oak::$models_without_redundancy = $models_without_redundancy;
 
 // Lets get the fields that are gonna be in the table
 foreach( $models_without_redundancy as $key => $model ) :
@@ -320,8 +425,10 @@ foreach( $models_without_redundancy as $key => $model ) :
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         object_designation varchar(555) DEFAULT '' NOT NULL,
         object_identifier varchar(555) DEFAULT '' NOT NULL,
-        object_state varchar(555),
+        object_selector varchar(555),
+        object_locked varchar(555),
         object_trashed varchar(555),
+        object_state varchar(555),
         object_modification_time datetime,
         PRIMARY KEY (id)
     ) $charset_collate;";
@@ -373,19 +480,42 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         term_designation varchar(555) DEFAULT '' NOT NULL,
         term_identifier varchar(555) DEFAULT '' NOT NULL,
+        term_selector varchar(555),
+        term_locked varchar(555),
+        term_trashed varchar(555),
+        term_state varchar(555),
+        term_modification_time datetime,
         term_numerotation varchar(555),
         term_title varchar(555),
         term_description varchar(555),
         term_color varchar(555),
         term_logo varchar(555),
-        term_state varchar(555),
-        term_trashed varchar(555),
-        term_modification_time datetime,
-        PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $terms_sql );
+
+    // lets get all the terms: 
+    $terms = $wpdb->get_results( "
+        SELECT *
+        FROM $table_name
+    ");
+    $terms = array_reverse( $terms );
+    foreach( $terms as $term ) :
+        $added = false;
+        foreach( Oak::$all_terms_without_redundancy as $added_term ) :
+            if ( $added_term->term_identifier == $term->term_identifier ) :
+                $added = true;
+            endif;
+        endforeach;
+        if ( !$added ) :
+            Oak::$all_terms_without_redundancy[] = $term;
+        endif;
+    endforeach;
+
+    Oak::$all_terms = array_merge( Oak::$all_terms, $terms );
 endforeach;
+
+// lets get all the terms: 
 
 // To get all objects associated to all models
 foreach( Oak::$models as $model ) :

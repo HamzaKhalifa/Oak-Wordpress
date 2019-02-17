@@ -9,7 +9,10 @@ var selectedData = {
     models: [],
     objects: [],
     forms: [],
-    fields: []
+    fields: [],
+    glossaries: [],
+    qualis: [],
+    quantis: []
 };
 
 (function() {
@@ -306,19 +309,44 @@ var selectedData = {
                             }
                         }
                     }
+                    // Lets get the glossaries: 
+                    var publicationIdentifier = selectedData.publication.publication_identifier;
+                    for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
+                        identifiers = allData.glossariesWithoutRedundancy[i].glossary_publication.split('|');
+                        if (identifiers.indexOf(publicationIdentifier) != -1) {
+                            selectedData.glossaries.push(allData.glossariesWithoutRedundancy[i]);
+                        } 
+                    }
+
+                    for (var i = 0; i < allData.qualisWithoutRedundancy.length; i++) {
+                        identifiers = allData.qualisWithoutRedundancy[i].quali_publication.split('|');
+                        if (identifiers.indexOf(publicationIdentifier) != -1) {
+                            selectedData.qualis.push(allData.qualisWithoutRedundancy[i]);
+                        } 
+                    }
+
+                    for (var i = 0; i < allData.quantisWithoutRedundancy.length; i++) {
+                        identifiers = allData.quantisWithoutRedundancy[i].quanti_publication.split('|');
+                        if (identifiers.indexOf(publicationIdentifier) != -1) {
+                            selectedData.quantis.push(allData.quantisWithoutRedundancy[i]);
+                        }
+                    }
+
+                    selectedData.termsAndObjects = allData.termsAndObjects;
+
                     console.log('Selected data', selectedData);
                     jQuery(document).ready(function() {
                         jQuery.ajax({
                             type: 'POST',
                             url: DATA.ajaxUrl,
                             data: {
-                                'data': selectedData,
+                                'selectedData': selectedData,
                                 'action': 'corn_save_data'
                             },
                             success: function(data) {
                                 console.log(data);
                                 doneLoading();
-                                window.location.reload();
+                                // window.location.reload();
                             },
                             error: function(error) {
                                 console.log(error);
@@ -333,14 +361,14 @@ var selectedData = {
 })();
 
 function openModal(title, twoButtons) {
-    var confirmButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
-    var cancelButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container');
-    var okButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container');
+    var confirmButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
+    var cancelButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__cancel_button_container');
+    var okButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__ok_button_container');
 
-    var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
+    var modalsContainer = document.querySelector('.oak_add_element_modal_container');
     modalsContainer.classList.add('oak_object_model_add_formula_modal_container__activated');
 
-    var modalTitle = document.querySelector('.oak_object_model_add_formula_modal_container_modal_title_container__title');
+    var modalTitle = document.querySelector('.oak_add_element_modal_container_modal_title_container__title');
     modalTitle.innerHTML = title;
 
     if ( twoButtons) {
@@ -356,23 +384,23 @@ function openModal(title, twoButtons) {
 
 function closeModals() {
     setTimeout(function() {
-        document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.remove('oak_object_model_add_formula_modal_container_modal__big_modal');
+        document.querySelector('.oak_add_element_modal_container__modal').classList.remove('oak_object_model_add_formula_modal_container_modal__big_modal');
     }, 500);
 
-    var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
+    var modalsContainer = document.querySelector('.oak_add_element_modal_container');
     modalsContainer.classList.remove('oak_object_model_add_formula_modal_container__activated');
 }
 
 function setLoading() {
     openModal();
     document.querySelector('.oak_loader').classList.remove('oak_hidden');
-    document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.add('oak_hidden');
+    document.querySelector('.oak_add_element_modal_container__modal').classList.add('oak_hidden');
 }
 
 function doneLoading() {
     closeModals();
     setTimeout(function() {
         document.querySelector('.oak_loader').classList.add('oak_hidden');
-        document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.remove('oak_hidden');
+        document.querySelector('.oak_add_element_modal_container__modal').classList.remove('oak_hidden');
     }, 1000);
 }

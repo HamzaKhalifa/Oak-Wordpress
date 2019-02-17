@@ -33,22 +33,22 @@ function manageUpdateButtons() {
 
 // Everything related to our modal:
 function openModal(title, twoButtons) {
-    var confirmButtonSpan = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text');
+    var confirmButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_add_button_container__text');
     if (deleting) {
         confirmButtonSpan.innerHTML = 'Supprimer';
     }
 
-    var confirmButtonSpan = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text');
+    var confirmButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_add_button_container__text');
 
-    var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
+    var modalsContainer = document.querySelector('.oak_add_element_modal_container');
     modalsContainer.classList.add('oak_object_model_add_formula_modal_container__activated');
 
-    var modalTitle = document.querySelector('.oak_object_model_add_formula_modal_container_modal_title_container__title');
+    var modalTitle = document.querySelector('.oak_add_element_modal_container_modal_title_container__title');
     modalTitle.innerHTML = title;
 
-    var addButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
-    var cancelButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container');
-    var okButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container');
+    var addButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
+    var cancelButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__cancel_button_container');
+    var okButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__ok_button_container');
     if ( twoButtons) {
         addButtonContainer.style.display = 'flex';
         cancelButtonContainer.style.display = 'flex';
@@ -60,13 +60,13 @@ function openModal(title, twoButtons) {
     }
 }
 
-var okButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container');
+var okButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__ok_button_container');
 okButtonContainer.addEventListener('click', function() {
     closeModals();
 }); 
 
 function closeModals() {
-    var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
+    var modalsContainer = document.querySelector('.oak_add_element_modal_container');
     modalsContainer.classList.remove('oak_object_model_add_formula_modal_container__activated');
     deleting = false;
 }
@@ -74,20 +74,20 @@ function closeModals() {
 function setLoading() {
     openModal();
     document.querySelector('.oak_loader').classList.remove('oak_hidden');
-    document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.add('oak_hidden');
+    document.querySelector('.oak_add_element_modal_container__modal').classList.add('oak_hidden');
 }
 
 function doneLoading() {
     closeModals();
     setTimeout(function() {
         document.querySelector('.oak_loader').classList.add('oak_hidden');
-        document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.remove('oak_hidden');
+        document.querySelector('.oak_add_element_modal_container__modal').classList.remove('oak_hidden');
     }, 1000);
 }
 
 handleModalButtons();
 function handleModalButtons() {
-    var confirmButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
+    var confirmButton = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function() {
         if (deleting) {
             closeModals();
@@ -114,7 +114,7 @@ function handleModalButtons() {
         }
     });
 
-    var cancelButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container');
+    var cancelButton = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__cancel_button_container');
     cancelButton.addEventListener('click', function() {
         closeModals();
     });

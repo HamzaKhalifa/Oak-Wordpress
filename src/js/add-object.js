@@ -241,14 +241,14 @@ browseRevisionsButton.addEventListener('click', function () {
 });
 
 // For the browse revisions select button: 
-var revisionsButtons = document.querySelectorAll('.oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision');
+var revisionsButtons = document.querySelectorAll('.oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision');
 for (var i = 0; i < revisionsButtons.length; i++) {
     revisionsButtons[i].addEventListener('click', function () {
         for (var j = 0; j < revisionsButtons.length; j++) {
             revisionsButtons[j].classList.remove('oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision_selected');
         }
         this.classList.add('oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision_selected');
-        document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container').classList.remove('oak_hidden');
+        document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container').classList.remove('oak_hidden');
 
         // Updating the selected revision fields:
         var selectedRevision = DATA.revisions[this.getAttribute('index')];
@@ -313,9 +313,9 @@ function readUrl(input) {
 
 // Everything related to our modal:
 function openModal(title, twoButtons) {
-    var confirmButtonSpan = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text');
-    var cancelButtonSpan = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container_cancel_button_container__text');
-    var confirmButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
+    var confirmButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_add_button_container__text');
+    var cancelButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text');
+    var confirmButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
     if (adding) {
         confirmButtonSpan.innerHTML = 'Ajouter';
         confirmButtonContainer.classList.remove('oak_hidden');
@@ -326,8 +326,8 @@ function openModal(title, twoButtons) {
         cancelButtonSpan.innerHTML = 'Non';
         confirmButtonContainer.classList.remove('oak_hidden');
     }
-    var modalContainer = document.querySelector('.oak_object_model_add_formula_modal_container__modal');
-    var revisionsContent = document.querySelector('.oak_object_model_add_formula_modal_container_modal_content__revisions_content');
+    var modalContainer = document.querySelector('.oak_add_element_modal_container__modal');
+    var revisionsContent = document.querySelector('.oak_add_element_modal_container_modal_content__revisions_content');
     if (browsingRevisions) {
         confirmButtonSpan.innerHTML = 'Importer';
         cancelButtonSpan.innerHTML = 'Annuler';
@@ -339,17 +339,17 @@ function openModal(title, twoButtons) {
         revisionsContent.classList.add('oak_hidden');
     }
 
-    var confirmButtonSpan = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container_add_button_container__text');
+    var confirmButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_add_button_container__text');
 
-    var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
+    var modalsContainer = document.querySelector('.oak_add_element_modal_container');
     modalsContainer.classList.add('oak_object_model_add_formula_modal_container__activated');
 
-    var modalTitle = document.querySelector('.oak_object_model_add_formula_modal_container_modal_title_container__title');
+    var modalTitle = document.querySelector('.oak_add_element_modal_container_modal_title_container__title');
     modalTitle.innerHTML = title;
 
-    var addButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
-    var cancelButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container');
-    var okButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container');
+    var addButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
+    var cancelButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__cancel_button_container');
+    var okButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__ok_button_container');
     if (twoButtons) {
         addButtonContainer.style.display = 'flex';
         cancelButtonContainer.style.display = 'flex';
@@ -361,7 +361,7 @@ function openModal(title, twoButtons) {
     }
 }
 
-var okButtonContainer = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container');
+var okButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__ok_button_container');
 okButtonContainer.addEventListener('click', function () {
     closeModals();
 });
@@ -369,11 +369,11 @@ okButtonContainer.addEventListener('click', function () {
 function closeModals() {
 
     setTimeout(function () {
-        document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.remove('oak_object_model_add_formula_modal_container_modal__big_modal');
-        document.querySelector('.oak_object_model_add_formula_modal_container_modal_content__revisions_content').classList.add('oak_hidden');
+        document.querySelector('.oak_add_element_modal_container__modal').classList.remove('oak_object_model_add_formula_modal_container_modal__big_modal');
+        document.querySelector('.oak_add_element_modal_container_modal_content__revisions_content').classList.add('oak_hidden');
     }, 500);
 
-    var modalsContainer = document.querySelector('.oak_object_model_add_formula_modal_container');
+    var modalsContainer = document.querySelector('.oak_add_element_modal_container');
     modalsContainer.classList.remove('oak_object_model_add_formula_modal_container__activated');
     adding = canceling = updating = browsingRevisions = false;
 }
@@ -381,20 +381,20 @@ function closeModals() {
 function setLoading() {
     openModal();
     document.querySelector('.oak_loader').classList.remove('oak_hidden');
-    document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.add('oak_hidden');
+    document.querySelector('.oak_add_element_modal_container__modal').classList.add('oak_hidden');
 }
 
 function doneLoading() {
     closeModals();
     setTimeout(function () {
         document.querySelector('.oak_loader').classList.add('oak_hidden');
-        document.querySelector('.oak_object_model_add_formula_modal_container__modal').classList.remove('oak_hidden');
+        document.querySelector('.oak_add_element_modal_container__modal').classList.remove('oak_hidden');
     }, 1000);
 }
 
 handleModalButtons();
 function handleModalButtons() {
-    var confirmButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__add_button_container');
+    var confirmButton = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function () {
         if (adding || updating) {
             console.log(objectData);
@@ -464,7 +464,7 @@ function handleModalButtons() {
         }
     });
 
-    var cancelButton = document.querySelector('.oak_object_model_add_formula_modal_container_modal_buttons_container__cancel_button_container');
+    var cancelButton = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__cancel_button_container');
     cancelButton.addEventListener('click', function () {
         closeModals();
     });
