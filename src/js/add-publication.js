@@ -361,10 +361,10 @@ localPublication.addEventListener('change', function() {
     var countrySelect = document.querySelector('.oak_country_select_container');
     if (localPublication.checked) {
         countrySelect.classList.remove('oak_hidden');
-        this.parentNode.classList.add('oak_left_field');
+        this.parentNode.classList.add(.oak_left_element');
     } else {
         countrySelect.classList.add('oak_hidden');
-        this.parentNode.classList.remove('oak_left_field');
+        this.parentNode.classList.remove(.oak_left_element');
     }
 });
 
@@ -374,10 +374,10 @@ sectorialFrameCheckbox.addEventListener('change', function() {
     var sectorsSelectorContainer = document.querySelector('.oak_add_field_container__sectors_container');
     if (this.checked) {
         sectorsSelectorContainer.classList.remove('oak_hidden');
-        this.parentNode.parentNode.classList.add('oak_left_field');
+        this.parentNode.parentNode.classList.add(.oak_left_element');
     } else {
         sectorsSelectorContainer.classList.add('oak_hidden');
-        this.parentNode.parentNode.classList.remove('oak_left_field');
+        this.parentNode.parentNode.classList.remove(.oak_left_element');
     }
 });
 

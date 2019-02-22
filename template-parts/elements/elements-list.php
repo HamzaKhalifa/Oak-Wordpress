@@ -9,28 +9,28 @@ include get_template_directory() . '/template-parts/admin-menu.php';
             <h2 class="oak_app_bar__title"><?php _e( 'Librairie de contenu', Oak::$text_domain ); ?></h2>
         </div>
         <div class="oak_app_bar__left_content">
-            <input placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_list_header_right__search_input oak_hidden" type="text">
+            <input placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_element_header_right__search_input oak_hidden" type="text">
             <i class="oak_menu_icon oak_menu_search_icon fas fa-search"></i>
             <i class="oak_menu_icon oak_menu_smaller_icon fas fa-th"></i>
             <i class="oak_menu_icon oak_menu_smaller_icon fas fa-ellipsis-v"></i>
         </div>
     </div>
-    <div class="oak_list_header">
-        <div class="oak_list_header_left">
+    <div class="oak_element_header">
+        <div class="oak_element_header_left">
             <i class="oak_menu_icon oak_menu_icon__cancel_icon fas fa-long-arrow-alt-left"></i>
-            <h3 class="oak_list_header_title"><?php echo( $title ); ?></h3>
+            <h3 class="oak_element_header_title"><?php echo( $title ); ?></h3>
             <div class="oak_list_add_button">
                 <i class="fas fa-plus"></i>
             </div>
         </div>
 
-        <div class="oak_list_header_right">
-            <i class="oak_menu_icon oak_menu_smaller_icon oak_list_header_right_edit_button oak_hidden fas fa-pen"></i>
-            <i class="oak_menu_icon oak_menu_smaller_icon oak_list_header_right_upload_button fas fa-upload"></i>
-            <i class="oak_menu_icon oak_menu_smaller_icon oak_list_header_right_download_button fas fa-download"></i>
-            <i class="oak_menu_icon oak_menu_smaller_icon oak_list_header_right_copy_button oak_hidden fas fa-copy"></i>
-            <i class="oak_menu_icon oak_menu_smaller_icon oak_list_header_right_delete_button oak_hidden fas fa-trash-alt"></i>
-            <i class="oak_menu_icon oak_menu_smaller_icon oak_list_header_right_restore_button oak_hidden far fa-window-restore"></i>
+        <div class="oak_element_header_right">
+            <i class="oak_menu_icon oak_menu_smaller_icon oak_elemnt_header_right_edit_button oak_hidden fas fa-pen"></i>
+            <i class="oak_menu_icon oak_menu_smaller_icon oak_element_header_right_upload_button fas fa-upload"></i>
+            <i class="oak_menu_icon oak_menu_smaller_icon oak_element_header_right_download_button fas fa-download"></i>
+            <i class="oak_menu_icon oak_menu_smaller_icon oak_element_header_right_copy_button oak_hidden fas fa-copy"></i>
+            <i class="oak_menu_icon oak_menu_smaller_icon oak_element_header_right_delete_button oak_hidden fas fa-trash-alt"></i>
+            <i class="oak_menu_icon oak_menu_smaller_icon oak_element_header_right_restore_button oak_hidden far fa-window-restore"></i>
         </div>
     </div>
 

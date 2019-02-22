@@ -1,5 +1,5 @@
 <div class="oak_elements_list_top_container">
-    <div class="oak_list_header">
+    <div class="oak_element_header">
         <img class="oak_list_header__icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/fields.png' ); ?>" alt="">
         <h1><?php _e( 'Organisations', Oak::$text_domain ); ?></h1>
         <span class="oak_list_header__add_button oak_list_button"><?php _e( 'Ajouter', Oak::$text_domain ); ?></span>

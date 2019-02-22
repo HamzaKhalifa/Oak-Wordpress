@@ -111,7 +111,6 @@ function unfocusAllTextFields() {
     }
 }
  
-
 // For the add button
 addButton();
 function addButton() {
@@ -214,48 +213,47 @@ function createIdentifier() {
 }
 
 // For the trash button
-trashButton();
-function trashButton() {
-    var trashButton = document.querySelector('.oak_add_element_container__trash_button');
-    if (trashButton) {
-        trashButton.addEventListener('click', function() {
-            setLoading();
-            jQuery(document).ready(function() {
-                jQuery.ajax({
-                    url: DATA.ajaxUrl,
-                    type: 'POST', 
-                    data: {
-                        'data': DATA.currentField.field_identifier,
-                        'action': 'oak_send_field_to_trash',
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        doneLoading();
-                        window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_' + table);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                        doneLoading();
-                    }
-                });
-            });
-        });
-    }
-}
-
+// trashButton();
+// function trashButton() {
+//     var trashButton = document.querySelector('.oak_add_element_container__trash_button');
+//     if (trashButton) {
+//         trashButton.addEventListener('click', function() {
+//             setLoading();
+//             jQuery(document).ready(function() {
+//                 jQuery.ajax({
+//                     url: DATA.ajaxUrl,
+//                     type: 'POST', 
+//                     data: {
+//                         'data': DATA.currentField.field_identifier,
+//                         'action': 'oak_send_field_to_trash',
+//                     },
+//                     success: function(data) {
+//                         console.log(data);
+//                         doneLoading();
+//                         window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_' + table);
+//                     },
+//                     error: function(error) {
+//                         console.log(error);
+//                         doneLoading();
+//                     }
+//                 });
+//             });
+//         });
+//     }
+// }
 
 // We create while adding the new revision
 function createElementData(state) {
     var keys = getKeys(elementData);
     for(var i = 0; i < properties.length; i++) {
         if (document.querySelector('.' + properties[i].name + '_input')) {
-            if (properties[i].type == 'text')
+            if (properties[i].input_type == 'text' || properties[i].input_type == 'select')
                 elementData[keys[i]] = document.querySelector('.' + properties[i].name + '_input').value.toString();
-            else if (properties[i].type == 'image')
+            else if (properties[i].input_type == 'image' || properties[i].input_type == 'file')
                 elementData[keys[i]] = document.querySelector('.' + properties[i].name + '_input').getAttribute('src').toString();
-            else if (properties[i].type == 'checkbox') 
+            else if (properties[i].input_type == 'checkbox') 
                 elementData[keys[i]] = document.querySelector('.' + properties[i].name + '_input').checked.toString();
-        } 
+        }
     }
     if (state != 0)
         elementData[table + '_state'] = state ? state.toString() : DATA.revisions[DATA.revisions.length - 1][table + '_state'].toString();
@@ -265,6 +263,24 @@ function createElementData(state) {
     // Manage trashed and locked
     elementData[table + '_trashed'] = 'false';
     elementData[table + '_locked'] = 'false';
+
+    // Manage other elements 
+    if (DATA.otherElementProperties) {
+        var otherElements = [];
+        var otherElementsDesignationContainers = document.querySelectorAll('.oak_other_elements_single_elements_container__single_element');
+        for (var i = 0; i < otherElementsDesignationContainers.length; i++) {
+            otherElements.push({
+                elementIdentifier: otherElementsDesignationContainers[i].querySelector('.oak_other_elements_select').value,
+                elementOtherDesignation: otherElementsDesignationContainers[i].querySelector('.designation_input').value,
+                elementRequired: otherElementsDesignationContainers[i].querySelector('.selector_input').checked,
+                elementIndex: i,
+                revisionNumber: DATA.revisions.length + 1
+            });
+        }
+        elementData.otherElements = otherElements;
+        elementData.otherElementsProperties = DATA.otherElementProperties;
+        elementData[table + '_revision_number'] = DATA.revisions.length + 1;
+    }
 
     return elementData;
 }
@@ -322,6 +338,189 @@ var getKeys = function(obj){
        keys.push(key);
     }
     return keys;
+}
+
+// Everything related to other elements (table relationships like forms using fields and models using forms)
+var singleElementContainer;
+if (DATA.otherElementProperties) 
+    getSingleElementContainer();
+function getSingleElementContainer() {
+    singleElementContainer = document.querySelector('.oak_other_elements_single_elements_container__single_element').innerHTML;
+    document.querySelector('.oak_other_elements_single_elements_container__single_element').remove();
+}
+
+if (DATA.otherElementProperties)
+    initializeElements();
+function initializeElements() {
+    if (DATA.revisions.length > 0) {
+        var otherElements = DATA.otherElementProperties.associative_tab_instances;
+        for (var i = 0; i < otherElements.length; i++) {
+            if ( otherElements[i][table + '_identifier'] == DATA.revisions[DATA.revisions.length - 1][table + '_identifier'] 
+                && otherElements[i][table + '_revision_number'] == DATA.revisions[DATA.revisions.length - 1][table + '_revision_number'] ) {
+                    addOtherElement(otherElements[i]);
+            }
+        }
+    }
+}
+
+if (DATA.otherElementProperties)
+    addOtherElementButton();
+function addOtherElementButton() {
+    document.querySelector('.oak_other_elements_container__add_button').addEventListener('click', function() {
+        addOtherElement();
+    });
+}
+
+function addOtherElement(data) {
+    var otherElementsContainer = document.querySelector('.oak_other_elements_container');
+    var newElement = document.createElement('div');
+    newElement.className = 'oak_other_elements_single_elements_container__single_element oak_other_elements_single_elements_container__single_element_not_checked';
+    newElement.innerHTML = singleElementContainer;
+    otherElementsContainer.append(newElement);
+
+    if (data) {
+        var elementsSelect = newElement.querySelector('.oak_other_elements_select');
+        elementsSelect.value = data[DATA.otherElementProperties.table + '_identifier'];
+        newElement.querySelector('.designation_input').value = data[DATA.otherElementProperties.table + '_designation'];
+        console.log('required', data[DATA.otherElementProperties.table + '_required']);
+        newElement.querySelector('.selector_input').checked = data[DATA.otherElementProperties.table + '_required'] == 'true' ? true : false;
+    }
+
+    handleOtherElementsCheckboxes();
+    textFieldsAnimations();
+    handleOtherElementsFilters();
+}
+
+handleOtherElementsCheckboxes();
+function handleOtherElementsCheckboxes() {
+    var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener('click', function() {
+            checkboxClickListener(this);
+        });
+    }
+}
+
+function checkboxClickListener(checkbox) {
+    var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
+    if (checkbox.checked) {
+        checkbox.parentNode.parentNode.classList.remove('oak_other_elements_single_elements_container__single_element_not_checked');
+    } else {
+        checkbox.parentNode.parentNode.classList.add('oak_other_elements_single_elements_container__single_element_not_checked');
+    }
+    var numberOfChecked = 0;
+    for (var j = 0; j < checkboxes.length; j++) {
+        if (checkboxes[j].checked) 
+            numberOfChecked++;
+    }
+    // Check the number of checked checkboxes
+    document.querySelector('.oak_number_of_other_selected_elements').innerHTML = numberOfChecked;
+    var elementHeadder = document.querySelector('.oak_element_header');
+    var otherElementsButtons = document.querySelector('.oak_element_header_right_other_elements_buttons');
+    var elementHeaderRightButtons = document.querySelector('.oak_element_header_right');
+    if (numberOfChecked == 0) {
+        elementHeadder.classList.remove('oak_element_header_at_least_one_selected');
+        elementHeaderRightButtons.classList.remove('oak_hidden');
+        otherElementsButtons.classList.add('oak_hidden');
+    } else {
+        elementHeadder.classList.add('oak_element_header_at_least_one_selected');
+        elementHeaderRightButtons.classList.add('oak_hidden');
+        otherElementsButtons.classList.remove('oak_hidden');
+    }
+}
+
+function handleOtherElementsFilters() {
+    for (var i = 0; i < DATA.otherElementProperties.filters.length; i++) {
+        var selects = document.querySelectorAll('.' + DATA.otherElementProperties.filters[i].filter_name);
+        for (var j = 0; j < selects.length; j++) {
+            selects[j].addEventListener('change', function() {
+                filterOtherElements(this.parentNode.parentNode.parentNode);
+            });
+        }
+    }
+}
+
+function filterOtherElements(otherElementContainer) {
+    var otherElementsOptions = otherElementContainer.querySelector('.oak_other_elements_select').querySelectorAll('option');
+    for (var j = 0; j < otherElementsOptions.length; j++) {
+        hide = false;
+        for (var i = 0; i < DATA.otherElementProperties.filters.length; i++) {
+            var filterValue = otherElementContainer.querySelector('.' + DATA.otherElementProperties.filters[i].filter_name).value;
+            if (filterValue != 0) {
+                for (var m = 0; m < DATA.otherElementProperties.elements.length; m++) {
+                    if (DATA.otherElementProperties.elements[m][DATA.otherElementProperties.table + '_identifier'] == otherElementsOptions[j].value) {
+                        if (DATA.otherElementProperties.elements[m][DATA.otherElementProperties.filters[i].name_in_database] != filterValue) {
+                            hide = true;
+                        }
+                    }
+                }
+            } 
+        }
+        if (hide) {
+            otherElementsOptions[j].classList.add('oak_hidden');
+        } else {
+            otherElementsOptions[j].classList.remove('oak_hidden');
+        }
+    }
+}
+
+// For the cancel button on the header: 
+headerCancelButton();
+function headerCancelButton() {
+    var cancelButton = document.querySelector('.oak_menu_icon__cancel_icon');
+    cancelButton.addEventListener('click', function() {
+        var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
+        var numberOfChecked = 0;
+        for (var j = 0; j < checkboxes.length; j++) {
+            if (checkboxes[j].checked) 
+                numberOfChecked++;
+        }
+        if (numberOfChecked == 0) {
+            window.location.replace(DATA.adminUrl + '?page=oak_elements_list&elements=' + DATA.tableInPlural + '&listorformula=list');
+        } else {
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = false;
+                checkboxClickListener(checkboxes[i]);
+            }
+        }
+    });
+}
+
+// For other elements Delete button 
+otherElementsDeleteButton();
+function otherElementsDeleteButton() {
+    var deleteButton = document.querySelector('.oak_other_elements_delete_button');
+    deleteButton.addEventListener('click', function() {
+        var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) 
+                checkboxes[i].parentNode.parentNode.remove();
+        }
+    });
+}
+
+otherElementsCopyButton();
+function otherElementsCopyButton() {
+    var copyButton = document.querySelector('.oak_other_elements_copy_button');
+    copyButton.addEventListener('click', function() {
+        var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                var otherElementsContainer = document.querySelector('.oak_other_elements_container');
+                var newElement = document.createElement('div');
+                newElement.className = 'oak_other_elements_single_elements_container__single_element oak_other_elements_single_elements_container__single_element_not_checked';
+                newElement.innerHTML = singleElementContainer;
+                newElement.querySelector('.designation_input').value = checkboxes[i].parentNode.parentNode.querySelector('.designation_input').value;
+                newElement.querySelector('.selector_input').checked = checkboxes[i].parentNode.parentNode.querySelector('.selector_input').checked;
+                newElement.querySelector('.oak_other_elements_select').value = checkboxes[i].parentNode.parentNode.querySelector('.oak_other_elements_select').value;
+
+                otherElementsContainer.append(newElement);
+
+                handleOtherElementsCheckboxes();
+                textFieldsAnimations();
+            }
+        }
+    });
 }
 
 // Everything related to our modal:
@@ -414,6 +613,7 @@ function handleModalButtons() {
         if (adding || updating) {
             closeModals();
             setLoading();
+            console.log('Element data', elementData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
@@ -425,6 +625,7 @@ function handleModalButtons() {
                     },
                     success: function(data) {
                         doneLoading();
+                        console.log(data);
                         window.location.reload();
                     },
                     error: function(error) {

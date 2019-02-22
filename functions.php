@@ -12,15 +12,21 @@ class Oak {
     public static $quantis_table_name;
     public static $taxonomies_table_name;
     public static $terms_and_objects_table_name;
+    public static $forms_and_fields_table_name;
+    public static $models_and_forms_table_name;
 
     public static $revisions;
 
     public static $fields;
     public static $fields_without_redundancy;
+    public static $field_properties;
 
     public static $forms;
     public static $forms_without_redundancy;
     public static $forms_attributes;
+    public static $form_properties;
+    public static $form_other_elements;
+    public static $all_forms_and_fields = [];
 
     public static $objects;
     public static $terms;
@@ -31,54 +37,37 @@ class Oak {
 
     public static $models;
     public static $models_without_redundancy;
+    public static $model_properties;
+    public static $model_other_elements;
+    public static $all_models_and_forms = [];
     
     public static $organizations;
     public static $organizations_without_redundancy;
+    public static $organization_properties;
 
     public static $publications;
     public static $publications_without_redundancy;
+    public static $publication_properties;
 
     public static $glossaries;
     public static $glossaries_without_redundancy;
+    public static $glossary_properties;
 
     public static $qualis;
     public static $qualis_without_redundancy;
+    public static $quali_properties;
 
     public static $quantis;
     public static $quantis_without_redundancy;
+    public static $quanti_properties;
 
     public static $taxonomies;
     public static $taxonomies_without_redundancy;
+    public static $taxonomy_properties;
 
     public static $main_color = '#003366';
     public static $secondary_text_color = '#bcc7d9';
     public static $selected_color = '#7b7b7b';
-
-    public static $screen_ids = array ( 
-            'oak-materiality-reporting_page_oak_critical_analysis',
-            'toplevel_page_oak_materiality_reporting',
-            'toplevel_page_oak_import_page',
-            'oak-materiality-reporting_page_oak_critical_analysis_configuration',
-            'toplevel_page_oak_fields_list',
-            'champs_page_oak_add_field',
-            'formes_page_oak_add_form',
-            'toplevel_page_oak_forms_list',
-            'modeles_page_oak_add_model',
-            'toplevel_page_oak_models_list',
-            'organisations_page_oak_add_organization',
-            'toplevel_page_oak_organizations_list',
-            'publications_page_oak_add_publication',
-            'toplevel_page_oak_publications_list',
-            'glossaire_page_oak_add_glossary',
-            'toplevel_page_oak_glossaries_list',
-            'indicateurs-qualitatifs_page_oak_add_quali',
-            'toplevel_page_oak_qualis_list',
-            'indicateurs-quantitatifs_page_oak_add_quanti',
-            'toplevel_page_oak_quantis_list',
-            'taxonomies_page_oak_add_taxonomy',
-            'toplevel_page_oak_taxonomies_list',
-            'oak_get_publication_data_for_corn'
-    );
 
     function __construct() {
         Oak::$text_domain = 'oak';
@@ -97,6 +86,8 @@ class Oak {
         Oak::$qualis_table_name = $wpdb->prefix . 'oak_qualis';
         Oak::$quantis_table_name = $wpdb->prefix . 'oak_quantis';
         Oak::$terms_and_objects_table_name = $wpdb->prefix . 'oak_terms_and_objects';
+        Oak::$forms_and_fields_table_name = $wpdb->prefix . 'oak_forms_and_fields';
+        Oak::$models_and_forms_table_name = $wpdb->prefix . 'oak_models_and_forms';
 
         Oak::$forms_attributes = [];
         Oak::$all_objects = [];
@@ -223,7 +214,8 @@ class Oak {
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
         if ( isset( $_GET['elements'] ) ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
-            wp_enqueue_style( 'oak_font_awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
+            // wp_enqueue_style( 'oak_font_awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
+            // wp_enqueue_style( 'oak_googleapifont_roboto', get_template_directory_uri() . '/src/css/vendor/googleapi-font-roboto.css' );
             ?>
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
@@ -295,76 +287,79 @@ class Oak {
             $table_in_plural = '';
             $elements = [];
             $properties = array(
-                array( 'name' => 'designation', 'type' => 'text' ),
-                array( 'name' => 'identifier', 'type' => 'text' ),
-                array( 'name' => 'selector', 'type' => 'checkbox' ),
-                array( 'name' => 'locked', 'type' => 'checkbox' ),
-                array( 'name' => 'trashed', 'type' => 'checkbox' ),
-                array( 'name' => 'state', 'type' => 'checkbox' ),
+                array( 'name' => 'designation', 'type' => 'text', 'input_type' => 'text' ),
+                array( 'name' => 'identifier', 'type' => 'text', 'input_type' => 'text' ),
+                array( 'name' => 'selector', 'type' => 'text', 'input_type' => 'checkbox' ),
+                array( 'name' => 'locked', 'type' => 'text', 'input_type' => 'checkbox' ),
+                array( 'name' => 'trashed', 'type' => 'text', 'input_type' => 'checkbox' ),
+                array( 'name' => 'state', 'type' => 'text', 'input_type' => 'checkbox' ),
             );
-            $addition_data_to_pass = array();
+            $additional_data_to_pass = array();
             
             if ( $_GET['elements'] == 'fields' ) :
                 $table = 'field';
                 $table_in_plural = 'fields';
                 $elements = Oak::$fields;
-                $properties = array_merge( $properties, array(
-                    array( 'name' => 'type', 'type' => 'text' ),
-                    array( 'name' => 'function', 'type' => 'text' ),
-                    array( 'name' => 'tag', 'type' => 'text' ),
-                    array( 'name' => 'help', 'type' => 'text' ),
-                    array( 'name' => 'description', 'type' => 'text' ),
-                ) );
+                $properties = array_merge( $properties, Oak::$field_properties );
             endif;
             if ( $_GET['elements'] == 'forms' ) :
                 $table = 'form';
                 $table_in_plural = 'forms';
                 $elements = Oak::$forms;
-                $addition_data_to_pass = array(
-                    'fields' => Oak::$fields,
+                $additional_data_to_pass = array(
+                    'otherElementProperties' => Oak::$form_other_elements,
                     'attributes' => Oak::$forms_attributes
                 );
+                $properties = array_merge( $properties, Oak::$form_properties );
             endif;
             if ( $_GET['elements'] == 'models' ) :
                 $table = 'model';
                 $table_in_plural = 'models';
                 $elements = Oak::$models;
-                $addition_data_to_pass = array(
+                $additional_data_to_pass = array(
                     'fields' => Oak::$fields,
-                    'forms' => Oak::$forms,
+                    'otherElementProperties' => $model_other_elements,
                     'attributes' => Oak::$forms_attributes
                 );
-            endif;
-            if ( $_GET['elements'] == 'organizations' ) :
-                $table = 'organization';
-                $table_in_plural = 'organizations';
-                $elements = Oak::$organizations;
-            endif;
-            if ( $_GET['elements'] == 'publications' ) :
-                $table = 'publication';
-                $table_in_plural = 'publications';
-                $elements = Oak::$publications;
-            endif;
-            if ( $_GET['elements'] == 'glossaries' ) :
-                $table = 'glossary';
-                $table_in_plural = 'glossaries';
-                $elements = Oak::$glossaries;
-            endif;
-            if ( $_GET['elements'] == 'qualis' ) :
-                $table = 'quali';
-                $table_in_plural = 'qualis';
-                $elements = Oak::$qualis;
-            endif;
-            if ( $_GET['elements'] == 'quantis' ) :
-                $table = 'quanti';
-                $table_in_plural = 'quantis';
-                $elements = Oak::$quantis;
+                $properties = array_merge( $properties, Oak::$model_properties );
             endif;
             if ( $_GET['elements'] == 'taxonomies' ) :
                 $table = 'taxonomy';
                 $table_in_plural = 'taxonomies';
                 $elements = Oak::$taxonomies;
+                $properties = array_merge( $properties, Oak::$taxonomy_properties );
             endif;
+            if ( $_GET['elements'] == 'organizations' ) :
+                $table = 'organization';
+                $table_in_plural = 'organizations';
+                $elements = Oak::$organizations;
+                $properties = array_merge( $properties, Oak::$organization_properties );
+            endif;
+            if ( $_GET['elements'] == 'publications' ) :
+                $table = 'publication';
+                $table_in_plural = 'publications';
+                $elements = Oak::$publications;
+                $properties = array_merge( $properties, Oak::$publication_properties );
+            endif;
+            if ( $_GET['elements'] == 'glossaries' ) :
+                $table = 'glossary';
+                $table_in_plural = 'glossaries';
+                $elements = Oak::$glossaries;
+                $properties = array_merge( $properties, Oak::$glossary_properties );
+            endif;
+            if ( $_GET['elements'] == 'qualis' ) :
+                $table = 'quali';
+                $table_in_plural = 'qualis';
+                $elements = Oak::$qualis;
+                $properties = array_merge( $properties, Oak::$quali_properties );
+            endif;
+            if ( $_GET['elements'] == 'quantis' ) :
+                $table = 'quanti';
+                $table_in_plural = 'quantis';
+                $elements = Oak::$quantis;
+                $properties = array_merge( $properties, Oak::$quanti_properties );
+            endif;
+
             Oak::$revisions = $this->oak_get_revisions( $table, $elements );
 
             $basic_data_to_pass = array(
@@ -377,7 +372,7 @@ class Oak {
                 'elements' => $elements,
                 'templateDirectoryUri' => get_template_directory_uri(),
             );
-            $final_data_to_pass = array_merge( $basic_data_to_pass, $addition_data_to_pass );
+            $final_data_to_pass = array_merge( $basic_data_to_pass, $additional_data_to_pass );
 
             if ( $_GET['listorformula'] == 'formula' ) :
                 wp_enqueue_script( 'corn_add_element', get_template_directory_uri() . '/src/js/add-element.js', array('jquery'), false, true );
@@ -494,6 +489,7 @@ class Oak {
     function oak_add_theme_support() {
         add_theme_support('menus');
         include get_template_directory() . '/functions/tables.php';
+        include get_template_directory() . '/functions/properties-initialization.php';
     }
 
     function add_cors_http_header() {
@@ -502,6 +498,7 @@ class Oak {
     }
 
     function oak_handle_admin_menu() {
+        // add_menu_page( 'Admin Menu', 'Admin Menu', 'manage_options', 'admin_menu', , $icon_url, $position)
         add_menu_page( 'OAK (Materiality Reporting)', 'OAK (Materiality Reporting)', 'manage_options', 'oak_materiality_reporting', array( $this, 'oak_materility_reporting' ), 'dashicons-chart-pie', 99 );
 
         $central = get_option( 'oak_corn' );
@@ -513,7 +510,14 @@ class Oak {
         add_submenu_page( 'oak_materiality_reporting', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'oak_critical_analysis_configuration', array( $this, 'oak_critical_analysis_configuration') );
 
         add_menu_page( __( 'Elements', Oak::$text_domain ), 'Elements', 'manage_options', 'oak_elements_list', array ( $this, 'oak_elements_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_elements_list', 'Ajouter un Champ', __( 'Ajouter un Champ', Oak::$text_domain ), 'manage_options', 'oak_add_field',  array( $this, 'oak_add_field' ) );
+        add_submenu_page( 'oak_elements_list', 'Ajouter un Champ', __( 'Ajouter un Champ', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
+        // add_submenu_page( 'oak_elements_list', 'Ajouter un Formulaire', __( 'Ajouter un Formulaire', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
+        // add_submenu_page( 'oak_elements_list', 'Ajouter un Modèle', __( 'Ajouter un Modèle', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
+        // add_submenu_page( 'oak_elements_list', 'Ajouter une Taxonomie', __( 'Ajouter une Taxonomie', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
+        // add_submenu_page( 'oak_elements_list', 'Ajouter une Publication', __( 'Ajouter une Publication', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
+        // add_submenu_page( 'oak_elements_list', 'Ajouter une Organisation', __( 'Ajouter une Organisation', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
+        // add_submenu_page( 'oak_elements_list', 'Ajouter une Terminologie', __( 'Ajouter une Terminologie', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
+        // add_submenu_page( 'oak_elements_list', 'Ajouter un indicateur qualitati', __( 'Ajouter un indicateur qualitati', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
 
         add_menu_page( __( 'Formes', Oak::$text_domain ), 'Formes', 'manage_options', 'oak_forms_list', array ( $this, 'oak_forms_list'), 'dashicons-index-card', 100 );
         add_submenu_page( 'oak_forms_list', 'Ajouter un formulaire', __( 'Ajouter un formulaire', Oak::$text_domain ), 'manage_options', 'oak_add_form',  array( $this, 'oak_add_form' ) );
@@ -610,7 +614,7 @@ class Oak {
         return $field;
     }
 
-    function oak_get_countries() {
+    static function oak_get_countries() {
         $country_query_result = wp_remote_get( 'https://restcountries.eu/rest/v2/all' );
         $countries = json_decode( $country_query_result['body'] );
         return $countries;
@@ -750,47 +754,102 @@ class Oak {
         ) );
     }
 
-    function oak_add_field() {
+    function oak_add_element() {
         $revisions = Oak::$revisions;
-        include get_template_directory() . '/template-parts/elements/add-field.php';
+        switch ( $_GET['elements'] ) :
+            case 'fields': 
+                $properties = Oak::$field_properties;
+                $table = 'field';
+                $title = __( 'Ajouter un champ', Oak::$text_domain );
+            break;
+            case 'forms': 
+                $properties = Oak::$form_properties;
+                $table = 'form';
+                $title = __( 'Nouveau formulaire', Oak::$text_domain );
+            break;
+            case 'models': 
+                $properties = Oak::$model_properties;
+                $table = 'model';
+                $title = __( 'Ajouter un modèle', Oak::$text_domain );
+            break;
+            case 'taxonomies': 
+                $properties = Oak::$taxonomy_properties;
+                $table = 'taxonomy';
+                $title = __( 'Ajouter une taxonomie', Oak::$text_domain );
+            break;
+            case 'publications': 
+                $properties = Oak::$publication_properties;
+                $table = 'publication';
+                $title = __( 'Ajouter une publication', Oak::$text_domain );
+            break;
+            case 'organizations': 
+                $properties = Oak::$organization_properties;
+                $table = 'organization';
+                $title = __( 'Ajouter une organisation', Oak::$text_domain );
+            break;
+            case 'quantis': 
+                $properties = Oak::$quanti_properties;
+                $table = 'quanti';
+                $title = __( 'Ajouter un indicateur quantitatif', Oak::$text_domain );
+            break;
+            case 'qualis':
+                $properties = Oak::$quali_properties;
+                $table = 'quali';
+                $title = __( 'Ajouter un indicateur qualitatif', Oak::$text_domain );
+            break;
+            case 'glossaries': 
+                $properties = Oak::$glossary_properties;
+                $table = 'glossary';
+                $title = __( 'Ajouter une términologie', Oak::$text_domain );
+            break;
+        endswitch;
+        include get_template_directory() . '/template-parts/elements/add-element.php';
     }
 
     function oak_add_form() {
         $revisions = Oak::$revisions;
+        $table = 'form';
         include get_template_directory() . '/template-parts/forms/add-form.php';
     }
 
     function oak_add_model() {
+        $table = 'model';
         $revisions = Oak::$revisions;
         include get_template_directory() . '/template-parts/models/add-model.php';
     }
 
     function oak_add_taxonomy() {
+        $table = 'taxonomy';
         $revisions = Oak::$revisions;
         include get_template_directory() . '/template-parts/taxonomies/add-taxonomy.php';
     }
 
     function oak_add_organization() {
+        $table = 'organization';
         $revisions = Oak::$revisions;
         include get_template_directory() . '/template-parts/organizations/add-organization.php';
     }
 
     function oak_add_publication() {
+        $table = 'publication';
         $revisions = Oak::$revisions;
         include get_template_directory() . '/template-parts/publications/add-publication.php';
     }
 
     function oak_add_glossary() {
+        $table = 'glossary';
         $revisions = Oak::$revisions;
         include get_template_directory() . '/template-parts/glossaries/add-glossary.php';
     }
 
     function oak_add_quali() {
+        $table = 'quali';
         $revisions = Oak::$revisions;
         include get_template_directory() . '/template-parts/qualis/add-quali.php';
     }
 
     function oak_add_quanti() {
+        $table = 'quanti';
         $revisions = Oak::$revisions;
         include get_template_directory() . '/template-parts/quantis/add-quanti.php';
     }
@@ -1108,6 +1167,29 @@ class Oak {
 
         $array_data = array_merge( $element, array( $table . '_modification_time' => date("Y-m-d H:i:s") ) );
 
+
+        if ( isset( $element['otherElements'] ) ) :
+            $other_elements = $element['otherElements'];
+            $other_elements_properties = $element['otherElementsProperties'];
+
+            foreach( $other_elements as $other_element ) :
+                $result = $wpdb->insert(
+                    $other_elements_properties['table_name'],
+                    array (
+                        $other_elements_properties['element_column_name'] => $element[ $table . '_identifier' ],
+                        $other_elements_properties['other_element_column_name'] => $other_element['elementIdentifier'],
+                        $other_elements_properties['table'] . '_designation' => $other_element['elementOtherDesignation'],
+                        $other_elements_properties['table'] . '_required' => $other_element['elementRequired'],
+                        $other_elements_properties['table'] . '_index' => $other_element['elementIndex'],
+                        $table . '_revision_number' => $element[ $table . '_revision_number' ]
+                    )
+                );
+            endforeach;
+        endif;
+
+        unset( $array_data['otherElements'] );
+        unset( $array_data['otherElementsProperties'] );
+
         $result = $wpdb->insert(
             $table_name, 
             $array_data
@@ -1115,7 +1197,7 @@ class Oak {
 
         wp_send_json_success( array(
             'tableName' => $table_name,
-            'element' => $array_data
+            'element' => $array_data,
         ) );
     }
 
@@ -1585,19 +1667,20 @@ class Oak {
 
     function oak_send_to_trash() {
         $data = $_POST['data'];
-        $which_table = $data['whichTable'];
-        $designations = $data['designations'];
+        $table = $data['table'];
+        $table_in_plural = $data['tableInPlural'];
+        $identifiers = $data['identifiers'];
 
         global $wpdb;
 
-        foreach( $designations as $designation ) :
+        foreach( $identifiers as $identifier ) :
         
             $result = $wpdb->update(
-                $wpdb->prefix . 'oak_' . $which_table . 's',
+                $wpdb->prefix . 'oak_' . $table_in_plural,
                 array (
-                    $which_table . '_trashed' => 'true',
+                    $table . '_trashed' => 'true',
                 ),
-                array( 'field_designation' => $designation )
+                array( $table . '_identifier' => $identifier )
             );
 
         endforeach;
@@ -1607,19 +1690,20 @@ class Oak {
 
     function oak_restore_from_trash() {
         $data = $_POST['data'];
-        $which_table = $data['whichTable'];
-        $designations = $data['designations'];
+        $table = $data['table'];
+        $table_in_plural = $data['tableInPlural'];
+        $identifiers = $data['identifiers'];
 
         global $wpdb;
 
-        foreach( $designations as $designation ) :
+        foreach( $identifiers as $identifier ) :
         
             $result = $wpdb->update(
-                $wpdb->prefix . 'oak_' . $which_table . 's',
+                $wpdb->prefix . 'oak_' . $table_in_plural,
                 array (
-                    $which_table . '_trashed' => 'false',
+                    $table . '_trashed' => 'false',
                 ),
-                array( 'field_designation' => $designation )
+                array( $table . '_identifier' => $identifier )
             );
 
         endforeach;

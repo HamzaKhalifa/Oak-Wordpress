@@ -30,7 +30,7 @@ searchButton();
 function searchButton() {
     var searchIconButton = document.querySelector('.oak_menu_search_icon');
     searchIconButton.addEventListener('click', function() {
-        var searchInput = document.querySelector('.oak_list_header_right__search_input');
+        var searchInput = document.querySelector('.oak_element_header_right__search_input');
         var oakHiddenExists = false;
         for(var i = 0; i < searchInput.classList.length; i++) {
             if (searchInput.classList[i] == 'oak_hidden')
@@ -49,7 +49,7 @@ function searchButton() {
 // For the delete button
 deleteButton();
 function deleteButton() {
-    var deleteButton = document.querySelector('.oak_list_header_right_delete_button');
+    var deleteButton = document.querySelector('.oak_element_header_right_delete_button');
     deleteButton.addEventListener('click', function() {
 
         var message = '';
@@ -68,7 +68,7 @@ function deleteButton() {
 // For the restore button
 restoreButton();
 function restoreButton() {
-    var restoreButton = document.querySelector('.oak_list_header_right_restore_button');
+    var restoreButton = document.querySelector('.oak_element_header_right_restore_button');
     restoreButton.addEventListener('click', function() {
         openModal('Êtes vous sûr de vouloir restaurer les élements sélectionnés ?', true);
         restoring = true;
@@ -97,8 +97,8 @@ function checkListeners() {
         checkers[i].addEventListener('change', function() {
             if (this.checked) {
                 this.parentNode.parentNode.classList.add('oak_list_row__selected');
-                var listHeader = document.querySelector('.oak_list_header');
-                listHeader.classList.add('oak_list_header_at_least_one_selected');
+                var listHeader = document.querySelector('.oak_element_header');
+                listHeader.classList.add('oak_element_header_at_least_one_selected');
                 document.querySelector('.oak_menu_icon__cancel_icon').classList.add('fa-times');
 
                 var changeToolBar = false;
@@ -109,7 +109,7 @@ function checkListeners() {
                     }
                 }
                 if (this.getAttribute('index') != 0 || (this.getAttribute('index') == 0 && changeToolBar )) {
-                    document.querySelector('.oak_list_header_right_upload_button').classList.add('oak_hidden');
+                    document.querySelector('.oak_element_header_right_upload_button').classList.add('oak_hidden');
                     document.querySelector('.fa-copy').classList.remove('oak_hidden');
                     document.querySelector('.fa-trash-alt').classList.remove('oak_hidden');
                 }
@@ -137,7 +137,7 @@ function checkListeners() {
             }
     
             // Check if there is only one element selected to add the edit button: 
-            var editButton = document.querySelector('.oak_list_header_right_edit_button');
+            var editButton = document.querySelector('.oak_elemnt_header_right_edit_button');
             var numberOfSelected = 0;
             for (var j = 0; j < checkers.length; j++) {
                 if (this.getAttribute('index') == 0) { 
@@ -161,10 +161,10 @@ function checkListeners() {
 
 function manageMenuForNothingSelected() {
     var checkers = document.querySelectorAll('.oak_list_titles_container__checkbox');
-    document.querySelector('.oak_list_header').classList.remove('oak_list_header_at_least_one_selected');
+    document.querySelector('.oak_element_header').classList.remove('oak_element_header_at_least_one_selected');
     checkers[0].checked = false;
     checkers[0].parentNode.parentNode.classList.remove('oak_list_row__selected');
-    document.querySelector('.oak_list_header_right_upload_button').classList.remove('oak_hidden');
+    document.querySelector('.oak_element_header_right_upload_button').classList.remove('oak_hidden');
     document.querySelector('.fa-copy').classList.add('oak_hidden');
     document.querySelector('.fa-trash-alt').classList.add('oak_hidden');
     document.querySelector('.oak_menu_icon__cancel_icon').classList.remove('fa-times');
@@ -173,13 +173,13 @@ function manageMenuForNothingSelected() {
 // For the edit button
 edit();
 function edit() {
-    var editButton = document.querySelector('.oak_list_header_right_edit_button');
+    var editButton = document.querySelector('.oak_elemnt_header_right_edit_button');
     editButton.addEventListener('click', function() {
         var checkboxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
         for (var i = 0; i < checkboxes.length; i++) {
             if (i != 0 && checkboxes[i].checked && !classExists(checkboxes[i].parentNode.parentNode, 'oak_hidden')) {
                 var identifier = checkboxes[i].parentNode.parentNode.getAttribute('identifier');
-                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_' + table + '&' + table + '_identifier=' + identifier + '&elements=' + DATA.tableInPlural + '&listorformula=formula');
+                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + DATA.tableInPlural + '&listorformula=formula');
             }
         }
     });
@@ -199,7 +199,7 @@ add();
 function add() {
     var addButton = document.querySelector('.oak_list_add_button');
     addButton.addEventListener('click', function() {
-        window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_' + table + '&elements=' + DATA.tableInPlural + '&listorformula=formula');
+        window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&elements=' + DATA.tableInPlural + '&listorformula=formula');
     });
 }
 // Done with the add button
@@ -207,7 +207,7 @@ function add() {
 // For the import button
 importButton();
 function importButton() {
-    var importButton = document.querySelector('.oak_list_header_right_upload_button');
+    var importButton = document.querySelector('.oak_element_header_right_upload_button');
     importButton.addEventListener('click', function() {
         importing = true;
         openModal('', true);
@@ -218,7 +218,7 @@ function importButton() {
 // For the model download button
 exportButton();
 function exportButton() {
-    var downloadButton = document.querySelector('.oak_list_header_right_download_button');
+    var downloadButton = document.querySelector('.oak_element_header_right_download_button');
     downloadButton.addEventListener('click', function() {
         exportData();
     });
@@ -295,7 +295,7 @@ function manageFilters() {
         filterResult();
     })
     trashSelect.addEventListener('change', function() {
-        var restoreButton = document.querySelector('.oak_list_header_right_restore_button');
+        var restoreButton = document.querySelector('.oak_element_header_right_restore_button');
         if (this.value == 'trashed') {
             restoreButton.classList.remove('oak_hidden');
         } else 
@@ -346,12 +346,12 @@ function filterResult() {
 }
 // Done with the all natures button
 
-// For the search button 
+// For the search button
 searchButton();
 function searchButton() {
-    var searchButton = document.querySelector('.oak_list_header_right__search_input');
+    var searchButton = document.querySelector('.oak_element_header_right__search_input');
     searchButton.oninput = function() {
-        var searchedDesignation = document.querySelector('.oak_list_header_right__search_input').value;
+        var searchedDesignation = document.querySelector('.oak_element_header_right__search_input').value;
         var allDesignationsSpans = document.querySelectorAll('.oak_list_titles_container__the_title');
         for (var i = 0; i < allDesignationsSpans.length; i++) {
             console.log(allDesignationsSpans[i].innerHTML);
@@ -450,11 +450,11 @@ function handleModalButtons() {
             readCSV(input);
         }
         if (deleting) {
-            var designationsToDelete = [];
+            var identifiersToDelete = [];
             var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
             for (var i = 1; i < checkBoxes.length; i++) {
                 if (checkBoxes[i].checked) {
-                    designationsToDelete.push(checkBoxes[i].parentNode.querySelector('.oak_list_titles_container__title').innerHTML);
+                    identifiersToDelete.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
                 }
             }
             setLoading();
@@ -464,8 +464,9 @@ function handleModalButtons() {
                     type: 'POST', 
                     data: {
                         'data': {
-                            whichTable: table,
-                            designations: designationsToDelete
+                            'table': DATA.table,
+                            'tableInPlural': DATA.tableInPlural,
+                            'identifiers': identifiersToDelete
                         },
                         'action': 'oak_send_to_trash'
                     },
@@ -480,11 +481,11 @@ function handleModalButtons() {
             });
         }
         if (restoring) {
-            var desgignationToRestore = [];
+            var identifiersToRestore = [];
             var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
             for (var i = 1; i < checkBoxes.length; i++) {
                 if (checkBoxes[i].checked) {
-                    desgignationToRestore.push(checkBoxes[i].parentNode.querySelector('.oak_list_titles_container__title').innerHTML);
+                    identifiersToRestore.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
                 }
             }
             setLoading();
@@ -494,8 +495,9 @@ function handleModalButtons() {
                     type: 'POST', 
                     data: {
                         'data': {
-                            whichTable: table,
-                            designations: desgignationToRestore
+                            'table': DATA.table,
+                            'tableInPlural': DATA.tableInPlural,
+                            'identifiers': identifiersToRestore
                         },
                         'action': 'oak_restore_from_trash'
                     },

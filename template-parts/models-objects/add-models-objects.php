@@ -10,7 +10,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 <div class="oak_add_field_big_container">
     <div class="oak_add_field_container">
         <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container.oak_left_element oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation de l\'Object: ', Oak::$text_domain ); ?></label> 
                 <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->object_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
@@ -24,7 +24,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         <?php 
         foreach( $fields as $key => $field ) : ?>
             <div class="oak_add_field_container__horizontal_container">
-                <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+                <div class="oak_add_field_container__field_container.oak_left_element oak_add_field_container__designation_container">
                     <label class="oak_add_field_container__label oak_add_field_container__label_designation"><?php echo( $field->field_designation ); ?></label> 
                     <?php
                     $the_revision = '';

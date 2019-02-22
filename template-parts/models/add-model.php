@@ -10,7 +10,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 <div class="oak_add_field_big_container">
     <div class="oak_add_field_container">
         <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container.oak_left_element oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation du modèle: ', Oak::$text_domain ); ?></label> 
                 <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->model_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
@@ -22,7 +22,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container.oak_left_element oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="types"><?php _e( 'Structure: ', Oak::$text_domain ); ?></label> 
                 <select name="types" class="oak_add_model_container__types" id="">
                     <option value="Type 1">Type 1</option>
@@ -84,8 +84,8 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                     </div>
 
                                     <div class="oak_add_model_forms_list__horizontal oak_add_model_forms_list__horizontal_without_margin_top">
-                                        <div class="oak_add_model_forms_list__vertical oak_left_field">
-                                            <label class="oak_add_field_label" for="type">Structure</label>
+                                        <div class="oak_add_model_forms_list__vertical.oak_left_element">
+                                            <label class="oak_add_other_element_label" for="type">Structure</label>
                                             <select class="oak_add_model_form_structure" name="type" id="">
                                                 <option value=""></option>
                                                 <option value="fixed">Fixe</option>
@@ -94,7 +94,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                         </div>
 
                                         <div class="oak_add_model_forms_list__vertical"> 
-                                            <label class="oak_add_field_label" for="type">Catégories de publications</label>
+                                            <label class="oak_add_other_element_label" for="type">Catégories de publications</label>
                                             <select class="oak_add_model_forms_list_horizontal__attributes_select" name="type" id="">
                                                 <option value=""></option>
                                                 <?php 
@@ -108,8 +108,8 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                     </div>
 
                                     <div class="oak_add_model_forms_list__horizontal">
-                                        <div class="oak_add_model_forms_list__vertical oak_left_field">
-                                            <label class="oak_add_field_label" for="field-designation">Désignation du formulaire</label>
+                                        <div class="oak_add_model_forms_list__vertical.oak_left_element">
+                                            <label class="oak_add_other_element_label" for="field-designation">Désignation du formulaire</label>
                                             <select class="oak_add_model_forms_list_horizontal__designation_select" name="field-designation" id="">
                                                 <?php 
                                                 foreach( Oak::$forms as $form ) : ?>
@@ -120,17 +120,17 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                             </select>
                                         </div>
                                         <div class="oak_add_model_forms_list__vertical">
-                                            <label class="oak_add_field_label" for="field-identifier">Identifiant Unique</label>
+                                            <label class="oak_add_other_element_label" for="field-identifier">Identifiant Unique</label>
                                             <input disabled name="form-identifier" type="text" value="<?php echo( $info[1] ); ?>" class="oak_add_field_container__input oak_add_model_field_identifier">
                                         </div>
                                     </div>
                                     <div class="oak_add_model_forms_list__horizontal">
-                                        <div class="oak_add_model_forms_list__horizontal oak_left_field">
-                                            <label class="oak_add_field_label" for="field-identifier">Renommer</label>
+                                        <div class="oak_add_model_forms_list__horizontal.oak_left_element">
+                                            <label class="oak_add_other_element_label" for="field-identifier">Renommer</label>
                                             <input name="field-identifier" type="text" value="<?php echo( $info[2] ); ?>" class="oak_add_field_container__input oak_add_model_form_rename">
                                         </div>
                                         <div class="oak_add_model_forms_list__horizontal">
-                                            <label class="oak_add_field_label without_margin_bottom" for="gabarit">Gabarit</label>
+                                            <label class="oak_add_other_element_label without_margin_bottom" for="gabarit">Gabarit</label>
                                             <select class="oak_add_model_form_gabarit" name="gabarit" id="">
                                                 <option value="Gabarit 1">Gabarit 1</option>
                                                 <option value="Gabarit 2">Gabarit 2</option>

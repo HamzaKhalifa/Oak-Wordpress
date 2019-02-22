@@ -195,7 +195,7 @@ function createFormData(state) {
     var trashed = false;
 
     fields = '';
-    var fieldsContainers = document.querySelectorAll('.oak_add_form_fields_list__single_field');
+    var fieldsContainers = document.querySelectorAll('.oak_add_other_elements_list__single_element');
     for (var i= 0; i < fieldsContainers.length; i++) {
         var fieldDesignation = fieldsContainers[i].querySelector('.oak_add_form_fields_list_horizontal__designation_select').value;
         var name = fieldsContainers[i].querySelector('.oak_add_form_field_rename').value;
@@ -308,27 +308,27 @@ addFieldButton.addEventListener('click', function() {
     var fieldsList = document.querySelector('.oak_add_form_fields_list')
 
     var singleFieldContainer = document.createElement('div');
-    singleFieldContainer.className = 'oak_add_form_fields_list__single_field';
+    singleFieldContainer.className = 'oak_add_other_elements_list__single_element';
     
-    singleFieldContainer.innerHTML = '<div class="oak_add_field_container__isert_field_title_container oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_without_margin_top oak_add_form_field_options">'
-    + '<div class="oak_add_form_fields_list__horizontal">'
+    singleFieldContainer.innerHTML = '<div class="oak_add_field_container__isert_field_title_container oak_add_other_elements_list__horizontal oak_add_other_elements_list__horizontal_without_margin_top oak_add_other_elements_options">'
+    + '<div class="oak_add_other_elements_list__horizontal">'
     + '<img class="oak_add_form_container_header_icon" src="' + DATA.templateDirectoryUri + '/src/assets/icons/fields.png" alt="">' 
     + '<h4 class="oak_add_field_container__isert_field_title">Insérer un champ</h4></div>'
     + '<div class="oak_add_form_fields_list__buttons_container"><div class="oak_add_form_field_options__button oak_add_form_field_options_button_delete"><i class="fas fa-times"></i></div></div>'
     + '</div>'
-    + '<div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_without_margin_top">'
-    + '<div class="oak_add_form_fields_list__vertical oak_left_field">'
-    + '<label class="oak_add_field_label" for="type">Nature</label>'
-    + '<select class="oak_add_form_fields_list_horizontal__type_select" name="type" id="">'
+    + '<div class="oak_add_other_elements_list__horizontal oak_add_other_elements_list__horizontal_without_margin_top">'
+    + '<div class="oak_add_other_elements_list__vertical.oak_left_element">'
+    + '<label class="oak_add_other_element_label" for="type">Nature</label>'
+    + '<select class="oak_add_other_elements_list_horizontal__type_select" name="type" id="">'
     + '<option value=""></option> <option value="Texte">Texte</option> <option value="Zone de Texte">Zone De Texte</option> <option value="Image">Image</option><option value="File">Fichier</option>'
     + '</select>'
-    + '</div> <div class="oak_add_form_fields_list__vertical"> <label class="oak_add_field_label" for="type">Fonction</label>'
+    + '</div> <div class="oak_add_other_elements_list__vertical"> <label class="oak_add_other_element_label" for="type">Fonction</label>'
     + '<select class="oak_add_form_fields_list_horizontal__function_select" name="type" id=""><option value=""></option> <option value="Information/Description">Information/Description</option><option value="Exemple">Exemple</option><option value="Illustration">Illustration</option>'
-    + '</select></div></div><div class="oak_add_form_fields_list__horizontal"><div class="oak_add_form_fields_list__vertical oak_left_field">'
-    + '<label class="oak_add_field_label" for="field-designation">Désignation</label><select class="oak_add_form_fields_list_horizontal__designation_select" name="field-designation" id=""></select></div>'
-    + '<div class="oak_add_form_fields_list__vertical"><label class="oak_add_field_label" for="field-identifier">Identifiant Unique</label><input disabled name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_form_field_identifier"></div></div>'
-    + '<div class="oak_add_form_fields_list__horizontal"><div class="oak_add_form_fields_list__vertical oak_left_field"><label class="oak_add_field_label" for="field-identifier">Renommer</label><input name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_form_field_rename"></div>'
-    + '<div class="oak_add_form_fields_list__horizontal"><div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_very_small oak_left_field"><label class="oak_add_field_label without_margin_bottom" for="field-required">Recquis</label><input type="checkbox" class="oak_field_required_input"></div><div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_small"><label class="oak_add_field_label oak_add_field_label_width without_margin_bottom" for="field-required">Largeur</label><input type="number" class="oak_field_width_input">'
+    + '</select></div></div><div class="oak_add_other_elements_list__horizontal"><div class="oak_add_other_elements_list__vertical.oak_left_element">'
+    + '<label class="oak_add_other_element_label" for="field-designation">Désignation</label><select class="oak_add_form_fields_list_horizontal__designation_select" name="field-designation" id=""></select></div>'
+    + '<div class="oak_add_other_elements_list__vertical"><label class="oak_add_other_element_label" for="field-identifier">Identifiant Unique</label><input disabled name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_other_element_identifier"></div></div>'
+    + '<div class="oak_add_other_elements_list__horizontal"><div class="oak_add_other_elements_list__vertical.oak_left_element"><label class="oak_add_other_element_label" for="field-identifier">Renommer</label><input name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_form_field_rename"></div>'
+    + '<div class="oak_add_other_elements_list__horizontal"><div class="oak_add_other_elements_list__horizontal oak_add_form_fields_list__horizontal_very_small.oak_left_element"><label class="oak_add_other_element_label without_margin_bottom" for="field-required">Recquis</label><input type="checkbox" class="oak_field_required_input"></div><div class="oak_add_other_elements_list__horizontal oak_add_form_fields_list__horizontal_small"><label class="oak_add_other_element_label oak_add_field_label_width without_margin_bottom" for="field-required">Largeur</label><input type="number" class="oak_field_width_input">'
     + '</div></div></div>'
 
     fieldsList.append(singleFieldContainer);
@@ -399,9 +399,9 @@ function handleSeparatorsDeleteButtons() {
 updateFiltersListeners();
 function updateFiltersListeners() {
     var fieldsList = document.querySelector('.oak_add_form_fields_list');
-    var fieldsContainers = fieldsList.querySelectorAll('.oak_add_form_fields_list__single_field');
+    var fieldsContainers = fieldsList.querySelectorAll('.oak_add_other_elements_list__single_element');
     for (var i = 0; i < fieldsContainers.length; i++) {
-        var typeSelect = fieldsContainers[i].querySelector('.oak_add_form_fields_list_horizontal__type_select');
+        var typeSelect = fieldsContainers[i].querySelector('.oak_add_other_elements_list_horizontal__type_select');
         typeSelect.setAttribute('index', i);
         var functionSelect = fieldsContainers[i].querySelector('.oak_add_form_fields_list_horizontal__function_select');
         functionSelect.setAttribute('index', i);
@@ -412,7 +412,7 @@ function updateFiltersListeners() {
         });
         functionSelect.addEventListener('change', function() {
             var designationsSelect = fieldsContainers[this.getAttribute('index')].querySelector('.oak_add_form_fields_list_horizontal__designation_select');
-            var currentTypeSelect = fieldsContainers[this.getAttribute('index')].querySelector('.oak_add_form_fields_list_horizontal__type_select');
+            var currentTypeSelect = fieldsContainers[this.getAttribute('index')].querySelector('.oak_add_other_elements_list_horizontal__type_select');
             updateDesignationsSelect(currentTypeSelect, this, designationsSelect);
         });
     }
@@ -494,7 +494,7 @@ function handleDesignationSelectsListeners() {
         designationsSelects[i].setAttribute('index', i);
         designationsSelects[i].addEventListener('change', function() {
             var theParentOfTheParent = this.parentNode.parentNode;
-            theParentOfTheParent.querySelector('.oak_add_form_field_identifier').value = createIdentifier(this.value);
+            theParentOfTheParent.querySelector('.oak_add_other_element_identifier').value = createIdentifier(this.value);
             // console.log(theParentOfTheParent);
         });
     }

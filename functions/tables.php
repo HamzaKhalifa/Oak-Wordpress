@@ -31,7 +31,7 @@ $forms_sql = "CREATE TABLE $forms_table_name (
     form_trashed varchar(555),
     form_state varchar(555),
     form_modification_time datetime,
-    form_fields varchar(555),
+    form_revision_number varchar(555),
     form_structure varchar(555),
     form_attributes varchar(100),
     form_separators varchar(100),
@@ -39,6 +39,20 @@ $forms_sql = "CREATE TABLE $forms_table_name (
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 dbDelta( $forms_sql );
+
+$forms_and_fields_table_name = Oak::$forms_and_fields_table_name;
+$forms_and_fields_sql= "CREATE TABLE $forms_and_fields_table_name (
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    form_identifier varchar(555) DEFAULT '' NOT NULL,
+    field_identifier varchar(555) DEFAULT '' NOT NULL,
+    field_designation varchar(555),
+    field_required varchar(555),
+    field_index varchar(555),
+    form_revision_number varchar(555),
+    PRIMARY KEY (id)
+) $charset_collate;";
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $forms_and_fields_sql );
 
 $models_table_name = Oak::$models_table_name;
 $models_sql = "CREATE TABLE $models_table_name (
@@ -50,14 +64,29 @@ $models_sql = "CREATE TABLE $models_table_name (
     model_trashed varchar(555),
     model_state varchar(555),
     model_modification_time datetime,
+    model_revision_number varchar(555),
     model_types varchar(555),
     model_publications_categories varchar(555),
-    model_forms varchar (555),
     model_separators varchar(100),
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 dbDelta( $models_sql );
+
+$models_and_forms_table_name = Oak::$models_and_forms_table_name;
+$models_and_forms_sql= "CREATE TABLE $models_and_forms_table_name (
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    model_identifier varchar(555) DEFAULT '' NOT NULL,
+    form_identifier varchar(555) DEFAULT '' NOT NULL,
+    form_designation varchar(555),
+    form_required varchar(555),
+    form_index varchar(555),
+    model_revision_number varchar(555),
+    PRIMARY KEY (id)
+) $charset_collate;";
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $models_and_forms_sql );
+
 
 $taxonomies_table_name = Oak::$taxonomies_table_name;
 $taxonomies_sql = "CREATE TABLE $taxonomies_table_name (
@@ -272,6 +301,18 @@ foreach( $reversed_forms as $form ) :
     endforeach;
 endforeach;
 Oak::$forms_without_redundancy = $forms_without_redundancy;
+
+$forms_and_fields_table_name = Oak::$forms_and_fields_table_name;
+Oak::$all_forms_and_fields = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $forms_and_fields_table_name
+" );
+
+$models_and_forms_table_name = Oak::$models_and_forms_table_name;
+Oak::$all_models_and_forms = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $models_and_forms_table_name
+" );
 
 $publications_table_name = Oak::$publications_table_name;
 Oak::$publications = $wpdb->get_results ( "

@@ -10,7 +10,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 <div class="oak_add_field_big_container">
     <div class="oak_add_field_container">
         <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container.oak_left_element oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation de la publication: ', Oak::$text_domain ); ?></label> 
                 <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->publication_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
@@ -22,7 +22,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container.oak_left_element oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="organization"><?php _e( 'Organisation émettrice de la publication: ', Oak::$text_domain ); ?></label> 
                 <select class="oak_add_field_container__organization" name="" id="">
                     <?php 
@@ -41,7 +41,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container.oak_left_element oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="headpiece"><?php _e( 'Vignette: ', Oak::$text_domain ); ?></label> 
                 <input name="headpiece" type="file" class="oak_add_logo" onChange="readUrl(this)">
                 <img src="<?php if ( count( $revisions ) > 0 ) : echo ( esc_attr( $revisions[ count( $revisions ) - 1 ]->publication_headpiece ) ); endif; ?>" class="oak_add_field_container__headpiece_img" alt="">
@@ -108,7 +108,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         </div>
 
         <div class="oak_add_field_container__horizontal_container oak_add_field_container__sectorial_frame_container <?php if ( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->publication_report_or_frame != 'frame' ) : echo('oak_hidden'); endif; endif; if( count( $revisions ) <= 0 ) : echo('oak_hidden'); endif;?>">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container.oak_left_element oak_add_field_container__designation_container">
                 <div class="oak_add_field_container__field_container oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="frame-type"><?php _e( 'Cadre sectoriel ? ', Oak::$text_domain ); ?></label>
                     <input <?php if ( count( $revisions ) > 0 ) : if( $revisions[ count( $revisions ) - 1 ]->publication_sectorial_frame == 'true' ) : echo('checked'); endif; endif; ?> type="checkbox" class="oak_add_field_container__sectorial_frame">
@@ -125,7 +125,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 
         
         <div class="oak_add_field_container__horizontal_container oak_add_field_container__local_container">
-            <div class="oak_add_field_container__field_container oak_add_field_container__designation_container oak_left_field">
+            <div class="oak_add_field_container__field_container oak_add_field_container__designation_container.oak_left_element">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="local"><?php _e( 'Publication locale ? ', Oak::$text_domain ); ?></label> 
                 <input name="local" type="checkbox" <?php if ( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->publication_local == 'true' ) : echo('checked'); endif; ?> class="oak_add_field_container__input oak_add_field_container__local">
             </div>

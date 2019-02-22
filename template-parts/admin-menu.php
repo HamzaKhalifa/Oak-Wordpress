@@ -10,7 +10,7 @@
     <h5 class="oak_admin_menu_central_application" style="color: <?php echo( Oak::$secondary_text_color ); ?>"><?php _e( 'Application centrale', Oak::$text_domain ); ?></h5>
     <hr>
     <br>
-
+    
     <?php 
         $menu_elements = array(
             array(

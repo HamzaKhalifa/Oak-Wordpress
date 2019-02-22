@@ -66,6 +66,18 @@
     margin-bottom: 10px;
 }
 
+.other_elements_input_container {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    position: relative;
+    background-color: #e5e9ef;
+    flex: 1;
+    margin-right: 25px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .oak_text_field_container_identifier {
     padding-bottom: 3px;
 }
@@ -212,7 +224,7 @@
     padding-right: 10px;
     padding-left: 10px;
     align-self: flex-end;
-    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .oak_add_element_container__trash_button {
@@ -444,14 +456,151 @@
     margin-left: 25px;
 }
 
-.oak_left_field {
+.oak_left_element {
     border-right: 1px solid #e2e4e7;
     padding-right: 20px;
     margin-right: 20px;
+    flex: 1;
 }
 
-.oak_select_go_button {
-
+.oak_add_other_elements_list__vertical {
+    flex: 1;
+    position: relative;
 }
 
-// Add field
+.oak_add_element_separators_and_other_elements_container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+
+// This is for other elements (Fields or forms whether we are in forms or models formulas)
+.oak_other_elements_container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.oak_other_elements_single_elements_container__single_element, .oak_other_elements_single_elements_container__final_selector_container {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    flex-direction: column;
+}
+
+.oak_other_elements_single_elements_container__single_element {
+    margin-bottom: 40px;
+}
+
+.oak_other_elements_single_elements_container__single_element .oak_text_field_container, .oak_other_elements_single_elements_container__single_element .oak_checkbox_container {
+    margin-top: 0px;
+}
+
+.oak_other_elements_single_elements_container__final_selector_container {
+    flex-direction: row;
+    width: 100%;
+}
+
+.oak_filters_container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+.oak_other_elements_select option:first-of-type {
+    color: #abb7cc;
+}
+
+input.oak_add_other_elements_list_single_element__chekcbox {
+    border: 2px solid #abb7cc;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    display: flex;
+    margin: 0px;
+}
+
+.oak_add_other_elements_list__single_element input[type=checkbox] {
+    margin: 0px;
+}
+
+// For the not checked checkbox design: 
+.oak_other_elements_single_elements_container__single_element_not_checked {
+    width: 50%;
+}
+
+.oak_other_elements_single_elements_container__single_element_not_checked .oak_text_field_container, .oak_other_elements_single_elements_container__single_element_not_checked .oak_checkbox_container, .oak_other_elements_single_elements_container__single_element_not_checked .oak_filters_container {
+    display: none;
+}
+
+.oak_other_elements_single_elements_container__single_element_not_checked .text_field_description, .oak_other_elements_single_elements_container__single_element_not_checked select, .oak_other_elements_single_elements_container__single_element_not_checked i, .oak_other_elements_single_elements_container__single_element_not_checked .oak_text_field_checkbox_description {
+    color: #abb7cc;
+}
+
+.oak_other_elements_single_elements_container__single_element_not_checked .input_line {
+    background-color: #abb7cc;
+}
+
+.oak_other_elements_container__title {
+    color: #003366;
+    margin-bottom: 15px;
+    font-weight: lighter;
+    font-size: 15px;
+}
+
+.oak_other_elements_container__add_button {
+    background-color: #1c6bb5;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 1px 1px 10px;
+    bottom: -50px;
+    transition: all .2s ease-in-out;
+}
+
+.oak_other_elements_container__add_button i {
+    color: white;
+}
+
+.oak_other_elements_container__add_button:hover {
+    background-color: white;
+    cursor: pointer;
+}
+
+.oak_other_elements_container__add_button:hover i {
+    color: #1c6bb5;
+}
+
+
+.oak_element_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #003366;
+}
+
+.oak_element_header i {
+    color: white;
+}
+
+span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_elements {
+    color: #000c3b;
+    font-size: 15px;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.oak_selected_other_elements_number_indicator {
+    display: none;
+}
+
+.oak_element_header_at_least_one_selected .oak_selected_other_elements_number_indicator {
+    display: block;
+} 

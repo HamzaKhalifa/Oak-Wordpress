@@ -2,6 +2,27 @@
     display: none!important;
 }
 
+div {
+    font-family: 'lato';
+}
+
+#wpadminbar ul#wp-admin-bar-root-default>li:hover, #wpadminbar .ab-top-menu>.menupop>.ab-sub-wrapper {
+    background-color: #003366!important;
+}
+
+#wpadminbar, menu {
+    background-color: #000c3b;
+}
+
+#wpadminbar .ab-top-menu>li.hover>.ab-item, #wpadminbar.nojq .quicklinks .ab-top-menu>li>.ab-item:focus, #wpadminbar:not(.mobile) .ab-top-menu>li:hover>.ab-item, #wpadminbar:not(.mobile) .ab-top-menu>li>.ab-item:focus {
+    color: white;
+    background: #003366!important;
+}
+
+.menupop, .ab-sub-wrapper, .menupop:hover, .ab-sub-wrapper:hover, #wpadminbar .quicklinks .menupop ul.ab-sub-secondary, #wpadminbar .quicklinks .menupop ul.ab-sub-secondary .ab-submenu {
+    background-color: #000c3b!important;
+}
+
 #wpcontent, #wpfooter {
     margin-left: 0px;
 }

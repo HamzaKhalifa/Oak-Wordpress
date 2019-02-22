@@ -10,7 +10,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
 <div class="oak_add_field_big_container">
     <div class="oak_add_field_container">
         <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container oak_left_element oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="designation"><?php _e( 'Désignation du formulaire: ', Oak::$text_domain ); ?></label> 
                 <input name="designation" <?php if ( count( $revisions ) > 0 ) : echo('disabled'); endif; ?> type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->form_designation ) ); endif; ?>" class="oak_add_field_container__input oak_add_field_container__designation">
             </div>
@@ -22,7 +22,7 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
         </div>
 
         <div class="oak_add_field_container__horizontal_container">
-            <div class="oak_add_field_container__field_container oak_left_field oak_add_field_container__designation_container">
+            <div class="oak_add_field_container__field_container.oak_left_element oak_add_field_container__designation_container">
                 <label class="oak_add_field_container__label oak_add_field_container__label_designation" for="structure"><?php _e( 'Structure: ', Oak::$text_domain ); ?></label> 
                 <select name="structure" class="oak_add_form_container__structure" id="">
                     <option <?php if ( count( $revisions ) > 0 ) : if ( $revisions[ count( $revisions ) - 1 ]->form_structure == 'fixed') : echo('selected');  endif; endif; ?> value="fixed"><?php _e( 'Fixe', Oak::$text_domain ); ?></option>
@@ -70,10 +70,10 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                         if ( count( $info ) > 2 ) :
                             if ( $info[5] == $index ) : 
                             ?>
-                                <div class="oak_add_form_fields_list__single_field">
+                                <div class="oak_add_other_elements_list__single_element">
 
-                                    <div class="oak_add_field_container__isert_field_title_container oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_without_margin_top oak_add_form_field_options">
-                                        <div class="oak_add_form_fields_list__horizontal">
+                                    <div class="oak_add_field_container__isert_field_title_container oak_add_other_elements_list__horizontal oak_add_other_elements_list__horizontal_without_margin_top oak_add_other_elements_options">
+                                        <div class="oak_add_other_elements_list__horizontal">
                                             <img class="oak_add_form_container_header_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/fields.png' ); ?>" alt="">
                                             <h4 class="oak_add_field_container__isert_field_title"><?php _e( 'Insérer un champ' ); ?></h4>
                                         </div>
@@ -85,10 +85,10 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                         </div>
                                     </div>
 
-                                    <div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_without_margin_top">
-                                        <div class="oak_add_form_fields_list__vertical oak_left_field">
-                                            <label class="oak_add_field_label" for="type">Nature</label>
-                                            <select class="oak_add_form_fields_list_horizontal__type_select" name="type" id="">
+                                    <div class="oak_add_other_elements_list__horizontal oak_add_other_elements_list__horizontal_without_margin_top">
+                                        <div class="oak_add_other_elements_list__vertical.oak_left_element">
+                                            <label class="oak_add_other_element_label" for="type">Nature</label>
+                                            <select class="oak_add_other_elements_list_horizontal__type_select" name="type" id="">
                                                 <option value=""></option>
                                                 <option value="Texte">Texte</option>
                                                 <option value="Zone de Texte">Zone De Texte</option>
@@ -97,8 +97,8 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                             </select>
                                         </div>
 
-                                        <div class="oak_add_form_fields_list__vertical">
-                                            <label class="oak_add_field_label" for="type">Fonction</label>
+                                        <div class="oak_add_other_elements_list__vertical">
+                                            <label class="oak_add_other_element_label" for="type">Fonction</label>
                                             <select class="oak_add_form_fields_list_horizontal__function_select" name="type" id="">
                                                 <option value=""></option>
                                                 <option value="Information/Description">Information/Description</option>
@@ -108,9 +108,9 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                         </div>
                                     </div>
 
-                                    <div class="oak_add_form_fields_list__horizontal">
-                                        <div class="oak_add_form_fields_list__vertical oak_left_field">
-                                            <label class="oak_add_field_label" for="field-designation"><?php _e( 'Désignation', Oak::$text_domain ) ?></label>
+                                    <div class="oak_add_other_elements_list__horizontal">
+                                        <div class="oak_add_other_elements_list__vertical.oak_left_element">
+                                            <label class="oak_add_other_element_label" for="field-designation"><?php _e( 'Désignation', Oak::$text_domain ) ?></label>
                                             <select class="oak_add_form_fields_list_horizontal__designation_select" name="field-designation" id="">
                                                 <?php 
                                                 $added_fields = [];
@@ -132,25 +132,25 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                             </select>
                                         </div>
 
-                                        <div class="oak_add_form_fields_list__vertical">
-                                            <label class="oak_add_field_label" for="field-identifier">Identifiant Unique</label>
-                                            <input value="<?php echo( $info[1] ); ?>" disabled name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_form_field_identifier">
+                                        <div class="oak_add_other_elements_list__vertical">
+                                            <label class="oak_add_other_element_label" for="field-identifier">Identifiant Unique</label>
+                                            <input value="<?php echo( $info[1] ); ?>" disabled name="field-identifier" type="text" value="" class="oak_add_field_container__input oak_add_other_element_identifier">
                                         </div>
                                     </div>
 
-                                    <div class="oak_add_form_fields_list__horizontal">
-                                        <div class="oak_add_form_fields_list__vertical oak_left_field">
-                                            <label class="oak_add_field_label" for="field-identifier">Renommer</label>
+                                    <div class="oak_add_other_elements_list__horizontal">
+                                        <div class="oak_add_other_elements_list__vertical.oak_left_element">
+                                            <label class="oak_add_other_element_label" for="field-identifier">Renommer</label>
                                             <input name="field-identifier" type="text" value="<?php echo( $info[2] ); ?>" class="oak_add_field_container__input oak_add_form_field_rename">
                                         </div>
                                         
-                                        <div class="oak_add_form_fields_list__horizontal">
-                                            <div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_very_small oak_left_field">
-                                                <label class="oak_add_field_label without_margin_bottom" for="field-required">Recquis</label>
+                                        <div class="oak_add_other_elements_list__horizontal">
+                                            <div class="oak_add_other_elements_list__horizontal oak_add_form_fields_list__horizontal_very_small.oak_left_element">
+                                                <label class="oak_add_other_element_label without_margin_bottom" for="field-required">Recquis</label>
                                                 <input type="checkbox" <?php if ( $info[3] == 'true' ) : echo('checked'); endif; ?> class="oak_field_required_input">
                                             </div>
-                                            <div class="oak_add_form_fields_list__horizontal oak_add_form_fields_list__horizontal_small">
-                                                <label class="oak_add_field_label oak_add_field_label_width without_margin_bottom" for="">Largeur</label>
+                                            <div class="oak_add_other_elements_list__horizontal oak_add_form_fields_list__horizontal_small">
+                                                <label class="oak_add_other_element_label oak_add_field_label_width without_margin_bottom" for="">Largeur</label>
                                                 <input type="number" value="<?php echo( $info[4] ); ?>" class="oak_field_width_input">
                                             </div>
                                         </div>
