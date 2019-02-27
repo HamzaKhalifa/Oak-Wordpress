@@ -104,7 +104,7 @@ $taxonomies_sql = "CREATE TABLE $taxonomies_table_name (
     taxonomy_title varchar(555),
     taxonomy_term_description varchar(555),
     taxonomy_color varchar(555),
-    taxonomy_logo varchar(555),
+    taxonomy_brand varchar(555),
     taxonomy_publication varchar(555),
     PRIMARY KEY (id)
 ) $charset_collate;";
@@ -436,23 +436,22 @@ Oak::$models_without_redundancy = $models_without_redundancy;
 
 // Lets get the fields that are gonna be in the table
 foreach( $models_without_redundancy as $key => $model ) :
-    $tables_fields = [];
-    $table_name = $wpdb->prefix . 'oak_' . $model->model_identifier;
-    $model_forms_data = explode( '|', $model->model_forms );
-    foreach( $model_forms_data as $form_data ) :
-        $form_data_array = explode( ':', $form_data );
-        if ( count( $form_data_array ) > 1 ) :
-            $form_identifier = $form_data_array['1'];
+    foreach( Oak::$all_models_and_forms as $model_and_form_instance ) :
+        if ( $model_and_form_instance->model_identifier == $model->model_identifier 
+            && $model_and_form_instance->model_revision_number == $model->model_revision_number 
+        ) :
+            $form_identifier = $model_and_form_instance->form_identifier;
             foreach( $forms_without_redundancy as $form ) :
                 if ( $form->form_identifier == $form_identifier ) :
-                    $form_fields_data = explode( '|', $form->form_fields );
-                    foreach( $form_fields_data as $form_field_data ) :
-                        $form_field_data_array = explode( ':', $form_field_data );
-                        if ( count( $form_field_data_array ) > 1 ) :
-                            $field_identifier = $form_field_data_array['1'];
+                    foreach ( Oak::$all_forms_and_fields as $form_and_field_instance ) :
+                        if ( $form_and_field_instance->form_identifier == $form->form_identifier 
+                            && $form_and_field_instance->form_revision_number == $form->form_revision_number
+                        ) :
+                            $field_identifier = $form_and_field_instance->field_identifier;
                             foreach( $fields_without_redundancy as $field ) :
                                 if ( $field->field_identifier == $field_identifier ) :
-                                    $tables_fields[] = $field;
+                                    $field->form_and_field_properties = $form_and_field_instance;
+                                    Oak::$current_model_fields[] = $field;
                                 endif;
                             endforeach;
                         endif;
@@ -462,6 +461,7 @@ foreach( $models_without_redundancy as $key => $model ) :
         endif;
     endforeach;
 
+    $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
     $models_sql = "CREATE TABLE $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         object_designation varchar(555) DEFAULT '' NOT NULL,
@@ -476,7 +476,7 @@ foreach( $models_without_redundancy as $key => $model ) :
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $models_sql );
 
-    foreach( $tables_fields as $key => $field ) :
+    foreach( Oak::$current_model_fields as $key => $field ) :
         $column_name = 'object_' . $key . '_' . $field->field_identifier;
         $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
         $exists = false;
@@ -489,7 +489,6 @@ foreach( $models_without_redundancy as $key => $model ) :
         if ( !$exists ) {
             $wpdb->query("ALTER TABLE $table_name ADD $column_name varchar(555)");
         }
-
     endforeach;
 
 endforeach;
@@ -531,6 +530,7 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
         term_description varchar(555),
         term_color varchar(555),
         term_logo varchar(555),
+        PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $terms_sql );
@@ -556,11 +556,9 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
     Oak::$all_terms = array_merge( Oak::$all_terms, $terms );
 endforeach;
 
-// lets get all the terms: 
-
 // To get all objects associated to all models
 foreach( Oak::$models as $model ) :
-    $table_name = $wpdb->prefix . 'oak_' . $model->model_identifier;
+    $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
     $model_objects = $wpdb->get_results ( "
         SELECT * 
         FROM $table_name

@@ -745,7 +745,7 @@ body .oak_hidden {
   flex-direction: column;
   position: relative;
   padding-top: 5px;
-  flex: 0.5;
+  flex: 1;
   margin-right: 25px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -758,6 +758,7 @@ body .oak_hidden {
   width: 100%;
   justify-content: space-between;
   margin-bottom: 5px;
+  max-height: 100px;
 }
 
 .oak_text_field_container:hover {
@@ -1192,6 +1193,12 @@ input.oak_add_other_elements_list_single_element__chekcbox {
   margin-bottom: 15px;
   font-weight: lighter;
   font-size: 15px;
+  margin-top: 30px;
+}
+
+.oak_add_element_image_container {
+  width: 200px;
+  height: auto;
 }
 
 .oak_other_elements_container__add_button {
@@ -1245,6 +1252,25 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 
 .oak_element_header_at_least_one_selected .oak_selected_other_elements_number_indicator {
   display: block;
+}
+
+.oak_other_elements_revision_inputs, .oak_other_elements_actual_revision_revision_inputs {
+  margin-top: 5px;
+}
+
+.oak_other_elements_revision_title {
+  margin-bottom: 5px;
+}
+
+.oak_other_elements_revision_inputs__single_element_container {
+  border: 1px solid #000c3b;
+  padding: 5px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.oak_add_element_image_container {
+  overflow: hidden;
 }
 
 .oak_system_bar {
@@ -1357,10 +1383,9 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 
 .oak_list_add_button {
   color: #003366;
-  background-color: #94CDF2;
-  transition: all 0.1s ease-in-out;
+  background-color: #1c6bb5;
   position: absolute;
-  left: 70px;
+  left: 40px;
   top: 20px;
   border-radius: 50%;
   display: flex;
@@ -1368,13 +1393,23 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   justify-content: center;
   width: 40px;
   height: 40px;
+  border: 1px solid #1c6bb5;
   transition: all 0.1s ease-in-out;
+  box-shadow: 1px 2px 10px;
+}
+
+.oak_list_add_button .fa-plus {
+  color: white;
 }
 
 .oak_list_add_button:hover {
   cursor: pointer;
-  background-color: #000c3b;
-  color: white;
+  background-color: white;
+  color: #1c6bb5;
+}
+
+.oak_list_add_button:hover .fa-plus {
+  color: #1c6bb5;
 }
 
 .oak_element_header__add_button:hover {

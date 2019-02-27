@@ -19,6 +19,11 @@
                 'icon' => 'fas fa-th-large'
             ),
             array(
+                'title' => __( 'Media', Oak::$text_domain ),
+                'url' => 'upload.php',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
                 'title' => __( 'Importation des Données', Oak::$text_domain ),
                 'url' => '?page=?page=oak_import_page',
                 'icon' => 'fas fa-th-large'
@@ -68,7 +73,26 @@
                 'url' => '?page=oak_elements_list&elements=glossaries&listorformula=list',
                 'icon' => 'fas fa-th-large'
             )
-        )
+        );
+
+        // Lets make the pages associated to each model: 
+        foreach( Oak::$models_without_redundancy as $model ) :
+            $model_page_properties = array (
+                'title' => $model->model_designation,
+                'url' => '?page=oak_elements_list&elements=objects&listorformula=list&model_identifier=' . $model->model_identifier,
+                'icon' => 'fas fa-th-large'
+            );
+            $menu_elements[] = $model_page_properties;
+        endforeach;
+        
+        foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
+            $taxonomy_page_properties = array (
+                'title' => $taxonomy->taxonomy_designation,
+                'url' => '?page=oak_elements_list&elements=terms&listorformula=list&taxonomy_identifier=' . $taxonomy->taxonomy_identifier,
+                'icon' => 'fas fa-th-large'
+            );
+            $menu_elements[] = $taxonomy_page_properties;
+        endforeach;
     ?>
 
     <?php 

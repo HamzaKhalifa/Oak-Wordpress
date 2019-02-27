@@ -108,10 +108,9 @@
 
 .oak_list_add_button {
     color: #003366;
-    background-color: #94CDF2;
-    transition: all 0.1s ease-in-out;
+    background-color: #1c6bb5;
     position: absolute;
-    left: 70px;
+    left: 40px;
     top: 20px;
     border-radius: 50%;
     display: flex;
@@ -119,13 +118,23 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    transition: all .1s ease-in-out;
+    border: 1px solid #1c6bb5;
+    transition: all 0.1s ease-in-out;
+    box-shadow: 1px 2px 10px;
+}
+
+.oak_list_add_button .fa-plus {
+    color: white;
 }
 
 .oak_list_add_button:hover {
     cursor: pointer;
-    background-color: #000c3b;
-    color: white;
+    background-color: white;
+    color: #1c6bb5;
+}
+
+.oak_list_add_button:hover .fa-plus {
+    color: #1c6bb5;
 }
 
 .oak_element_header__add_button:hover {

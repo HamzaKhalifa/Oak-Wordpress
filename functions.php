@@ -20,6 +20,7 @@ class Oak {
     public static $fields;
     public static $fields_without_redundancy;
     public static $field_properties;
+    public static $field_types;
 
     public static $forms;
     public static $forms_without_redundancy;
@@ -34,12 +35,16 @@ class Oak {
     public static $all_terms;
     public static $all_objects_without_redundancy = [];
     public static $all_terms_without_redundancy = [];
+    public static $terms_without_redundancy = [];
 
     public static $models;
     public static $models_without_redundancy;
     public static $model_properties;
     public static $model_other_elements;
     public static $all_models_and_forms = [];
+    public static $current_model_fields = [];
+    public static $object_properties = [];
+    public static $term_properties = [];
     
     public static $organizations;
     public static $organizations_without_redundancy;
@@ -94,6 +99,13 @@ class Oak {
         Oak::$all_terms = [];
         Oak::$all_terms_without_redundancy = [];
 
+        Oak::$field_types = array ( 
+            array ( 'value' => 'Texte', 'innerHTML' => 'Texte' ), 
+            array ( 'value' => 'Zone de Texte', 'innerHTML' => 'Zone de Texte'), 
+            array ( 'value' => 'Image', 'innerHTML' => 'Image' ), 
+            array ( 'value' => 'Fichier', 'innerHTML' => 'Fichier' ) 
+        );
+
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
 
@@ -103,6 +115,7 @@ class Oak {
         add_action( 'after_setup_theme', array( $this, 'oak_add_theme_support' ) );
 
         // add_action( 'init', array( $this, 'add_cors_http_header' ) );
+        add_action('wp_dashboard_setup', array ( $this, 'oak_wordpress_dashboard' ) );
         
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
         
@@ -124,9 +137,6 @@ class Oak {
         add_action( 'wp_ajax_oak_get_organizations', array( $this, 'oak_get_organizations') );
         add_action( 'wp_ajax_nopriv_oak_get_organizations', array( $this, 'oak_get_organizations') );
 
-        add_action( 'wp_ajax_oak_corn_configuration', array( $this, 'oak_corn_configuration') );
-        add_action( 'wp_ajax_nopriv_oak_corn_configuration', array( $this, 'oak_corn_configuration') );
-
         add_action( 'wp_ajax_oak_corn_import_publications_data', array( $this, 'oak_corn_import_publications_data') );
         add_action( 'wp_ajax_nopriv_oak_corn_import_publications_data', array( $this, 'oak_corn_import_publications_data') );
 
@@ -136,47 +146,20 @@ class Oak {
         add_action( 'wp_ajax_oak_register_element', array( $this, 'oak_register_element') );
         add_action( 'wp_ajax_nopriv_oak_register_element', array( $this, 'oak_register_element') );
 
-        add_action( 'wp_ajax_oak_register_field', array( $this, 'oak_register_field') );
-        add_action( 'wp_ajax_nopriv_oak_register_field', array( $this, 'oak_register_field') );
-
-        add_action( 'wp_ajax_oak_register_form', array( $this, 'oak_register_form') );
-        add_action( 'wp_ajax_nopriv_oak_register_form', array( $this, 'oak_register_form') );
-
-        add_action( 'wp_ajax_oak_register_model', array( $this, 'oak_register_model') );
-        add_action( 'wp_ajax_nopriv_oak_register_model', array( $this, 'oak_register_model') );
-
-        add_action( 'wp_ajax_oak_register_taxonomy', array( $this, 'oak_register_taxonomy') );
-        add_action( 'wp_ajax_nopriv_oak_register_taxonomy', array( $this, 'oak_register_taxonomy') );
-
-        add_action( 'wp_ajax_oak_register_organization', array( $this, 'oak_register_organization') );
-        add_action( 'wp_ajax_nopriv_oak_register_organization', array( $this, 'oak_register_organization') );
-
-        add_action( 'wp_ajax_oak_register_publication', array( $this, 'oak_register_publication') );
-        add_action( 'wp_ajax_nopriv_oak_register_publication', array( $this, 'oak_register_publication') );
-
-        add_action( 'wp_ajax_oak_register_glossary', array( $this, 'oak_register_glossary') );
-        add_action( 'wp_ajax_nopriv_oak_register_glossary', array( $this, 'oak_register_glossary') );
-
-        add_action( 'wp_ajax_oak_register_quali', array( $this, 'oak_register_quali') );
-        add_action( 'wp_ajax_nopriv_oak_register_quali', array( $this, 'oak_register_quali') );
-
-        add_action( 'wp_ajax_oak_register_quanti', array( $this, 'oak_register_quanti') );
-        add_action( 'wp_ajax_nopriv_oak_register_quanti', array( $this, 'oak_register_quanti') );
-
-        add_action( 'wp_ajax_oak_register_object', array( $this, 'oak_register_object') );
-        add_action( 'wp_ajax_nopriv_oak_register_object', array( $this, 'oak_register_object') );
-
-        add_action( 'wp_ajax_oak_register_term', array( $this, 'oak_register_term') );
-        add_action( 'wp_ajax_nopriv_oak_register_term', array( $this, 'oak_register_term') );
-
         add_action( 'wp_ajax_oak_send_to_trash', array( $this, 'oak_send_to_trash') );
         add_action( 'wp_ajax_nopriv_oak_send_to_trash', array( $this, 'oak_send_to_trash') );
+
+        add_action( 'wp_ajax_oak_delete_definitely', array( $this, 'oak_delete_definitely') );
+        add_action( 'wp_ajax_nopriv_oak_delete_definitely', array( $this, 'oak_delete_definitely') );
 
         add_action( 'wp_ajax_oak_restore_from_trash', array( $this, 'oak_restore_from_trash') );
         add_action( 'wp_ajax_nopriv_oak_restore_from_trash', array( $this, 'oak_restore_from_trash') );
 
         add_action( 'wp_ajax_oak_import_csv', array( $this, 'oak_import_csv') );
         add_action( 'wp_ajax_nopriv_oak_import_csv', array( $this, 'oak_import_csv') );
+
+        add_action( 'wp_ajax_oak_corn_configuration', array( $this, 'oak_corn_configuration') );
+        add_action( 'wp_ajax_nopriv_oak_corn_configuration', array( $this, 'oak_corn_configuration') );
 
         add_action('wp_ajax_oak_get_all_data_for_corn', array( $this, 'oak_get_all_data_for_corn') );
         add_action('wp_ajax_nopriv_oak_get_all_data_for_corn', array( $this, 'oak_get_all_data_for_corn') );
@@ -212,7 +195,7 @@ class Oak {
 
     function oak_admin_enqueue_styles( $hook ) {
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
-        if ( isset( $_GET['elements'] ) ) :
+        // if ( isset( $_GET['elements'] ) ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
             // wp_enqueue_style( 'oak_font_awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
             // wp_enqueue_style( 'oak_googleapifont_roboto', get_template_directory_uri() . '/src/css/vendor/googleapi-font-roboto.css' );
@@ -221,7 +204,7 @@ class Oak {
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
             
             <?php
-        endif;
+        // endif;
     }
 
     function oak_admin_enqueue_scripts( $hook ) { 
@@ -311,6 +294,7 @@ class Oak {
                     'attributes' => Oak::$forms_attributes
                 );
                 $properties = array_merge( $properties, Oak::$form_properties );
+                $properties[] = array( 'name' => 'revision_number', 'type' => 'text', 'input_type' => 'checkbox' );
             endif;
             if ( $_GET['elements'] == 'models' ) :
                 $table = 'model';
@@ -318,10 +302,11 @@ class Oak {
                 $elements = Oak::$models;
                 $additional_data_to_pass = array(
                     'fields' => Oak::$fields,
-                    'otherElementProperties' => $model_other_elements,
+                    'otherElementProperties' => Oak::$model_other_elements,
                     'attributes' => Oak::$forms_attributes
                 );
                 $properties = array_merge( $properties, Oak::$model_properties );
+                $properties[] = array( 'name' => 'revision_number', 'type' => 'text', 'input_type' => 'checkbox' );
             endif;
             if ( $_GET['elements'] == 'taxonomies' ) :
                 $table = 'taxonomy';
@@ -359,6 +344,50 @@ class Oak {
                 $elements = Oak::$quantis;
                 $properties = array_merge( $properties, Oak::$quanti_properties );
             endif;
+            if ( $_GET['elements'] == 'objects' ) :
+                $table = 'object';
+                $table_in_plural = $_GET['model_identifier'];
+                $object_table_name = $wpdb->prefix . 'oak_model_' . $_GET['model_identifier'];
+                Oak::$objects = $wpdb->get_results ( "
+                    SELECT *
+                    FROM  $object_table_name
+                " );
+                $elements = Oak::$objects;
+
+                foreach( Oak::$current_model_fields as $key => $field ) :
+                    $input_type = 'text';
+                    if ( $field->field_type == 'Image' ) :
+                        $input_type = 'image';
+                    elseif( $field->field_type == 'Fichier' ) :
+                        $input_type = 'file';
+                    endif;
+
+                    Oak::$object_properties[] = array (
+                        'name' => $key . '_' . $field->field_identifier,
+                        'property_name' => 'object_' . $key . '_' . $field->field_identifier, 
+                        'type' => 'text',
+                        'input_type' => $input_type,
+                        'placeholder' => $field->form_and_field_properties->field_designation,
+                        'description' => $field->form_and_field_properties->field_designation,
+                        'width' => '50'
+                    );
+                endforeach;
+
+                $properties = array_merge( $properties, Oak::$object_properties );
+            endif;
+
+            if ( $_GET['elements'] == 'terms' ) :
+                $table = 'term';
+                $table_in_plural = $_GET['taxonomy_identifier'];
+                $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
+                Oak::$terms = $wpdb->get_results ( "
+                    SELECT *
+                    FROM $term_table_name
+                " );
+                $elements = Oak::$terms;
+
+                $properties = array_merge( $properties, Oak::$term_properties );
+            endif;
 
             Oak::$revisions = $this->oak_get_revisions( $table, $elements );
 
@@ -370,6 +399,7 @@ class Oak {
                 'properties' => $properties,
                 'adminUrl' => admin_url(),
                 'elements' => $elements,
+                'elementsType' => $_GET['elements'],
                 'templateDirectoryUri' => get_template_directory_uri(),
             );
             $final_data_to_pass = array_merge( $basic_data_to_pass, $additional_data_to_pass );
@@ -510,61 +540,31 @@ class Oak {
         add_submenu_page( 'oak_materiality_reporting', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'oak_critical_analysis_configuration', array( $this, 'oak_critical_analysis_configuration') );
 
         add_menu_page( __( 'Elements', Oak::$text_domain ), 'Elements', 'manage_options', 'oak_elements_list', array ( $this, 'oak_elements_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_elements_list', 'Ajouter un Champ', __( 'Ajouter un Champ', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
-        // add_submenu_page( 'oak_elements_list', 'Ajouter un Formulaire', __( 'Ajouter un Formulaire', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
-        // add_submenu_page( 'oak_elements_list', 'Ajouter un Modèle', __( 'Ajouter un Modèle', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
-        // add_submenu_page( 'oak_elements_list', 'Ajouter une Taxonomie', __( 'Ajouter une Taxonomie', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
-        // add_submenu_page( 'oak_elements_list', 'Ajouter une Publication', __( 'Ajouter une Publication', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
-        // add_submenu_page( 'oak_elements_list', 'Ajouter une Organisation', __( 'Ajouter une Organisation', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
-        // add_submenu_page( 'oak_elements_list', 'Ajouter une Terminologie', __( 'Ajouter une Terminologie', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
-        // add_submenu_page( 'oak_elements_list', 'Ajouter un indicateur qualitati', __( 'Ajouter un indicateur qualitati', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
+        add_submenu_page( 'oak_elements_list', 'Ajouter un Element', __( 'Ajouter un Element', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
 
-        add_menu_page( __( 'Formes', Oak::$text_domain ), 'Formes', 'manage_options', 'oak_forms_list', array ( $this, 'oak_forms_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_forms_list', 'Ajouter un formulaire', __( 'Ajouter un formulaire', Oak::$text_domain ), 'manage_options', 'oak_add_form',  array( $this, 'oak_add_form' ) );
+        // add_menu_page( __( 'Formes', Oak::$text_domain ), 'Formes', 'manage_options', 'oak_forms_list', array ( $this, 'oak_forms_list'), 'dashicons-index-card', 100 );
+        // add_submenu_page( 'oak_forms_list', 'Ajouter un formulaire', __( 'Ajouter un formulaire', Oak::$text_domain ), 'manage_options', 'oak_add_form',  array( $this, 'oak_add_form' ) );
 
-        add_menu_page( __( 'Modèles', Oak::$text_domain ), 'Modèles', 'manage_options', 'oak_models_list', array ( $this, 'oak_models_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_models_list', 'Ajouter un modèle', __( 'Ajouter un modèle', Oak::$text_domain ), 'manage_options', 'oak_add_model',  array( $this, 'oak_add_model' ) );
+        // add_menu_page( __( 'Modèles', Oak::$text_domain ), 'Modèles', 'manage_options', 'oak_models_list', array ( $this, 'oak_models_list'), 'dashicons-index-card', 100 );
+        // add_submenu_page( 'oak_models_list', 'Ajouter un modèle', __( 'Ajouter un modèle', Oak::$text_domain ), 'manage_options', 'oak_add_model',  array( $this, 'oak_add_model' ) );
 
-        add_menu_page( __( 'Taxonomies', Oak::$text_domain ), 'Taxonomies', 'manage_options', 'oak_taxonomies_list', array ( $this, 'oak_taxonomies_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_taxonomies_list', 'Ajouter une Taxonomy', __( 'Ajouter une Taxonomy', Oak::$text_domain ), 'manage_options', 'oak_add_taxonomy',  array( $this, 'oak_add_taxonomy' ) );
+        // add_menu_page( __( 'Taxonomies', Oak::$text_domain ), 'Taxonomies', 'manage_options', 'oak_taxonomies_list', array ( $this, 'oak_taxonomies_list'), 'dashicons-index-card', 100 );
+        // add_submenu_page( 'oak_taxonomies_list', 'Ajouter une Taxonomy', __( 'Ajouter une Taxonomy', Oak::$text_domain ), 'manage_options', 'oak_add_taxonomy',  array( $this, 'oak_add_taxonomy' ) );
 
-        add_menu_page( __( 'Organisations', Oak::$text_domain ), 'Organisations', 'manage_options', 'oak_organizations_list', array ( $this, 'oak_organizations_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_organizations_list', 'Ajouter une Organisation', __( 'Ajouter une Organisation', Oak::$text_domain ), 'manage_options', 'oak_add_organization',  array( $this, 'oak_add_organization' ) );
+        // add_menu_page( __( 'Organisations', Oak::$text_domain ), 'Organisations', 'manage_options', 'oak_organizations_list', array ( $this, 'oak_organizations_list'), 'dashicons-index-card', 100 );
+        // add_submenu_page( 'oak_organizations_list', 'Ajouter une Organisation', __( 'Ajouter une Organisation', Oak::$text_domain ), 'manage_options', 'oak_add_organization',  array( $this, 'oak_add_organization' ) );
 
-        add_menu_page( __( 'Publications', Oak::$text_domain ), 'Publications', 'manage_options', 'oak_publications_list', array ( $this, 'oak_publications_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_publications_list', 'Ajouter une Publication', __( 'Ajouter une Publication', Oak::$text_domain ), 'manage_options', 'oak_add_publication',  array( $this, 'oak_add_publication' ) );
+        // add_menu_page( __( 'Publications', Oak::$text_domain ), 'Publications', 'manage_options', 'oak_publications_list', array ( $this, 'oak_publications_list'), 'dashicons-index-card', 100 );
+        // add_submenu_page( 'oak_publications_list', 'Ajouter une Publication', __( 'Ajouter une Publication', Oak::$text_domain ), 'manage_options', 'oak_add_publication',  array( $this, 'oak_add_publication' ) );
 
-        add_menu_page( __( 'Glossaire', Oak::$text_domain ), 'Glossaire', 'manage_options', 'oak_glossaries_list', array ( $this, 'oak_glossaries_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_glossaries_list', 'Ajouter une Terminologie', __( 'Ajouter une Terminologie', Oak::$text_domain ), 'manage_options', 'oak_add_glossary',  array( $this, 'oak_add_glossary' ) );
+        // add_menu_page( __( 'Glossaire', Oak::$text_domain ), 'Glossaire', 'manage_options', 'oak_glossaries_list', array ( $this, 'oak_glossaries_list'), 'dashicons-index-card', 100 );
+        // add_submenu_page( 'oak_glossaries_list', 'Ajouter une Terminologie', __( 'Ajouter une Terminologie', Oak::$text_domain ), 'manage_options', 'oak_add_glossary',  array( $this, 'oak_add_glossary' ) );
 
-        add_menu_page( __( 'Indicateurs Qualitatifs', Oak::$text_domain ), 'Indicateurs Qualitatifs', 'manage_options', 'oak_qualis_list', array ( $this, 'oak_qualis_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_qualis_list', 'Ajouter un indicateur qualitatif', __( 'Ajouter un indicateur qualitatif', Oak::$text_domain ), 'manage_options', 'oak_add_quali',  array( $this, 'oak_add_quali' ) );
+        // add_menu_page( __( 'Indicateurs Qualitatifs', Oak::$text_domain ), 'Indicateurs Qualitatifs', 'manage_options', 'oak_qualis_list', array ( $this, 'oak_qualis_list'), 'dashicons-index-card', 100 );
+        // add_submenu_page( 'oak_qualis_list', 'Ajouter un indicateur qualitatif', __( 'Ajouter un indicateur qualitatif', Oak::$text_domain ), 'manage_options', 'oak_add_quali',  array( $this, 'oak_add_quali' ) );
 
-        add_menu_page( __( 'Indicateurs Quantitatifs', Oak::$text_domain ), 'Indicateurs Quantitatifs', 'manage_options', 'oak_quantis_list', array ( $this, 'oak_quantis_list'), 'dashicons-index-card', 100 );
-        add_submenu_page( 'oak_quantis_list', 'Ajouter un indicateur quantitatif', __( 'Ajouter un indicateur quantitatif', Oak::$text_domain ), 'manage_options', 'oak_add_quanti',  array( $this, 'oak_add_quanti' ) );
-
-        $added_models = [];
-        foreach( Oak::$models as $model ) :
-            $exists = false;
-            foreach( $added_models as $added_model ) :
-                if ( $added_model->model_identifier == $model->model_identifier ) :
-                    $exists = true;
-                endif;
-            endforeach;
-            if ( !$exists ) :
-                $added_models[] = $model;
-            endif; 
-        endforeach;
-        $reversed_oak_models = array_reverse( $added_models );
-        foreach( $reversed_oak_models as $model ) :
-            add_menu_page( $model->model_designation, $model->model_designation, 'manage_options', 'oak_model_' . $model->model_identifier, array( $this, 'oak_model_objects_list' ), 'dashicons-index-card', 100 );
-            add_submenu_page( 'oak_model_' . $model->model_identifier, 'Ajouter une instance', 'Ajouter', 'manage_options', 'oak_model_add_' . $model->model_identifier, array( $this, 'oak_add_model_object' ) );
-        endforeach;
-
-        foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) : 
-            add_menu_page( $taxonomy->taxonomy_designation, $taxonomy->taxonomy_designation, 'manage_options', 'oak_taxonomy_' . $taxonomy->taxonomy_identifier, array( $this, 'oak_taxonomy_terms_list' ), 'dashicons-index-card', 100 );
-            add_submenu_page( 'oak_taxonomy_' . $taxonomy->taxonomy_identifier, 'Ajouter une instance', 'Ajouter', 'manage_options', 'oak_taxonomy_add_' . $taxonomy->taxonomy_identifier, array( $this, 'oak_add_taxonomy_term' ) );
-        endforeach;
+        // add_menu_page( __( 'Indicateurs Quantitatifs', Oak::$text_domain ), 'Indicateurs Quantitatifs', 'manage_options', 'oak_quantis_list', array ( $this, 'oak_quantis_list'), 'dashicons-index-card', 100 );
+        // add_submenu_page( 'oak_quantis_list', 'Ajouter un indicateur quantitatif', __( 'Ajouter un indicateur quantitatif', Oak::$text_domain ), 'manage_options', 'oak_add_quanti',  array( $this, 'oak_add_quanti' ) );
 
         if ( get_option( 'oak_corn' ) == 'true' ) :
             foreach( Oak::$all_terms_without_redundancy as $term ) :
@@ -674,7 +674,7 @@ class Oak {
                 // Uploading the image
                 $upload_dir  = wp_upload_dir();
                 $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
-            
+                
                 $img             = str_replace( 'data:image/png;base64,', '', $single_principle['image'] );
                 $img             = str_replace( ' ', '+', $img );
                 $decoded         = base64_decode( $img );
@@ -802,6 +802,16 @@ class Oak {
                 $table = 'glossary';
                 $title = __( 'Ajouter une términologie', Oak::$text_domain );
             break;
+            case 'objects' :
+                $properties = Oak::$object_properties;
+                $table = 'object';
+                $title = __( 'Ajouter un objet', Oak::$text_domain );
+            break;
+            case 'terms' :
+                $properties = Oak::$term_properties;
+                $table = 'term';
+                $title = __( 'Ajouter un terme', Oak::$text_domain );
+            break;
         endswitch;
         include get_template_directory() . '/template-parts/elements/add-element.php';
     }
@@ -853,79 +863,7 @@ class Oak {
         $revisions = Oak::$revisions;
         include get_template_directory() . '/template-parts/quantis/add-quanti.php';
     }
-
-    function oak_add_model_object() {
-        global $wpdb;
-        $page_name = $_GET['page'];
-        $model_identifier = explode( '_', $page_name )[3];
-        $table_name = $wpdb->prefix . 'oak_' . $model_identifier;
-        $objects = $wpdb->get_results ( "
-            SELECT * 
-            FROM $table_name
-        " );
-        
-        $revisions = [];
-        if ( isset( $_GET['object_identifier'] ) ) :
-            foreach( Oak::$objects as $object ) :
-                if ( $object->object_identifier == $_GET['object_identifier'] ) :
-                    $revisions[] = $object;
-                endif;
-            endforeach;
-        endif;
-        
-        $fields_without_repetition = [];
-        foreach( Oak::$fields as $field ) :
-            $exists = false;
-            foreach( $fields_without_repetition as $field_without_repetition ) :
-                if ( $field_without_repetition->field_identifier == $field->field_identifier ) :
-                    $exists = true;
-                endif;
-            endforeach;
-            if ( !$exists ) 
-                $fields_without_repetition[] = $field;
-        endforeach;
-
-        $the_model;
-        foreach( Oak::$models as $model ) :
-            if ( $model->model_identifier == $model_identifier ) :
-                $the_model = $model;
-            endif;
-        endforeach;
-
-        $fields = $this->get_model_fields( $the_model, $fields_without_repetition );
-
-        include get_template_directory() . '/template-parts/models-objects/add-models-objects.php';
-    }
-
-    function oak_add_taxonomy_term() {
-        global $wpdb;
-        $page_name = $_GET['page'];
-        $taxonomy_identifier = explode( '_', $page_name )[3];
-        $table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy_identifier;
-        $terms = $wpdb->get_results ( "
-            SELECT * 
-            FROM $table_name
-        " );
-        
-        $revisions = [];
-        if ( isset( $_GET['term_identifier'] ) ) :
-            foreach( Oak::$terms as $term ) :
-                if ( $term->term_identifier == $_GET['term_identifier'] ) :
-                    $revisions[] = $term;
-                endif;
-            endforeach;
-        endif;
-
-        $the_taxonomy;
-        foreach( Oak::$taxonomies as $taxonomy ) :
-            if ( $taxonomy->taxonomy_identifier == $taxonomy_identifier ) :
-                $the_taxonomy = $taxonomy;
-            endif;
-        endforeach;
-
-        include get_template_directory() . '/template-parts/taxonomies-terms/add-taxonomies-terms.php';
-    }
-
+    
     function get_model_fields( $model, $fields_without_redundancy ) {
         $reversed_forms = array_reverse( Oak::$forms );
         $forms_without_redundancy = [];
@@ -969,6 +907,7 @@ class Oak {
     }
 
     function oak_elements_list() {
+        global $wpdb;
         $elements = [];
         $table = '';
         $title = '';
@@ -1007,7 +946,7 @@ class Oak {
             break;
             case 'organizations' : 
                 $title = __( 'Organisations', Oak::$text_domain );
-                $elements = Oak::$organization_without_redundancy;
+                $elements = Oak::$organizations_without_redundancy;
                 $table = 'organization';
                 $first_property = array ( 'title' => __( 'Acronyme', Oak::$text_domain ), 'property' => 'organization_acronym' );
                 $second_property = array ( 'title' => __( 'Description', Oak::$text_domain ), 'property' => 'organization_description' );
@@ -1044,6 +983,45 @@ class Oak {
                 $first_property = array ( 'title' => __( 'Publication', Oak::$text_domain ), 'property' => 'glossary_publication' );
                 $second_property = array ( 'title' => __( 'Parent', Oak::$text_domain ), 'property' => 'glossary_parent' );
                 $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'glossary_parent' );;
+            break;
+            case 'objects' :
+                $object_table_name = $wpdb->prefix . 'oak_model_' . $_GET['model_identifier'];
+                Oak::$objects = $wpdb->get_results ( "
+                    SELECT * 
+                    FROM $object_table_name
+                " );
+                $title = __( 'Objets', Oak::$text_domain );
+                $elements = Oak::$objects;
+                $table = 'object';
+                $first_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' );
+                $second_property = array ( 'title' => __( 'Sélecteur de cadres RSE', Oak::$text_domain ), 'property' => 'object_selector' );
+                $third_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' );
+            break;
+            case 'terms' :
+                $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
+                Oak::$objects = $wpdb->get_results ( "
+                    SELECT * 
+                    FROM $term_table_name
+                " );
+                $reversed_terms = array_reverse( Oak::$terms  );
+                foreach( $reversed_terms as $term ) :
+                    $added = false;
+                    foreach( Oak::$terms_without_redundancy as $term_without_redundancy ) :
+                        if ( $term_without_redundancy->term_identifier == $term->term_identifier) :
+                            $added = true;
+                        endif;
+                    endforeach;
+                    if ( !$added ) :
+                        Oak::$terms_without_redundancy[] = $term;
+                    endif;
+                endforeach;
+
+                $title = __( 'Termes', Oak::$text_domain );
+                $elements = Oak::$terms_without_redundancy;
+                $table = 'term';
+                $first_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'term_identifier' );
+                $second_property = array ( 'title' => __( 'Sélecteur de cadres RSE', Oak::$text_domain ), 'property' => 'term_selector' );
+                $third_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'term_identifier' );
             break;
         endswitch;
         include get_template_directory() . '/template-parts/elements/elements-list.php';
@@ -1163,12 +1141,19 @@ class Oak {
         endforeach;
 
         $table = $_POST['table'];
-        $table_name = $wpdb->prefix . 'oak_' . $table . 's';
+        $prefix = $wpdb->prefix . 'oak_';
+        if ( $table == 'object' ) : 
+            $prefix = $wpdb->prefix . 'oak_model_';
+        elseif( $table == 'term' ) :
+            $prefix = $wpdb->prefix . 'oak_taxonomy_';
+        endif;
+
+        $table_name = $prefix . $_POST['tableInPlural'];
 
         $array_data = array_merge( $element, array( $table . '_modification_time' => date("Y-m-d H:i:s") ) );
 
 
-        if ( isset( $element['otherElements'] ) ) :
+        if ( isset( $element['otherElements'] ) && !$_GET['fromRevision'] ) :
             $other_elements = $element['otherElements'];
             $other_elements_properties = $element['otherElementsProperties'];
 
@@ -1189,7 +1174,25 @@ class Oak {
 
         unset( $array_data['otherElements'] );
         unset( $array_data['otherElementsProperties'] );
+        
+        $file = '';
+        foreach( $array_data as $key => $value ) :
+            if ( strpos( $key, 'logo' ) != false || strpos( $key, 'image' ) != false || strpos( $key, 'headpiece' ) != false ) :
+                if ( strpos( $value, 'uploads/' ) == false ) :
+                    $image = $this->upload_image( $value );
+                    $array_data[ $key ] = $image;
+                endif;
+            endif;
 
+            if ( strpos( $key, 'file' ) != false ) :
+                if ( strpos( $value, 'uploads/' ) == false ) :
+                    // $file  = $this->upload_user_file( $value );
+                    $file = $this->upload_image( $value );
+                    $array_data[ $key ] = $file;
+                endif;
+            endif;
+        endforeach;
+        
         $result = $wpdb->insert(
             $table_name, 
             $array_data
@@ -1198,453 +1201,53 @@ class Oak {
         wp_send_json_success( array(
             'tableName' => $table_name,
             'element' => $array_data,
+            'theFile' => $file
         ) );
     }
 
-    function oak_register_field( $passed_field ) {
-        global $wpdb;
-
-        $prefix = '';
-        $field = $_POST['data'];
-        if ( !isset( $field ) ) :
-            $field = $passed_field;
-            $prefix = 'field_';
-        endif;
-
-        $result = $wpdb->insert(
-            Oak::$fields_table_name, 
-            array(
-                'field_designation' => $this->oak_filter_word( $field[ $prefix . 'designation' ] ),
-                'field_identifier' => $this->oak_filter_word( $field[ $prefix . 'identifier' ] ),
-                'field_type' => $this->oak_filter_word( $field[ $prefix . 'type' ] ),
-                'field_function' => $this->oak_filter_word( $field[ $prefix == '' ? 'functionField' : $prefix . 'function' ] ),
-                'field_default_value' => $this->oak_filter_word( $field[ $prefix == '' ? 'defaultValue' : $prefix . 'default_value' ] ),
-                'field_instructions' => $this->oak_filter_word( $field[ $prefix . 'instructions' ] ),
-                'field_placeholder' => $this->oak_filter_word( $field[ $prefix . 'placeholder' ] ),
-                'field_before' => $this->oak_filter_word( $field[ $prefix . 'before' ] ),
-                'field_after' => $this->oak_filter_word( $field[ $prefix . 'after' ] ),
-                'field_max_length' => $this->oak_filter_word( $field[ $prefix == '' ? 'maxLength' : $prefix . 'max_length' ] ),
-                'field_selector' => $this->oak_filter_word( $field[ $prefix . 'selector' ] ),
-                'field_state' => $this->oak_filter_word( $field[ $prefix . 'state' ] ),
-                'field_modification_time' => date("Y-m-d H:i:s"),
-                'field_trashed' => $this->oak_filter_word( $field[ $prefix . 'trashed' ] )
-            )
-        );
-
-        if ( $prefix != '' )
-            return;
-
-        wp_send_json_success( array(
-            'data' => $field,
-            'formatted default value' => $this->oak_filter_word( $field['defaultValue'] )
-        ) );
-    }
-
-    function oak_register_form( $passed_form ) {
-        global $wpdb;
-
-        $prefix = '';
-        $form = $_POST['data'];
-        if ( !isset( $form ) ) :
-            $form = $passed_form;
-            $prefix = 'form_';
-        endif;
-
-        $result = $wpdb->insert(
-            Oak::$forms_table_name, 
-            array(
-                'form_designation' => $this->oak_filter_word( $form[ $prefix . 'designation'] ),
-                'form_identifier' => $this->oak_filter_word( $form[ $prefix . 'identifier'] ),
-                'form_fields' => $this->oak_filter_word( $form[ $prefix . 'fields'] ),
-                'form_selector' => $this->oak_filter_word( $form[ $prefix . 'selector'] ),
-                'form_state' => $this->oak_filter_word( $form[ $prefix . 'state'] ),
-                'form_modification_time' => date("Y-m-d H:i:s"),
-                'form_trashed' => $this->oak_filter_word( $form[ $prefix . 'trashed'] ),
-                'form_structure' => $this->oak_filter_word( $form[ $prefix . 'structure'] ),
-                'form_attributes' => $this->oak_filter_word( $form[ $prefix . 'attributs'] ),
-                'form_separators' => $this->oak_filter_word( $form[ $prefix . 'separators'] ),
-            )
-        );
-
-        if ( $prefix != '' )
-            return;
-
-        wp_send_json_success();
-    }
-
-    function oak_register_model( $passed_model ) {
-        global $wpdb;
-
-        $prefix = '';
-        $model = $_POST['data'];
-        if ( !isset( $model ) ) :
-            $model = $passed_model;
-            $prefix = 'model_';
-        endif;
-
-        $result = $wpdb->insert(
-            Oak::$models_table_name, 
-            array(
-                'model_designation' => $this->oak_filter_word( $model[ $prefix . 'designation'] ),
-                'model_identifier' => $this->oak_filter_word( $model[ $prefix . 'identifier'] ),
-                'model_types' => $this->oak_filter_word( $model[ $prefix . 'types'] ),
-                'model_publications_categories' => $this->oak_filter_word( $prefix == '' ? 'publicationsCategories' : $model[ $prefix . 'publications_categories'] ),
-                'model_selector' => $this->oak_filter_word( $model[ $prefix . 'selector'] ),
-                'model_forms' => $this->oak_filter_word( $model[ $prefix . 'forms'] ),
-                'model_separators' => $this->oak_filter_word( $model[ $prefix . 'separators'] ),
-                'model_state' => $this->oak_filter_word( $model[ $prefix . 'state'] ),
-                'model_trashed' => $this->oak_filter_word( $model[ $prefix . 'trashed'] ),
-                'model_modification_time' => date("Y-m-d H:i:s"),
-            )
-        );
-
-        if ( $prefix != '' )
-            return;
-
-        wp_send_json_success();
-    }
-    
-    function oak_register_taxonomy( $passed_taxonomy ) {
-        global $wpdb;
-
-        $prefix = '';
-        $taxonomy = $_POST['data'];
-        if ( !isset( $taxonomy ) ) :
-            $taxonomy = $passed_taxonomy;
-            $prefix = 'taxonomy_';
-        endif;
-
-        $result = $wpdb->insert(
-            Oak::$taxonomies_table_name, 
-            array(
-                'taxonomy_designation' => $this->oak_filter_word( $taxonomy[ $prefix . 'designation'] ),
-                'taxonomy_identifier' => $this->oak_filter_word( $taxonomy[ $prefix . 'identifier'] ),
-                'taxonomy_description' => $this->oak_filter_word( $taxonomy[ $prefix . 'description'] ),
-                'taxonomy_structure' => $this->oak_filter_word( $taxonomy[ $prefix . 'structure'] ),
-                'taxonomy_numerotation' => $taxonomy[ $prefix . 'numerotation'],
-                'taxonomy_title' => $taxonomy[ $prefix . 'title'],
-                'taxonomy_term_description' => $taxonomy[ $prefix == '' ? 'termDescription' : $prefix . 'term_description'],
-                'taxonomy_color' => $taxonomy[ $prefix . 'color'],
-                'taxonomy_logo' => $taxonomy[ $prefix . 'logo'],
-                'taxonomy_publication' => $this->oak_filter_word( $taxonomy[ $prefix . 'publication'] ),
-                'taxonomy_state' => $this->oak_filter_word( $taxonomy[ $prefix . 'state'] ),
-                'taxonomy_trashed' => $taxonomy[ $prefix . 'trashed'],
-                'taxonomy_modification_time' => date("Y-m-d H:i:s"),
-            )
-        );
-
-        if ( $prefix != '' )
-            return;
-
-        wp_send_json_success();
-    }
-
-    function oak_register_organization( $passed_organization ) {
-        global $wpdb;
-
-        $prefix = '';
-        $organization = $_POST['data'];
-        if ( !isset( $organization ) ) :
-            $organization = $passed_organization;
-            $prefix = 'organization_';
-        endif;
-
-        if ( $prefix == '' ) :
-            $image_url = $this->upload_image( $_POST['logo'] );
-        else : 
-            $image_url = $organization[ $prefix . 'logo' ];
-        endif;
-
-        $result = $wpdb->insert(
-            Oak::$organizations_table_name, 
-            array(
-                'organization_designation' => $this->oak_filter_word( $organization[ $prefix . 'designation'] ),
-                'organization_identifier' => $this->oak_filter_word( $organization[ $prefix . 'identifier'] ),
-                'organization_acronym' => $this->oak_filter_word( $organization[ $prefix . 'acronym'] ),
-                'organization_logo' => $image_url,
-                'organization_description' => $this->oak_filter_word( $organization[ $prefix . 'description'] ),
-                'organization_url' => $this->oak_filter_word( $organization[ $prefix . 'url'] ),
-                'organization_address' => $this->oak_filter_word( $organization[ $prefix . 'address'] ),
-                'organization_country' => $this->oak_filter_word( $organization[ $prefix . 'country'] ),
-                'organization_company' => $this->oak_filter_word( $organization[ $prefix . 'company'] ),
-                'organization_type' => $this->oak_filter_word( $organization[ $prefix . 'type'] ),
-                'organization_side' => $this->oak_filter_word( $organization[ $prefix . 'side'] ),
-                'organization_sectors' => $this->oak_filter_word( $organization[ $prefix . 'sectors'] ),
-                'organization_state' => $this->oak_filter_word( $organization[ $prefix . 'state'] ),
-                'organization_trashed' => $this->oak_filter_word( $organization[ $prefix . 'trashed'] ),
-                'organization_modification_time' => date("Y-m-d H:i:s"),
-            )
-        );
-
-        if ( $prefix != '' )
-            return;
-
-        wp_send_json_success(
-            array( 'image url' => $image_url )
-        );
-    }
-
-    function oak_register_publication( $passed_publication ) {
-        global $wpdb;
-
-        $prefix = '';
-        $publication = $_POST['data'];
-        if ( !isset( $publication ) ) :
-            $publication = $passed_publication;
-            $prefix = 'publication_';
-        endif;
-
-        if ( $prefix == '' ) :
-            $image_url = $this->upload_image( $_POST['headpiece'] );
-        else : 
-            $image_url = $passed_publication[ $prefix . 'headpiece' ];
-        endif;
-
-        $result = $wpdb->insert(
-            Oak::$publications_table_name, 
-            array(
-                'publication_designation' => $this->oak_filter_word( $publication[ $prefix . 'designation'] ),
-                'publication_identifier' => $this->oak_filter_word( $publication[ $prefix . 'identifier'] ),
-                'publication_organization' => $this->oak_filter_word( $publication[ $prefix . 'organization'] ),
-                'publication_year' => $this->oak_filter_word( $publication[ $prefix . 'year'] ),
-                'publication_headpiece' => $image_url,
-                'publication_format' => $this->oak_filter_word( $publication[ $prefix . 'format'] ),
-                'publication_file' => $this->oak_filter_word( $publication[ $prefix . 'file'] ),
-                'publication_description' => $this->oak_filter_word( $publication[ $prefix . 'description'] ),
-                'publication_report_or_frame' => $this->oak_filter_word( $publication[ $prefix == '' ? 'reportOrFrame' : $prefix . 'report_or_frame'] ),
-                'publication_local' => $this->oak_filter_word( $publication[ $prefix . 'local'] ),
-                'publication_country' => $this->oak_filter_word( $publication[ $prefix . 'country'] ),
-                'publication_report_type' => $this->oak_filter_word( $publication[ $prefix == '' ? 'reportType' : $prefix . 'report_type'] ),
-                'publication_frame_type' => $this->oak_filter_word( $publication[ $prefix == '' ? 'frameType' : $prefix . 'frame_type'] ),
-                'publication_sectorial_frame' => $this->oak_filter_word( $publication[ $prefix == '' ? 'sectorialFrame' : $prefix . 'sectorial_frame'] ),
-                'publication_sectors' => $this->oak_filter_word( $publication[ $prefix . 'sectors'] ),
-                'publication_language' => $this->oak_filter_word( $publication[ $prefix . 'language'] ),
-                'publication_gri_type' => $this->oak_filter_word( $publication[ $prefix == '' ? 'griType' : $prefix . 'gri_type'] ),
-                'publication_sectorial_supplement' => $this->oak_filter_word( $publication[ $prefix == '' ? 'sectorialSupplement' : $prefix . 'sectorial_supplement'] ),
-                'publication_state' => $this->oak_filter_word( $publication[ $prefix . 'state'] ),
-                'publication_trashed' => $this->oak_filter_word( $publication[ $prefix . 'trashed'] ),
-                'publication_modification_time' => date("Y-m-d H:i:s")
-            )
-        );
-
-        if ( $prefix != '' )
-            return;
-
-        wp_send_json_success();
-    }
-
-    function oak_register_glossary( $passed_glossary ) {
-        global $wpdb;
-
-        $prefix = '';
-        $glossary = $_POST['data'];
-        if ( !isset( $glossary ) ) :
-            $glossary = $passed_glossary;
-            $prefix = 'glossary_';
-        endif;
-
-        $result = $wpdb->insert(
-            Oak::$glossaries_table_name, 
-            array(
-                'glossary_designation' => $this->oak_filter_word( $glossary[ $prefix . 'designation'] ),
-                'glossary_identifier' => $this->oak_filter_word( $glossary[ $prefix . 'identifier'] ),
-                'glossary_publication' => $glossary[ $prefix . 'publication'],
-                'glossary_object' => $this->oak_filter_word( $glossary[ $prefix . 'object'] ),
-                'glossary_depends' => $this->oak_filter_word( $glossary[ $prefix . 'depends'] ),
-                'glossary_parent' => $this->oak_filter_word( $glossary[ $prefix . 'parent'] ),
-                'glossary_definition' => $this->oak_filter_word( $glossary[ $prefix . 'definition'] ),
-                'glossary_close' => $this->oak_filter_word( $glossary[ $prefix . 'close'] ),
-                'glossary_close_indicators' => $this->oak_filter_word( $glossary[ $prefix == '' ? 'closeIndicators' : $prefix . 'close_indicators' ] ),
-                'glossary_state' => $this->oak_filter_word( $glossary[ $prefix . 'state'] ),
-                'glossary_trashed' => $this->oak_filter_word( $glossary[ $prefix . 'trashed'] ),
-                'glossary_modification_time' => date("Y-m-d H:i:s")
-            )
-        );
-
-        if ( $prefix != '' )
-            return;
-
-        wp_send_json_success( array(
-            'publications' => $glossary['publication']
-        ) );
-    }
-
-    function oak_register_quali( $passed_quali ) {
-        global $wpdb;
-
-        $quali = $_POST['data'];
-        $close_indicators = '';
-        $prefix = '';
-        if ( !isset( $quali ) ) :
-            $quali = $passed_quali;
-            $prefix = 'quali_';
-            $close_indicators = $passed_quali[ $prefix . 'close_indicators' ];
-        else:
-            foreach( $quali['closeIndicators'] as $indicator ) :
-                $close_indicators = $close_indicators . ',' . $indicator;
-            endforeach;
-        endif;
-
-        $result = $wpdb->insert(
-            Oak::$qualis_table_name, 
-            array (
-                'quali_designation' => $this->oak_filter_word( $quali[ $prefix . 'designation'] ),
-                'quali_identifier' => $this->oak_filter_word( $quali[ $prefix . 'identifier'] ),
-                'quali_publication' => $quali[ $prefix . 'publication'],
-                'quali_object' => $this->oak_filter_word( $quali[ $prefix . 'object'] ),
-                'quali_depends' => $this->oak_filter_word( $quali[ $prefix . 'depends'] ),
-                'quali_parent' => $this->oak_filter_word( $quali[ $prefix . 'parent'] ),
-                'quali_numerotation_type' => $this->oak_filter_word( $quali[ $prefix == '' ? 'numerotationType' : $prefix . 'numerotation_type' ] ),
-                'quali_numerotation' => $this->oak_filter_word( $quali[ $prefix . 'numerotation'] ),
-                'quali_description' => $this->oak_filter_word( $quali[ $prefix . 'description'] ),
-                'quali_close' => $this->oak_filter_word( $quali[ $prefix . 'close'] ),
-                'quali_close_indicators' => $close_indicators,
-                'quali_state' => $this->oak_filter_word( $quali[ $prefix . 'state'] ),
-                'quali_trashed' => $this->oak_filter_word( $quali[ $prefix . 'trashed'] ),
-                'quali_modification_time' => date("Y-m-d H:i:s")
-            )
-        );
-
-        if ( $prefix != '' )
-            return;
-
-        wp_send_json_success(
-            array( 'quali' => $quali )
-        );
-    }
-
-    function oak_register_quanti( $passed_quanti ) {
-        global $wpdb;
-
-        $prefix = '';
-        $quanti = $_POST['data'];
-        $close_indicators = '';
-        if ( !isset( $quanti ) ) :
-            $quanti = $passed_quanti;
-            $prefix = 'quanti_';
-            $close_indicators = $passed_quanti[ $prefix . 'close_indicators' ];
-        else: 
-            foreach( $quanti['closeIndicators'] as $indicator ) :
-                $close_indicators = $close_indicators . ',' . $indicator;
-            endforeach;
-        endif;
-        
-        $result = $wpdb->insert(
-            Oak::$quantis_table_name, 
-            array (
-                'quanti_designation' => $this->oak_filter_word( $quanti[ $prefix . 'designation'] ),
-                'quanti_identifier' => $this->oak_filter_word( $quanti[ $prefix . 'identifier'] ),
-                'quanti_publication' => $this->oak_filter_word( $quanti[ $prefix . 'publication'] ),
-                'quanti_object' => $this->oak_filter_word( $quanti[ $prefix . 'object'] ),
-                'quanti_depends' => $this->oak_filter_word( $quanti[ $prefix . 'depends'] ),
-                'quanti_parent' => $this->oak_filter_word( $quanti[ $prefix . 'parent'] ),
-                'quanti_numerotation_type' => $this->oak_filter_word( $quanti[ $prefix == '' ? 'numerotationType' : $prefix . 'numerotation_type' ] ),
-                'quanti_numerotation' => $this->oak_filter_word( $quanti[ $prefix . 'numerotation'] ),
-                'quanti_description' => $this->oak_filter_word( $quanti[ $prefix . 'description'] ),
-                'quanti_close' => $this->oak_filter_word( $quanti[ $prefix . 'close'] ),
-                'quanti_close_indicators' => $close_indicators,
-                'quanti_state' => $this->oak_filter_word( $quanti[ $prefix . 'state'] ),
-                'quanti_trashed' => $this->oak_filter_word( $quanti[ $prefix . 'trashed'] ),
-                'quanti_modification_time' => date("Y-m-d H:i:s")
-            )
-        );
-
-        if ( $prefix != '' )
-            return;
-
-        wp_send_json_success();
-    }
-
-    function oak_register_object() {
-        global $wpdb;
-
-        $object = $_POST['data'];
-        $model_identifier = $_POST['modelIdentifier'];
-        
-        $additional_fields = $_POST['data']['additionalFieldsData'];
-        $additional_arguments = array();
-        $file_data;
-        foreach( $additional_fields as $single_additional_field ) :
-            if ( $single_additional_field['type'] == 'Image' ) :
-                $image_url = $this->upload_image( $single_additional_field['value'] );
-                $additional_arguments[ $single_additional_field['columnName'] ] = $image_url;
-            elseif ( $single_additional_field['type'] == 'Fichier' ) :
-                $file_data = wp_handle_upload( $single_additional_field['value'], array( 'test_form' => FALSE ) );
-                $image_url = $this->upload_image( $single_additional_field['value'] );
-                $additional_arguments[ $single_additional_field['columnName'] ] = $image_url;
-            else:
-                $additional_arguments[ $single_additional_field['columnName'] ] = $single_additional_field['value'];
-            endif;
-                
-        endforeach;
-
-        $arguments = array_merge( array(
-            'object_designation' => $this->oak_filter_word( $object['designation'] ),
-            'object_identifier' => $this->oak_filter_word( $object['identifier'] ),
-            'object_state' => $this->oak_filter_word( $object['state'] ),
-            'object_trashed' => $this->oak_filter_word( $object['trashed'] ),
-            'object_modification_time' => date("Y-m-d H:i:s")
-        ), $additional_arguments );
-        
-        $result = $wpdb->insert(
-            $wpdb->prefix . 'oak_' . $model_identifier,
-            $arguments
-        );
-
-        wp_send_json_success( array(
-            'tableName' => $wpdb->prefix . 'oak_' . $model_identifier,
-            'arguments' => $arguments,
-            'fileData' => $file_data
-        ) );
-    }
-
-    function oak_register_term() {
-        global $wpdb;
-
-        $term = $_POST['data'];
-        $taxonomy_identifier = $_POST['taxonomyIdentifier'];
-
-        $term_logo = '';
-        if ( $term['logo'] != '' ) : 
-            $term_logo = $this->upload_image( $term['logo'] );
-        endif;
-
-        $arguments = array(
-            'term_designation' => $this->oak_filter_word( $term['designation'] ),
-            'term_identifier' => $this->oak_filter_word( $term['identifier'] ),
-            'term_numerotation' => $this->oak_filter_word( $term['numerotation'] ),
-            'term_title' => $this->oak_filter_word( $term['title'] ),
-            'term_description' => $this->oak_filter_word( $term['description'] ),
-            'term_color' => $this->oak_filter_word( $term['color'] ),
-            'term_logo' => $this->oak_filter_word( $term['ogo'] ),
-            'term_state' => $this->oak_filter_word( $term['state'] ),
-            'term_trashed' => $this->oak_filter_word( $term['trashed'] ),
-            'term_modification_time' => date("Y-m-d H:i:s")
-        );
-        
-        $result = $wpdb->insert(
-            $wpdb->prefix . 'oak_taxonomy_' . $taxonomy_identifier,
-            $arguments
-        );
-
-        wp_send_json_success(array(
-            'data' => $arguments,
-            'term_logo' => $term_logo
-        ));
+    function upload_user_file( $file = array() ) {
+        require_once( ABSPATH . 'wp-admin/includes/admin.php' );
+          $file_return = wp_handle_upload( $file, array('test_form' => false ) );
+          if( isset( $file_return['error'] ) || isset( $file_return['upload_error_handler'] ) ) {
+              return false;
+          } else {
+              $filename = $file_return['file'];
+              $attachment = array(
+                  'post_mime_type' => $file_return['type'],
+                  'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+                  'post_content' => '',
+                  'post_status' => 'inherit',
+                  'guid' => $file_return['url']
+              );
+              $attachment_id = wp_insert_attachment( $attachment, $file_return['url'] );
+              require_once(ABSPATH . 'wp-admin/includes/image.php');
+              $attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
+              wp_update_attachment_metadata( $attachment_id, $attachment_data );
+              if( 0 < intval( $attachment_id ) ) {
+                return $attachment_id;
+              }
+          }
+          return false;
     }
 
     function upload_image( $image ) {
+        if ( strpos( $image, 'uploads/' ) == true ) :
+            return $image;
+        endif;
+        
         $image_url = '';
+        
+        $image_type = explode( ';', explode( '/', $image )[1] )[0];
 
         if ( !filter_var( $image, FILTER_VALIDATE_URL ) ) :
             // Uploading the image
             $upload_dir  = wp_upload_dir();
             $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
-        
-            $img             = str_replace( 'data:image/png;base64,', '', $image );
+            
+            $img             = str_replace( 'data:image/' . $image_type . ';base64,', '', $image );
             $img             = str_replace( ' ', '+', $img );
             $decoded         = base64_decode( $img );
-            $filename        = $single_principle['principle'] . '.jpeg';
+            $filename        = 'random.' . $image_type;
             $file_type       = 'image/jpeg';
             $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
             $upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
@@ -1688,6 +1291,33 @@ class Oak {
         wp_send_json_success();
     }
 
+    function oak_delete_definitely() {
+        $data = $_POST['data'];
+        $table = $data['table'];
+        $table_in_plural = $data['tableInPlural'];
+        $identifiers = $data['identifiers'];
+
+        global $wpdb;
+
+        foreach( $identifiers as $identifier ) :
+        
+            $wpdb->delete( 
+                $wpdb->prefix . 'oak_' . $table_in_plural, 
+                array( $table . '_identifier' => $identifier )
+            );
+
+            if ( $data['otherElementsTableName'] ) :
+                $wpdb->delete( 
+                    $data['otherElementsTableName'], 
+                    array( $table . '_identifier' => $identifier )
+                );
+            endif;
+
+        endforeach;
+
+        wp_send_json_success();
+    }
+
     function oak_restore_from_trash() {
         $data = $_POST['data'];
         $table = $data['table'];
@@ -1717,13 +1347,16 @@ class Oak {
         $table = $_POST['table'];
         $rows = $_POST['rows'];
 
-        $table_name = $wpdb->prefix . 'oak_' . $table;
+        $table_name = $table;
+        if ( $_POST['wellDefinedTableName'] == 'false' ) :
+            $table_name = $wpdb->prefix . 'oak_' . $table;
+        endif;
 
         foreach( $rows as $key => $row ) :
             if ( $key != 0 && !is_null( $row[1] ) ) :
                 $arguments = [];
                 foreach( $rows[0] as $property_key => $property ) : 
-                    if ( $property != 'id' && $property_key < count( $rows[0] ) ) :
+                    if ( $property != 'id' && $property_key < count( $rows[0] ) && $property != '' ) :
                         $arguments[ $property ] = $this->oak_filter_word( $row[ $property_key ] );
                     endif;
                     if ( strpos( $property, '_trashed' ) != false ) :
@@ -1736,10 +1369,13 @@ class Oak {
                 );
             endif;
         endforeach;
-
+        
         wp_send_json_success( array(
             'table name' => $table_name,
             'rows' => $rows,
+            'wellDefinedTableName' => $_POST['wellDefinedTableName'],
+            'table_name' => $table_name,
+            'arguments' => $arguments
         ) );
     }
 
@@ -2310,6 +1946,12 @@ class Oak {
             'objects' => $objects
 
         ) );
+    }
+
+    function oak_wordpress_dashboard() {
+        include get_template_directory() . '/template-parts/admin-menu.php';
+        include get_template_directory() . '/template-parts/system-bar.php';
+        include get_template_directory() . '/template-parts/app-bar.php';
     }
 }
 

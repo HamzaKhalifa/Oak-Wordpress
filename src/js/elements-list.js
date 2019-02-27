@@ -42,8 +42,43 @@ function searchButton() {
         } else {
             searchInput.classList.add('oak_hidden');
             this.classList.remove('fa-times');
+            document.querySelector('.oak_element_header_right__search_input').value = '';
+            search();
         }
     });
+}
+
+// For the search button
+searchInput();
+function searchInput() {
+    var searchButton = document.querySelector('.oak_element_header_right__search_input');
+    searchButton.oninput = function() {
+        search();
+    }
+}
+
+function search() {
+    var searchedDesignation = document.querySelector('.oak_element_header_right__search_input').value;
+    var allDesignationsSpans = document.querySelectorAll('.oak_list_titles_container__the_title');
+    for (var i = 0; i < allDesignationsSpans.length; i++) {
+        if (allDesignationsSpans[i].parentNode.parentNode.getAttribute('filtered') != 'true') {
+            if (searchedDesignation == '') {
+                allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
+                allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_hidden');
+            } else {
+                if (allDesignationsSpans[i].innerHTML.indexOf(searchedDesignation) != -1) {
+                    // if (allDesignationsSpans[i].innerHTML == searchedDesignation) {
+                    allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_list_highlighted');
+                    allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_hidden');
+                    allDesignationsSpans[i].parentNode.parentNode.scrollIntoView();
+                } else {
+                    allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
+                    allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_hidden');
+                }
+            }
+        }
+        
+    }
 }
 
 // For the delete button
@@ -56,7 +91,7 @@ function deleteButton() {
         var trashSelectValue = document.querySelector('.oak_trash_list_select').value;
         if (trashSelectValue == 'trashed') {
             deletingDefinitely = true;
-            message = 'Êtes vous sûr de vouloir supprimer l\'élement definitivement ?';
+            message = 'Êtes vous sûr de vouloir supprimer l\'élement définitivement ?';
         } else {
             message = 'Êtes vous sûr de vouloir supprimer les élements sélectionnés ?';
             deleting = true;
@@ -179,7 +214,13 @@ function edit() {
         for (var i = 0; i < checkboxes.length; i++) {
             if (i != 0 && checkboxes[i].checked && !classExists(checkboxes[i].parentNode.parentNode, 'oak_hidden')) {
                 var identifier = checkboxes[i].parentNode.parentNode.getAttribute('identifier');
-                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + DATA.tableInPlural + '&listorformula=formula');
+                var additionalData = ''
+                if (DATA.elementsType == 'objects') 
+                    additionalData = '&model_identifier=' + DATA.tableInPlural;
+                else if ( DATA.elementsType == 'terms' )
+                    additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
+
+                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + DATA.elementsType + '&listorformula=formula' + additionalData);
             }
         }
     });
@@ -199,7 +240,13 @@ add();
 function add() {
     var addButton = document.querySelector('.oak_list_add_button');
     addButton.addEventListener('click', function() {
-        window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&elements=' + DATA.tableInPlural + '&listorformula=formula');
+        additionalData = '';
+        if (DATA.elementsType == 'objects') 
+            additionalData = '&model_identifier=' + DATA.tableInPlural;
+        else if ( DATA.elementsType == 'terms' )
+            additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
+            
+        window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&elements=' + DATA.elementsType + '&listorformula=formula' + additionalData);
     });
 }
 // Done with the add button
@@ -223,16 +270,16 @@ function exportButton() {
         exportData();
     });
     function exportData() {
-        var designationsToExport = [];
+        var identifiersToExport = [];
         var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
         for (var i = 1; i < checkBoxes.length; i++) {
             if (checkBoxes[i].checked) {
-                designationsToExport.push(checkBoxes[i].parentNode.querySelector('.oak_list_titles_container__title').innerHTML);
+                identifiersToExport.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
             }
         }
         var rows = [];
         for (var i = 0; i < DATA.elements.length; i++) {
-            if (designationsToExport.indexOf(DATA.elements[i][table + '_designation']) != -1 ) {
+            if (identifiersToExport.indexOf(DATA.elements[i][table + '_identifier']) != -1 ) {
                 var rowValues = [];
                 for (var j = 0; j < DATA.properties.length; j++) {
                     rowValues.push(formatWordForSCV(DATA.elements[i][table + '_' + DATA.properties[j].name]));
@@ -255,9 +302,56 @@ function exportButton() {
                 nextLine = '\r\n';
             csvContent += row + nextLine;
         }
+
+        // For the associative table
+        var rows = [];
+        if (DATA.otherElementProperties && DATA.otherElementProperties.associative_tab_instances.length > 0) {
+            var keys = getKeys(DATA.otherElementProperties.associative_tab_instances[0]);
+            for (var i = 0; i < DATA.otherElementProperties.associative_tab_instances.length; i++) {
+                if (identifiersToExport.indexOf(DATA.otherElementProperties.associative_tab_instances[i][table + '_identifier']) != -1 ) {
+                    var rowValues = [];
+                    for (var j = 0; j < keys.length; j++) {
+                        if (keys[j] != 'id') {
+                            rowValues.push(formatWordForSCV(DATA.otherElementProperties.associative_tab_instances[i][keys[j]]));
+                        }
+                    }
+                    rows.push(rowValues);
+                }
+            }
+            var model = '';
+            for (var i = 0; i < keys.length; i++) {
+                if (keys[i] != 'id') {
+                    model += keys[i] + ',';
+                }
+            }
+            let associativeTableCSV = 'data:text/csv;charset=utf-8,' + model + '\r\n';
+            console.log(rows);
+            for (var i = 0; i < rows.length; i++) {
+                let row = rows[i].join(",");
+                var nextLine = '';
+                if (i != rows.length - 1) 
+                    nextLine = '\r\n';
+                associativeTableCSV += row + nextLine;
+            }
+            var encodedUriForAssociativeTableCSV = encodeURI(associativeTableCSV);
+            window.open(encodedUriForAssociativeTableCSV);
+        }
+        // Done with the associative table
+
+        // setTimeout(function() {
+            
+        // }, 2000)
         var encodedUri = encodeURI(csvContent);
         window.open(encodedUri);
     }
+}
+
+var getKeys = function(obj){
+    var keys = [];
+    for(var key in obj){
+       keys.push(key);
+    }
+    return keys;
 }
 
 function formatWordForSCV(word) {
@@ -346,36 +440,6 @@ function filterResult() {
 }
 // Done with the all natures button
 
-// For the search button
-searchButton();
-function searchButton() {
-    var searchButton = document.querySelector('.oak_element_header_right__search_input');
-    searchButton.oninput = function() {
-        var searchedDesignation = document.querySelector('.oak_element_header_right__search_input').value;
-        var allDesignationsSpans = document.querySelectorAll('.oak_list_titles_container__the_title');
-        for (var i = 0; i < allDesignationsSpans.length; i++) {
-            console.log(allDesignationsSpans[i].innerHTML);
-            if (allDesignationsSpans[i].parentNode.parentNode.getAttribute('filtered') != 'true') {
-                if (searchedDesignation == '') {
-                    allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
-                    allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_hidden');
-                } else {
-                    if (allDesignationsSpans[i].innerHTML.indexOf(searchedDesignation) != -1) {
-                        // if (allDesignationsSpans[i].innerHTML == searchedDesignation) {
-                        allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_list_highlighted');
-                        allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_hidden');
-                        allDesignationsSpans[i].parentNode.parentNode.scrollIntoView();
-                    } else {
-                        allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
-                        allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_hidden');
-                    }
-                }
-            }
-            
-        }
-    }
-}
-
 // Everything related to our modal:
 function openModal(title, twoButtons) {
     var confirmButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_add_button_container__text');
@@ -449,7 +513,7 @@ function handleModalButtons() {
             var input = document.querySelector('.oak_csv_file_input');
             readCSV(input);
         }
-        if (deleting) {
+        if (deleting || deletingDefinitely) {
             var identifiersToDelete = [];
             var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
             for (var i = 1; i < checkBoxes.length; i++) {
@@ -458,17 +522,19 @@ function handleModalButtons() {
                 }
             }
             setLoading();
+            var functionName = deleting ? 'oak_send_to_trash' : 'oak_delete_definitely';
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
-                    type: 'POST', 
+                    type: 'POST',
                     data: {
                         'data': {
                             'table': DATA.table,
                             'tableInPlural': DATA.tableInPlural,
-                            'identifiers': identifiersToDelete
+                            'identifiers': identifiersToDelete,
+                            'otherElementsTableName': DATA.otherElementProperties ? DATA.otherElementProperties.table_name : false
                         },
-                        'action': 'oak_send_to_trash'
+                        'action': functionName
                     },
                     success: function(data) {
                         doneLoading();
@@ -538,6 +604,15 @@ function readCSV(input) {
                     rows[i] = valuesOfI;
                 }
             }
+            console.log(rows);
+            var tableName = tableInPlural
+            var wellDefinedTableName = false;
+            if (rows[0][0].split('_')[0] != rows[0][1].split('_')[0]) {
+                // Then this is an associative table import: 
+                tableName = DATA.otherElementProperties.table_name;
+                wellDefinedTableName = true;
+            }
+            console.log(tableName);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
@@ -545,8 +620,9 @@ function readCSV(input) {
                     data: {
                         'action': 'oak_import_csv',
                         'rows': rows,
-                        'table': tableInPlural,
-                        'single_name': table
+                        'table': tableName,
+                        'single_name': table,
+                        'wellDefinedTableName': wellDefinedTableName
                     },
                     success: function(data) {
                         console.log(data);

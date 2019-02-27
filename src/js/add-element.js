@@ -163,7 +163,7 @@ function registerButton() {
 
 function checkOk() {
     ok = true;
-    var designation = document.querySelector('.designation_input').value;
+    var designation = document.querySelector('.' + DATA.table + '_designation_input').value;
     if (designation.trim() == '') {
         openModal('Veuillez entrer la désignation d\'abord', false);
         ok = false;
@@ -208,7 +208,7 @@ function createIdentifier() {
     for (var i = 0; i < 20; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length));
       
-    var identifierInput = document.querySelector('.identifier_input');
+    var identifierInput = document.querySelector('.' + DATA.table + '_identifier_input');
     identifierInput.value = text;
 }
 
@@ -246,18 +246,18 @@ function createIdentifier() {
 function createElementData(state) {
     var keys = getKeys(elementData);
     for(var i = 0; i < properties.length; i++) {
-        if (document.querySelector('.' + properties[i].name + '_input')) {
-            if (properties[i].input_type == 'text' || properties[i].input_type == 'select')
-                elementData[keys[i]] = document.querySelector('.' + properties[i].name + '_input').value.toString();
+        if (document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input')) {
+            if (properties[i].input_type == 'text' || properties[i].input_type == 'select' || properties[i].input_type == 'number' )
+                elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').value.toString();
             else if (properties[i].input_type == 'image' || properties[i].input_type == 'file')
-                elementData[keys[i]] = document.querySelector('.' + properties[i].name + '_input').getAttribute('src').toString();
+                elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').parentNode.querySelector('img').getAttribute('src').toString();
             else if (properties[i].input_type == 'checkbox') 
-                elementData[keys[i]] = document.querySelector('.' + properties[i].name + '_input').checked.toString();
+                elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').checked.toString();
         }
     }
     if (state != 0)
         elementData[table + '_state'] = state ? state.toString() : DATA.revisions[DATA.revisions.length - 1][table + '_state'].toString();
-    else 
+    else
         elementData[table + '_state'] = state.toString();
 
     // Manage trashed and locked
@@ -286,18 +286,75 @@ function createElementData(state) {
 }
 
 // for the browse revisions button:
+singleElementRevisionView = '';
+getSingleElementRevisionView();
+function getSingleElementRevisionView() {
+    var singleElementInputContainer = document.querySelector('.oak_other_elements_revision_inputs__single_element_container'); 
+    if (singleElementInputContainer) {
+        singleElementRevisionView = singleElementInputContainer.innerHTML;
+        document.querySelector('.oak_other_elements_revision_inputs__single_element_container').remove();
+    }
+}
+
 browseRevisionsButton();
 function browseRevisionsButton() {
     theBrowseRevisionsButton = document.querySelector('.oak_add_element_big_container_tabs_single_tab_section_state__browse');
     theBrowseRevisionsButton.addEventListener('click', function() {
         browsingRevisions = true;
         openModal('Liste des révisions', true);
-
+        
         elementData = createElementData();
         for (var i = 0; i < properties.length; i++) {
-            document.querySelector('.oak_revision_' + properties[i].name + '_field_current').value = elementData[table + '_' + properties[i].name];
+            console.log(properties[i].name)
+            if ( properties[i].name != 'revision_number' )
+                document.querySelector('.oak_revision_' + properties[i].name + '_field_current').value = elementData[table + '_' + properties[i].name];
+        }
+        if ( table == 'form' || table == 'model') {
+            // Lets first delete what is already there
+            var singleElementsRevisionsContainers = document.querySelectorAll('.oak_other_elements_revision_inputs__single_element_container');
+            for (var i = 0; i < singleElementsRevisionsContainers.length; i++) {
+                singleElementsRevisionsContainers[i].remove();
+            }
+            // Done deleting what is already there
+
+            var singleElementsContainers = document.querySelectorAll('.oak_other_elements_single_elements_container__single_element');
+            for (var i = 0; i < singleElementsContainers.length; i++) {
+                var designationsSelect = singleElementsContainers[i].querySelector('.oak_other_elements_select');
+                var elementIdentifier = designationsSelect.value;
+                var elementName = '';
+                var options = designationsSelect.querySelectorAll('option');
+                for (var j = 0; j < options.length; j++) {
+                    if (options[j].getAttribute('value') == elementIdentifier) {
+                        elementName = options[j].innerHTML;
+                    }
+                }
+                var newDesignation = document.querySelector('.designation_input').value;
+                var required = document.querySelector('.selector_input').checked;
+
+                var element = {
+                    elementName, elementIdentifier, newDesignation, required
+                }
+                createSingleOtherElementRevisionContainer(element, true);
+            }
         }
     });
+}
+
+function createSingleOtherElementRevisionContainer(element, current) {
+    var otherElementsInputsContainer = current ? document.querySelector('.oak_other_elements_revision_inputs') : document.querySelector('.oak_other_elements_actual_revision_revision_inputs');
+
+    var singleElementDiv = document.createElement('div');
+    singleElementDiv.className = 'oak_other_elements_revision_inputs__single_element_container';
+    singleElementDiv.innerHTML = singleElementRevisionView;
+    
+    // Lets populate the inputs with the corresponding data that we found above:
+    var inputs = singleElementDiv.querySelectorAll('input');
+    var elementKeys = getKeys(element);
+    for (var i = 0; i < elementKeys.length; i++) {
+        inputs[i].value = element[elementKeys[i]];
+    }
+
+    otherElementsInputsContainer.append(singleElementDiv);
 }
 
 // For the browse revisions select button: 
@@ -305,7 +362,7 @@ browseRevisionsSelectButton();
 function browseRevisionsSelectButton() {
     var revisionsButtons = document.querySelectorAll('.oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision');
     for( var i = 0; i < revisionsButtons.length; i++ ) {
-        revisionsButtons[i].addEventListener('click', function(){
+        revisionsButtons[i].addEventListener('click', function() {
             for (var j = 0; j < revisionsButtons.length; j++) {
                 revisionsButtons[j].classList.remove('oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision_selected');
             }
@@ -316,10 +373,40 @@ function browseRevisionsSelectButton() {
             var selectedRevision = DATA.revisions[this.getAttribute('index')];
             revision = selectedRevision;
 
-            for (var i = 0; i < properties.length; i++) {
-                document.querySelector('.oak_revision_' + properties[i].name + '_field').value = selectedRevision[table + '_' + properties[i].name];
-                checkEquals(document.querySelector('.oak_revision_' + properties[i].name + '_field_current').value, document.querySelector('.oak_revision_' + properties[i].name + '_field').value, document.querySelector('.oak_revision_' + properties[i].name + '_field'));
+            for (var m = 0; m < properties.length; m++) {
+                if ( properties[m].name != 'revision_number' ) {
+                    document.querySelector('.oak_revision_' + properties[m].name + '_field').value = selectedRevision[table + '_' + properties[m].name];
+                    checkEquals(document.querySelector('.oak_revision_' + properties[m].name + '_field_current').value, document.querySelector('.oak_revision_' + properties[m].name + '_field').value, document.querySelector('.oak_revision_' + properties[m].name + '_field'));
+                }
             }
+
+            if (DATA.otherElementProperties) {
+                var singleElementsRevisionsContainers = document.querySelector('.oak_other_elements_actual_revision_revision_inputs').querySelectorAll('.oak_other_elements_revision_inputs__single_element_container');
+                for (var i = 0; i < singleElementsRevisionsContainers.length; i++) {
+                    singleElementsRevisionsContainers[i].remove();
+                }
+
+                for (var j = 0; j < DATA.otherElementProperties.associative_tab_instances.length; j++) {
+                    if ( selectedRevision[table + '_revision_number'] == DATA.otherElementProperties.associative_tab_instances[j][table + '_revision_number'] ) {
+                        // Lets get the other Element real name
+                        var name = '';
+                        for (var k = 0; k < DATA.otherElementProperties.elements.length; k++) {
+                            if (DATA.otherElementProperties.elements[k][DATA.otherElementProperties.table + '_identifier'] == DATA.otherElementProperties.associative_tab_instances[j][DATA.otherElementProperties.table + '_identifier']) {
+                                name = DATA.otherElementProperties.elements[k][DATA.otherElementProperties.table + '_designation'];
+                            }
+                        }
+                        var otherElementData = {
+                            name,
+                            identifier: DATA.otherElementProperties.associative_tab_instances[j][DATA.otherElementProperties.table + '_identifier'],
+                            renaming: DATA.otherElementProperties.associative_tab_instances[j][DATA.otherElementProperties.table + '_designation'],
+                            required: DATA.otherElementProperties.associative_tab_instances[j][DATA.otherElementProperties.table + '_required'],
+                        } 
+                        createSingleOtherElementRevisionContainer(otherElementData, false);
+                    }
+                }
+            }
+            
+            
         });
     }
 }
@@ -382,7 +469,6 @@ function addOtherElement(data) {
         var elementsSelect = newElement.querySelector('.oak_other_elements_select');
         elementsSelect.value = data[DATA.otherElementProperties.table + '_identifier'];
         newElement.querySelector('.designation_input').value = data[DATA.otherElementProperties.table + '_designation'];
-        console.log('required', data[DATA.otherElementProperties.table + '_required']);
         newElement.querySelector('.selector_input').checked = data[DATA.otherElementProperties.table + '_required'] == 'true' ? true : false;
     }
 
@@ -476,7 +562,13 @@ function headerCancelButton() {
                 numberOfChecked++;
         }
         if (numberOfChecked == 0) {
-            window.location.replace(DATA.adminUrl + '?page=oak_elements_list&elements=' + DATA.tableInPlural + '&listorformula=list');
+            additionalData = '';
+            if (DATA.elementsType == 'objects') 
+                additionalData = '&model_identifier=' + DATA.tableInPlural;
+            else if ( DATA.elementsType == 'terms' )
+                additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
+
+            window.location.replace(DATA.adminUrl + '?page=oak_elements_list&elements=' + DATA.elementsType + '&listorformula=list' + additionalData);
         } else {
             for (var i = 0; i < checkboxes.length; i++) {
                 checkboxes[i].checked = false;
@@ -521,6 +613,26 @@ function otherElementsCopyButton() {
             }
         }
     });
+}
+
+// Initialize the images/files after page load: 
+function initializeImagesFiles() {
+    var allInputs = document.querySelector('input');
+    for (var i = 0; i < allInputs.length; i++) {
+        if ( allInputs[i].getAttribute('type') == 'file' ) {
+            readUrl(allInputs[i]);
+        }
+    }
+}
+
+function readUrl(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            input.parentNode.querySelector('img').setAttribute('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
 // Everything related to our modal:
@@ -613,7 +725,6 @@ function handleModalButtons() {
         if (adding || updating) {
             closeModals();
             setLoading();
-            console.log('Element data', elementData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
@@ -621,7 +732,9 @@ function handleModalButtons() {
                     data: {
                         'action': 'oak_register_element',
                         'element': elementData,
-                        'table': table
+                        'table': table,
+                        'tableInPlural': DATA.tableInPlural,
+                        'fromRevision': false
                     },
                     success: function(data) {
                         doneLoading();
@@ -632,7 +745,7 @@ function handleModalButtons() {
                         doneLoading();
                     }
                 });
-            })
+            });
         }
         if (canceling) {
             window.location.replace(DATA.adminUrl + 'admin.php?page=oak_fields_list');
@@ -654,7 +767,9 @@ function handleModalButtons() {
                     data: {
                         'action': 'oak_register_element',
                         'element': revisionWithoutId,
-                        'table': table
+                        'table': table,
+                        'tableInPlural': DATA.tableInPlural,
+                        'fromRevision': true
                     },
                     success: function(data) {
                         doneLoading();

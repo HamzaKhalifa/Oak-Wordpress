@@ -12,31 +12,36 @@ foreach( Oak::$organizations_without_redundancy as $organization ) :
 endforeach;
 
 $glossaries_array = [];
+$glossaries_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucune terminologie sélectionnée', Oak::$text_domain ) ) ];
 foreach( Oak::$glossaries_without_redundancy as $glossary ) :
     $glossaries_array[] = array( 'value' => $glossary->glossary_identifier, 'innerHTML' => $glossary->glossary_designation );
 endforeach;
 
 $qualis_array = [];
+$qualis_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun indicateur sélectionné', Oak::$text_domain ) ) ];
 foreach( Oak::$qualis_without_redundancy as $quali ) :
     $qualis_array[] = array( 'value' => $quali->quali_identifier, 'innerHTML' => $quali->quali_designation );
 endforeach;
 
-$quantis_array = [];
+$quantis_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun indicateur sélectionné', Oak::$text_domain ) ) ];
 foreach( Oak::$quantis_without_redundancy as $quanti ) :
     $quantis_array[] = array( 'value' => $quanti->quanti_identifier, 'innerHTML' => $quanti->quanti_designation );
 endforeach;
 
-$countries_names = Oak::oak_get_countries_names();
 $countries = array();
-foreach( $countries_names as $country_name ) :
-    $countries[] = array( 'value' => $country_name, 'innerHTML' => $country_name );
-endforeach;
-
-$languages_names = Oak::oak_get_languages();
 $languages = array();
-foreach( $languages_names as $langauge_name ) :
-    $languages[] = array( 'value' => $langauge_name, 'innerHTML' => $langauge_name );
-endforeach;
+if ( isset( $_GET['elements'] ) && $_GET['elements'] == 'publications' ) :
+    $countries_names = Oak::oak_get_countries_names();
+    
+    foreach( $countries_names as $country_name ) :
+        $countries[] = array( 'value' => $country_name, 'innerHTML' => $country_name );
+    endforeach;
+
+    $languages_names = Oak::oak_get_languages();
+    foreach( $languages_names as $langauge_name ) :
+        $languages[] = array( 'value' => $langauge_name, 'innerHTML' => $langauge_name );
+    endforeach;
+endif;
 
 $objects_array = [];
 
@@ -255,13 +260,6 @@ $years = array(
     array ( 'value' => '3000', 'innerHTML' => '3000' ),
 );
 
-$field_types = array ( 
-    array ( 'value' => 'Texte', 'innerHTML' => 'Texte' ), 
-    array ( 'value' => 'Zone de Texte', 'innerHTML' => 'Zone de Texte'), 
-    array ( 'value' => 'Image', 'innerHTML' => 'Image' ), 
-    array ( 'value' => 'Fichier', 'innerHTML' => 'Fichier' ) 
-);
-
 $field_functions =  array ( 
     array ( 'value' => 'Information/Description', 'innerHTML' => 'Information/Description' ), 
     array ( 'value' => 'Exemple', 'innerHTML' => 'Exemple' ), 
@@ -275,7 +273,7 @@ Oak::$field_properties =  array (
         'type' => 'text', 
         'input_type' => 'select', 
         'select_multiple' => 'false', 
-        'choices' => $field_types,
+        'choices' => Oak::$field_types,
         'description' => __( 'Nature des contenus compris dans le champ', Oak::$text_domain ), 
         'width' => '50' 
     ),
@@ -316,23 +314,25 @@ Oak::$field_properties =  array (
     ),
 );
 
+$form_structures = array (
+    array ( 'value' => 'Structure 1', 'innerHTML' => 'Structure 1' ), 
+    array ( 'value' => 'Structure 2', 'innerHTML' => 'Structure 2'), 
+    array ( 'value' => 'Structure 3', 'innerHTML' => 'Structure 3' ), 
+    array ( 'value' => 'Structure 4', 'innerHTML' => 'Structure 4' ) 
+);
+
 Oak::$form_properties =  array (
     array ( 
         'name' => 'structure', 
         'property_name' => 'form_structure', 
-        'type' => 'text', 
+        'type' => 'text',
         'input_type' => 'select', 
         'select_multiple' => 'false', 
-        'choices' => array ( 
-            array ( 'value' => 'Structure 1', 'innerHTML' => 'Structure 1' ), 
-            array ( 'value' => 'Structure 2', 'innerHTML' => 'Structure 2'), 
-            array ( 'value' => 'Structure 3', 'innerHTML' => 'Structure 3' ), 
-            array ( 'value' => 'Structure 4', 'innerHTML' => 'Structure 4' ) 
-        ), 
+        'choices' => $form_structures, 
         'description' => __( 'Structure du formulaire', Oak::$text_domain ), 
         'width' => '50' 
     ),
-    array( 
+    array(
         'name' => 'attributes', 
         'property_name' => 'form_attributes', 
         'type' => 'text', 
@@ -363,7 +363,7 @@ Oak::$form_other_elements = array (
     'index_property' => 'field_index',
 
     'filters' => array(
-        array( 'name_in_database' => 'field_type', 'filter_name' => 'oak_filter_field_type', 'title' => __( 'Nature des contenus compris dans le champ', Oak::$text_domain ), 'first_option' => 'Aucune nature attribuée', 'choices' => $field_types ),
+        array( 'name_in_database' => 'field_type', 'filter_name' => 'oak_filter_field_type', 'title' => __( 'Nature des contenus compris dans le champ', Oak::$text_domain ), 'first_option' => 'Aucune nature attribuée', 'choices' => Oak::$field_types ),
         array( 'name_in_database' => 'field_function', 'filter_name' => 'oak_filter_field_function', 'title' => __( 'Fonction du champ en tant que message', Oak::$text_domain ), 'first_option' => 'Aucune fonction attribuée', 'choices' => $field_functions ),
     ),
 );
@@ -388,7 +388,8 @@ Oak::$model_other_elements = array (
     'index_property' => 'form_index',
 
     'filters' => array(
-        // array( 'name_in_database' => 'field_type', 'filter_name' => 'oak_filter_field_type', 'title' => __( 'Nature des contenus compris dans le champ', Oak::$text_domain ), 'first_option' => 'Aucune nature attribuée', 'choices' => $field_types ),
+        array( 'name_in_database' => 'form_structure', 'filter_name' => 'oak_filter_form_structure', 'title' => __( 'Structure du formulaire', Oak::$text_domain ), 'first_option' => 'Aucune structure attribuée', 'choices' => $form_structures ),
+        // array( 'name_in_database' => 'field_type', 'filter_name' => 'oak_filter_field_type', 'title' => __( 'Nature des contenus compris dans le champ', Oak::$text_domain ), 'first_option' => 'Aucune nature attribuée', 'choices' => Oak::$field_types ),
         // array( 'name_in_database' => 'field_function', 'filter_name' => 'oak_filter_field_function', 'title' => __( 'Fonction du champ en tant que message', Oak::$text_domain ), 'first_option' => 'Aucune fonction attribuée', 'choices' => $field_functions ),
     ),
 );
@@ -449,51 +450,6 @@ Oak::$taxonomy_properties = array(
         'description' => __( 'Structure du formulaire', Oak::$text_domain ), 'width' => '50' 
     ),
     array ( 
-        'name' => 'numerotation', 
-        'property_name' => 'taxonomy_numerotation', 
-        'type' => 'text',
-        'input_type' => 'checkbox',
-        'placeholder' => __( 'Numérotation', Oak::$text_domain ), 
-        'description' => __( 'Numérotation.', Oak::$text_domain ), 
-        'width' => '100' 
-    ),
-    array ( 
-        'name' => 'title', 
-        'property_name' => 'taxonomy_title', 
-        'type' => 'text', 
-        'input_type' => 'checkbox',
-        'placeholder' => __( 'Titre', Oak::$text_domain ), 
-        'description' => __( 'Titre.', Oak::$text_domain ), 
-        'width' => '100' 
-    ),
-    array ( 
-        'name' => 'term_description', 
-        'property_name' => 'taxonomy_term_description', 
-        'type' => 'text', 
-        'input_type' => 'checkbox',
-        'placeholder' => __( 'Titre', Oak::$text_domain ), 
-        'description' => __( 'Titre.', Oak::$text_domain ), 
-        'width' => '100' 
-    ),
-    array ( 
-        'name' => 'color', 
-        'property_name' => 'taxonomy_color', 
-        'type' => 'text', 
-        'input_type' => 'checkbox',
-        'placeholder' => __( 'Couleur', Oak::$text_domain ), 
-        'description' => __( 'Couleur.', Oak::$text_domain ), 
-        'width' => '100' 
-    ),
-    array ( 
-        'name' => 'logo', 
-        'property_name' => 'taxonomy_logo', 
-        'type' => 'text', 
-        'input_type' => 'checkbox',
-        'placeholder' => __( 'Logo', Oak::$text_domain ), 
-        'description' => __( 'Logo.', Oak::$text_domain ), 
-        'width' => '100' 
-    ),
-    array ( 
         'name' => 'publication', 
         'property_name' => 'field_publication', 
         'type' => 'text', 
@@ -503,26 +459,71 @@ Oak::$taxonomy_properties = array(
         'description' => __( 'Publications', Oak::$text_domain ), 
         'width' => '50' 
     ),
+    array ( 
+        'name' => 'numerotation', 
+        'property_name' => 'taxonomy_numerotation', 
+        'type' => 'text',
+        'input_type' => 'checkbox',
+        'placeholder' => __( 'Numérotation', Oak::$text_domain ), 
+        'description' => __( 'Numérotation.', Oak::$text_domain ), 
+        'width' => '50'
+    ),
+    array ( 
+        'name' => 'title', 
+        'property_name' => 'taxonomy_title', 
+        'type' => 'text', 
+        'input_type' => 'checkbox',
+        'placeholder' => __( 'Titre', Oak::$text_domain ), 
+        'description' => __( 'Titre.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array (
+        'name' => 'term_description', 
+        'property_name' => 'taxonomy_term_description', 
+        'type' => 'text',
+        'input_type' => 'checkbox',
+        'placeholder' => __( 'Déscription du terme', Oak::$text_domain ),
+        'description' => __( 'Déscription du terme.', Oak::$text_domain ),
+        'width' => '50'
+    ),
+    array ( 
+        'name' => 'color', 
+        'property_name' => 'taxonomy_color', 
+        'type' => 'text', 
+        'input_type' => 'checkbox',
+        'placeholder' => __( 'Couleur', Oak::$text_domain ), 
+        'description' => __( 'Couleur.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array ( 
+        'name' => 'brand', 
+        'property_name' => 'taxonomy_brand', 
+        'type' => 'text', 
+        'input_type' => 'checkbox',
+        'placeholder' => __( 'Logo', Oak::$text_domain ), 
+        'description' => __( 'Logo.', Oak::$text_domain ), 
+        'width' => '100' 
+    ),
 );
 
 Oak::$organization_properties = array(
     array ( 
         'name' => 'acronym', 
         'property_name' => 'organization_acronym', 
-        'type' => 'text', 
+        'type' => 'text',
         'input_type' => 'text',
         'placeholder' => __( 'Acronyme', Oak::$text_domain ), 
         'description' => __( 'Acronyme.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '100'
     ),
     array ( 
         'name' => 'logo', 
         'property_name' => 'organization_logo', 
         'type' => 'text', 
-        'input_type' => 'text',
+        'input_type' => 'image',
         'placeholder' => __( 'Logo', Oak::$text_domain ), 
         'description' => __( 'Logo.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
     array ( 
         'name' => 'description', 
@@ -531,7 +532,7 @@ Oak::$organization_properties = array(
         'input_type' => 'text',
         'placeholder' => __( 'Description', Oak::$text_domain ), 
         'description' => __( 'Description.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
     array ( 
         'name' => 'url', 
@@ -540,7 +541,7 @@ Oak::$organization_properties = array(
         'input_type' => 'text',
         'placeholder' => __( 'Url', Oak::$text_domain ), 
         'description' => __( 'Url.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
     array ( 
         'name' => 'address', 
@@ -549,7 +550,7 @@ Oak::$organization_properties = array(
         'input_type' => 'text',
         'placeholder' => __( 'Address', Oak::$text_domain ), 
         'description' => __( 'Address.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
     array ( 
         'name' => 'country', 
@@ -558,7 +559,7 @@ Oak::$organization_properties = array(
         'input_type' => 'text',
         'placeholder' => __( 'Pays', Oak::$text_domain ), 
         'description' => __( 'Pays.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
     array ( 
         'name' => 'company', 
@@ -567,7 +568,7 @@ Oak::$organization_properties = array(
         'input_type' => 'checkbox',
         'placeholder' => __( 'Entreprise', Oak::$text_domain ), 
         'description' => __( 'Entreprise.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
     array ( 
         'name' => 'type', 
@@ -582,7 +583,7 @@ Oak::$organization_properties = array(
         ),
         'placeholder' => __( 'Entreprise', Oak::$text_domain ), 
         'description' => __( 'Entreprise.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
     array ( 
         'name' => 'side', 
@@ -591,7 +592,7 @@ Oak::$organization_properties = array(
         'input_type' => 'checkbox',
         'placeholder' => __( 'Coté', Oak::$text_domain ), 
         'description' => __( 'Coté.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
     array ( 
         'name' => 'sectors', 
@@ -616,8 +617,8 @@ Oak::$publication_properties = array (
         'width' => '50' 
     ),
     array ( 
-        'name' => 'organization', 
-        'property_name' => 'publication_organization', 
+        'name' => 'year', 
+        'property_name' => 'publication_year', 
         'type' => 'text', 
         'input_type' => 'select',
         'select_multiple' => 'false',
@@ -668,7 +669,12 @@ Oak::$publication_properties = array (
         'name' => 'report_or_frame', 
         'property_name' => 'publication_report_or_frame', 
         'type' => 'text',
-        'input_type' => 'checkbox',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'report', 'innerHTML' => 'Rapport' ),
+            array( 'value' => 'frame', 'innerHTML' => 'Cadres RSE' ),
+        ),
         'placeholder' => __( 'Rapport ou Cadres RSE', Oak::$text_domain ), 
         'description' => __( 'Rapport ou Cadres RSE', Oak::$text_domain ), 
         'width' => '50'
@@ -834,7 +840,7 @@ Oak::$glossary_properties = array (
         'type' => 'text',
         'input_type' => 'select',
         'select_multiple' => 'false',
-        'choices' => $objects_array,
+        'choices' => $glossaries_array,
         'placeholder' => __( 'Terminologie de niveau supérieur:', Oak::$text_domain ), 
         'description' => __( 'Terminologie de niveau supérieur:', Oak::$text_domain ), 
         'width' => '50'
@@ -852,11 +858,13 @@ Oak::$glossary_properties = array (
         'name' => 'close', 
         'property_name' => 'glossary_close', 
         'type' => 'text',
-        'input_type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => $glossaries_array,
         'placeholder' => __( 'Terminologie(s) proche(s) de la terminologie défnie: ', Oak::$text_domain ), 
         'description' => __( 'Terminologie(s) proche(s) de la terminologie défnie: ', Oak::$text_domain ), 
         'width' => '50'
-    ),
+    )
 );
 
 Oak::$quali_properties = array (
@@ -887,8 +895,8 @@ Oak::$quali_properties = array (
         'property_name' => 'quali_depends', 
         'type' => 'text',
         'input_type' => 'checkbox',
-        'placeholder' => __( 'Terminologie dépendante d’une autre:', Oak::$text_domain ), 
-        'description' => __( 'Terminologie dépendante d’une autre:', Oak::$text_domain ), 
+        'placeholder' => __( 'Indicateur dépandant d’un autre:', Oak::$text_domain ), 
+        'description' => __( 'Indicateur dépandant d’un autre:', Oak::$text_domain ), 
         'width' => '50'
     ),
     array(
@@ -897,9 +905,9 @@ Oak::$quali_properties = array (
         'type' => 'text',
         'input_type' => 'select',
         'select_multiple' => 'false',
-        'choices' => $objects_array,
-        'placeholder' => __( 'Terminologie de niveau supérieur:', Oak::$text_domain ), 
-        'description' => __( 'Terminologie de niveau supérieur:', Oak::$text_domain ), 
+        'choices' => $qualis_array,
+        'placeholder' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
+        'description' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
         'width' => '50'
     ),
     array(
@@ -954,7 +962,7 @@ Oak::$quali_properties = array (
         'choices' => $qualis_array,
         'placeholder' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'description' => __( 'Indicateurs proches', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '100'
     ),
 );
 
@@ -966,13 +974,13 @@ Oak::$quanti_properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => $publications_array,
-        'placeholder' => __( 'Publication(s) dont est issue l\'Idicateur: ', Oak::$text_domain ), 
-        'description' => __( 'Publication(s) dont est issue l\'Idicateur: ', Oak::$text_domain ), 
+        'placeholder' => __( 'Publication(s) dont est issue l\'Idicateur: ', Oak::$text_domain ),
+        'description' => __( 'Publication(s) dont est issue l\'Idicateur: ', Oak::$text_domain ),
         'width' => '50'
     ),
     array(
-        'name' => 'object', 
-        'property_name' => 'quanti_object', 
+        'name' => 'object',
+        'property_name' => 'quanti_object',
         'type' => 'text',
         'input_type' => 'select',
         'select_multiple' => 'false',
@@ -986,8 +994,8 @@ Oak::$quanti_properties = array (
         'property_name' => 'quanti_depends', 
         'type' => 'text',
         'input_type' => 'checkbox',
-        'placeholder' => __( 'Terminologie dépendante d’une autre:', Oak::$text_domain ), 
-        'description' => __( 'Terminologie dépendante d’une autre:', Oak::$text_domain ), 
+        'placeholder' => __( 'Indicateur dépendant d’une autre:', Oak::$text_domain ), 
+        'description' => __( 'Indicateur dépendant d’une autre:', Oak::$text_domain ), 
         'width' => '50'
     ),
     array(
@@ -996,9 +1004,9 @@ Oak::$quanti_properties = array (
         'type' => 'text',
         'input_type' => 'select',
         'select_multiple' => 'false',
-        'choices' => $objects_array,
-        'placeholder' => __( 'Terminologie de niveau supérieur:', Oak::$text_domain ), 
-        'description' => __( 'Terminologie de niveau supérieur:', Oak::$text_domain ), 
+        'choices' => $quantis_array,
+        'placeholder' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
+        'description' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
         'width' => '50'
     ),
     array(
@@ -1053,6 +1061,54 @@ Oak::$quanti_properties = array (
         'choices' => $quantis_array,
         'placeholder' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'description' => __( 'Indicateurs proches', Oak::$text_domain ), 
+        'width' => '100'
+    ),
+);
+
+Oak::$term_properties = array (
+    array(
+        'name' => 'numerotation', 
+        'property_name' => 'term_numerotation', 
+        'type' => 'text',
+        'input_type' => 'number',
+        'placeholder' => __( 'Numérotation ', Oak::$text_domain ),
+        'description' => __( 'Numérotation ', Oak::$text_domain ),
         'width' => '50'
     ),
+    array(
+        'name' => 'title', 
+        'property_name' => 'term_title', 
+        'type' => 'text',
+        'input_type' => 'text',
+        'placeholder' => __( 'Titre ', Oak::$text_domain ),
+        'description' => __( 'Titre ', Oak::$text_domain ),
+        'width' => '50'
+    ),
+    array(
+        'name' => 'description', 
+        'property_name' => 'term_description', 
+        'type' => 'text',
+        'input_type' => 'text',
+        'placeholder' => __( 'Déscription ', Oak::$text_domain ),
+        'description' => __( 'Déscription ', Oak::$text_domain ),
+        'width' => '100'
+    ),
+    array(
+        'name' => 'color', 
+        'property_name' => 'term_color', 
+        'type' => 'text',
+        'input_type' => 'text',
+        'placeholder' => __( 'Couleur ', Oak::$text_domain ),
+        'description' => __( 'Couleur ', Oak::$text_domain ),
+        'width' => '50'
+    ),
+    array(
+        'name' => 'logo', 
+        'property_name' => 'term_logo', 
+        'type' => 'text',
+        'input_type' => 'image',
+        'placeholder' => __( 'Logo ', Oak::$text_domain ),
+        'description' => __( 'Logo ', Oak::$text_domain ),
+        'width' => '50'
+    )
 );
