@@ -18,7 +18,6 @@
     </div>
 </div>
 
-
 <div class="oak_element_header">
     <div class="oak_element_header_left">
         <i class="oak_menu_icon oak_menu_icon__cancel_icon fas fa-times"></i>
@@ -206,7 +205,7 @@ $modification_time_property = $table . '_modification_time';
                 </div>
             <?php
             endif;
-            if ( $property['width'] == '100' || !$first ) : ?>
+            if ( $property['width'] == '100' || !$first || $key == count( $properties ) - 1 ) : ?>
                 </div>
                     <?php 
             endif;

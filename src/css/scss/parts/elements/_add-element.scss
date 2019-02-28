@@ -559,6 +559,10 @@ input.oak_add_other_elements_list_single_element__chekcbox {
     height: auto;
 }
 
+.oak_add_element_image_container .oak_checkbox_container__container {
+    overflow: hidden;
+}
+
 .oak_other_elements_container__add_button {
     background-color: #1c6bb5;
     position: absolute;
@@ -626,8 +630,4 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
     padding: 5px;
     margin-bottom: 20px;
     box-sizing: border-box;
-}
-
-.oak_add_element_image_container {
-    overflow: hidden;
 }

@@ -445,13 +445,13 @@ foreach( $models_without_redundancy as $key => $model ) :
                 if ( $form->form_identifier == $form_identifier ) :
                     foreach ( Oak::$all_forms_and_fields as $form_and_field_instance ) :
                         if ( $form_and_field_instance->form_identifier == $form->form_identifier 
-                            && $form_and_field_instance->form_revision_number == $form->form_revision_number
+                            && $form_and_field_instance->form_revision_number == $form->form_revision_number 
                         ) :
-                            $field_identifier = $form_and_field_instance->field_identifier;
                             foreach( $fields_without_redundancy as $field ) :
-                                if ( $field->field_identifier == $field_identifier ) :
-                                    $field->form_and_field_properties = $form_and_field_instance;
-                                    Oak::$current_model_fields[] = $field;
+                                if ( $field->field_identifier == $form_and_field_instance->field_identifier ) :
+                                    $field_copy = clone $field;
+                                    $field_copy->form_and_field_properties = $form_and_field_instance;
+                                    array_push( Oak::$current_model_fields, $field_copy );
                                 endif;
                             endforeach;
                         endif;
@@ -460,6 +460,7 @@ foreach( $models_without_redundancy as $key => $model ) :
             endforeach;
         endif;
     endforeach;
+
 
     $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
     $models_sql = "CREATE TABLE $table_name (

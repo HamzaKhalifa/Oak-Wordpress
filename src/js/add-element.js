@@ -734,7 +734,8 @@ function handleModalButtons() {
                         'element': elementData,
                         'table': table,
                         'tableInPlural': DATA.tableInPlural,
-                        'fromRevision': false
+                        'fromRevision': false,
+                        'properties': DATA.properties
                     },
                     success: function(data) {
                         doneLoading();

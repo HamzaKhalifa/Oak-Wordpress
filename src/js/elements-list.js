@@ -523,6 +523,8 @@ function handleModalButtons() {
             }
             setLoading();
             var functionName = deleting ? 'oak_send_to_trash' : 'oak_delete_definitely';
+            var tableInPlural = DATA.tableInPlural;
+
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
@@ -530,7 +532,7 @@ function handleModalButtons() {
                     data: {
                         'data': {
                             'table': DATA.table,
-                            'tableInPlural': DATA.tableInPlural,
+                            'tableInPlural': tableInPlural,
                             'identifiers': identifiersToDelete,
                             'otherElementsTableName': DATA.otherElementProperties ? DATA.otherElementProperties.table_name : false
                         },
@@ -621,11 +623,10 @@ function readCSV(input) {
                         'action': 'oak_import_csv',
                         'rows': rows,
                         'table': tableName,
-                        'single_name': table,
+                        'single_name': DATA.table,
                         'wellDefinedTableName': wellDefinedTableName
                     },
                     success: function(data) {
-                        console.log(data);
                         doneLoading();
                         window.location.reload();
                     },
