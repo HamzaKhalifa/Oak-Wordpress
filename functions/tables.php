@@ -543,6 +543,7 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
     ");
     $terms = array_reverse( $terms );
     foreach( $terms as $term ) :
+        $term->term_taxonomy_identifier = $taxonomy->taxonomy_identifier;
         $added = false;
         foreach( Oak::$all_terms_without_redundancy as $added_term ) :
             if ( $added_term->term_identifier == $term->term_identifier ) :
@@ -567,7 +568,8 @@ foreach( Oak::$models as $model ) :
     Oak::$all_objects = array_merge( Oak::$all_objects, $model_objects );
 endforeach;
 
-foreach( Oak::$all_objects as $object ) :
+$objects_reversed = array_reverse( Oak::$all_objects );
+foreach( $objects_reversed as $object ) :
     $exists = false;
     foreach( Oak::$all_objects_without_redundancy as $object_without_redundancy) :
         if ( $object_without_redundancy->object_identifier == $object->object_identifier ) 
@@ -576,5 +578,11 @@ foreach( Oak::$all_objects as $object ) :
     if ( !$exists )
         Oak::$all_objects_without_redundancy[] = $object;
 endforeach;
+
+$terms_and_objects_table_name = Oak::$terms_and_objects_table_name;
+Oak::$terms_and_objects = $wpdb->get_results ( "
+    SELECT * 
+    FROM $terms_and_objects_table_name
+" );
 
 

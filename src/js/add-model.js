@@ -578,7 +578,6 @@ okButtonContainer.addEventListener('click', function() {
 }); 
 
 function closeModals() {
-    
     setTimeout(function() {
         document.querySelector('.oak_add_element_modal_container__modal').classList.remove('oak_object_model_add_formula_modal_container_modal__big_modal');
         document.querySelector('.oak_add_element_modal_container_modal_content__revisions_content').classList.add('oak_hidden');

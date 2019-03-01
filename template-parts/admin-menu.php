@@ -24,11 +24,6 @@
                 'icon' => 'fas fa-th-large'
             ),
             array(
-                'title' => __( 'Importation des Données', Oak::$text_domain ),
-                'url' => '?page=?page=oak_import_page',
-                'icon' => 'fas fa-th-large'
-            ),
-            array(
                 'title' => __( 'Organisations', Oak::$text_domain ),
                 'url' => '?page=oak_elements_list&elements=organizations&listorformula=list',
                 'icon' => 'fas fa-th-large'
@@ -74,6 +69,16 @@
                 'icon' => 'fas fa-th-large'
             )
         );
+
+        $central = get_option( 'oak_corn' );
+        if ( $central == 'true' ) :
+            $import_page = array(
+                'title' => __( 'Importation des Données', Oak::$text_domain ),
+                'url' => '?page=oak_import_page',
+                'icon' => 'fas fa-th-large'
+            );
+            $menu_elements[] = $import_page;
+        endif;
 
         // Lets make the pages associated to each model: 
         foreach( Oak::$models_without_redundancy as $model ) :

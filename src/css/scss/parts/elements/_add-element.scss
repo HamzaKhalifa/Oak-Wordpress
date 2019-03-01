@@ -631,3 +631,16 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
     margin-bottom: 20px;
     box-sizing: border-box;
 }
+
+.oak_add_element_terms_atribution_single_element {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.oak_autocomplete_input, .oak_autocomplete_selected_input {
+    background-color: #e5e9ef!important;
+}
+
+.oak_add_element_taxonomy_title {
+    margin-right: 10px;
+}

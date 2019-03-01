@@ -216,6 +216,50 @@ $modification_time_property = $table . '_modification_time';
         endforeach;
         ?>
 
+        <!-- // This is for objects (We are gonna associate them to the terms) -->
+        <?php 
+        if ( $_GET['elements'] == 'objects' ) :
+            foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) : ?>
+                <div class="oak_add_element_terms_atribution_single_element">
+                    <span class="oak_add_element_taxonomy_title"><?php echo( $taxonomy->taxonomy_designation ); ?></span>
+                    <div class="autocomplete" style="width:300px;">
+                        <div class="oak_admin_autocomplete_selections_container">
+                            <?php 
+                            if ( isset( $_GET['object_identifier'] ) ) :
+                                foreach( Oak::$terms_and_objects as $term_and_object ) :
+                                    if ( $term_and_object->object_identifier == $_GET['object_identifier'] ) :
+                                        foreach( Oak::$all_terms_without_redundancy as $term ) :
+                                            if ( $term->term_taxonomy_identifier == $taxonomy->taxonomy_identifier && $term->term_identifier == $term_and_object->term_identifier ) : ?>
+                                                <div class="oak_autocomplete_selected_input_container">
+                                                    <input type="text" disabled value="<?php echo ( $term->term_designation ); ?>" identifier="<?php echo( $term->term_identifier ); ?>" class="oak_autocomplete_selected_input">
+                                                    <i class="oak_autocomplete_delete_button fas fa-minus"></i>
+                                                </div>
+                                            <?php
+                                            endif;
+                                        endforeach;
+                                    endif;
+                                endforeach;
+                            endif;
+                            ?>
+                        </div>
+                        <input type="text" class="oak_autocomplete_input">
+                        <select class="oak_autocomplete_select oak_hidden" id=""> 
+                            <?php
+                            foreach( Oak::$all_terms_without_redundancy as $term ) :
+                                if ( $term->term_taxonomy_identifier == $taxonomy->taxonomy_identifier ) : ?>
+                                    <option value="<?php echo( $term->term_identifier ); ?>"><?php echo( $term->term_designation ); ?></option>
+                                <?php
+                                endif;
+                            endforeach;
+                        ?>
+                        </select>
+                    </div>
+                </div>
+            <?php
+            endforeach;
+        endif;
+        ?>
+
         <?php if ( $table == 'form' || $table == 'model' ) :
             if ( $table == 'form' ) 
                 $other_properties = Oak::$form_other_elements;

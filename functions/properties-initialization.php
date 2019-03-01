@@ -1,7 +1,7 @@
 <?php 
 // the property type here means type in the database (so a select is gonna have a type of text. So are the images and the files)
 
-$publications_array = [];
+$publications_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucune Publication sélectionnée', Oak::$text_domain ) ) ];
 foreach( Oak::$publications_without_redundancy as $publication ) :
     $publications_array[] = array( 'value' => $publication->publication_identifier, 'innerHTML' => $publication->publication_designation );
 endforeach;
@@ -43,8 +43,11 @@ if ( isset( $_GET['elements'] ) && $_GET['elements'] == 'publications' ) :
     endforeach;
 endif;
 
-$objects_array = [];
-
+// $objects_array = Oak::$all_objects_without_redundancy;
+$objects_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun objet sélectionné', Oak::$text_domain ) ) ];
+foreach( Oak::$all_objects_without_redundancy as $object ) :
+    $objects_array[] = array( 'value' => $object->object_identifier, 'innerHTML' => $object->object_designation );
+endforeach;
 
 $years = array(
     array ( 'value' => '1990', 'innerHTML' => '1990' ),

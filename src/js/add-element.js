@@ -212,36 +212,6 @@ function createIdentifier() {
     identifierInput.value = text;
 }
 
-// For the trash button
-// trashButton();
-// function trashButton() {
-//     var trashButton = document.querySelector('.oak_add_element_container__trash_button');
-//     if (trashButton) {
-//         trashButton.addEventListener('click', function() {
-//             setLoading();
-//             jQuery(document).ready(function() {
-//                 jQuery.ajax({
-//                     url: DATA.ajaxUrl,
-//                     type: 'POST', 
-//                     data: {
-//                         'data': DATA.currentField.field_identifier,
-//                         'action': 'oak_send_field_to_trash',
-//                     },
-//                     success: function(data) {
-//                         console.log(data);
-//                         doneLoading();
-//                         window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_' + table);
-//                     },
-//                     error: function(error) {
-//                         console.log(error);
-//                         doneLoading();
-//                     }
-//                 });
-//             });
-//         });
-//     }
-// }
-
 // We create while adding the new revision
 function createElementData(state) {
     var keys = getKeys(elementData);
@@ -280,6 +250,16 @@ function createElementData(state) {
         elementData.otherElements = otherElements;
         elementData.otherElementsProperties = DATA.otherElementProperties;
         elementData[table + '_revision_number'] = DATA.revisions.length + 1;
+    }
+
+    // Manage objects' terms: 
+    if (DATA.table == 'object') {
+        var selectedTerms = [];
+        var selectedTermsInputs = document.querySelectorAll('.oak_autocomplete_selected_input');
+        for (var i = 0; i < selectedTermsInputs.length; i++) {
+            selectedTerms.push(selectedTermsInputs[i].getAttribute('identifier'));
+        }
+        elementData.selected_terms = selectedTerms;
     }
 
     return elementData;
@@ -725,6 +705,7 @@ function handleModalButtons() {
         if (adding || updating) {
             closeModals();
             setLoading();
+            console.log(elementData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,

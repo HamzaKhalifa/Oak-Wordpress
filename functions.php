@@ -38,6 +38,8 @@ class Oak {
     public static $all_objects_without_redundancy = [];
     public static $all_terms_without_redundancy = [];
 
+    public static $terms_and_objects = [];
+
     public static $models;
     public static $models_without_redundancy;
     public static $model_properties;
@@ -216,6 +218,9 @@ class Oak {
         wp_localize_script( 'admin_menu_script', 'DATA', array(
             'ajaxUrl' => admin_url('admin-ajax.php')
         ) );
+        
+        // Auto complete
+        wp_enqueue_script( 'auto_complete', get_template_directory_uri() . '/src/js/autocomplete.js', array('jquery'), false, true );
 
         // Configuration page
         if ( get_current_screen()->id == 'toplevel_page_oak_materiality_reporting' ) :
@@ -532,40 +537,13 @@ class Oak {
         // add_menu_page( 'Admin Menu', 'Admin Menu', 'manage_options', 'admin_menu', , $icon_url, $position)
         add_menu_page( 'OAK (Materiality Reporting)', 'OAK (Materiality Reporting)', 'manage_options', 'oak_materiality_reporting', array( $this, 'oak_materility_reporting' ), 'dashicons-chart-pie', 99 );
 
-        $central = get_option( 'oak_corn' );
-        if ( $central == 'true' ) :
-            add_menu_page( 'Importation des données', 'Importation des données', 'manage_options', 'oak_import_page', array( $this, 'oak_import_page' ), 'dashicons-chart-pie', 100 );
-        endif;
+        add_menu_page( 'Importation des données', 'Importation des données', 'manage_options', 'oak_import_page', array( $this, 'oak_import_page' ), 'dashicons-chart-pie', 100 );
 
         add_submenu_page( 'oak_materiality_reporting', __('Analyse Critique', Oak::$text_domain), __('Analyse Critique', Oak::$text_domain), 'manage_options', 'oak_critical_analysis', array( $this, 'oak_critical_analysis') );
         add_submenu_page( 'oak_materiality_reporting', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'oak_critical_analysis_configuration', array( $this, 'oak_critical_analysis_configuration') );
 
         add_menu_page( __( 'Elements', Oak::$text_domain ), 'Elements', 'manage_options', 'oak_elements_list', array ( $this, 'oak_elements_list'), 'dashicons-index-card', 100 );
         add_submenu_page( 'oak_elements_list', 'Ajouter un Element', __( 'Ajouter un Element', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
-
-        // add_menu_page( __( 'Formes', Oak::$text_domain ), 'Formes', 'manage_options', 'oak_forms_list', array ( $this, 'oak_forms_list'), 'dashicons-index-card', 100 );
-        // add_submenu_page( 'oak_forms_list', 'Ajouter un formulaire', __( 'Ajouter un formulaire', Oak::$text_domain ), 'manage_options', 'oak_add_form',  array( $this, 'oak_add_form' ) );
-
-        // add_menu_page( __( 'Modèles', Oak::$text_domain ), 'Modèles', 'manage_options', 'oak_models_list', array ( $this, 'oak_models_list'), 'dashicons-index-card', 100 );
-        // add_submenu_page( 'oak_models_list', 'Ajouter un modèle', __( 'Ajouter un modèle', Oak::$text_domain ), 'manage_options', 'oak_add_model',  array( $this, 'oak_add_model' ) );
-
-        // add_menu_page( __( 'Taxonomies', Oak::$text_domain ), 'Taxonomies', 'manage_options', 'oak_taxonomies_list', array ( $this, 'oak_taxonomies_list'), 'dashicons-index-card', 100 );
-        // add_submenu_page( 'oak_taxonomies_list', 'Ajouter une Taxonomy', __( 'Ajouter une Taxonomy', Oak::$text_domain ), 'manage_options', 'oak_add_taxonomy',  array( $this, 'oak_add_taxonomy' ) );
-
-        // add_menu_page( __( 'Organisations', Oak::$text_domain ), 'Organisations', 'manage_options', 'oak_organizations_list', array ( $this, 'oak_organizations_list'), 'dashicons-index-card', 100 );
-        // add_submenu_page( 'oak_organizations_list', 'Ajouter une Organisation', __( 'Ajouter une Organisation', Oak::$text_domain ), 'manage_options', 'oak_add_organization',  array( $this, 'oak_add_organization' ) );
-
-        // add_menu_page( __( 'Publications', Oak::$text_domain ), 'Publications', 'manage_options', 'oak_publications_list', array ( $this, 'oak_publications_list'), 'dashicons-index-card', 100 );
-        // add_submenu_page( 'oak_publications_list', 'Ajouter une Publication', __( 'Ajouter une Publication', Oak::$text_domain ), 'manage_options', 'oak_add_publication',  array( $this, 'oak_add_publication' ) );
-
-        // add_menu_page( __( 'Glossaire', Oak::$text_domain ), 'Glossaire', 'manage_options', 'oak_glossaries_list', array ( $this, 'oak_glossaries_list'), 'dashicons-index-card', 100 );
-        // add_submenu_page( 'oak_glossaries_list', 'Ajouter une Terminologie', __( 'Ajouter une Terminologie', Oak::$text_domain ), 'manage_options', 'oak_add_glossary',  array( $this, 'oak_add_glossary' ) );
-
-        // add_menu_page( __( 'Indicateurs Qualitatifs', Oak::$text_domain ), 'Indicateurs Qualitatifs', 'manage_options', 'oak_qualis_list', array ( $this, 'oak_qualis_list'), 'dashicons-index-card', 100 );
-        // add_submenu_page( 'oak_qualis_list', 'Ajouter un indicateur qualitatif', __( 'Ajouter un indicateur qualitatif', Oak::$text_domain ), 'manage_options', 'oak_add_quali',  array( $this, 'oak_add_quali' ) );
-
-        // add_menu_page( __( 'Indicateurs Quantitatifs', Oak::$text_domain ), 'Indicateurs Quantitatifs', 'manage_options', 'oak_quantis_list', array ( $this, 'oak_quantis_list'), 'dashicons-index-card', 100 );
-        // add_submenu_page( 'oak_quantis_list', 'Ajouter un indicateur quantitatif', __( 'Ajouter un indicateur quantitatif', Oak::$text_domain ), 'manage_options', 'oak_add_quanti',  array( $this, 'oak_add_quanti' ) );
 
         if ( get_option( 'oak_corn' ) == 'true' ) :
             foreach( Oak::$all_terms_without_redundancy as $term ) :
@@ -1205,6 +1183,33 @@ class Oak {
             endforeach;
 
         endforeach;
+
+        // For objects' terms
+        if ( $table = 'object' ) : 
+            $terms_identifiers = $array_data['selected_terms'];
+
+            foreach( Oak::$terms_and_objects as $term_and_object ) :
+                if ( $term_and_object->object_identifier == $array_data['object_identifier'] 
+                    && !in_array( $terms_identifiers, $term_and_object->term_identifier )
+                ) :
+                    $wpdb->delete( 
+                        $wpdb->prefix . 'oak_terms_and_objects',  
+                        array( 'term_identifier' => $term_and_object->term_identifier, 'object_identifier' => $array_data['object_identifier'] )
+                    );
+                endif;
+            endforeach;
+
+            foreach( $terms_identifiers as $term_identifier ) :
+                $result = $wpdb->insert(
+                    $wpdb->prefix . 'oak_terms_and_objects', 
+                    array(
+                        'term_identifier' => $term_identifier,
+                        'object_identifier' => $array_data['object_identifier']
+                    )
+                );
+            endforeach;
+            unset( $array_data['selected_terms'] );
+        endif;
         
         $result = $wpdb->insert(
             $table_name, 
@@ -1213,7 +1218,7 @@ class Oak {
 
         wp_send_json_success( array(
             'properties' => $_POST['properties'],
-            'array_data' => $array_data
+            'array_data' => $array_data,
         ) );
     }
 
@@ -1339,9 +1344,19 @@ class Oak {
                 );
             endif;
 
+            // We are deleting the tables for models or taxonomies
+            if ( $table == 'model' || $table == 'taxonomy' ) : 
+                $table_name_to_delete = $wpdb->prefix . 'oak_' . $table . '_' . $identifier;
+                $wpdb->query( "DROP TABLE IF EXISTS $table_name_to_delete" );
+            endif;
+
         endforeach;
 
-        wp_send_json_success();
+        wp_send_json_success( array(
+            'table' => $table,
+            'table_in_plural' => $table_in_plural,
+            'identifiers' => $identifiers
+        ) );
     }
 
     function oak_restore_from_trash() {
@@ -1735,7 +1750,7 @@ class Oak {
 
         $all_objects = [];
         foreach( $models_without_redundancy as $model ) :
-            $model_table_name = $wpdb->prefix . 'oak_' . $model->model_identifier;
+            $model_table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
             $objects = $wpdb->get_results ( "
                 SELECT *
                 FROM  $model_table_name
@@ -1977,7 +1992,6 @@ class Oak {
         wp_send_json_success( array( 
             'selected data' => $selected_data,
             'objects' => $objects
-
         ) );
     }
 
@@ -1985,6 +1999,7 @@ class Oak {
         include get_template_directory() . '/template-parts/admin-menu.php';
         include get_template_directory() . '/template-parts/system-bar.php';
         include get_template_directory() . '/template-parts/app-bar.php';
+
     }
 }
 

@@ -1273,6 +1273,19 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   box-sizing: border-box;
 }
 
+.oak_add_element_terms_atribution_single_element {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.oak_autocomplete_input, .oak_autocomplete_selected_input {
+  background-color: #e5e9ef !important;
+}
+
+.oak_add_element_taxonomy_title {
+  margin-right: 10px;
+}
+
 .oak_system_bar {
   background-color: #000c3b;
 }
@@ -1791,6 +1804,52 @@ input.import_container__element_checkbox {
 
 .next_button_container_next {
   padding: 10px;
+}
+
+.autocomplete {
+  position: relative;
+  display: inline-block;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.autocomplete-items div:hover {
+  background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+
+.oak_autocomplete_selected_value {
+  -webkit-appearance: none;
+  background-color: #e5e9ef !important;
+}
+
+.oak_autocomplete_delete_button {
+  color: #f15c3b;
+  margin-left: 10px;
+}
+
+.oak_autocomplete_delete_button:hover {
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=style.css.map */

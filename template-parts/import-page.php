@@ -1,3 +1,8 @@
+<?php
+include get_template_directory() . '/template-parts/admin-menu.php';
+include get_template_directory() . '/template-parts/system-bar.php';
+include get_template_directory() . '/template-parts/app-bar.php';
+?>
 <div class="oak_import_page">
     <div class="import_header">
         <div class="import_header__left_side">
