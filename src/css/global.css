@@ -1,3 +1,17 @@
+
+@font-face {
+    font-family: 'lato';
+    src: url('../assets/fonts/lato/Lato-Regular.ttf') format('truetype');
+    src: url('../assets/fonts/lato/Lato-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+* {
+    font-family: 'lato';
+}
+
 .update-nag, #footer-thankyou {
     display: none!important;
 }
