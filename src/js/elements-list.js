@@ -539,12 +539,14 @@ function handleModalButtons() {
                         'action': functionName
                     },
                     success: function(data) {
-                        doneLoading();
                         console.log(data);
-                        // window.location.reload();
+                        doneLoading();
+                        window.location.reload();
                     },
                     error: function(error) {
                         console.log(error);
+                        doneLoading();
+                        window.localStorage.reload();
                     }
                 });
             });
