@@ -867,8 +867,46 @@ class Oak {
             endforeach;
         endif;
 
+        $properties = '';
+        if ( ( $_POST['table'] == 'form' || $_POST['table'] == 'model' ) && isset( $_POST['copy'] ) ) :
+            $other_table = $_POST['table'] == 'form' ? 'field' : 'form';
+            $associative_table_name = $_POST['table'] == 'form' ? Oak::$forms_and_fields_table_name : Oak::$models_and_forms_table_name;
+            $identifier = $element['copy_identifier'];
+            $associative_table_instances = $wpdb->get_results ( "
+                SELECT * 
+                FROM  $associative_table_name
+            " );
+
+            foreach( $associative_table_instances as $instance ) :
+                $other_element_identifier_property = $other_table . '_identifier';
+                $identifier_property = $_POST['table'] . '_identifier';
+                $designation_property = $other_table . '_designation';
+                $required_property = $other_table . '_required';
+                $index_property = $other_table . '_index';
+                $revision_number_property = $_POST['table'] . '_revision_number';
+                $properties = array( $other_element_identifier_property, $identifier_property, $designation_property, $required_property,
+                $index_property, $revision_number_property );
+                if ( $instance->$identifier_property == $element['copy_identifier'] ) : 
+                    $result = $wpdb->insert(
+                        $associative_table_name,
+                        array (
+                            $_POST['table'] . '_identifier' => $element[ $table . '_identifier' ],
+                            $other_table . '_identifier' => $instance->$other_element_identifier_property,
+                            $other_table . '_designation' => $instance->$designation_property,
+                            $other_table . '_required' => $instance->$required_property,
+                            $other_table . '_index' => $instance->$index_property,
+                            $_POST['table'] . '_revision_number' => $instance->$revision_number_property
+                        )
+                    );
+                endif;
+            endforeach;
+
+            
+        endif;
+
         unset( $array_data['otherElements'] );
         unset( $array_data['otherElementsProperties'] );
+        unset( $array_data['copy_identifier'] );
         
         // For the files/images: 
         foreach( $array_data as $key => $value ) :
@@ -922,6 +960,7 @@ class Oak {
         wp_send_json_success( array(
             'properties' => $_POST['properties'],
             'array_data' => $array_data,
+            'result' => $properties,
         ) );
     }
 

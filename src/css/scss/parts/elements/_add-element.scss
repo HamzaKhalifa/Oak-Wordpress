@@ -53,6 +53,11 @@
 }
 
 // For the text field and the select
+
+.oak_text_field {
+    width: 90%!important;
+}
+
 .oak_text_field_container, .oak_text_field_container_identifier {
     display: flex;
     align-items: flex-start;
@@ -557,6 +562,10 @@ input.oak_add_other_elements_list_single_element__chekcbox {
 .oak_add_element_image_container {
     width: 200px;
     height: auto;
+}
+
+.additional_container {
+    width: 90%;
 }
 
 .oak_add_element_image_container .oak_checkbox_container__container {

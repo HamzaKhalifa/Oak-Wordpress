@@ -110,6 +110,84 @@ function restoreButton() {
     });
 }
 
+// For the copy button
+copy();
+function copy() {
+    document.querySelector('.oak_element_header_right_copy_button').addEventListener('click', function() {
+        var checkboxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
+        var selectedIdentifiers = [];
+        for (var i = 1; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedIdentifiers.push(checkboxes[i].parentNode.parentNode.getAttribute('identifier'));
+            }
+        }
+        var copies = [];
+        for (var i = 0; i < selectedIdentifiers.length; i++) {
+            var foundIt = false;
+            var counter = DATA.elements.length - 1;
+            do {
+                if (DATA.elements[counter][DATA.table + '_identifier'] == selectedIdentifiers[i]) {
+                    foundIt = true;
+                    var copy = {};
+                    var keys = getKeys(DATA.elements[counter]);
+                    for (var k = 0; k < keys.length; k++) {
+                        if (keys[k] != table + '_identifier' && keys[k] != table + '_designation' && keys[k] != 'id') {
+                            copy[keys[k]] = DATA.elements[counter][keys[k]];
+                        }
+                    }
+                    copy[table + '_identifier'] = createIdentifier();
+                    copy[table + '_designation'] = DATA.elements[counter][table + '_designation'] + ' (copy)';
+                    copy['copy_identifier'] = DATA.elements[counter][DATA.table + '_identifier'];
+                    copies.push(copy);
+                }
+                counter--;
+            } while(!foundIt && counter >= 0 );
+        }
+
+        var numberOfReturns = 0;
+        setLoading();
+        for (var i = 0; i < copies.length; i++) {
+            jQuery(document).ready(function() {
+                jQuery.ajax({
+                    url: DATA.ajaxUrl,
+                    type: 'POST',
+                    data: {
+                        'action': 'oak_register_element',
+                        'element': copies[i],
+                        'table': DATA.table,
+                        'tableInPlural': DATA.tableInPlural,
+                        'fromRevision': false,
+                        'properties': DATA.properties,
+                        'copy': true
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        numberOfReturns++;
+
+                        if (numberOfReturns == copies.length) {
+                            window.location.reload();
+                            doneLoading();
+                        }
+                    },
+                    error: function(error) {
+                        doneLoading();
+                    }
+                });
+            });
+        }
+    });
+}
+
+function createIdentifier() {
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 20; i++) 
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+      
+    return text;
+}
+
 // For the select all checkboxes
 selectAllCheckboxes();
 function selectAllCheckboxes() {
@@ -534,7 +612,7 @@ function handleModalButtons() {
                             'table': DATA.table,
                             'tableInPlural': tableInPlural,
                             'identifiers': identifiersToDelete,
-                            'otherElementsTableName': DATA.otherElementProperties ? DATA.otherElementProperties.table_name : false
+                            'otherElementsTableName': DATA.otherElementProperties ? DATA.otherElementProperties.table_name : false,
                         },
                         'action': functionName
                     },
