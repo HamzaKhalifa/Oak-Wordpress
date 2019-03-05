@@ -540,7 +540,8 @@ function handleModalButtons() {
                     },
                     success: function(data) {
                         doneLoading();
-                        window.location.reload();
+                        console.log(data);
+                        // window.location.reload();
                     },
                     error: function(error) {
                         console.log(error);
