@@ -43,6 +43,7 @@ dbDelta( $forms_sql );
 $forms_and_fields_table_name = Oak::$forms_and_fields_table_name;
 $forms_and_fields_sql= "CREATE TABLE $forms_and_fields_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
+    form_and_field_identifier varchar(555) DEFAULT '' NOT NULL,
     form_identifier varchar(555) DEFAULT '' NOT NULL,
     field_identifier varchar(555) DEFAULT '' NOT NULL,
     field_designation varchar(555),

@@ -30,7 +30,7 @@ endforeach;
 
 $countries = array();
 $languages = array();
-if ( isset( $_GET['elements'] ) && $_GET['elements'] == 'publications' ) :
+if ( isset( $_GET['elements'] ) && ( $_GET['elements'] == 'publications' || $_GET['elements'] == 'organizations' ) ) :
     $countries_names = Oak::oak_get_countries_names();
     
     foreach( $countries_names as $country_name ) :
@@ -559,7 +559,9 @@ Oak::$organization_properties = array(
         'name' => 'country', 
         'property_name' => 'organization_country', 
         'type' => 'text', 
-        'input_type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => $countries,
         'placeholder' => __( 'Pays', Oak::$text_domain ), 
         'description' => __( 'Pays.', Oak::$text_domain ), 
         'width' => '50' 
@@ -626,7 +628,7 @@ Oak::$publication_properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => $years,
-        'description' => __( 'Publications', Oak::$text_domain ), 
+        'description' => __( 'Année', Oak::$text_domain ), 
         'width' => '50' 
     ),
     array ( 
@@ -644,20 +646,24 @@ Oak::$publication_properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
+            array( 'value' => 'web', 'innerHTML' => 'WEB' ),
             array( 'value' => 'pdf', 'innerHTML' => 'Fichier PDF' ),
             array( 'value' => 'epub', 'innerHTML' => 'ePub' ),
-            array( 'value' => 'web', 'innerHTML' => 'WEB' ),
         ),
         'description' => __( 'Format', Oak::$text_domain ), 
-        'width' => '50' 
+        'width' => '50',
+        'condition' => true,
     ),
-    array ( 
+    array (
         'name' => 'file', 
         'property_name' => 'publication_file', 
         'type' => 'text',
         'input_type' => 'file',
         'description' => __( 'Fichier', Oak::$text_domain ), 
-        'width' => '50' 
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'format', 'values' => array( 'pdf', 'epub' ) )
+        )
     ),
     array ( 
         'name' => 'description', 
@@ -667,6 +673,41 @@ Oak::$publication_properties = array (
         'placeholder' => __( 'Description', Oak::$text_domain ), 
         'description' => __( 'Description', Oak::$text_domain ), 
         'width' => '50' 
+    ),
+    array ( 
+        'name' => 'local', 
+        'property_name' => 'publication_local', 
+        'type' => 'text',
+        'input_type' => 'checkbox',
+        'placeholder' => __( 'Publication locale', Oak::$text_domain ), 
+        'description' => __( 'Publication locale', Oak::$text_domain ), 
+        'width' => '50',
+        'condition' => true
+    ),
+    array (
+        'name' => 'country', 
+        'property_name' => 'publication_country', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => $countries,
+        'placeholder' => __( 'Pays', Oak::$text_domain ), 
+        'description' => __( 'Pays', Oak::$text_domain ), 
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'local', 'values' => array( 'true' ) )
+        )
+    ),
+    array ( 
+        'name' => 'language', 
+        'property_name' => 'publication_language', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => $languages,
+        'placeholder' => __( 'Langue', Oak::$text_domain ), 
+        'description' => __( 'Langue', Oak::$text_domain ), 
+        'width' => '50'
     ),
     array ( 
         'name' => 'report_or_frame', 
@@ -680,31 +721,12 @@ Oak::$publication_properties = array (
         ),
         'placeholder' => __( 'Rapport ou Cadres RSE', Oak::$text_domain ), 
         'description' => __( 'Rapport ou Cadres RSE', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'condition' => true
     ),
     array ( 
-        'name' => 'local', 
-        'property_name' => 'publication_local', 
-        'type' => 'text',
-        'input_type' => 'checkbox',
-        'placeholder' => __( 'Publication locale', Oak::$text_domain ), 
-        'description' => __( 'Publication locale', Oak::$text_domain ), 
-        'width' => '50'
-    ),
-    array ( 
-        'name' => 'country', 
-        'property_name' => 'publication_country', 
-        'type' => 'text',
-        'input_type' => 'select',
-        'select_multiple' => 'false',
-        'choices' => $countries,
-        'placeholder' => __( 'Pays', Oak::$text_domain ), 
-        'description' => __( 'Pays', Oak::$text_domain ), 
-        'width' => '50'
-    ),
-    array ( 
-        'name' => 'report_type', 
-        'property_name' => 'publication_report_type', 
+        'name' => 'frame_type', 
+        'property_name' => 'publication_frame_type', 
         'type' => 'text',
         'input_type' => 'select',
         'select_multiple' => 'false',
@@ -715,13 +737,16 @@ Oak::$publication_properties = array (
             array ( 'value' => 'evaluation-initiatives', 'innerHTML' => __( 'Initiatives d\'évaluation (Notation)', Oak::$text_domain ) ),
             array ( 'value' => 'extra-finantial-notation', 'innerHTML' => __( 'Notation extra financière (Classement)', Oak::$text_domain ) ),
         ),
-        'placeholder' => __( 'Type de rapport', Oak::$text_domain ), 
-        'description' => __( 'Type de rapport', Oak::$text_domain ), 
-        'width' => '50'
+        'placeholder' => __( 'Type de cadres', Oak::$text_domain ), 
+        'description' => __( 'Type de cadres', Oak::$text_domain ), 
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'report_or_frame', 'values' => array( 'frame' ) )
+        )
     ),
     array ( 
-        'name' => 'frame_type', 
-        'property_name' => 'publication_frame_type', 
+        'name' => 'report_type', 
+        'property_name' => 'publication_report_type', 
         'type' => 'text',
         'input_type' => 'select',
         'select_multiple' => 'false',
@@ -732,9 +757,12 @@ Oak::$publication_properties = array (
             array ( 'value' => 'evaluation-initiatives', 'innerHTML' => __( 'Initiatives d\'évaluation (Notation)', Oak::$text_domain ) ),
             array ( 'value' => 'extra-finantial-notation', 'innerHTML' => __( 'Notation extra financière (Classement)', Oak::$text_domain ) ),
         ),
-        'placeholder' => __( 'Type de cadres', Oak::$text_domain ), 
-        'description' => __( 'Type de cadres', Oak::$text_domain ), 
-        'width' => '50'
+        'placeholder' => __( 'Type de rapport', Oak::$text_domain ), 
+        'description' => __( 'Type de rapport', Oak::$text_domain ), 
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'report_or_frame', 'values' => array( 'report' ) )
+        )
     ),
     array ( 
         'name' => 'sectorial_frame', 
@@ -743,7 +771,11 @@ Oak::$publication_properties = array (
         'input_type' => 'checkbox',
         'placeholder' => __( 'Cadre sectoriel', Oak::$text_domain ), 
         'description' => __( 'Cadre sectoriel', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'condition' => true,
+        'depends' => array(
+            array( 'name' => 'report_or_frame', 'values' => array( 'frame' ) )
+        )
     ),
     array ( 
         'name' => 'sectors', 
@@ -752,18 +784,11 @@ Oak::$publication_properties = array (
         'input_type' => 'text',
         'placeholder' => __( 'Secteurs d\'activité', Oak::$text_domain ), 
         'description' => __( 'Secteurs d\'activité', Oak::$text_domain ), 
-        'width' => '50'
-    ),
-    array ( 
-        'name' => 'language', 
-        'property_name' => 'publication_language', 
-        'type' => 'text',
-        'input_type' => 'select',
-        'select_multiple' => 'false',
-        'choices' => $languages,
-        'placeholder' => __( 'Langue', Oak::$text_domain ), 
-        'description' => __( 'Langue', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'report_or_frame', 'values' => array( 'frame' ) ),
+            array( 'name' => 'sectorial_frame', 'values' => array( 'true' ) )
+        )
     ),
     array ( 
         'name' => 'gri_type', 
@@ -779,7 +804,10 @@ Oak::$publication_properties = array (
         ),
         'placeholder' => __( 'Type GRI de rapport', Oak::$text_domain ), 
         'description' => __( 'Type GRI de rapport', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'report_or_frame', 'values' => array( 'report' ) )
+        )
     ),
     array ( 
         'name' => 'sectorial_supplement', 
@@ -801,7 +829,10 @@ Oak::$publication_properties = array (
         ),
         'placeholder' => __( 'Supplément sectoriel', Oak::$text_domain ), 
         'description' => __( 'Supplément sectoriel', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'report_or_frame', 'values' => array( 'report' ) )
+        )
     ),
 );
 
@@ -900,7 +931,8 @@ Oak::$quali_properties = array (
         'input_type' => 'checkbox',
         'placeholder' => __( 'Indicateur dépandant d’un autre:', Oak::$text_domain ), 
         'description' => __( 'Indicateur dépandant d’un autre:', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'condition' => true
     ),
     array(
         'name' => 'parent', 
@@ -911,7 +943,10 @@ Oak::$quali_properties = array (
         'choices' => $qualis_array,
         'placeholder' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
         'description' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'depends', 'values' => array( 'true' ) )
+        )
     ),
     array(
         'name' => 'numerotation_type', 
@@ -949,12 +984,13 @@ Oak::$quali_properties = array (
     ),
     array(
         'name' => 'close', 
-        'property_name' => 'quali_close', 
+        'property_name' => 'quali_close',
         'type' => 'text',
         'input_type' => 'checkbox',
         'placeholder' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'description' => __( 'Indicateurs proches', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'condition' => true,
     ),
     array(
         'name' => 'close_indicators', 
@@ -965,7 +1001,10 @@ Oak::$quali_properties = array (
         'choices' => $qualis_array,
         'placeholder' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'description' => __( 'Indicateurs proches', Oak::$text_domain ), 
-        'width' => '100'
+        'width' => '100',
+        'depends' => array (
+            array( 'name' => 'close', 'values' => array( 'true' ) )
+        )
     ),
 );
 
@@ -999,7 +1038,8 @@ Oak::$quanti_properties = array (
         'input_type' => 'checkbox',
         'placeholder' => __( 'Indicateur dépendant d’une autre:', Oak::$text_domain ), 
         'description' => __( 'Indicateur dépendant d’une autre:', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'condition' => true
     ),
     array(
         'name' => 'parent', 
@@ -1010,7 +1050,10 @@ Oak::$quanti_properties = array (
         'choices' => $quantis_array,
         'placeholder' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
         'description' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'depends' => array (
+            array( 'name' => 'depends', 'values' => array( 'true' ) )
+        )
     ),
     array(
         'name' => 'numerotation_type', 
@@ -1053,7 +1096,8 @@ Oak::$quanti_properties = array (
         'input_type' => 'checkbox',
         'placeholder' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'description' => __( 'Indicateurs proches', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'condition' => true
     ),
     array(
         'name' => 'close_indicators', 
@@ -1064,7 +1108,10 @@ Oak::$quanti_properties = array (
         'choices' => $quantis_array,
         'placeholder' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'description' => __( 'Indicateurs proches', Oak::$text_domain ), 
-        'width' => '100'
+        'width' => '100',
+        'depends' => array (
+            array( 'name' => 'close', 'values' => array( 'true' ) )
+        )
     ),
 );
 

@@ -9,7 +9,7 @@
                 url: DATA.ajaxUrl,
                 type: 'POST',
                 data: {
-                    'action': 'oak_save_save_configuration',
+                    'action': 'oak_save_configuration',
                     'data': {
                         central,
                         centralUrl: centralUrl

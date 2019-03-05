@@ -41,6 +41,9 @@ function textFieldsAnimations() {
 
 function focusTextField(input) {
     var textField = input.parentNode;
+    if (!textField.querySelector('.oak_text_field_placeholder')) {
+        textField = textField.parentNode;
+    }
     removeSomethingWrittenClasses(textField);
     textField.querySelector('.oak_text_field_placeholder').classList.add('oak_text_field_placeholder_focused');
     if (textField.querySelector('input').inputMode != 'focus')
@@ -285,7 +288,6 @@ function browseRevisionsButton() {
         
         elementData = createElementData();
         for (var i = 0; i < properties.length; i++) {
-            console.log(properties[i].name)
             if ( properties[i].name != 'revision_number' )
                 document.querySelector('.oak_revision_' + properties[i].name + '_field_current').value = elementData[table + '_' + properties[i].name];
         }
@@ -615,6 +617,48 @@ function readUrl(input) {
     }
 }
 
+// For the conditions:
+handlePropertiesConditions(); 
+function handlePropertiesConditions() {
+    for (var i = 0; i < DATA.properties.length; i++) {
+        if (DATA.properties[i].condition) {
+            var propertyInput = document.querySelector('.' + DATA.table + '_' + DATA.properties[i].name + '_input');
+            propertyInput.setAttribute('name', DATA.properties[i].name);
+            conditionListener(propertyInput);
+            propertyInput.addEventListener('change', function() {
+                conditionListener(this);
+            });
+        }
+    }
+}
+
+function conditionListener(input) {
+    for (var j = 0; j < DATA.properties.length; j++) {
+        if (DATA.properties[j].depends) {
+            var hide = false;
+            var doesDepend = false;
+            for (var m = 0; m < DATA.properties[j].depends.length; m++) {
+                var conditionInput = document.querySelector('.' + DATA.table + '_' + DATA.properties[j].depends[m].name + '_input');
+                var newValue = conditionInput.value == 'on' ? conditionInput.checked.toString() : conditionInput.value;
+                if (DATA.properties[j].depends[m].values.indexOf(newValue) == -1) {
+                    hide = true;
+                }
+                if (DATA.properties[j].depends[m].name == input.getAttribute('name')) {
+                    doesDepend = true;
+                }
+            }
+            if (doesDepend) {
+                if (hide) {
+                    document.querySelector('.' + DATA.table + '_' + DATA.properties[j].name + '_input').parentNode.parentNode.classList.add('oak_hidden');
+                } else {
+                    document.querySelector('.' + DATA.table + '_' + DATA.properties[j].name + '_input').parentNode.parentNode.classList.remove('oak_hidden');
+                }
+            }
+            
+        }
+    }
+}
+
 // Everything related to our modal:
 function openModal(title, twoButtons) {
     var confirmButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_add_button_container__text');
@@ -705,7 +749,7 @@ function handleModalButtons() {
         if (adding || updating) {
             closeModals();
             setLoading();
-            console.log(elementData);
+            // console.log(elementData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,

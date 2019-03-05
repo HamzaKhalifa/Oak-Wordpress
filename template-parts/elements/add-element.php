@@ -156,29 +156,33 @@ $modification_time_property = $table . '_modification_time';
                         $input_class_prefix = 'object_';
                     endif;
                     ?>
-                    <input type="<?php echo( $property['input_type'] ); ?>" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->$property_name ) ); endif; ?>" class="oak_text_field <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
+                    <div class="additional_container">
+                        <input type="<?php echo( $property['input_type'] ); ?>" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->$property_name ) ); endif; ?>" class="oak_text_field <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
+                    </div>
                     <span class="oak_text_field_placeholder <?php if( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->$property_name != '' ) : echo('oak_text_field_placeholder_not_focused_but_something_written'); endif; ?>"><?php echo( $property['placeholder'] ); ?></span>
                     <div class="text_field_line <?php if( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
                     <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
                 </div><?php
             elseif ( $property['input_type'] == 'select' ) : ?>
                 <div class="oak_select_container">
-                    <select type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
-                        <?php 
-                        $selected = array();
-                        foreach( $property['choices'] as $key => $choice ) :
-                            array_push( $selected, 'notselected' );
-                            if ( count( $revisions ) > 0 ) :
-                                if ( $revisions[ count( $revisions ) - 1 ]->$property_name == $choice['value'] ) :
-                                    $selected[ $key ] = 'selected';
+                    <div class="additional_container">
+                        <select type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
+                            <?php 
+                            $selected = array();
+                            foreach( $property['choices'] as $key => $choice ) :
+                                array_push( $selected, 'notselected' );
+                                if ( count( $revisions ) > 0 ) :
+                                    if ( $revisions[ count( $revisions ) - 1 ]->$property_name == $choice['value'] ) :
+                                        $selected[ $key ] = 'selected';
+                                    endif;
                                 endif;
-                            endif;
+                                ?>
+                                <option <?php echo( esc_attr( $selected[ $key ] ) ); ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
+                                <?php
+                            endforeach;
                             ?>
-                            <option <?php echo( esc_attr( $selected[ $key ] ) ); ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
-                            <?php
-                        endforeach;
-                        ?>
-                    </select>
+                        </select>
+                    </div>
                     <div class="input_line"></div>
                     <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
                     <span class="text_field_description"><?php echo( $property['description'] ); ?></span>

@@ -12,7 +12,9 @@ var selectedData = {
     fields: [],
     glossaries: [],
     qualis: [],
-    quantis: []
+    quantis: [],
+    formsAndFields: [],
+    modelsAndForms: [],
 };
 
 (function() {
@@ -223,118 +225,55 @@ var selectedData = {
                             termIdentifiers.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
                         }
                     }
+                    // Lets get the terms
                     for (var i = 0; i < termIdentifiers.length; i++) {
                         for (var j = 0; j < allData.allTerms.length; j++) {
                             for (var m = 0; m < allData.allTerms[j].terms.length; m++) {
                                 if (termIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) != -1) {
-                                    if (allData.allTerms[i].terms[m]) {
+                                    if (allData.allTerms[j].terms[m]) {
                                         selectedData.terms.push(allData.allTerms[j].terms[m]);
                                         // Lets get the objects associated to these terms:
-                                         for(var n = 0; n < allData.termsAndObjects.length; n++) {
-                                             if (allData.termsAndObjects[n].term_identifier == allData.allTerms[i].terms[m].term_identifier) {
-                                                 var objectIdentifier = allData.termsAndObjects[n].object_identifier;
+                                        for(var n = 0; n < allData.termsAndObjects.length; n++) {
+                                            if (allData.termsAndObjects[n].term_identifier == allData.allTerms[j].terms[m].term_identifier) {
+                                                var objectIdentifier = allData.termsAndObjects[n].object_identifier;
                                                 //  Lets add that object to our list of objects
-                                                 for (var k = 0; k < allData.allObjects.length; k++) {
-                                                     for (var l = 0; l < allData.allObjects[k].objects.length; l++) {
-                                                         if (allData.allObjects[k].objects[l].object_identifier == objectIdentifier) {
-                                                            allData.allObjects[k].objects[l].model = allData.allObjects[k].model_identifier;
-                                                            var exists = false;
-                                                            for (var p = 0; p < selectedData.objects.length; p++) {
-                                                                if (selectedData.objects[p].object_identifier == allData.allObjects[k].objects[l].object_identifier )
-                                                                    exists = true;
-                                                            }
-                                                            if (!exists) {
-                                                                selectedData.objects.push(allData.allObjects[k].objects[l]);
-                                                                // if the object is added, then we are gonna add its model here: 
-                                                                for (var q = 0; q < allData.modelsWihoutRedundancy.length; q++) {
-                                                                    if (allData.allObjects[k].objects[l].model == allData.modelsWihoutRedundancy[q].model_identifier) {
-                                                                        var exists = false;
-                                                                        for (var r = 0; r < selectedData.models.length; r++) {
-                                                                            if (selectedData.models[r].model_identifier == allData.modelsWihoutRedundancy[q].model_identifier) {
-                                                                                exists = true;
-                                                                            }
-                                                                        }
-                                                                        if (!exists) {
-                                                                            selectedData.models.push(allData.modelsWihoutRedundancy[q]);
-                                                                            var model = allData.modelsWihoutRedundancy[q];
-                                                                            var forms = model.model_forms.split('|');
-                                                                            for (var e = 0; e < forms.length; e++) {
-                                                                                var formIdentifier = forms[e].split(':')[0];
-                                                                                var exists = false;
-                                                                                for (var f = 0; f < selectedData.forms.length; f++) {
-                                                                                    if (selectedData.forms[f].form_identifier == formIdentifier) {
-                                                                                        exists = true;
-                                                                                    }
-                                                                                }
-                                                                                if (!exists) {
-                                                                                    // Lets get the form data by form identifier
-                                                                                    for (var g = 0; g < allData.formsWithoutRedundancy.length; g++) {
-                                                                                        if (allData.formsWithoutRedundancy[g].form_identifier == formIdentifier) {
-                                                                                            selectedData.forms.push(allData.formsWithoutRedundancy[g]);
-                                                                                            // Now lets get the fields in this form: 
-                                                                                            var fields = allData.formsWithoutRedundancy[g].form_fields.split('|');
-                                                                                            for (var h = 0; h < fields.length; h++) {
-                                                                                                var fieldIdentifier = fields[h].split(':')[0];
-                                                                                                var exists = false;
-                                                                                                for (var s = 0; s < selectedData.fields.length; s++) {
-                                                                                                    if (selectedData.fields[s].field_identifier == fieldIdentifier) {
-                                                                                                        exists = false;
-                                                                                                    }
-                                                                                                }
-                                                                                                if (!exists) {
-                                                                                                    // Lets look for the field based on its identififer:
-                                                                                                    for (var t = 0; t < allData.fieldsWithoutRedundancy.length; t++) {
-                                                                                                        if (allData.fieldsWithoutRedundancy[t].field_identifier == fieldIdentifier) {
-                                                                                                            var theField = allData.fieldsWithoutRedundancy[t];
-                                                                                                            selectedData.fields.push(theField);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } 
-                                                         }
-                                                     }
-                                                 }
-                                             }
+                                                addObject(objectIdentifier);
+                                            }
                                          }
                                     }
                                 }
                             }
                         }
                     }
+
                     // Lets get the glossaries: 
                     var publicationIdentifier = selectedData.publication.publication_identifier;
+
                     for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
-                        identifiers = allData.glossariesWithoutRedundancy[i].glossary_publication.split('|');
-                        if (identifiers.indexOf(publicationIdentifier) != -1) {
-                            selectedData.glossaries.push(allData.glossariesWithoutRedundancy[i]);
-                        } 
+                        glossaryPublicationIdentifier = allData.glossariesWithoutRedundancy[i].glossary_publication;
+                        if (glossaryPublicationIdentifier == publicationIdentifier) {
+                            selectedData.glossaries = addGlossary(selectedData.glossaries, allData.glossariesWithoutRedundancy[i].glossary_identifier, allData.glossariesWithoutRedundancy[i] );
+                        }
                     }
 
+                    // Lets get the qualis:
                     for (var i = 0; i < allData.qualisWithoutRedundancy.length; i++) {
-                        identifiers = allData.qualisWithoutRedundancy[i].quali_publication.split('|');
-                        if (identifiers.indexOf(publicationIdentifier) != -1) {
-                            selectedData.qualis.push(allData.qualisWithoutRedundancy[i]);
-                        } 
+                        qualiPublicationIdentifier = allData.qualisWithoutRedundancy[i].quali_publication;
+                        if (qualiPublicationIdentifier == publicationIdentifier) {
+                            selectedData.qualis = addIndicator(selectedData.qualis, allData.qualisWithoutRedundancy[i].quali_identifier, 'quali', allData.qualisWithoutRedundancy[i] );
+                        }
                     }
 
+                    // Lets get the quantis
                     for (var i = 0; i < allData.quantisWithoutRedundancy.length; i++) {
-                        identifiers = allData.quantisWithoutRedundancy[i].quanti_publication.split('|');
-                        if (identifiers.indexOf(publicationIdentifier) != -1) {
-                            selectedData.quantis.push(allData.quantisWithoutRedundancy[i]);
+                        quantiPublicationIdentifier = allData.quantisWithoutRedundancy[i].quanti_publication;
+                        if (quantiPublicationIdentifier == publicationIdentifier) {
+                            selectedData.quantis = addIndicator(selectedData.quantis, allData.quantisWithoutRedundancy[i].quanti_identifier, 'quanti', allData.quantisWithoutRedundancy[i] );
                         }
                     }
 
                     selectedData.termsAndObjects = allData.termsAndObjects;
-
-                    console.log('Selected data', selectedData);
+                    console.log(selectedData);
                     jQuery(document).ready(function() {
                         jQuery.ajax({
                             type: 'POST',
@@ -346,7 +285,7 @@ var selectedData = {
                             success: function(data) {
                                 console.log(data);
                                 doneLoading();
-                                // window.location.reload();
+                                window.location.reload();
                             },
                             error: function(error) {
                                 console.log(error);
@@ -360,6 +299,170 @@ var selectedData = {
     })()
 })();
 
+function addObject(objectIdentifier) {
+    for (var k = 0; k < allData.allObjects.length; k++) {
+        for (var l = 0; l < allData.allObjects[k].objects.length; l++) {
+            if (allData.allObjects[k].objects[l].object_identifier == objectIdentifier) {
+               allData.allObjects[k].objects[l].model = allData.allObjects[k].model_identifier;
+               var exists = false;
+               for (var p = 0; p < selectedData.objects.length; p++) {
+                   if (selectedData.objects[p].object_identifier == allData.allObjects[k].objects[l].object_identifier )
+                       exists = true;
+               }
+               if (!exists) {
+                   selectedData.objects.push(allData.allObjects[k].objects[l]);
+                   // if the object is added, then we are gonna add its model here: 
+                   for (var q = 0; q < allData.modelsWihoutRedundancy.length; q++) {
+                       if (allData.allObjects[k].objects[l].model == allData.modelsWihoutRedundancy[q].model_identifier) {
+                           var exists = false;
+                           for (var r = 0; r < selectedData.models.length; r++) {
+                               if (selectedData.models[r].model_identifier == allData.modelsWihoutRedundancy[q].model_identifier) {
+                                   exists = true;
+                               }
+                           }
+                           if (!exists) {
+                               selectedData.models.push(allData.modelsWihoutRedundancy[q]);
+                               // Now that we added the model, lets add the models_and_forms instances related to it: 
+                               for (var i = 0; i < allData.modelsAndForms.length; i++) {
+                                   if (allData.modelsAndForms[i].model_identifier == allData.modelsWihoutRedundancy[q].model_identifier) {
+                                       selectedData.modelsAndForms.push(allData.modelsAndForms[i]);
+                                   }
+                               }
+                               var model = allData.modelsWihoutRedundancy[q];
+                               // Lets get the model's forms now: 
+                               var formsIdentifiers = [];
+                               for (var z = 0; z < allData.modelsAndForms.length; z++) {
+                                   if ( allData.modelsAndForms[z].model_identifier == model.model_identifier ) {
+                                       formsIdentifiers.push(allData.modelsAndForms[z].form_identifier);
+                                   }
+                               }
+                               for (var e = 0; e < formsIdentifiers.length; e++) {
+                                   var formIdentifier = formsIdentifiers[e];
+                                   var exists = false;
+                                   for (var f = 0; f < selectedData.forms.length; f++) {
+                                       if (selectedData.forms[f].form_identifier == formIdentifier) {
+                                           exists = true;
+                                       }
+                                   }
+                                   if (!exists) {
+                                       // Lets get the form data by form identifier
+                                       for (var g = 0; g < allData.formsWithoutRedundancy.length; g++) {
+                                           if (allData.formsWithoutRedundancy[g].form_identifier == formIdentifier) {
+                                               selectedData.forms.push(allData.formsWithoutRedundancy[g]);
+                                               // Now that we added the model, lets add the models_and_forms instances related to it:
+                                               for (var i = 0; i < allData.formsAndFields.length; i++) {
+                                                   if (allData.formsAndFields[i].form_identifier == allData.formsWithoutRedundancy[g].form_identifier) {
+                                                       selectedData.formsAndFields.push(allData.formsAndFields[i]);
+                                                   }
+                                               }
+                                               // Now lets get the fields in this form: 
+                                               var fieldsIdentifiers = [];
+                                               for (var z = 0; z < allData.formsAndFields.length; z++) {
+                                                   if ( allData.formsAndFields[z].form_identifier == formIdentifier ) {
+                                                       fieldsIdentifiers.push(allData.formsAndFields[z].field_identifier);
+                                                   }
+                                               }
+                                               for (var h = 0; h < fieldsIdentifiers.length; h++) {
+                                                   var fieldIdentifier = fieldsIdentifiers[h];
+                                                   var exists = false;
+                                                   for (var s = 0; s < selectedData.fields.length; s++) {
+                                                       if (selectedData.fields[s].field_identifier == fieldIdentifier) {
+                                                           exists = false;
+                                                       }
+                                                   }
+                                                   if (!exists) {
+                                                       // Lets look for the field based on its identififer:
+                                                       for (var t = 0; t < allData.fieldsWithoutRedundancy.length; t++) {
+                                                           if (allData.fieldsWithoutRedundancy[t].field_identifier == fieldIdentifier) {
+                                                               var theField = allData.fieldsWithoutRedundancy[t];
+                                                               selectedData.fields.push(theField);
+                                                           }
+                                                       }
+                                                   }
+                                               }
+                                           }
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                   }
+               } 
+            }
+        }
+    }
+}
+
+function addGlossary(glossaries, glossaryIdentifier, glossary) {
+    var exists = false;
+    for (var i = 0; i < glossaries.length; i++) {
+        if (glossaries[i].glossary_identifier == glossaryIdentifier) {
+            exists = true;
+            return glossaries;
+        }
+    }
+    if (!exists) {
+        if (!glossary) {
+        // Lets get the glossary
+            for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
+                if (allData.glossariesWithoutRedundancy[i].glossary_identifier == glossaryIdentifier) {
+                    glossary = allData.glossariesWithoutRedundancy[i];
+                }
+            }
+        }
+        if (glossary) {
+            glossaries.push(glossary);
+            addObject(glossary.glossary_object);
+
+            // Lets get the parent glossary as well: 
+            var parentIdentifier = glossary.glossary_parent;
+            // Lets get the close glossary too: 
+            var closeIdentifier = glossary.glossary_close;
+
+            glossaries = addGlossary(glossaries, parentIdentifier);
+            glossaries = addGlossary(glossaries, closeIdentifier);
+        }
+
+        return glossaries;
+    }
+}
+
+function addIndicator(indicators, indicatorIdentifier, whichIndicator, indicator) {
+    var exists = false;
+    for (var i = 0; i < indicators.length; i++) {
+        if (indicators[i][whichIndicator + '_identifier'] == indicatorIdentifier) {
+            exists = true;
+            return indicators;
+        }
+    }
+    if (!exists) {
+        if (!indicator) {
+            // Lets get the indicator
+            var allDataIndicators = whichIndicator == 'quali' ? allData.qualisWithoutRedundancy : allData.quantisWithoutRedundancy;
+            for (var i = 0; i < allDataIndicators.length; i++) {
+                if (allDataIndicators[i][whichIndicator + '_identifier'] == indicatorIdentifier) {
+                    indicator = allDataIndicators[i];
+                }
+            }
+        }
+        if (indicator) {
+            indicators.push(indicator);
+            addObject(indicator[whichIndicator + '_object']);
+
+            // Lets get the parent indicator as well: 
+            var parentIdentifier = indicator[whichIndicator + '_parent'];
+            // Lets get the close indicator too: 
+            var closeIdentifier = indicator[whichIndicator + '_close_indicators'];
+
+            indicators = addIndicator(indicators, parentIdentifier, whichIndicator);
+            indicators = addIndicator(indicators, closeIdentifier, whichIndicator);
+        }
+
+        return indicators;
+    }
+}
+
+// Everything related to our modal
 function openModal(title, twoButtons) {
     var confirmButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
     var cancelButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__cancel_button_container');
