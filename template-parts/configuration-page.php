@@ -1,8 +1,3 @@
-<?php
-include get_template_directory() . '/template-parts/admin-menu.php';
-include get_template_directory() . '/template-parts/system-bar.php';
-include get_template_directory() . '/template-parts/app-bar.php';
-?>
 <div class="oak_configuration_page">
     <h1 class="oak_configuration_page__title"><?php _e( 'Page de configuration', Oak::$text_domain ); ?></h1>
     <div class="oak_configuration_page_field_container">

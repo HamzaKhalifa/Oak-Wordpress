@@ -866,7 +866,8 @@ Oak::$glossary_properties = array (
         'input_type' => 'checkbox',
         'placeholder' => __( 'Terminologie dépendante d’une autre:', Oak::$text_domain ), 
         'description' => __( 'Terminologie dépendante d’une autre:', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'condition' => true
     ),
     array(
         'name' => 'parent', 
@@ -877,7 +878,10 @@ Oak::$glossary_properties = array (
         'choices' => $glossaries_array,
         'placeholder' => __( 'Terminologie de niveau supérieur:', Oak::$text_domain ), 
         'description' => __( 'Terminologie de niveau supérieur:', Oak::$text_domain ), 
-        'width' => '50'
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'depends', 'values' => array( 'true' ) )
+        )
     ),
     array(
         'name' => 'definition', 

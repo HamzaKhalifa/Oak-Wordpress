@@ -1364,7 +1364,7 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   margin: auto;
 }
 
-.wp-admin select {
+.wp-admin .oak_grouped_actions select {
   padding: 0px;
   margin: 0px;
   text-align-last: center;

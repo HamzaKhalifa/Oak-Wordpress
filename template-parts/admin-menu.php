@@ -14,13 +14,28 @@
     <?php 
         $menu_elements = array(
             array(
-                'title' => __( 'Configuration de Oak', Oak::$text_domain ),
-                'url' => '?page=oak_materiality_reporting',
+                'title' => __( 'Dashboard', Oak::$text_domain ),
+                'url' => '',
                 'icon' => 'fas fa-th-large'
             ),
             array(
                 'title' => __( 'Media', Oak::$text_domain ),
                 'url' => 'upload.php',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
+                'title' => __( 'Themes', Oak::$text_domain ),
+                'url' => 'themes.php',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
+                'title' => __( 'Plugins', Oak::$text_domain ),
+                'url' => 'plugins.php',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
+                'title' => __( 'Configuration de Oak', Oak::$text_domain ),
+                'url' => '?page=oak_materiality_reporting',
                 'icon' => 'fas fa-th-large'
             ),
             array(

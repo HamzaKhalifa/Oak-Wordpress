@@ -1,22 +1,4 @@
-<!-- For the top bars (To replicate) -->
-<?php
-    include get_template_directory() . '/template-parts/admin-menu.php';
-?>
-<?php include( get_template_directory() . '/template-parts/system-bar.php' ); ?>
-
 <?php $state_property = $table . '_state'; ?>
-<div class="oak_app_bar">
-    <div class="oak_app_bar__right_content">
-        <i class="oak_menu_icon oak_menu_burger fas fa-bars"></i>
-        <h2 class="oak_app_bar__title"><?php _e( 'Librairie de contenu', Oak::$text_domain ); ?></h2>
-    </div>
-    <div class="oak_app_bar__left_content">
-        <input placeholder="<?php _e( 'Rechercher un champ', Oak::$text_domain ); ?>" class="oak_list_header_right__search_input oak_hidden" type="text">
-        <i class="oak_menu_icon oak_menu_search_icon fas fa-search"></i>
-        <i class="oak_menu_icon oak_menu_smaller_icon fas fa-th"></i>
-        <i class="oak_menu_icon oak_menu_smaller_icon fas fa-ellipsis-v"></i>
-    </div>
-</div>
 
 <div class="oak_element_header">
     <div class="oak_element_header_left">
@@ -117,6 +99,7 @@ $modification_time_property = $table . '_modification_time';
     <div class="oak_add_element_container">
         
         <div class="oak_add_element_container__horizontal_container">
+            <!-- For the designation -->
             <div class="oak_text_field_container">
                 <input type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->$designation_property ) ); endif; ?>" class="oak_text_field <?php echo( $table . '_designation_input' ); ?>">
                 <span class="oak_text_field_placeholder <?php if( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->$designation_property != '' ) : echo('oak_text_field_placeholder_not_focused_but_something_written'); endif; ?>"><?php _e( 'Designation', Oak::$text_domain ); ?></span>
@@ -124,6 +107,7 @@ $modification_time_property = $table . '_modification_time';
                 <span class="text_field_description"><?php _e('Nom'); ?></span>
             </div>
 
+            <!-- For the identifier -->
             <div class="oak_text_field_container_identifier">
                 <input placeholder="Identifiant Unique  " type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->$identifier_property ) ); endif; ?>" disabled class="oak_text_field <?php echo( $table . '_identifier_input' ); ?>">
                 <span class="oak_text_field_placeholder"><?php _e( '', Oak::$text_domain ); ?></span>
@@ -131,6 +115,7 @@ $modification_time_property = $table . '_modification_time';
                 <span class="text_field_description"><?php _e('Identifiant technique'); ?></span>
             </div>
 
+            <!-- For the selector -->
             <div class="oak_checkbox_container">
                 <div class="oak_checkbox_container__container">
                     <span class="oak_text_field_checkbox_description"><?php _e( 'Sélecteur de cadre RSE', Oak::$text_domain ); ?></span>
@@ -216,6 +201,12 @@ $modification_time_property = $table . '_modification_time';
 
             if ( $property['width'] == '50' )
                 $first = !$first;
+
+            if ( isset( $property['selector'] ) ) :
+                if ( $property['selector'] == 'true' ) :
+                    var_dump('selector here');
+                endif;
+            endif;
                 
         endforeach;
         ?>
@@ -264,7 +255,8 @@ $modification_time_property = $table . '_modification_time';
         endif;
         ?>
 
-        <?php if ( $table == 'form' || $table == 'model' ) :
+        <?php 
+        if ( $table == 'form' || $table == 'model' ) :
             if ( $table == 'form' ) 
                 $other_properties = Oak::$form_other_elements;
             if ( $table == 'model' )
@@ -341,7 +333,9 @@ $modification_time_property = $table . '_modification_time';
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
+        <?php 
+        endif; 
+        ?>
     </div>
     
     <div class="oak_add_element_big_container__tabs">

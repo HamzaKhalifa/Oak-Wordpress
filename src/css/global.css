@@ -12,6 +12,12 @@
     font-family: 'lato';
 }
 
+.wrap {
+    width: 95%;
+    left: 2.5%;
+    position: relative;
+}
+
 .update-nag, #footer-thankyou {
     display: none!important;
 }
@@ -51,9 +57,11 @@ div {
     top: 0px;
     bottom: 0px;
     background-color: white;
-    z-index: 99;
+    z-index: 301;
     left: -300px;
     transition: all .2s ease-in-out;
+    overflow: scroll;
+    padding-bottom: 40px;
 }
 
 .oak_admin_menu_shown {
@@ -72,7 +80,7 @@ div {
 }
 
 .oak_admin_menu_layer__shown {
-    z-index: 98;
+    z-index: 300;
     opacity: 1;
 }
 

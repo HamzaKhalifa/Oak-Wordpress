@@ -120,7 +120,10 @@ class Oak {
         add_action( 'after_setup_theme', array( $this, 'oak_add_theme_support' ) );
 
         // add_action( 'init', array( $this, 'add_cors_http_header' ) );
-        add_action('wp_dashboard_setup', array ( $this, 'oak_wordpress_dashboard' ) );
+        // add_action('wp_dashboard_setup', array ( $this, 'oak_wordpress_dashboard' ) );
+        // add_action('admin_init', array ( $this, 'oak_wordpress_dashboard' ) );
+        add_action('admin_head', array ( $this, 'oak_wordpress_dashboard' ) );
+        
         
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
         
@@ -130,8 +133,8 @@ class Oak {
     }
     
     function oak_ajax_calls() {
-        add_action('wp_ajax_oak_save_save_configuration', array( $this, 'oak_save_configuration') );
-        add_action('wp_ajax_nopriv_oak_save_save_configuration', array( $this, 'oak_save_configuration') );
+        add_action('wp_ajax_oak_save_configuration', array( $this, 'oak_save_configuration') );
+        add_action('wp_ajax_nopriv_oak_save_configuration', array( $this, 'oak_save_configuration') );
 
         add_action('wp_ajax_oak_save_analysis_model', array( $this, 'oak_save_analysis_model') );
         add_action('wp_ajax_nopriv_oak_save_analysis_model', array( $this, 'oak_save_analysis_model') );
@@ -368,6 +371,7 @@ class Oak {
                         'input_type' => $input_type,
                         'placeholder' => $field->form_and_field_properties->field_designation,
                         'description' => $field->form_and_field_properties->field_designation,
+                        'selector' => $field->field_selector,
                         'width' => '50'
                     );
                 endforeach;

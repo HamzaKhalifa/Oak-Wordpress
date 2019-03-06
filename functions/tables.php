@@ -437,6 +437,7 @@ Oak::$models_without_redundancy = $models_without_redundancy;
 
 // Lets get the fields that are gonna be in the table
 foreach( $models_without_redundancy as $key => $model ) :
+    $model_fields = [];
     foreach( Oak::$all_models_and_forms as $model_and_form_instance ) :
         if ( $model_and_form_instance->model_identifier == $model->model_identifier 
             && $model_and_form_instance->model_revision_number == $model->model_revision_number 
@@ -452,7 +453,12 @@ foreach( $models_without_redundancy as $key => $model ) :
                                 if ( $field->field_identifier == $form_and_field_instance->field_identifier ) :
                                     $field_copy = clone $field;
                                     $field_copy->form_and_field_properties = $form_and_field_instance;
-                                    array_push( Oak::$current_model_fields, $field_copy );
+                                    if ( isset( $_GET['model_identifier'] ) ) :
+                                        if ( $model->model_identifier == $_GET['model_identifier'] ) :
+                                            array_push( Oak::$current_model_fields, $field_copy );
+                                        endif;
+                                    endif;
+                                    array_push( $model_fields, $field_copy );
                                 endif;
                             endforeach;
                         endif;
@@ -478,7 +484,7 @@ foreach( $models_without_redundancy as $key => $model ) :
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $models_sql );
 
-    foreach( Oak::$current_model_fields as $key => $field ) :
+    foreach( $model_fields as $key => $field ) :
         $column_name = 'object_' . $key . '_' . $field->field_identifier;
         $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
         $exists = false;
