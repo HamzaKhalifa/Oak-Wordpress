@@ -204,7 +204,7 @@ $modification_time_property = $table . '_modification_time';
 
             if ( isset( $property['selector'] ) ) :
                 if ( $property['selector'] == 'true' ) :
-                    var_dump('selector here');
+                    // var_dump('selector here');
                 endif;
             endif;
                 
