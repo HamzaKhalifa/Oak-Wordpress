@@ -123,11 +123,9 @@ class Oak {
 
         add_action( 'after_setup_theme', array( $this, 'oak_add_theme_support' ) );
 
-        // add_action( 'init', array( $this, 'add_cors_http_header' ) );
-        // add_action('wp_dashboard_setup', array ( $this, 'oak_wordpress_dashboard' ) );
-        // add_action('admin_init', array ( $this, 'oak_wordpress_dashboard' ) );
+        add_action( 'init', array( $this, 'add_cors_http_header' ) );
+
         add_action('admin_head', array ( $this, 'oak_wordpress_dashboard' ) );
-        
         
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
         
