@@ -106,7 +106,7 @@ class Oak {
         Oak::$all_terms = [];
         Oak::$all_terms_without_redundancy = [];
 
-        // $this->delete_everything();
+        $this->delete_everything();
 
         Oak::$field_types = array ( 
             array ( 'value' => 'Texte', 'innerHTML' => 'Texte' ), 
@@ -1549,7 +1549,7 @@ class Oak {
                                 ) :
                                     foreach( $fields as $field ) :
                                         if ( $field['field_identifier'] == $form_and_field_instance['field_identifier'] ) :
-                                            $field_copy = clone $field;
+                                            $field_copy = $field;
                                             $field_copy['form_and_field_properties'] = $form_and_field_instance;
                                             array_push( $model_fields, $field_copy );
                                         endif;
@@ -1596,7 +1596,7 @@ class Oak {
 
         $this->corn_save_element( $objects );
 
-        // Creating the tables for taxonomies
+        // // Creating the tables for taxonomies
         foreach( $taxonomies as $taxonomy ) :
             $table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy['taxonomy_identifier'];
             $terms_sql = "CREATE TABLE $table_name (
@@ -1622,7 +1622,8 @@ class Oak {
         $this->corn_save_element( $terms );
 
         wp_send_json_success( array(
-            'functionReturn' => $this->corn_save_element( $fields, Oak::$fields_table_name )
+            'functionReturn' => $this->corn_save_element( $fields, Oak::$fields_table_name ),
+            'taxonomies' => $taxonomies[0]['taxonomy_identifier']
         ) );
     }
 
