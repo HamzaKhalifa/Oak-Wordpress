@@ -218,6 +218,11 @@ function createIdentifier() {
 // We create while adding the new revision
 function createElementData(state) {
     var keys = getKeys(elementData);
+
+    if (DATA.table == 'object') {
+        elementData.object_selectors = '';
+    }
+
     for(var i = 0; i < properties.length; i++) {
         if (document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input')) {
             if (properties[i].input_type == 'text' || properties[i].input_type == 'select' || properties[i].input_type == 'number' )
@@ -227,7 +232,13 @@ function createElementData(state) {
             else if (properties[i].input_type == 'checkbox') 
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').checked.toString();
         }
+
+        // Check for the selector for each property: 
+        if (document.querySelector('.' + DATA.table + '_' + properties[i].name + '_selector')) {
+            elementData.object_selectors += properties[i].name + ':' + document.querySelector('.' + DATA.table + '_' + properties[i].name + '_selector').value + '|';
+        }
     }
+    
     if (state != 0)
         elementData[table + '_state'] = state ? state.toString() : DATA.revisions[DATA.revisions.length - 1][table + '_state'].toString();
     else
@@ -264,6 +275,7 @@ function createElementData(state) {
         }
         elementData.selected_terms = selectedTerms;
     }
+    console.log(elementData);
 
     return elementData;
 }

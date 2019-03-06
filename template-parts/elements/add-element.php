@@ -127,6 +127,19 @@ $modification_time_property = $table . '_modification_time';
         </div>
 
         <?php 
+        $selectors_values = [];
+        if ( $table == 'object' ) :
+            $properties_and_selectors = explode( '|', $revisions[ count( $revisions ) - 1 ]->object_selectors );
+            foreach( $properties_and_selectors as $property_and_selector ) :
+                if ( $property_and_selector != '' ) :
+                    $selectors_values[] = array(
+                        'property' => explode( ':', $property_and_selector )[0],
+                        'selector_value' => explode( ':', $property_and_selector )[1]
+                    );
+                endif;
+            endforeach;
+        endif; 
+
         $first = true;
         foreach( $properties as $key => $property ) : 
             if ( $property['width'] == '100' || $first ) : ?>
@@ -201,10 +214,35 @@ $modification_time_property = $table . '_modification_time';
 
             if ( $property['width'] == '50' )
                 $first = !$first;
-
+                
             if ( isset( $property['selector'] ) ) :
                 if ( $property['selector'] == 'true' ) :
                     // var_dump('selector here');
+                    ?>
+                    <div class="oak_select_container oak_select_container__selector">
+                        <div class="additional_container">
+                            <select type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_selector' ) ?>">
+                                <option value="0"><?php _e( 'Aucun object selectionné', Oak::$text_domain ); ?></option>
+                                <?php 
+                                foreach( Oak::$all_frame_objects_without_redundancy as $frame_object ) : 
+                                    $selected = '';
+                                    foreach( $selectors_values as $selector_value ) :
+                                        if ( $selector_value['property'] == $property['name'] && $selector_value['selector_value'] == $frame_object->object_identifier ) :
+                                            $selected = 'selected';
+                                        endif;
+                                    endforeach; 
+                                ?>
+                                    <option <?php echo( $selected ); ?> value="<?php echo( $frame_object->object_identifier ); ?>"><?php echo( $frame_object->object_designation ); ?></option>
+                                <?php
+                                endforeach;
+                                ?>
+                            </select>
+                        </div>
+                        <div class="input_line"></div>
+                        <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+                        <span class="text_field_description"><?php _e( 'Selecteur de cadres RSE', Oak::$text_domain ); ?></span>
+                    </div>
+                    <?php
                 endif;
             endif;
                 
@@ -213,7 +251,9 @@ $modification_time_property = $table . '_modification_time';
 
         <!-- // This is for objects (We are gonna associate them to the terms) -->
         <?php 
-        if ( $_GET['elements'] == 'objects' ) :
+        if ( $_GET['elements'] == 'objects' ) : ?>
+            <div class="oak_objects_terms">
+            <?php
             foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) : ?>
                 <div class="oak_add_element_terms_atribution_single_element">
                     <span class="oak_add_element_taxonomy_title"><?php echo( $taxonomy->taxonomy_designation ); ?></span>
@@ -251,7 +291,9 @@ $modification_time_property = $table . '_modification_time';
                     </div>
                 </div>
             <?php
-            endforeach;
+            endforeach; ?>
+            </div>
+            <?php
         endif;
         ?>
 

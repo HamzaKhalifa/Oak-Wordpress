@@ -73,6 +73,10 @@ class Oak {
     public static $taxonomies_without_redundancy;
     public static $taxonomy_properties;
 
+    public static $frame_publications_identifiers = [];
+    public static $frame_terms_identifiers = [];
+    public static $all_frame_objects_without_redundancy = [];
+
     public static $main_color = '#003366';
     public static $secondary_text_color = '#bcc7d9';
     public static $selected_color = '#7b7b7b';

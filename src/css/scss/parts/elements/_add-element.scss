@@ -203,6 +203,10 @@
     margin-right: 25px;
 }
 
+.oak_select_container__selector {
+    flex: .3;
+}
+
 .oak_select_container select {
     width: 100%;
     border: none;
@@ -652,4 +656,8 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 
 .oak_add_element_taxonomy_title {
     margin-right: 10px;
+}
+
+.oak_objects_terms {
+    margin-top: 50px;
 }

@@ -332,6 +332,11 @@ foreach( $reversed_publications as $publication ) :
     if ( !$added ) :
         $publications_without_redundancy[] = $publication;
     endif;
+
+    if ( $publication->publication_report_or_frame == 'frame' ) :
+        Oak::$frame_publications_identifiers[] = $publication->publication_identifier;
+    endif;
+
 endforeach;
 Oak::$publications_without_redundancy = $publications_without_redundancy;
 
@@ -479,6 +484,7 @@ foreach( $models_without_redundancy as $key => $model ) :
         object_trashed varchar(555),
         object_state varchar(555),
         object_modification_time datetime,
+        object_selectors varchar(999),
         PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -499,6 +505,16 @@ foreach( $models_without_redundancy as $key => $model ) :
         }
     endforeach;
 
+endforeach;
+
+// To get all objects associated to all models
+foreach( Oak::$models as $model ) :
+    $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
+    $model_objects = $wpdb->get_results ( "
+        SELECT * 
+        FROM $table_name
+    " );
+    Oak::$all_objects = array_merge( Oak::$all_objects, $model_objects );
 endforeach;
 
 // For taxonomies
@@ -559,20 +575,15 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
         endforeach;
         if ( !$added ) :
             Oak::$all_terms_without_redundancy[] = $term;
+
+            if ( in_array( $taxonomy->taxonomy_publication, Oak::$frame_publications_identifiers ) ) :
+                Oak::$frame_terms_identifiers[] = $term->term_identifier;
+            endif;
+
         endif;
     endforeach;
 
     Oak::$all_terms = array_merge( Oak::$all_terms, $terms );
-endforeach;
-
-// To get all objects associated to all models
-foreach( Oak::$models as $model ) :
-    $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
-    $model_objects = $wpdb->get_results ( "
-        SELECT * 
-        FROM $table_name
-    " );
-    Oak::$all_objects = array_merge( Oak::$all_objects, $model_objects );
 endforeach;
 
 $objects_reversed = array_reverse( Oak::$all_objects );
@@ -591,5 +602,29 @@ Oak::$terms_and_objects = $wpdb->get_results ( "
     SELECT * 
     FROM $terms_and_objects_table_name
 " );
+
+// To get all frame objects
+// var_dump( Oak::$all_objects_without_redundancy );
+foreach( Oak::$all_objects_without_redundancy as $object ) :
+    foreach( Oak::$terms_and_objects as $term_and_object ) :
+        if ( $term_and_object->object_identifier == $object->object_identifier ) :
+            $term_identifier = $term_and_object->term_identifier;
+            if ( in_array( $term_identifier, Oak::$frame_terms_identifiers ) ) :
+                // Check if the object has already been added: 
+                    $exists = false;
+                    foreach( Oak::$all_frame_objects_without_redundancy as $frame_object ) :
+                        if ( $frame_object->object_identifier == $object->object_identifier ) :
+                            $exists = true;
+                        endif;
+                    endforeach;
+                    if ( !$exists ) :
+                        Oak::$all_frame_objects_without_redundancy[] = $object;
+                    endif;
+            endif;
+        endif;
+    endforeach;
+endforeach;
+
+
 
 
