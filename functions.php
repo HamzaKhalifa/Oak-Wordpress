@@ -1537,20 +1537,20 @@ class Oak {
             
             $model_fields = [];
             foreach( $models_and_forms as $model_and_form_instance ) :
-                if ( $model_and_form_instance->model_identifier == $model->model_identifier 
-                    && $model_and_form_instance->model_revision_number == $model->model_revision_number 
+                if ( $model_and_form_instance['model_identifier'] == $model['model_identifier'] 
+                    && $model_and_form_instance['model_revision_number'] == $model['model_revision_number'] 
                 ) :
-                    $form_identifier = $model_and_form_instance->form_identifier;
-                    foreach( $forms_without_redundancy as $form ) :
-                        if ( $form->form_identifier == $form_identifier ) :
+                    $form_identifier = $model_and_form_instance['form_identifier'];
+                    foreach( $forms as $form ) :
+                        if ( $form['form_identifier'] == $form_identifier ) :
                             foreach ( $forms_and_fields as $form_and_field_instance ) :
-                                if ( $form_and_field_instance->form_identifier == $form->form_identifier 
-                                    && $form_and_field_instance->form_revision_number == $form->form_revision_number 
+                                if ( $form_and_field_instance['form_identifier'] == $form['form_identifier'] 
+                                    && $form_and_field_instance['form_revision_number'] == $form['form_revision_number'] 
                                 ) :
-                                    foreach( $fields_without_redundancy as $field ) :
-                                        if ( $field->field_identifier == $form_and_field_instance->field_identifier ) :
+                                    foreach( $fields as $field ) :
+                                        if ( $field['field_identifier'] == $form_and_field_instance['field_identifier'] ) :
                                             $field_copy = clone $field;
-                                            $field_copy->form_and_field_properties = $form_and_field_instance;
+                                            $field_copy['form_and_field_properties'] = $form_and_field_instance;
                                             array_push( $model_fields, $field_copy );
                                         endif;
                                     endforeach;
@@ -1561,7 +1561,7 @@ class Oak {
                 endif;
             endforeach;
 
-            $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
+            $table_name = $wpdb->prefix . 'oak_model_' . $model['model_identifier'];
             $models_sql = "CREATE TABLE $table_name (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 object_designation varchar(555) DEFAULT '' NOT NULL,
@@ -1577,7 +1577,7 @@ class Oak {
             dbDelta( $models_sql );
 
             foreach( $model_fields as $key => $field ) :
-                $column_name = 'object_' . $key . '_' . $field->field_identifier;
+                $column_name = 'object_' . $key . '_' . $field['field_identifier'];
                 $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
                 $exists = false;
                 foreach( $columns as $column ) :
@@ -1585,7 +1585,7 @@ class Oak {
                         $exists = true;
                     endif;
                 endforeach;
-
+                
                 if ( !$exists ) {
                     $wpdb->query("ALTER TABLE $table_name ADD $column_name varchar(555)");
                 }
@@ -1598,7 +1598,7 @@ class Oak {
 
         // Creating the tables for taxonomies
         foreach( $taxonomies as $taxonomy ) :
-            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy->taxonomy_identifier;
+            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy['taxonomy_identifier'];
             $terms_sql = "CREATE TABLE $table_name (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 term_designation varchar(555) DEFAULT '' NOT NULL,
