@@ -274,25 +274,25 @@ var selectedData = {
 
                     selectedData.termsAndObjects = allData.termsAndObjects;
                     console.log(selectedData);
-                    jQuery(document).ready(function() {
-                        jQuery.ajax({
-                            type: 'POST',
-                            url: DATA.ajaxUrl,
-                            data: {
-                                'selectedData': selectedData,
-                                'action': 'corn_save_data'
-                            },
-                            success: function(data) {
-                                console.log(data);
-                                doneLoading();
-                                window.location.reload();
-                            },
-                            error: function(error) {
-                                console.log(error);
-                                doneLoading();
-                            }
-                        });
-                    });
+                    // jQuery(document).ready(function() {
+                    //     jQuery.ajax({
+                    //         type: 'POST',
+                    //         url: DATA.ajaxUrl,
+                    //         data: {
+                    //             'selectedData': selectedData,
+                    //             'action': 'corn_save_data'
+                    //         },
+                    //         success: function(data) {
+                    //             console.log(data);
+                    //             doneLoading();
+                    //             window.location.reload();
+                    //         },
+                    //         error: function(error) {
+                    //             console.log(error);
+                    //             doneLoading();
+                    //         }
+                    //     });
+                    // });
                 break;
             }
         });

@@ -106,7 +106,7 @@ class Oak {
         Oak::$all_terms = [];
         Oak::$all_terms_without_redundancy = [];
 
-        $this->delete_everything();
+        // $this->delete_everything();
 
         Oak::$field_types = array ( 
             array ( 'value' => 'Texte', 'innerHTML' => 'Texte' ), 
@@ -1571,6 +1571,7 @@ class Oak {
                 object_trashed varchar(555),
                 object_state varchar(555),
                 object_modification_time datetime,
+                object_selectors varchar(999),
                 PRIMARY KEY (id)
             ) $charset_collate;";
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -1623,7 +1624,7 @@ class Oak {
 
         wp_send_json_success( array(
             'functionReturn' => $this->corn_save_element( $fields, Oak::$fields_table_name ),
-            'taxonomies' => $taxonomies[0]['taxonomy_identifier']
+            'return' => $this->corn_save_element( $organizations, Oak::$organizations_table_name )
         ) );
     }
 
