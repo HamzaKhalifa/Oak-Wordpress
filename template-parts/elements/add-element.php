@@ -128,7 +128,7 @@ $modification_time_property = $table . '_modification_time';
 
         <?php 
         $selectors_values = [];
-        if ( $table == 'object' ) :
+        if ( $table == 'object' && count( $revisions ) > 0 ) :
             $properties_and_selectors = explode( '|', $revisions[ count( $revisions ) - 1 ]->object_selectors );
             foreach( $properties_and_selectors as $property_and_selector ) :
                 if ( $property_and_selector != '' ) :
@@ -217,7 +217,6 @@ $modification_time_property = $table . '_modification_time';
                 
             if ( isset( $property['selector'] ) ) :
                 if ( $property['selector'] == 'true' ) :
-                    // var_dump('selector here');
                     ?>
                     <div class="oak_select_container oak_select_container__selector">
                         <div class="additional_container">

@@ -454,7 +454,7 @@ Oak::$taxonomy_properties = array(
     ),
     array ( 
         'name' => 'publication', 
-        'property_name' => 'field_publication', 
+        'property_name' => 'taxonomy_publication', 
         'type' => 'text', 
         'input_type' => 'select',
         'select_multiple' => 'false',

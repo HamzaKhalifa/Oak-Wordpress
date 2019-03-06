@@ -429,7 +429,7 @@ class Oak {
 
     function add_cors_http_header() {
         header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Origin: http://localhost:8888/boilerplate/');
+        // header('Access-Control-Allow-Origin: http://localhost:8888/test/wp-admin/admin-ajax.php');
     }
 
     function oak_handle_admin_menu() {
@@ -632,6 +632,7 @@ class Oak {
             break;
             case 'taxonomies': 
                 $properties = Oak::$taxonomy_properties;
+                // var_dump( Oak::$taxonomy_properties );
                 $table = 'taxonomy';
                 $title = __( 'Ajouter une taxonomie', Oak::$text_domain );
             break;

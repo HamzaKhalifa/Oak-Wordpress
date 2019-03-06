@@ -300,7 +300,7 @@ var selectedData = {
 })();
 
 function addObject(objectIdentifier) {
-    for (var k = 0; k < allData.allObjects.length; k++) {
+    for (var k = allData.allObjects.length - 1; k >= 0; k++) {
         for (var l = 0; l < allData.allObjects[k].objects.length; l++) {
             if (allData.allObjects[k].objects[l].object_identifier == objectIdentifier) {
                allData.allObjects[k].objects[l].model = allData.allObjects[k].model_identifier;
