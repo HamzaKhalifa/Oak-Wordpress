@@ -1507,6 +1507,7 @@ class Oak {
         $organizations[] = $selected_data['organization'];
         $publications = [];
         $publications[] = $selected_data['publication'];
+        $frame_publications = $selected_data['framePublications'];
         $fields = $selected_data['fields'];
         $forms = $selected_data['forms'];
         $models = $selected_data['models'];
@@ -1522,6 +1523,7 @@ class Oak {
 
         $this->corn_save_element( $organizations, Oak::$organizations_table_name );
         $this->corn_save_element( $publications, Oak::$publications_table_name );
+        $this->corn_save_element( $frame_publications, Oak::$publications_table_name );
         $this->corn_save_element( $fields, Oak::$fields_table_name );
         $this->corn_save_element( $forms, Oak::$forms_table_name );
         $this->corn_save_element( $models, Oak::$models_table_name );

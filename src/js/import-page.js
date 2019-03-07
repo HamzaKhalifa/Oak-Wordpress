@@ -4,6 +4,7 @@ var step = 'organization';
 var selectedData = {
     organization: null,
     publication: null,
+    framePublications: [],
     taxonomies: [],
     terms: [],
     models: [],
@@ -197,12 +198,14 @@ var selectedData = {
                             for (var j = 0; j < allData.allTerms.length; j++) {
                                 if (allData.allTerms[j].taxonomy_identifier == allData.taxonomiesWithoutRedundancy[i].taxonomy_identifier) {
                                     var addedTermsIdentifiers = [];
-                                    for (var n = 0; n < allData.allTerms[j].terms.length; n++) {
+                                    for (var n = allData.allTerms[j].terms.length; n >= 0; n--) {
                                         var term = allData.allTerms[j].terms[n];
-                                        if (addedTermsIdentifiers.indexOf(term.term_identifier) == -1) {
-                                            addedTermsIdentifiers.push(term.term_identifier);
+                                        if (term != null) {
                                             term.term_taxonomy_designation = allData.taxonomiesWithoutRedundancy[i].taxonomy_designation;
                                             term.term_taxonomy_identifier = allData.taxonomiesWithoutRedundancy[i].taxonomy_identifier;
+                                        }
+                                        if (term != null && addedTermsIdentifiers.indexOf(term.term_identifier) == -1) {
+                                            addedTermsIdentifiers.push(term.term_identifier);
                                             termsToPush.push(term);
                                         } 
                                     }
@@ -218,10 +221,8 @@ var selectedData = {
                         'term',
                         'term'
                     );
-                    document.querySelector('.next_button_container_next').innerHTML = 'Sauvegarder';
                 break;
-                case 'term':
-                    setLoading();
+                case 'term': 
                     checkBoxes = document.querySelector('.import_container').querySelectorAll('.import_container__element_checkbox');
                     var termIdentifiers = [];
                     for (var i = 0; i < checkBoxes.length; i++) {
@@ -229,58 +230,74 @@ var selectedData = {
                             termIdentifiers.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
                         }
                     }
-
+                    
                     var publicationIdentifier = selectedData.publication.publication_identifier;
                     addPublicationData(publicationIdentifier, termIdentifiers);
+
+                    // Lets get all frame publicaitons (Publication de type cadre RSE)
+                    var addedPublicationsIdentifiers = [];
+                    var framePublicationsToShow = [];
+                    for (var i = allData.publications.length - 1; i >= 0; i--) {
+                        if (addedPublicationsIdentifiers.indexOf(allData.publications[i].publication_identifier) == -1 && allData.publications[i].publication_identifier != selectedData.publication.publication_identifier 
+                        && allData.publications[i].publication_report_or_frame == 'frame' ) {
+                            addedPublicationsIdentifiers.push(allData.publications[i].publication_identifier);
+                            framePublicationsToShow.push(allData.publications[i]);
+                        }
+                    }
+                    populateImportContainer(
+                        'Publications Cadres RSE',
+                        framePublicationsToShow, 
+                        ['Titre de la publication', 'Pays', 'Type', 'Année'],
+                        ['publication_identifier', 'publication_designation', 'publication_country', 'publication_format', 'publication_year'],
+                        'frame_publications',
+                        'frame_publications'
+                    );
+                    document.querySelector('.next_button_container_next').innerHTML = 'Sauvegarder';
+                break
+                case 'frame_publications':
+                    setLoading();
                     
-                    // Lets get the terms
-                    // for (var i = 0; i < termIdentifiers.length; i++) {
-                    //     for (var j = 0; j < allData.allTerms.length; j++) {
-                    //         for (var m = 0; m < allData.allTerms[j].terms.length; m++) {
-                    //             if (termIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) != -1) {
-                    //                 if (allData.allTerms[j].terms[m]) {
-                    //                     selectedData.terms.push(allData.allTerms[j].terms[m]);
-                    //                     // Lets get the objects associated to these terms:
-                    //                     for(var n = 0; n < allData.termsAndObjects.length; n++) {
-                    //                         if (allData.termsAndObjects[n].term_identifier == allData.allTerms[j].terms[m].term_identifier) {
-                    //                             var objectIdentifier = allData.termsAndObjects[n].object_identifier;
-                    //                             //  Lets add that object to our list of objects
-                    //                             addObject(objectIdentifier);
-                    //                         }
-                    //                      }
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    // }
-
-                    // // Lets get the glossaries: 
-                    // var publicationIdentifier = selectedData.publication.publication_identifier;
-
-                    // for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
-                    //     glossaryPublicationIdentifier = allData.glossariesWithoutRedundancy[i].glossary_publication;
-                    //     if (glossaryPublicationIdentifier == publicationIdentifier) {
-                    //         selectedData.glossaries = addGlossary(selectedData.glossaries, allData.glossariesWithoutRedundancy[i].glossary_identifier, allData.glossariesWithoutRedundancy[i] );
-                    //     }
-                    // }
-
-                    // // Lets get the qualis:
-                    // for (var i = 0; i < allData.qualisWithoutRedundancy.length; i++) {
-                    //     qualiPublicationIdentifier = allData.qualisWithoutRedundancy[i].quali_publication;
-                    //     if (qualiPublicationIdentifier == publicationIdentifier) {
-                    //         selectedData.qualis = addIndicator(selectedData.qualis, allData.qualisWithoutRedundancy[i].quali_identifier, 'quali', allData.qualisWithoutRedundancy[i] );
-                    //     }
-                    // }
-
-                    // // Lets get the quantis
-                    // for (var i = 0; i < allData.quantisWithoutRedundancy.length; i++) {
-                    //     quantiPublicationIdentifier = allData.quantisWithoutRedundancy[i].quanti_publication;
-                    //     if (quantiPublicationIdentifier == publicationIdentifier) {
-                    //         selectedData.quantis = addIndicator(selectedData.quantis, allData.quantisWithoutRedundancy[i].quanti_identifier, 'quanti', allData.quantisWithoutRedundancy[i] );
-                    //     }
-                    // }
-
+                    // Here we are gonna add frame publications data: 
+                    checkBoxes = document.querySelector('.import_container').querySelectorAll('.import_container__element_checkbox');
+                    var publicationsIdentifiers = [];
+                    for (var i = 0; i < checkBoxes.length; i++) {
+                        if (checkBoxes[i].checked) {
+                            publicationsIdentifiers.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
+                        }
+                    }
+                    for (var i = 0; i < publicationsIdentifiers.length; i++) {
+                        var addedTermsIdentifiers = [];
+                        for (var j = 0; j < allData.taxonomiesWithoutRedundancy.length; j++) {
+                            if (allData.taxonomiesWithoutRedundancy[j].taxonomy_publication == publicationsIdentifiers[i]) {
+                                selectedData.taxonomies.push(allData.taxonomiesWithoutRedundancy[j]);
+                                var taxonomy = allData.taxonomiesWithoutRedundancy[j];
+                                for (var k = 0; k < allData.allTerms.length; k++) {
+                                    if (allData.allTerms[k].taxonomy_identifier == taxonomy.taxonomy_identifier) {
+                                        for (var n = allData.allTerms[j].terms.length; n >= 0; n--) {
+                                            var term = allData.allTerms[k].terms[n];
+                                            if (term != null && addedTermsIdentifiers.indexOf(term.term_identifier) == -1) {
+                                                term.term_taxonomy_designation = allData.taxonomiesWithoutRedundancy[j].taxonomy_designation;
+                                                term.term_taxonomy_identifier = allData.taxonomiesWithoutRedundancy[j].taxonomy_identifier;
+                                                addedTermsIdentifiers.push(term.term_identifier);
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        var publication = {}; 
+                        for (var j = 0; j < allData.publicationsWithoutRedundancy.length; j++) {
+                            if (publicationsIdentifiers[i] == allData.publicationsWithoutRedundancy[j].publication_identifier) {
+                                publication = allData.publicationsWithoutRedundancy[j];
+                            }
+                        }
+                        selectedData.framePublications.push(publication);
+                        addPublicationData(publicationsIdentifiers[i], addedTermsIdentifiers);
+                    }
+                    
+                    // For the terms and objects (Gotta filter this some day)
                     selectedData.termsAndObjects = allData.termsAndObjects;
+
                     console.log(selectedData);
                     jQuery(document).ready(function() {
                         jQuery.ajax({
@@ -311,12 +328,12 @@ function addPublicationData(publicationIdentifier, termIdentifiers) {
     var addedTermsIdentifiers = [];
     for (var i = 0; i < termIdentifiers.length; i++) {
         for (var j = allData.allTerms.length - 1; j >= 0; j--) {
-            for (var m = 0; m < allData.allTerms[j].terms.length; m++) {
-                if (termIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) == -1) {
-                    addedTermsIdentifiers.push(allData.allTerms[j].terms[m].term_identifier);
+            for (var m = allData.allTerms[j].terms.length - 1; m >= 0; m--) {
+                if (termIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) != -1) {
                     if (allData.allTerms[j].terms[m]) {
                         // Lets check if the term hasnt been added already to avoid getting revisions: 
                         if (addedTermsIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) == -1) {
+                            addedTermsIdentifiers.push(allData.allTerms[j].terms[m].term_identifier);
                             selectedData.terms.push(allData.allTerms[j].terms[m]);
                             // Lets get the objects associated to these terms:
                             for(var n = 0; n < allData.termsAndObjects.length; n++) {
