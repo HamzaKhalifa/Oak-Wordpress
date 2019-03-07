@@ -374,7 +374,9 @@ class Oak {
                         'placeholder' => $field->form_and_field_properties->field_designation,
                         'description' => $field->form_and_field_properties->field_designation,
                         'selector' => $field->field_selector,
-                        'width' => '50'
+                        'width' => '50',
+                        'model_and_form_instance' => $field->model_and_form_instance,
+                        'form' => $field->form
                     );
                 endforeach;
 
@@ -1261,7 +1263,7 @@ class Oak {
             SELECT * 
             FROM  $models_and_forms_table_name
         " );
-
+        
         $all_objects = [];
         foreach( $models_without_redundancy as $model ) :
             $model_table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
@@ -1572,6 +1574,7 @@ class Oak {
                 object_state varchar(555),
                 object_modification_time datetime,
                 object_selectors varchar(999),
+                object_form_selectors varchar(999),
                 PRIMARY KEY (id)
             ) $charset_collate;";
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

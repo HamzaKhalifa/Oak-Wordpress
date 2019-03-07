@@ -1302,6 +1302,11 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   margin-top: 50px;
 }
 
+.oak_add_element_formula_title {
+  margin-top: 50px;
+  padding-bottom: 0px;
+}
+
 .oak_system_bar {
   background-color: #000c3b;
 }

@@ -274,6 +274,17 @@ function createElementData(state) {
             selectedTerms.push(selectedTermsInputs[i].getAttribute('identifier'));
         }
         elementData.selected_terms = selectedTerms;
+
+        // Check for forms' selectors: 
+        var objectFormSelectors = '';
+        var formSelectors = document.querySelectorAll('.object_form_selector');
+        for (var i = 0; i < formSelectors.length; i++) {
+            var formIdentifier = formSelectors[i].getAttribute('form-identifier');
+            var value = formSelectors[i].value;
+            objectFormSelectors += 'form_' + formIdentifier + '_object_' + value + '|';
+        }
+        console.log(objectFormSelectors);
+        elementData.object_form_selectors = objectFormSelectors;
     }
     console.log(elementData);
 

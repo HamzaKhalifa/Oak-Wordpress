@@ -141,7 +141,25 @@ $modification_time_property = $table . '_modification_time';
         endif; 
 
         $first = true;
-        foreach( $properties as $key => $property ) : 
+        $form_designation = '';
+        foreach( $properties as $key => $property ) :
+            if ( isset( $property['model_and_form_instance'] ) ) :
+                // For the form new designation: 
+                $form_new_designation = $property['form']->form_designation;
+                if ( $property['model_and_form_instance']->form_designation != '' ) :
+                    $form_new_designation = $property['model_and_form_instance']->form_designation;
+                endif;
+
+                if ( $form_designation != $form_new_designation ) : ?>
+                    <div class="oak_add_element_container__horizontal_container">
+                        <h2 class="oak_add_element_formula_title"><?php echo( $property['model_and_form_instance']->form_designation ); ?></h2>
+                    </div>
+                    <?php 
+                    $property['width'] = '100';
+                    ?>
+                <?php
+                endif;
+            endif;
             if ( $property['width'] == '100' || $first ) : ?>
                 <div class="oak_add_element_container__horizontal_container"><?php
             endif;
@@ -209,7 +227,7 @@ $modification_time_property = $table . '_modification_time';
             endif;
             if ( $property['width'] == '100' || !$first || $key == count( $properties ) - 1 ) : ?>
                 </div>
-                    <?php 
+            <?php 
             endif;
 
             if ( $property['width'] == '50' )
@@ -240,6 +258,63 @@ $modification_time_property = $table . '_modification_time';
                         <div class="input_line"></div>
                         <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
                         <span class="text_field_description"><?php _e( 'Selecteur de cadres RSE', Oak::$text_domain ); ?></span>
+                    </div>
+                    <?php
+                endif;
+            endif;
+
+            // For the form selector
+            if ( isset( $property['model_and_form_instance'] ) ) :
+                $form_identifier = $property['form']->form_identifier;
+                $at_the_end_of_form = false;
+                if ( $key == count( $properties ) - 1 ) :
+                    $at_the_end_of_form = true;
+                elseif( $properties[ $key + 1 ]['form']->form_identifier != $form_identifier ) :
+                    $at_the_end_of_form = true;
+                endif;
+
+                // We are gonna set the selector for the previous form:
+                if ( $property['form']->form_selector == 'true' ) :
+                    ?>
+                    <div class="oak_select_container oak_select_container__selector">
+                        <div class="additional_container">
+                            <select type="text" class="oak_add_element_container__input <?php echo( 'object_form_selector' ) ?>" form-identifier="<?php echo( $property['form']->form_identifier ); ?>">
+                                <option value="0"><?php _e( 'Aucun object selectionné', Oak::$text_domain ); ?></option>
+                                <?php 
+                                $object_form_selectors_attributes = [];
+                                if ( count( $revisions ) > 0 ) :
+                                    $object_form_selectors = $revisions[ count( $revisions ) - 1 ]->object_form_selectors;
+                                    $object_form_selectors = explode( '|', $object_form_selectors );
+                                    foreach( $object_form_selectors as $selector ) :
+                                        if ( $selector != '' ) :
+                                            $attributes = explode( '_', $selector );
+                                            
+                                            $object_form_selectors_attributes[] = array(
+                                                'form' => $attributes[1],
+                                                'object' => $attributes[3]
+                                            );
+                                        endif;
+                                    endforeach;
+                                endif;
+                                var_dump( $object_form_selectors_attributes );
+                                
+                                foreach( Oak::$all_frame_objects_without_redundancy as $frame_object ) : 
+                                    $selected = '';
+                                    foreach( $object_form_selectors_attributes as $object_form_attributes ) :
+                                        if ( $object_form_attributes['form'] == $property['form']->form_identifier && $object_form_attributes['object'] == $frame_object->object_identifier ) :
+                                            $selected = 'selected';
+                                        endif;
+                                    endforeach; 
+                                ?>
+                                    <option <?php echo( $selected ); ?> value="<?php echo( $frame_object->object_identifier ); ?>"><?php echo( $frame_object->object_designation ); ?></option>
+                                <?php
+                                endforeach;
+                                ?>
+                            </select>
+                        </div>
+                        <div class="input_line"></div>
+                        <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+                        <span class="text_field_description"><?php _e( 'Selecteur de cadres RSE pour le formulaire', Oak::$text_domain ); ?></span>
                     </div>
                     <?php
                 endif;
@@ -296,7 +371,7 @@ $modification_time_property = $table . '_modification_time';
         endif;
         ?>
 
-        <?php 
+        <?php
         if ( $table == 'form' || $table == 'model' ) :
             if ( $table == 'form' ) 
                 $other_properties = Oak::$form_other_elements;

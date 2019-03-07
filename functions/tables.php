@@ -427,7 +427,7 @@ Oak::$models = $wpdb->get_results ( "
 " );
 $reversed_models = array_reverse( Oak::$models );
 $models_without_redundancy = [];
-foreach( Oak::$models as $model ) :
+foreach( $reversed_models as $model ) :
     $added = false;
     foreach( $models_without_redundancy as $model_without_redundancy ) :
         if ( $model_without_redundancy->model_identifier == $model->model_identifier ) :
@@ -458,6 +458,8 @@ foreach( $models_without_redundancy as $key => $model ) :
                                 if ( $field->field_identifier == $form_and_field_instance->field_identifier ) :
                                     $field_copy = clone $field;
                                     $field_copy->form_and_field_properties = $form_and_field_instance;
+                                    $field_copy->model_and_form_instance = $model_and_form_instance;
+                                    $field_copy->form = $form;
                                     if ( isset( $_GET['model_identifier'] ) ) :
                                         if ( $model->model_identifier == $_GET['model_identifier'] ) :
                                             array_push( Oak::$current_model_fields, $field_copy );
@@ -485,6 +487,7 @@ foreach( $models_without_redundancy as $key => $model ) :
         object_state varchar(555),
         object_modification_time datetime,
         object_selectors varchar(999),
+        object_form_selectors varchar(999),
         PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

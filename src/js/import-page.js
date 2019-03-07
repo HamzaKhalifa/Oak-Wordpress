@@ -225,79 +225,131 @@ var selectedData = {
                             termIdentifiers.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
                         }
                     }
-                    // Lets get the terms
-                    for (var i = 0; i < termIdentifiers.length; i++) {
-                        for (var j = 0; j < allData.allTerms.length; j++) {
-                            for (var m = 0; m < allData.allTerms[j].terms.length; m++) {
-                                if (termIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) != -1) {
-                                    if (allData.allTerms[j].terms[m]) {
-                                        selectedData.terms.push(allData.allTerms[j].terms[m]);
-                                        // Lets get the objects associated to these terms:
-                                        for(var n = 0; n < allData.termsAndObjects.length; n++) {
-                                            if (allData.termsAndObjects[n].term_identifier == allData.allTerms[j].terms[m].term_identifier) {
-                                                var objectIdentifier = allData.termsAndObjects[n].object_identifier;
-                                                //  Lets add that object to our list of objects
-                                                addObject(objectIdentifier);
-                                            }
-                                         }
-                                    }
-                                }
-                            }
-                        }
-                    }
 
-                    // Lets get the glossaries: 
                     var publicationIdentifier = selectedData.publication.publication_identifier;
+                    addPublicationData(publicationIdentifier, termIdentifiers);
+                    
+                    // Lets get the terms
+                    // for (var i = 0; i < termIdentifiers.length; i++) {
+                    //     for (var j = 0; j < allData.allTerms.length; j++) {
+                    //         for (var m = 0; m < allData.allTerms[j].terms.length; m++) {
+                    //             if (termIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) != -1) {
+                    //                 if (allData.allTerms[j].terms[m]) {
+                    //                     selectedData.terms.push(allData.allTerms[j].terms[m]);
+                    //                     // Lets get the objects associated to these terms:
+                    //                     for(var n = 0; n < allData.termsAndObjects.length; n++) {
+                    //                         if (allData.termsAndObjects[n].term_identifier == allData.allTerms[j].terms[m].term_identifier) {
+                    //                             var objectIdentifier = allData.termsAndObjects[n].object_identifier;
+                    //                             //  Lets add that object to our list of objects
+                    //                             addObject(objectIdentifier);
+                    //                         }
+                    //                      }
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
 
-                    for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
-                        glossaryPublicationIdentifier = allData.glossariesWithoutRedundancy[i].glossary_publication;
-                        if (glossaryPublicationIdentifier == publicationIdentifier) {
-                            selectedData.glossaries = addGlossary(selectedData.glossaries, allData.glossariesWithoutRedundancy[i].glossary_identifier, allData.glossariesWithoutRedundancy[i] );
-                        }
-                    }
+                    // // Lets get the glossaries: 
+                    // var publicationIdentifier = selectedData.publication.publication_identifier;
 
-                    // Lets get the qualis:
-                    for (var i = 0; i < allData.qualisWithoutRedundancy.length; i++) {
-                        qualiPublicationIdentifier = allData.qualisWithoutRedundancy[i].quali_publication;
-                        if (qualiPublicationIdentifier == publicationIdentifier) {
-                            selectedData.qualis = addIndicator(selectedData.qualis, allData.qualisWithoutRedundancy[i].quali_identifier, 'quali', allData.qualisWithoutRedundancy[i] );
-                        }
-                    }
+                    // for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
+                    //     glossaryPublicationIdentifier = allData.glossariesWithoutRedundancy[i].glossary_publication;
+                    //     if (glossaryPublicationIdentifier == publicationIdentifier) {
+                    //         selectedData.glossaries = addGlossary(selectedData.glossaries, allData.glossariesWithoutRedundancy[i].glossary_identifier, allData.glossariesWithoutRedundancy[i] );
+                    //     }
+                    // }
 
-                    // Lets get the quantis
-                    for (var i = 0; i < allData.quantisWithoutRedundancy.length; i++) {
-                        quantiPublicationIdentifier = allData.quantisWithoutRedundancy[i].quanti_publication;
-                        if (quantiPublicationIdentifier == publicationIdentifier) {
-                            selectedData.quantis = addIndicator(selectedData.quantis, allData.quantisWithoutRedundancy[i].quanti_identifier, 'quanti', allData.quantisWithoutRedundancy[i] );
-                        }
-                    }
+                    // // Lets get the qualis:
+                    // for (var i = 0; i < allData.qualisWithoutRedundancy.length; i++) {
+                    //     qualiPublicationIdentifier = allData.qualisWithoutRedundancy[i].quali_publication;
+                    //     if (qualiPublicationIdentifier == publicationIdentifier) {
+                    //         selectedData.qualis = addIndicator(selectedData.qualis, allData.qualisWithoutRedundancy[i].quali_identifier, 'quali', allData.qualisWithoutRedundancy[i] );
+                    //     }
+                    // }
+
+                    // // Lets get the quantis
+                    // for (var i = 0; i < allData.quantisWithoutRedundancy.length; i++) {
+                    //     quantiPublicationIdentifier = allData.quantisWithoutRedundancy[i].quanti_publication;
+                    //     if (quantiPublicationIdentifier == publicationIdentifier) {
+                    //         selectedData.quantis = addIndicator(selectedData.quantis, allData.quantisWithoutRedundancy[i].quanti_identifier, 'quanti', allData.quantisWithoutRedundancy[i] );
+                    //     }
+                    // }
 
                     selectedData.termsAndObjects = allData.termsAndObjects;
                     console.log(selectedData);
-                    // jQuery(document).ready(function() {
-                    //     jQuery.ajax({
-                    //         type: 'POST',
-                    //         url: DATA.ajaxUrl,
-                    //         data: {
-                    //             'selectedData': selectedData,
-                    //             'action': 'corn_save_data'
-                    //         },
-                    //         success: function(data) {
-                    //             console.log(data);
-                    //             doneLoading();
-                    //             window.location.reload();
-                    //         },
-                    //         error: function(error) {
-                    //             console.log(error);
-                    //             doneLoading();
-                    //         }
-                    //     });
-                    // });
+                    jQuery(document).ready(function() {
+                        jQuery.ajax({
+                            type: 'POST',
+                            url: DATA.ajaxUrl,
+                            data: {
+                                'selectedData': selectedData,
+                                'action': 'corn_save_data'
+                            },
+                            success: function(data) {
+                                console.log(data);
+                                doneLoading();
+                                window.location.reload();
+                            },
+                            error: function(error) {
+                                console.log(error);
+                                doneLoading();
+                            }
+                        });
+                    });
                 break;
             }
         });
     })()
 })();
+
+function addPublicationData(publicationIdentifier, termIdentifiers) {
+    for (var i = 0; i < termIdentifiers.length; i++) {
+        for (var j = 0; j < allData.allTerms.length; j++) {
+            for (var m = 0; m < allData.allTerms[j].terms.length; m++) {
+                if (termIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) != -1) {
+                    if (allData.allTerms[j].terms[m]) {
+                        selectedData.terms.push(allData.allTerms[j].terms[m]);
+                        // Lets get the objects associated to these terms:
+                        for(var n = 0; n < allData.termsAndObjects.length; n++) {
+                            if (allData.termsAndObjects[n].term_identifier == allData.allTerms[j].terms[m].term_identifier) {
+                                var objectIdentifier = allData.termsAndObjects[n].object_identifier;
+                                //  Lets add that object to our list of objects
+                                addObject(objectIdentifier);
+                            }
+                         }
+                    }
+                }
+            }
+        }
+    }
+
+    // Lets get the glossaries: 
+    var publicationIdentifier = selectedData.publication.publication_identifier;
+
+    for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
+        glossaryPublicationIdentifier = allData.glossariesWithoutRedundancy[i].glossary_publication;
+        if (glossaryPublicationIdentifier == publicationIdentifier) {
+            selectedData.glossaries = addGlossary(selectedData.glossaries, allData.glossariesWithoutRedundancy[i].glossary_identifier, allData.glossariesWithoutRedundancy[i] );
+        }
+    }
+
+    // Lets get the qualis:
+    for (var i = 0; i < allData.qualisWithoutRedundancy.length; i++) {
+        qualiPublicationIdentifier = allData.qualisWithoutRedundancy[i].quali_publication;
+        if (qualiPublicationIdentifier == publicationIdentifier) {
+            selectedData.qualis = addIndicator(selectedData.qualis, allData.qualisWithoutRedundancy[i].quali_identifier, 'quali', allData.qualisWithoutRedundancy[i] );
+        }
+    }
+
+    // Lets get the quantis
+    for (var i = 0; i < allData.quantisWithoutRedundancy.length; i++) {
+        quantiPublicationIdentifier = allData.quantisWithoutRedundancy[i].quanti_publication;
+        if (quantiPublicationIdentifier == publicationIdentifier) {
+            selectedData.quantis = addIndicator(selectedData.quantis, allData.quantisWithoutRedundancy[i].quanti_identifier, 'quanti', allData.quantisWithoutRedundancy[i] );
+        }
+    }
+} 
 
 function addObject(objectIdentifier) {
     for (var k = 0; k < allData.allObjects.length; k++) {
