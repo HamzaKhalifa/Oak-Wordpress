@@ -196,11 +196,15 @@ var selectedData = {
                             selectedData.taxonomies.push(allData.taxonomiesWithoutRedundancy[i]);
                             for (var j = 0; j < allData.allTerms.length; j++) {
                                 if (allData.allTerms[j].taxonomy_identifier == allData.taxonomiesWithoutRedundancy[i].taxonomy_identifier) {
+                                    var addedTermsIdentifiers = [];
                                     for (var n = 0; n < allData.allTerms[j].terms.length; n++) {
                                         var term = allData.allTerms[j].terms[n];
-                                        term.term_taxonomy_designation = allData.taxonomiesWithoutRedundancy[i].taxonomy_designation;
-                                        term.term_taxonomy_identifier = allData.taxonomiesWithoutRedundancy[i].taxonomy_identifier;
-                                        termsToPush.push(term);
+                                        if (addedTermsIdentifiers.indexOf(term.term_identifier) == -1) {
+                                            addedTermsIdentifiers.push(term.term_identifier);
+                                            term.term_taxonomy_designation = allData.taxonomiesWithoutRedundancy[i].taxonomy_designation;
+                                            term.term_taxonomy_identifier = allData.taxonomiesWithoutRedundancy[i].taxonomy_identifier;
+                                            termsToPush.push(term);
+                                        } 
                                     }
                                 }
                             }
