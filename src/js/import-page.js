@@ -304,20 +304,25 @@ var selectedData = {
 })();
 
 function addPublicationData(publicationIdentifier, termIdentifiers) {
+    var addedTermsIdentifiers = [];
     for (var i = 0; i < termIdentifiers.length; i++) {
-        for (var j = 0; j < allData.allTerms.length; j++) {
+        for (var j = allData.allTerms.length - 1; j >= 0; j--) {
             for (var m = 0; m < allData.allTerms[j].terms.length; m++) {
-                if (termIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) != -1) {
+                if (termIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) == -1) {
+                    addedTermsIdentifiers.push(allData.allTerms[j].terms[m].term_identifier);
                     if (allData.allTerms[j].terms[m]) {
-                        selectedData.terms.push(allData.allTerms[j].terms[m]);
-                        // Lets get the objects associated to these terms:
-                        for(var n = 0; n < allData.termsAndObjects.length; n++) {
-                            if (allData.termsAndObjects[n].term_identifier == allData.allTerms[j].terms[m].term_identifier) {
-                                var objectIdentifier = allData.termsAndObjects[n].object_identifier;
-                                //  Lets add that object to our list of objects
-                                addObject(objectIdentifier);
+                        // Lets check if the term hasnt been added already to avoid getting revisions: 
+                        if (addedTermsIdentifiers.indexOf(allData.allTerms[j].terms[m].term_identifier) == -1) {
+                            selectedData.terms.push(allData.allTerms[j].terms[m]);
+                            // Lets get the objects associated to these terms:
+                            for(var n = 0; n < allData.termsAndObjects.length; n++) {
+                                if (allData.termsAndObjects[n].term_identifier == allData.allTerms[j].terms[m].term_identifier) {
+                                    var objectIdentifier = allData.termsAndObjects[n].object_identifier;
+                                    //  Lets add that object to our list of objects
+                                    addObject(objectIdentifier);
+                                }
                             }
-                         }
+                        }
                     }
                 }
             }
