@@ -34,6 +34,23 @@
                 'icon' => 'fas fa-th-large'
             ),
             array(
+                'title' => __( 'Elementor', Oak::$text_domain ),
+                'url' => 'edit.php?post_type=elementor_library',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
+                'title' => __( 'Settings', Oak::$text_domain ),
+                'url' => 'admin.php?page=elementor',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
+                'title' => __( 'Role manager', Oak::$text_domain ),
+                'url' => 'admin.php?page=elementor-role-manager',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
                 'title' => __( 'Configuration de Oak', Oak::$text_domain ),
                 'url' => '?page=oak_materiality_reporting',
                 'icon' => 'fas fa-th-large'
@@ -97,37 +114,69 @@
 
         // Lets make the pages associated to each model: 
         foreach( Oak::$models_without_redundancy as $model ) :
-            $model_page_properties = array (
-                'title' => $model->model_designation,
-                'url' => '?page=oak_elements_list&elements=objects&listorformula=list&model_identifier=' . $model->model_identifier,
-                'icon' => 'fas fa-th-large'
-            );
-            $menu_elements[] = $model_page_properties;
+            if ( $model->model_trashed != 'true' ) :
+                $model_page_properties = array (
+                    'title' => $model->model_designation,
+                    'url' => '?page=oak_elements_list&elements=objects&listorformula=list&model_identifier=' . $model->model_identifier,
+                    'icon' => 'fas fa-th-large'
+                );
+                $menu_elements[] = $model_page_properties;
+            endif;
         endforeach;
         
+        // Lets make the pages associated to each taxonomy:
         foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
-            $taxonomy_page_properties = array (
-                'title' => $taxonomy->taxonomy_designation,
-                'url' => '?page=oak_elements_list&elements=terms&listorformula=list&taxonomy_identifier=' . $taxonomy->taxonomy_identifier,
-                'icon' => 'fas fa-th-large'
-            );
-            $menu_elements[] = $taxonomy_page_properties;
+            if ( $taxonomy->taxonomy_trashed != 'true' ) :
+                $taxonomy_page_properties = array (
+                    'title' => $taxonomy->taxonomy_designation,
+                    'url' => '?page=oak_elements_list&elements=terms&listorformula=list&taxonomy_identifier=' . $taxonomy->taxonomy_identifier,
+                    'icon' => 'fas fa-th-large'
+                );
+                $menu_elements[] = $taxonomy_page_properties;
+            endif;
         endforeach;
     ?>
 
     <?php 
-    foreach( $menu_elements as $element ) : ?>
-        <a class="oak_admin_menu_element" href="<?php echo( admin_url( $element['url'] ) ); ?>">
-            <div class="oak_admin_menu_element__side_part">
-                <i class="oak_admin_menu_element__icon <?php echo( $element['icon'] ); ?>"></i>
-                <span class="oak_admin_menu_element__span"><?php echo( $element['title'] ); ?></span>
-            </div>
-            
-            <div class="oak_admin_menu_element__side_part">
-                <i class="oak_admin_menu_element__arrow fas fa-caret-right"></i>
-            </div>
-        </a>
-    <?php 
+    foreach( $menu_elements as $key => $element ) : 
+        if ( ! isset( $element['submenu'] ) ) :
+    ?>
+            <a class="oak_admin_menu_element" href="<?php echo( admin_url( $element['url'] ) ); ?>">
+                <div class="oak_admin_menu_element__side_part">
+                    <i class="oak_admin_menu_element__icon <?php echo( $element['icon'] ); ?>"></i>
+                    <span class="oak_admin_menu_element__span"><?php echo( $element['title'] ); ?></span>
+                </div>
+                
+                <div class="oak_admin_menu_element__side_part">
+                    <i class="oak_admin_menu_element__arrow fas fa-caret-right"></i>
+                </div>
+            </a>
+            <?php 
+            $index = $key + 1;
+            if ( isset( $menu_elements[ $index ]['submenu'] ) ) : ?>
+                <div class="oak_admin_menu_element__sub_menu oak_hidden">
+                <?php
+                    do {
+                        ?>
+                            <a class="oak_admin_menu_sub_element" href="<?php echo( admin_url( $menu_elements[ $index ]['url'] ) ); ?>">
+                                <div class="oak_admin_menu_element__side_part">
+                                    <i class="oak_admin_menu_element__icon <?php echo( $menu_elements[ $index ]['icon'] ); ?>"></i>
+                                    <span class="oak_admin_menu_element__span"><?php echo( $menu_elements[ $index ]['title'] ); ?></span>
+                                </div>
+                                
+                                <div class="oak_admin_menu_element__side_part">
+                                    <i class="oak_admin_menu_element__arrow fas fa-caret-right"></i>
+                                </div>
+                            </a>
+                        <?php
+                        $index++;
+                    }
+                    while ( isset( $menu_elements[ $index ] ) && isset( $menu_elements[ $index ]['submenu'] ) && $menu_elements[ $index ]['submenu'] == true );
+                    ?>
+                </div>
+                <?php
+            endif;
+        endif;
     endforeach; ?>
 </div>
 

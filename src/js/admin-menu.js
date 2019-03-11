@@ -24,3 +24,10 @@
         menuOpen = false;
     });
 })();
+
+
+// For the submenu
+handleSubMenu();
+function handleSubMenu() {
+    
+}

@@ -856,7 +856,7 @@ class Oak {
 
         $array_data = array_merge( $element, array( $table . '_modification_time' => date("Y-m-d H:i:s") ) );
 
-
+        // Other elements: fields for forms and forms for models
         if ( isset( $element['otherElements'] ) && !$_GET['fromRevision'] ) :
             $other_elements = $element['otherElements'];
             $other_elements_properties = $element['otherElementsProperties'];
@@ -908,9 +908,7 @@ class Oak {
                         )
                     );
                 endif;
-            endforeach;
-
-            
+            endforeach;   
         endif;
 
         unset( $array_data['otherElements'] );
@@ -918,15 +916,23 @@ class Oak {
         unset( $array_data['copy_identifier'] );
         
         // For the files/images: 
+        $test_file_url = '';
         foreach( $array_data as $key => $value ) :
             foreach( $_POST['properties'] as $property ) :
                 $property_name_divided = explode( '_', $property['name'] );
                 $key_divided = explode( '_', $key ); 
                 if ( $property_name_divided[ count( $property_name_divided ) - 1 ] == $key_divided[ count( $key_divided ) - 1 ] ) :
                     if ( $property['input_type'] == 'image' || $property['input_type'] == 'file' ) :
-                        if ( strpos( $value, 'uploads/' ) == false ) :
-                            $image = $this->upload_image( $value );
-                            $array_data[ $key ] = $image;
+                        if ( !filter_var( $file, FILTER_VALIDATE_URL ) ) :
+                        // if ( strpos( $value, 'uploads/' ) == false ) :
+                            // if ( $property['input_type'] == 'file' ) :
+                            //     $file_url = $this->upload_file( $value );
+                            //     $test_file_url = $file_url;
+                            // else :
+                            //     $file_url = $this->upload_image( $value );
+                            // endif;
+                            $file_url = $this->upload_image( $value );
+                            $array_data[ $key ] = $file_url;
                         endif;
                     endif;
                 endif;
@@ -970,14 +976,43 @@ class Oak {
             'properties' => $_POST['properties'],
             'array_data' => $array_data,
             'result' => $properties,
+            'test' => $test_file_url
         ) );
     }
 
-    function upload_image( $image ) {
-        if ( strpos( $image, 'uploads/' ) == true ) :
-            return $image;
-        endif;
+    function upload_file( $file ) {
+        $file_url = '';
         
+        $file_type = explode( ';', explode( '/', $file )[1] )[0];
+
+        if ( !filter_var( $file, FILTER_VALIDATE_URL ) ) :
+            // Uploading the image
+            $uplad_dir  = wp_upload_dir();
+            $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+            
+            $file             = str_replace( 'data:application/' . $file_type . ';base64,', '', $file );
+            $file             = str_replace( ' ', '+', $file );
+            $decoded         = base64_decode( $file );
+            $filename        = 'random.' . $file_type;
+            $file_type       = 'application/' . $file_type;
+            $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
+            $upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
+            // $attachment = array(
+            //     'post_mime_type' => $file_type,
+            //     'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $hashed_filename ) ),
+            //     'post_content'   => '',
+            //     'post_status'    => 'inherit',
+            //     'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
+            // );
+        
+            // $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
+            // $file_url = wp_get_attachment_image_url( $attach_id );
+        endif;
+
+        return $hashed_filename;
+    } 
+
+    function upload_image( $image ) {
         $image_url = '';
         
         $image_type = explode( ';', explode( '/', $image )[1] )[0];

@@ -89,6 +89,10 @@ $locked_property = $table . '_locked';
 $trashed_property = $table . '_trashed';
 $state_property = $table . '_state';
 $modification_time_property = $table . '_modification_time';
+
+// echo('<pre>');
+// var_dump( $revisions[ count( $revisions ) - 1 ] );
+// echo('</pre>');
 ?>
 <div class="oak_add_element_container__header">
     <img class="oak_add_element_container_header_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/fields.png' ); ?>" alt="">

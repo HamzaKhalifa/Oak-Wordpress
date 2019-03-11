@@ -772,7 +772,7 @@ function handleModalButtons() {
         if (adding || updating) {
             closeModals();
             setLoading();
-            // console.log(elementData);
+            console.log(elementData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,

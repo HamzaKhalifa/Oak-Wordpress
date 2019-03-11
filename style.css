@@ -1288,6 +1288,11 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 .oak_add_element_terms_atribution_single_element {
   margin-bottom: 20px;
   display: flex;
+  width: 50%;
+}
+
+.autocomplete {
+  flex: 1;
 }
 
 .oak_autocomplete_input, .oak_autocomplete_selected_input {
@@ -1296,6 +1301,7 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 
 .oak_add_element_taxonomy_title {
   margin-right: 10px;
+  flex: 1;
 }
 
 .oak_objects_terms {
