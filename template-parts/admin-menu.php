@@ -37,7 +37,7 @@
             ),
         );
 
-        if ( !get_option('oak_corn') || get_option('oak_corn') == 'false' ) :
+        // if ( !get_option('oak_corn') || get_option('oak_corn') == 'false' ) :
             $taxonomies_menu = array (
                 array(
                     'title' => __( 'Taxonomies', Oak::$text_domain ),
@@ -67,7 +67,7 @@
                     $menu_elements[] = $taxonomy_page_properties;
                 endif;
             endforeach;
-        endif;
+        // endif;
 
         $menu_elements_after_taxo = array(
             array(
