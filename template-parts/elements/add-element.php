@@ -161,9 +161,12 @@ $modification_time_property = $table . '_modification_time';
                 <?php
                 endif;
             endif;
-            if ( $property['width'] == '100' || $first ) : ?>
+
+            if ( $property['width'] == '100' || $first ) : 
+            ?>
                 <div class="oak_add_element_container__horizontal_container"><?php
             endif;
+
             $property_name = $property['property_name'];
             if ( $property['input_type'] == 'text' || $property['input_type'] == 'number' ) : ?>
                 <div class="oak_text_field_container">
@@ -226,16 +229,11 @@ $modification_time_property = $table . '_modification_time';
                 </div>
             <?php
             endif;
-            if ( $property['width'] == '100' || !$first || $key == count( $properties ) - 1 ) : ?>
-                </div>
-            <?php 
-            endif;
-
-            if ( $property['width'] == '50' )
-                $first = !$first;
-                
+            
+            $showed_a_selector = false;
             if ( isset( $property['selector'] ) ) :
                 if ( $property['selector'] == 'true' ) :
+                    $showed_a_selector = true;
                     ?>
                     <div class="oak_select_container oak_select_container__selector">
                         <div class="additional_container">
@@ -266,6 +264,7 @@ $modification_time_property = $table . '_modification_time';
 
             // For the form selector
             // var_dump( $property['form']->form_identifier );
+            $at_the_end_of_form = false;
             if ( isset( $property['model_and_form_instance'] ) ) :
                 $form_identifier = $property['form']->form_identifier;
                 $at_the_end_of_form = false;
@@ -278,6 +277,7 @@ $modification_time_property = $table . '_modification_time';
 
                 // We are gonna set the selector for the previous form:
                 if ( $property['form']->form_selector == 'true' && $at_the_end_of_form ) :
+                    $showed_a_selector = true;
                     ?>
                     <div class="oak_select_container oak_select_container__selector">
                         <div class="additional_container">
@@ -321,6 +321,19 @@ $modification_time_property = $table . '_modification_time';
                     <?php
                 endif;
             endif;
+            
+            $close_div = $property['width'] == '100' || !$first || $showed_a_selector || $at_the_end_of_form || $key == count( $properties ) - 1 ;
+            if ( $close_div ) : ?>
+                </div>
+            <?php 
+            endif;
+
+            if ( $close_div )
+                $first = true;
+            if ( !$close_div && $first ) :
+                $first = false;
+            endif;
+                
                 
         endforeach;
         ?>
