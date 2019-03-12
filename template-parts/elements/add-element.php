@@ -150,8 +150,9 @@ $modification_time_property = $table . '_modification_time';
                     
                     $form_new_designation = $property['model_and_form_instance']->form_designation;
                 endif;
-
-                if ( $form_designation != $form_new_designation ) : ?>
+                if ( $form_designation != $form_new_designation ) :
+                    $form_designation = $form_new_designation;
+                ?>
                     <div class="oak_add_element_container__horizontal_container">
                         <h2 class="oak_add_element_formula_title"><?php echo( $form_new_designation ); ?></h2>
                     </div>
