@@ -707,7 +707,7 @@ body .oak_hidden {
 }
 
 .oak_text_field {
-  width: 90% !important;
+  width: 100% !important;
 }
 
 .oak_text_field_container, .oak_text_field_container_identifier {
@@ -1210,7 +1210,7 @@ input.oak_add_other_elements_list_single_element__chekcbox {
 }
 
 .additional_container {
-  width: 90%;
+  width: 99%;
 }
 
 .oak_add_element_image_container .oak_checkbox_container__container {
@@ -1311,6 +1311,15 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 .oak_add_element_formula_title {
   margin-top: 50px;
   padding-bottom: 0px;
+}
+
+.oak_color {
+  width: 100%;
+  height: 40px;
+}
+
+.color_additional_container {
+  width: 100%;
 }
 
 .oak_system_bar {

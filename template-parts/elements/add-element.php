@@ -168,6 +168,7 @@ $modification_time_property = $table . '_modification_time';
             endif;
 
             $property_name = $property['property_name'];
+
             if ( $property['input_type'] == 'text' || $property['input_type'] == 'number' ) : ?>
                 <div class="oak_text_field_container">
                     <?php 
@@ -180,6 +181,35 @@ $modification_time_property = $table . '_modification_time';
                         <input type="<?php echo( $property['input_type'] ); ?>" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->$property_name ) ); endif; ?>" class="oak_text_field <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
                     </div>
                     <span class="oak_text_field_placeholder <?php if( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->$property_name != '' ) : echo('oak_text_field_placeholder_not_focused_but_something_written'); endif; ?>"><?php echo( $property['placeholder'] ); ?></span>
+                    <div class="text_field_line <?php if( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
+                    <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
+                </div><?php
+            elseif ( $property['input_type'] == 'textarea' ) : ?>
+                <div class="oak_text_field_container">
+                    <?php 
+                    $input_class_prefix = '';
+                    if ( $_GET['elements'] == 'objects' ) :
+                        $input_class_prefix = 'object_';
+                    endif;
+                    ?>
+                    <div class="additional_container">
+                        <textarea class="oak_text_field <?php echo( $table . '_' . $property['name'] . '_input' ) ?>" name="" id="" cols="30" rows="5"  ><?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->$property_name ) ); endif; ?></textarea>
+                    </div>
+                    <span class="oak_text_field_placeholder <?php if( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->$property_name != '' ) : echo('oak_text_field_placeholder_not_focused_but_something_written'); endif; ?>"><?php echo( $property['placeholder'] ); ?></span>
+                    <div class="text_field_line <?php if( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
+                    <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
+                </div><?php
+            elseif ( $property['input_type'] == 'color' ) : ?>
+                <div class="oak_select_container">
+                    <?php 
+                    $input_class_prefix = '';
+                    if ( $_GET['elements'] == 'objects' ) :
+                        $input_class_prefix = 'object_';
+                    endif;
+                    ?>
+                    <div class="color_additional_container">
+                        <input type="<?php echo( $property['input_type'] ); ?>" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $revisions[ count( $revisions ) - 1 ]->$property_name ) ); endif; ?>" class="oak_color <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
+                    </div>
                     <div class="text_field_line <?php if( count( $revisions ) > 0 && $revisions[ count( $revisions ) - 1 ]->property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
                     <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
                 </div><?php
@@ -237,7 +267,7 @@ $modification_time_property = $table . '_modification_time';
                     ?>
                     <div class="oak_select_container oak_select_container__selector">
                         <div class="additional_container">
-                            <select type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_selector' ) ?>">
+                            <select multiple type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_selector' ) ?>">
                                 <option value="0"><?php _e( 'Aucun object selectionné', Oak::$text_domain ); ?></option>
                                 <?php 
                                 foreach( Oak::$all_frame_objects_without_redundancy as $frame_object ) : 
@@ -281,7 +311,7 @@ $modification_time_property = $table . '_modification_time';
                     ?>
                     <div class="oak_select_container oak_select_container__selector">
                         <div class="additional_container">
-                            <select type="text" class="oak_add_element_container__input <?php echo( 'object_form_selector' ) ?>" form-identifier="<?php echo( $property['form']->form_identifier ); ?>">
+                            <select multiple type="text" class="oak_add_element_container__input <?php echo( 'object_form_selector' ) ?>" form-identifier="<?php echo( $property['form']->form_identifier ); ?>">
                                 <option value="0"><?php _e( 'Aucun object selectionné', Oak::$text_domain ); ?></option>
                                 <?php 
                                 $object_form_selectors_attributes = [];
@@ -321,7 +351,7 @@ $modification_time_property = $table . '_modification_time';
                     <?php
                 endif;
             endif;
-            
+
             $close_div = $property['width'] == '100' || !$first || $showed_a_selector || $at_the_end_of_form || $key == count( $properties ) - 1 ;
             if ( $close_div ) : ?>
                 </div>

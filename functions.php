@@ -198,6 +198,10 @@ class Oak {
 
     function oak_admin_enqueue_styles( $hook ) {
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
+
+        // Add the color picker css file       
+        wp_enqueue_style( 'wp-color-picker' ); 
+
         // if ( isset( $_GET['elements'] ) ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
             // wp_enqueue_style( 'oak_font_awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
@@ -366,6 +370,8 @@ class Oak {
                         $input_type = 'image';
                     elseif( $field->field_type == 'Fichier' ) :
                         $input_type = 'file';
+                    elseif( $field->field_type == 'Zone de Texte' ) :
+                        $input_type = 'textarea';
                     endif;
 
                     Oak::$object_properties[] = array (
@@ -434,7 +440,7 @@ class Oak {
             $final_data_to_pass = array_merge( $basic_data_to_pass, $additional_data_to_pass );
 
             if ( $_GET['listorformula'] == 'formula' ) :
-                wp_enqueue_script( 'corn_add_element', get_template_directory_uri() . '/src/js/add-element.js', array('jquery'), false, true );
+                wp_enqueue_script( 'corn_add_element', get_template_directory_uri() . '/src/js/add-element.js', array( 'jquery', 'wp-color-picker' ), false, true );
                 wp_localize_script( 'corn_add_element', 'DATA', $final_data_to_pass );
             endif;
 
@@ -1684,6 +1690,8 @@ class Oak {
                 term_description varchar(555),
                 term_color varchar(555),
                 term_logo varchar(555),
+                term_order varchar(555),
+                term_parent varchar(555),
                 PRIMARY KEY (id)
             ) $charset_collate;";
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

@@ -18,6 +18,67 @@
                 'url' => '',
                 'icon' => 'fas fa-th-large'
             ),
+        );
+
+        // For corn: 
+        $terms_orders = [];
+        foreach( Oak::$all_terms_without_redundancy as $term ) :
+            if ( $term->term_parent == '0' ) :
+                $terms_orders[] = $term->term_order;
+            endif;
+        endforeach;
+        sort( $terms_orders );
+
+        if ( get_option('oak_corn') == 'true' ) :
+            $incrementer = 0;
+            do {
+                foreach( Oak::$all_terms_without_redundancy as $term ) : 
+                    if ( isset( $terms_orders[ $incrementer ] ) && ( $term->term_order == '' || $term->term_order == $terms_orders[ $incrementer ] ) ) :
+                        $incrementer++;
+                        $children = array();
+                        if ( $term->term_parent == '0' ) :
+                            foreach( Oak::$all_terms_without_redundancy as $potential_term_child ) :
+                                if ( $potential_term_child->term_identifier != $term->term_identifier && $potential_term_child->term_parent == $term->term_identifier ) :
+                                    $children[] = array(
+                                        'title' => $potential_term_child->term_designation,
+                                        'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $potential_term_child->term_identifier . '&listorformula=list',
+                                        'icon' => 'fas fa-th-large',
+                                        'submenu' => true
+                                    );
+                                endif;
+                            endforeach;
+
+                            if ( count( $children ) > 0 ) :
+                                $menu_elements[] = array(
+                                    'title' => $term->term_designation,
+                                    'url' => '',
+                                    'icon' => 'fas fa-th-large',
+                                    'order' => $term->term_order == '' ? 0 : $term->term_order
+                                );
+                                $menu_elements[] = array(
+                                    'title' => $term->term_designation,
+                                    'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
+                                    'icon' => 'fas fa-th-large',
+                                    'submenu' => true
+                                );
+
+                                $menu_elements = array_merge( $menu_elements, $children );
+                            else :
+                                $menu_elements[] = array(
+                                    'title' => $term->term_designation,
+                                    'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
+                                    'icon' => 'fas fa-th-large',
+                                    'order' => $term->term_order == '' ? 0 : $term->term_order
+                                );
+                            endif;
+                        endif;
+                    endif;
+                endforeach;
+            }
+            while( $incrementer < count( $terms_orders ) );
+        endif;
+
+        $after_terms = array(
             array(
                 'title' => __( 'Embeded XP', Oak::$text_domain ),
                 'url' => '',
@@ -35,39 +96,34 @@
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),
+            array(
+                'title' => __( 'Taxonomies', Oak::$text_domain ),
+                'url' => '',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
+                'title' => __( 'Taxonomies', Oak::$text_domain ),
+                'url' => '?page=oak_elements_list&elements=taxonomies&listorformula=list',
+                'icon' => 'fas fa-th-large',
+                'submenuelement' => true
+            )
         );
 
-        // if ( !get_option('oak_corn') || get_option('oak_corn') == 'false' ) :
-            $taxonomies_menu = array (
-                array(
-                    'title' => __( 'Taxonomies', Oak::$text_domain ),
-                    'url' => '',
-                    'icon' => 'fas fa-th-large',
-                    'submenu' => true
-                ),
-                array(
-                    'title' => __( 'Taxonomies', Oak::$text_domain ),
-                    'url' => '?page=oak_elements_list&elements=taxonomies&listorformula=list',
+        $menu_elements = array_merge( $menu_elements, $after_terms );
+
+        // Lets make the pages associated to each taxonomy:
+        foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
+            if ( $taxonomy->taxonomy_trashed != 'true' ) :
+                $taxonomy_page_properties = array (
+                    'title' => $taxonomy->taxonomy_designation,
+                    'url' => '?page=oak_elements_list&elements=terms&listorformula=list&taxonomy_identifier=' . $taxonomy->taxonomy_identifier,
                     'icon' => 'fas fa-th-large',
                     'submenuelement' => true
-                )
-            );
-            
-            $menu_elements = array_merge( $menu_elements, $taxonomies_menu );
-
-            // Lets make the pages associated to each taxonomy:
-            foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
-                if ( $taxonomy->taxonomy_trashed != 'true' ) :
-                    $taxonomy_page_properties = array (
-                        'title' => $taxonomy->taxonomy_designation,
-                        'url' => '?page=oak_elements_list&elements=terms&listorformula=list&taxonomy_identifier=' . $taxonomy->taxonomy_identifier,
-                        'icon' => 'fas fa-th-large',
-                        'submenuelement' => true
-                    );
-                    $menu_elements[] = $taxonomy_page_properties;
-                endif;
-            endforeach;
-        // endif;
+                );
+                $menu_elements[] = $taxonomy_page_properties;
+            endif;
+        endforeach;
 
         $menu_elements_after_taxo = array(
             array(
@@ -152,18 +208,6 @@
                 'icon' => 'fas fa-th-large'
             );
             $menu_elements[] = $import_page;
-        endif;
-
-
-        // For corn: 
-        if ( get_option('oak_corn') == 'true' ) :
-            foreach( Oak::$all_terms_without_redundancy as $term ) : 
-                $menu_elements[] = array(
-                    'title' => $term->term_designation,
-                    'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
-                    'icon' => 'fas fa-th-large'
-                );
-            endforeach;
         endif;
 
         $other_menu_elements = array(
@@ -321,6 +365,12 @@
             <a class="oak_admin_menu_element" href="<?php if ( $element['url'] != '' || $key == 0 ) : echo( admin_url( $element['url'] ) ); else : echo('#'); endif; ?>">
                 <div class="oak_admin_menu_element__side_part">
                     <i class="oak_admin_menu_element__icon <?php echo( $element['icon'] ); ?>"></i>
+                    <?php 
+                    if ( isset( $element['order'] ) ) : ?>
+                        <span class="oak_admin_menu_element__order"><?php echo( $element['order'] ); ?></span>
+                    <?php
+                    endif;
+                    ?>
                     <span class="oak_admin_menu_element__span"><?php echo( $element['title'] ); ?></span>
                 </div>
                 

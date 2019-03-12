@@ -7,7 +7,6 @@
     font-style: normal;
 }
 
-
 * {
     font-family: 'lato';
 }
@@ -130,6 +129,10 @@ div {
 .oak_admin_menu_element:hover, .oak_admin_menu_sub_element:hover {
     background-color: #bcc7d9;
     cursor: pointer;
+}
+
+.oak_admin_menu_element__order {
+    margin-right: 10px;
 }
 
 .oak_admin_menu_sub_element {

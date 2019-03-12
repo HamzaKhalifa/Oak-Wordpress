@@ -17,7 +17,8 @@ function textFieldsAnimations() {
     var textFields = document.querySelectorAll('.oak_text_field_container');
     for(var i = 0; i < textFields.length; i++) {
         textFields[i].addEventListener('click', function() {
-            this.querySelector('input').focus();
+            var input = this.querySelector('input') ? this.querySelector('input') : this.querySelector('textarea');
+            input.focus();
         });
     }
 
@@ -28,7 +29,8 @@ function textFieldsAnimations() {
             var textFields = document.querySelectorAll('.oak_text_field_container');
             for(var i = 0; i < textFields.length; i++) {
                 if (!jQuery(textFields[i].querySelector('input')).is(':focus')) {
-                    if ( textFields[i].querySelector('input').value == '')
+                    var input = textFields[i].querySelector('input') ? textFields[i].querySelector('input') : textFields[i].querySelector('textarea');
+                    if ( input.value == '')
                         unfocusTextField(textFields[i]);
                     else 
                         unfocusTextFieldButSomethingWritten(textFields[i]);
@@ -46,8 +48,9 @@ function focusTextField(input) {
     }
     removeSomethingWrittenClasses(textField);
     textField.querySelector('.oak_text_field_placeholder').classList.add('oak_text_field_placeholder_focused');
-    if (textField.querySelector('input').inputMode != 'focus')
-        textField.querySelector('input').focus();
+    theInput = textField.querySelector('input') ? textField.querySelector('input') : textField.querySelector('textarea');
+    if (theInput.inputMode != 'focus')
+        theInput.focus();
     textField.querySelector('.text_field_line').classList.add('text_field_line_focused');
 }
 
@@ -72,7 +75,8 @@ function windowClick() {
         window.addEventListener('click', function() {
             var textFields = document.querySelectorAll('.oak_text_field_container');
             for(var i = 0; i < textFields.length; i++) {
-                if (!jQuery(textFields[i].querySelector('input')).is(':focus') && textFields[i].querySelector('input').value == '') {
+                var input = textFields[i].querySelector('input') ? textFields[i].querySelector('input') : textFields[i].querySelector('textarea');
+                if (!jQuery(input).is(':focus') && input.value == '') {
                     unfocusTextField(textFields[i]);
                 }
             }
@@ -107,7 +111,8 @@ function otherInputsListeners() {
 function unfocusAllTextFields() {
     var textFields = document.querySelectorAll('.oak_text_field_container');
     for(var i = 0; i < textFields.length; i++) {
-        if ( textFields[i].querySelector('input').value == '')
+        var input = textFields[i].querySelector('input') ? textFields[i].querySelector('input') : textFields[i].querySelector('textarea');
+        if ( input.value == '')
             unfocusTextField(textFields[i]);
         else 
             unfocusTextFieldButSomethingWritten(textFields[i]);
@@ -215,6 +220,11 @@ function createIdentifier() {
     identifierInput.value = text;
 }
 
+// To initialize the color select: 
+jQuery(document).ready(function($){
+    jQuery('.oak_color').wpColorPicker();
+});
+
 // We create while adding the new revision
 function createElementData(state) {
     var keys = getKeys(elementData);
@@ -225,7 +235,7 @@ function createElementData(state) {
 
     for(var i = 0; i < properties.length; i++) {
         if (document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input')) {
-            if (properties[i].input_type == 'text' || properties[i].input_type == 'select' || properties[i].input_type == 'number' )
+            if (properties[i].input_type == 'text' || properties[i].input_type == 'select' || properties[i].input_type == 'number' || properties[i].input_type == 'color' || properties[i].input_type == 'textarea' )
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').value.toString();
             else if (properties[i].input_type == 'image' || properties[i].input_type == 'file')
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').parentNode.querySelector('img').getAttribute('src').toString();
@@ -235,7 +245,20 @@ function createElementData(state) {
 
         // Check for the selector for each property: 
         if (document.querySelector('.' + DATA.table + '_' + properties[i].name + '_selector')) {
-            elementData.object_selectors += properties[i].name + ':' + document.querySelector('.' + DATA.table + '_' + properties[i].name + '_selector').value + '|';
+            var selector = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_selector');
+            var options = selector.querySelectorAll('option');
+            var selectedObjects = [];
+            for (var j = 1; j < options.length; j++ ) {
+                if (options[j].selected) {
+                    selectedObjects.push(options[j].getAttribute('value'));
+                }
+            }
+            for (var j = 0; j < selectedObjects.length; j++) {
+                elementData.object_selectors += properties[i].name + ':' + selectedObjects[j] + '|';
+            }
+            console.log('Object selectors', elementData.object_selectors);
+
+            // elementData.object_selectors += properties[i].name + ':' + document.querySelector('.' + DATA.table + '_' + properties[i].name + '_selector').value + '|';
         }
     }
     
@@ -286,10 +309,18 @@ function createElementData(state) {
         var formSelectors = document.querySelectorAll('.object_form_selector');
         for (var i = 0; i < formSelectors.length; i++) {
             var formIdentifier = formSelectors[i].getAttribute('form-identifier');
-            var value = formSelectors[i].value;
-            objectFormSelectors += 'form_' + formIdentifier + '_object_' + value + '|';
+            var options = formSelectors[i].querySelectorAll('option');
+            var selectedObjects = [];
+            for (var i = 1; i < options.length; i++ ) {
+                if (options[i].selected) {
+                    selectedObjects.push(options[i].getAttribute('value'));
+                }
+            }
+            for (var j = 0; j < selectedObjects.length; j++) {
+                objectFormSelectors += 'form_' + formIdentifier + '_object_' + selectedObjects[j] + '|';
+            }
+            
         }
-        console.log(objectFormSelectors);
         elementData.object_form_selectors = objectFormSelectors;
     }
     console.log(elementData);
