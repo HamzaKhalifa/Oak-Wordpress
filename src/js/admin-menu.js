@@ -29,5 +29,35 @@
 // For the submenu
 handleSubMenu();
 function handleSubMenu() {
-    
+    var menuElements = document.querySelectorAll('.oak_admin_menu_element');
+    for (var i = 0; i < menuElements.length; i++) {
+        menuElements[i].addEventListener('click', function() {
+            submenuClick(this);
+        });
+    }
+    var submenuElements = document.querySelectorAll('.oak_admin_menu_sub_element');
+    for (var i = 0; i < submenuElements.length; i++) {
+        submenuElements[i].addEventListener('click', function() {
+            submenuClick(this);
+        });
+    }
+}
+
+function submenuClick(element) {
+    if (containsClass(element.nextSibling.nextSibling, 'oak_admin_menu_element__sub_menu')) {
+        var submenu = element.nextSibling.nextSibling;
+        if (containsClass(submenu, 'oak_hidden')) {
+            submenu.classList.remove('oak_hidden');
+        } else {
+            submenu.classList.add('oak_hidden');
+        }
+    }
+} 
+
+function containsClass(element, className) {
+    for (var i = 0; i < element.classList.length; i++) {
+        if (className == element.classList[i]) 
+            return true;
+    }
+    return false;
 }

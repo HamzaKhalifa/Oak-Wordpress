@@ -66,7 +66,6 @@ div {
 }
 
 .oak_admin_menu_element__sub_menu {
-    background-color: white;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -128,7 +127,7 @@ div {
     text-decoration: none;
 }
 
-.oak_admin_menu_element:hover {
+.oak_admin_menu_element:hover, .oak_admin_menu_sub_element:hover {
     background-color: #bcc7d9;
     cursor: pointer;
 }
@@ -138,12 +137,16 @@ div {
     margin-left: 0px;
 }
 
+.oak_admin_menu_element_sub_menu__sub_menu .oak_admin_menu_sub_element {
+    margin-right: 90px;
+}
+
 .oak_admin_menu_element__icon, .oak_admin_menu_element__arrow, .oak_admin_menu_element__span {
     color: #bcc7d9;
     text-decoration: none;
 }
 
-.oak_admin_menu_element:hover .oak_admin_menu_element__side_part span, .oak_admin_menu_element:hover .oak_admin_menu_element__side_part i {
+.oak_admin_menu_element:hover .oak_admin_menu_element__side_part span, .oak_admin_menu_element:hover .oak_admin_menu_element__side_part i, .oak_admin_menu_sub_element:hover .oak_admin_menu_element__side_part span, .oak_admin_menu_sub_element:hover .oak_admin_menu_element__side_part i {
     color: #003366;
 }
 

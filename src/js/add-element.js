@@ -250,6 +250,12 @@ function createElementData(state) {
 
     // Manage other elements 
     if (DATA.otherElementProperties) {
+
+        var revisionNumber = 1;
+        if (DATA.revisions.length != 0) {
+            revisionNumber = parseInt(DATA.revisions[DATA.revisions.length - 1][DATA.table + '_revision_number']) + 1;
+        }
+
         var otherElements = [];
         var otherElementsDesignationContainers = document.querySelectorAll('.oak_other_elements_single_elements_container__single_element');
         for (var i = 0; i < otherElementsDesignationContainers.length; i++) {
@@ -258,12 +264,12 @@ function createElementData(state) {
                 elementOtherDesignation: otherElementsDesignationContainers[i].querySelector('.designation_input').value,
                 elementRequired: otherElementsDesignationContainers[i].querySelector('.selector_input').checked,
                 elementIndex: i,
-                revisionNumber: DATA.revisions.length + 1
+                revisionNumber: revisionNumber
             });
         }
         elementData.otherElements = otherElements;
         elementData.otherElementsProperties = DATA.otherElementProperties;
-        elementData[table + '_revision_number'] = DATA.revisions.length + 1;
+        elementData[table + '_revision_number'] = revisionNumber;
     }
 
     // Manage objects' terms: 

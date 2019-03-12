@@ -459,7 +459,7 @@ Oak::$taxonomy_properties = array(
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => $publications_array, 
-        'description' => __( 'Publications', Oak::$text_domain ), 
+        'description' => __( 'Publications liée', Oak::$text_domain ), 
         'width' => '50' 
     ),
     array ( 
@@ -571,8 +571,8 @@ Oak::$organization_properties = array(
         'property_name' => 'organization_company', 
         'type' => 'text', 
         'input_type' => 'checkbox',
-        'placeholder' => __( 'Entreprise', Oak::$text_domain ), 
-        'description' => __( 'Entreprise.', Oak::$text_domain ), 
+        'placeholder' => __( 'Entreprise ou non', Oak::$text_domain ), 
+        'description' => __( 'Entreprise ou non.', Oak::$text_domain ), 
         'width' => '50' 
     ),
     array ( 
@@ -719,8 +719,8 @@ Oak::$publication_properties = array (
             array( 'value' => 'report', 'innerHTML' => 'Rapport' ),
             array( 'value' => 'frame', 'innerHTML' => 'Cadres RSE' ),
         ),
-        'placeholder' => __( 'Rapport ou Cadres RSE', Oak::$text_domain ), 
-        'description' => __( 'Rapport ou Cadres RSE', Oak::$text_domain ), 
+        'placeholder' => __( 'Rapport/Cadre RSE', Oak::$text_domain ), 
+        'description' => __( 'Rapport/Cadre RSE', Oak::$text_domain ), 
         'width' => '50',
         'condition' => true
     ),

@@ -111,6 +111,17 @@
         <div class="oak_add_element_modal_container_modal__title_container">
             <h3 class="oak_add_element_modal_container_modal_title_container__title"></h3>
         </div>
+        <div class="oak_add_element_modal_container_modal__models_list">
+            <?php 
+                foreach( Oak::$models_without_redundancy as $model ) : ?>
+                    <div class="oak_modal_select_model_button" model-identifier="<?php echo( $model->model_identifier ); ?>">
+                        <span class="oak_modal_select_model_button__span"><?php echo( $model->model_designation ); ?></span>
+                        <i class="oak_admin_menu_element__arrow fas fa-caret-right"></i>
+                    </div>
+                <?php
+                endforeach;
+            ?>
+        </div>
         <span class="oak_add_element_modal_container_modal__error"></span>
         <div class="oak_add_element_modal_container_modal__buttons_container">
             <div class="oak_add_element_modal_container_modal_buttons_container__cancel_button_container">

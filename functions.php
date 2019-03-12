@@ -77,6 +77,8 @@ class Oak {
     public static $frame_terms_identifiers = [];
     public static $all_frame_objects_without_redundancy = [];
 
+    public static $term_objects_without_redundancy = [];
+
     public static $main_color = '#003366';
     public static $secondary_text_color = '#bcc7d9';
     public static $selected_color = '#7b7b7b';
@@ -198,11 +200,11 @@ class Oak {
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
         // if ( isset( $_GET['elements'] ) ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
-            // wp_enqueue_style( 'oak_font_awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
-            // wp_enqueue_style( 'oak_googleapifont_roboto', get_template_directory_uri() . '/src/css/vendor/googleapi-font-roboto.css' );
+            wp_enqueue_style( 'oak_font_awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
+            wp_enqueue_style( 'oak_googleapifont_roboto', get_template_directory_uri() . '/src/css/vendor/googleapi-font-roboto.css' );
             ?>
-            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+            <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"> -->
             
             <?php
         // endif;
@@ -371,8 +373,8 @@ class Oak {
                         'property_name' => 'object_' . $key . '_' . $field->field_identifier, 
                         'type' => 'text',
                         'input_type' => $input_type,
-                        'placeholder' => $field->form_and_field_properties->field_designation,
-                        'description' => $field->form_and_field_properties->field_designation,
+                        'placeholder' => $field->form_and_field_properties->field_designation != '' ? $field->form_and_field_properties->field_designation : $field->field_designation,
+                        'description' => $field->form_and_field_properties->field_designation != '' ? $field->form_and_field_properties->field_designation : $field->field_designation,
                         'selector' => $field->field_selector,
                         'width' => '50',
                         'model_and_form_instance' => $field->model_and_form_instance,
@@ -396,6 +398,25 @@ class Oak {
                 $properties = array_merge( $properties, Oak::$term_properties );
             endif;
 
+            if ( $_GET['elements'] == 'term_objects' ) :
+                $title = __( 'Objets', Oak::$text_domain );
+                $term_identifier = $_GET['term_identifier'];
+                foreach( Oak::$terms_and_objects as $term_and_object ) :
+                    if ( $term_and_object->term_identifier == $term_identifier ) :
+                        foreach( Oak::$all_objects_without_redundancy as $object ) :
+                            if ( $object->object_identifier == $term_and_object->object_identifier ) :
+                                Oak::$term_objects_without_redundancy[] = $object;
+                            endif;
+                        endforeach;
+                    endif;
+                endforeach;
+
+                $table = 'object';
+                $table_in_plural = 'objects';
+                $elements = Oak::$term_objects_without_redundancy;
+                // $properties = array_merge( $properties, Oak::$glossary_properties );
+            endif;
+
             Oak::$revisions = $this->oak_get_revisions( $table, $elements );
 
             $basic_data_to_pass = array(
@@ -408,6 +429,7 @@ class Oak {
                 'elements' => $elements,
                 'elementsType' => $_GET['elements'],
                 'templateDirectoryUri' => get_template_directory_uri(),
+                'termIdentifier' => isset ( $_GET['term_identifier'] ) ? $_GET['term_identifier'] : ''
             );
             $final_data_to_pass = array_merge( $basic_data_to_pass, $additional_data_to_pass );
 
@@ -634,7 +656,6 @@ class Oak {
             break;
             case 'taxonomies': 
                 $properties = Oak::$taxonomy_properties;
-                // var_dump( Oak::$taxonomy_properties );
                 $table = 'taxonomy';
                 $title = __( 'Ajouter une taxonomie', Oak::$text_domain );
             break;
@@ -806,6 +827,15 @@ class Oak {
                 $first_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'term_identifier' );
                 $second_property = array ( 'title' => __( 'Sélecteur de cadres RSE', Oak::$text_domain ), 'property' => 'term_selector' );
                 $third_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'term_identifier' );
+            break;
+            case 'term_objects' :
+                $title = __( 'Objets', Oak::$text_domain );
+                $elements = Oak::$term_objects_without_redundancy;
+
+                $table = 'object';
+                $first_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' );
+                $second_property = array ( 'title' => __( 'Sélecteur de cadres RSE', Oak::$text_domain ), 'property' => 'object_selector' );
+                $third_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' );
             break;
         endswitch;
         include get_template_directory() . '/template-parts/elements/elements-list.php';

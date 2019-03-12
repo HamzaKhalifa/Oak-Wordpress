@@ -1703,6 +1703,46 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   color: white;
 }
 
+.oak_add_element_modal_container_modal__models_list {
+  display: flex;
+  flex-direction: column;
+}
+
+.oak_modal_select_model_button {
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 10px;
+  margin-left: 10px;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid #bcc7d9;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.oak_modal_select_model_button:hover {
+  background-color: #bcc7d9;
+  cursor: pointer;
+}
+
+.oak_modal_select_model_button__span {
+  margin-left: 10px;
+  color: #bcc7d9;
+}
+
+.oak_modal_select_model_button i {
+  position: absolute;
+  right: 0px;
+  top: 7px;
+}
+
+.oak_modal_select_model_button:hover .oak_modal_select_model_button__span, .oak_modal_select_model_button:hover i {
+  color: white;
+}
+
 .oak_configuration_page_field_container {
   margin-bottom: 10px;
   display: flex;

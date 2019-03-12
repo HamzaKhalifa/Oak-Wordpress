@@ -89,10 +89,6 @@ $locked_property = $table . '_locked';
 $trashed_property = $table . '_trashed';
 $state_property = $table . '_state';
 $modification_time_property = $table . '_modification_time';
-
-// echo('<pre>');
-// var_dump( $revisions[ count( $revisions ) - 1 ] );
-// echo('</pre>');
 ?>
 <div class="oak_add_element_container__header">
     <img class="oak_add_element_container_header_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/fields.png' ); ?>" alt="">
@@ -151,12 +147,13 @@ $modification_time_property = $table . '_modification_time';
                 // For the form new designation: 
                 $form_new_designation = $property['form']->form_designation;
                 if ( $property['model_and_form_instance']->form_designation != '' ) :
+                    
                     $form_new_designation = $property['model_and_form_instance']->form_designation;
                 endif;
 
                 if ( $form_designation != $form_new_designation ) : ?>
                     <div class="oak_add_element_container__horizontal_container">
-                        <h2 class="oak_add_element_formula_title"><?php echo( $property['model_and_form_instance']->form_designation ); ?></h2>
+                        <h2 class="oak_add_element_formula_title"><?php echo( $form_new_designation ); ?></h2>
                     </div>
                     <?php 
                     $property['width'] = '100';
@@ -300,7 +297,6 @@ $modification_time_property = $table . '_modification_time';
                                         endif;
                                     endforeach;
                                 endif;
-                                var_dump( $object_form_selectors_attributes );
                                 
                                 foreach( Oak::$all_frame_objects_without_redundancy as $frame_object ) : 
                                     $selected = '';
@@ -350,6 +346,18 @@ $modification_time_property = $table . '_modification_time';
                                             <?php
                                             endif;
                                         endforeach;
+                                    endif;
+                                endforeach;
+                            endif;
+
+                            if ( isset( $_GET['term_identifier'] ) ) :
+                                foreach( Oak::$all_terms_without_redundancy as $term ) :
+                                    if ( $term->term_taxonomy_identifier == $taxonomy->taxonomy_identifier && $term->term_identifier == $_GET['term_identifier'] ) : ?>
+                                        <div class="oak_autocomplete_selected_input_container">
+                                            <input type="text" disabled value="<?php echo ( $term->term_designation ); ?>" identifier="<?php echo( $term->term_identifier ); ?>" class="oak_autocomplete_selected_input">
+                                            <i class="oak_autocomplete_delete_button fas fa-minus"></i>
+                                        </div>
+                                    <?php
                                     endif;
                                 endforeach;
                             endif;

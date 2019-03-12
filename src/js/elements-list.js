@@ -3,6 +3,7 @@ var deleting = false;
 var deletingDefinitely = false;
 var importing = false;
 var restoring = false;
+var choosingModel = false;
 var table = DATA.table;
 var tableInPlural = DATA.tableInPlural;
 
@@ -323,7 +324,11 @@ function add() {
             additionalData = '&model_identifier=' + DATA.tableInPlural;
         else if ( DATA.elementsType == 'terms' )
             additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
-            
+        else if ( DATA.elementsType == 'term_objects' ) {
+            choosingModel = true;
+            openModal('Veuillez choisir le modèle');
+            return;
+        }
         window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&elements=' + DATA.elementsType + '&listorformula=formula' + additionalData);
     });
 }
@@ -524,6 +529,12 @@ function openModal(title, twoButtons) {
     if (deleting) {
         confirmButtonSpan.innerHTML = 'Supprimer';
     }
+    var modelsList = document.querySelector('.oak_add_element_modal_container_modal__models_list');
+    if (choosingModel) {
+        modelsList.style.display = 'flex';
+    } else {
+        modelsList.style.display = 'none';
+    }
 
     var confirmButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_add_button_container__text');
 
@@ -567,6 +578,7 @@ function closeModals() {
     deleting = false;
     importing  = false;
     restoring = false;
+    choosingModel = false;
 }
 
 function setLoading() {
@@ -666,6 +678,18 @@ function handleModalButtons() {
     cancelButton.addEventListener('click', function() {
         closeModals();
     });
+}
+
+handleAddObjectModelButtons();
+function handleAddObjectModelButtons() {
+    var modelsButtons = document.querySelectorAll('.oak_modal_select_model_button');
+    for (var i = 0; i < modelsButtons.length; i++) {
+        modelsButtons[i].addEventListener('click', function() {
+            var modelIdentifier = this.getAttribute('model-identifier');
+
+            window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&elements=objects&listorformula=formula&model_identifier=' + modelIdentifier + '&term_identifier=' + DATA.termIdentifier);
+        });
+    }
 }
 
 function readCSV(input) {
