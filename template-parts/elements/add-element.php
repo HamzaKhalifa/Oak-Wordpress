@@ -147,7 +147,6 @@ $modification_time_property = $table . '_modification_time';
                 // For the form new designation: 
                 $form_new_designation = $property['form']->form_designation;
                 if ( $property['model_and_form_instance']->form_designation != '' ) :
-                    
                     $form_new_designation = $property['model_and_form_instance']->form_designation;
                 endif;
                 if ( $form_designation != $form_new_designation ) :
@@ -266,6 +265,7 @@ $modification_time_property = $table . '_modification_time';
             endif;
 
             // For the form selector
+            // var_dump( $property['form']->form_identifier );
             if ( isset( $property['model_and_form_instance'] ) ) :
                 $form_identifier = $property['form']->form_identifier;
                 $at_the_end_of_form = false;
@@ -275,8 +275,9 @@ $modification_time_property = $table . '_modification_time';
                     $at_the_end_of_form = true;
                 endif;
 
+
                 // We are gonna set the selector for the previous form:
-                if ( $property['form']->form_selector == 'true' ) :
+                if ( $property['form']->form_selector == 'true' && $at_the_end_of_form ) :
                     ?>
                     <div class="oak_select_container oak_select_container__selector">
                         <div class="additional_container">
