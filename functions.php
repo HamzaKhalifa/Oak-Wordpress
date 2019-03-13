@@ -41,7 +41,7 @@ class Oak {
     public static $terms_and_objects = [];
 
     public static $models;
-    public static $models_without_redundancy;
+    public static $models_without_redundancy = [];
     public static $model_properties;
     public static $model_other_elements;
     public static $all_models_and_forms = [];
@@ -70,7 +70,7 @@ class Oak {
     public static $quanti_properties;
 
     public static $taxonomies;
-    public static $taxonomies_without_redundancy;
+    public static $taxonomies_without_redundancy = [];
     public static $taxonomy_properties;
 
     public static $frame_publications_identifiers = [];
@@ -108,7 +108,7 @@ class Oak {
         Oak::$all_terms = [];
         Oak::$all_terms_without_redundancy = [];
 
-        // $this->delete_everything();
+        $this->delete_everything();
 
         Oak::$field_types = array ( 
             array ( 'value' => 'Texte', 'innerHTML' => 'Texte' ), 
@@ -1561,8 +1561,63 @@ class Oak {
             , Oak::$organizations_table_name, Oak::$publications_table_name, Oak::$glossaries_table_name, Oak::$qualis_table_name
             , Oak::$quantis_table_name, Oak::$forms_and_fields_table_name, Oak::$models_and_forms_table_name, Oak::$terms_and_objects_table_name
         ];
+
+        // Lets get the taxonomies (because delete_everything is called before tables.php) :
+        $taxonomies_table_name = Oak::$taxonomies_table_name;
+        Oak::$taxonomies = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $taxonomies_table_name
+        " );
+        $reversed_taxonomies = array_reverse( Oak::$taxonomies );
+        $taxonomies_without_redundancy = [];
+        foreach( $reversed_taxonomies as $taxonomy ) :
+            $added = false;
+            foreach( $taxonomies_without_redundancy as $taxonomy_without_redundancy ) :
+                if ( $taxonomy_without_redundancy->taxonomy_identifier == $taxonomy->taxonomy_identifier) :
+                    $added = true;
+                endif;
+            endforeach;
+            if ( !$added ) :
+                $taxonomies_without_redundancy[] = $taxonomy;
+            endif;
+        endforeach;
+        Oak::$taxonomies_without_redundancy = $taxonomies_without_redundancy;
+
+        // Now lets get the models :
+        $models_table_name = Oak::$models_table_name;
+        Oak::$models = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $models_table_name
+        " );
+        $reversed_models = array_reverse( Oak::$models );
+        $models_without_redundancy = [];
+        foreach( $reversed_models as $model ) :
+            $added = false;
+            foreach( $models_without_redundancy as $model_without_redundancy ) :
+                if ( $model_without_redundancy->model_identifier == $model->model_identifier ) :
+                    $added = true;
+                endif;
+            endforeach;
+            if ( !$added ) :
+                $models_without_redundancy[] = $model;
+            endif;
+        endforeach;
+        Oak::$models_without_redundancy = $models_without_redundancy;
+                
+
+        // Now lets delete the tables related to the taxonomies we found:
+        foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
+            $table_name_to_delete = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy->taxonomy_identifier;
+            $wpdb->query( "DROP TABLE IF EXISTS $table_name_to_delete" );
+        endforeach;
+
+        // And the tables related to the models we found:
+        foreach( Oak::$models_without_redundancy as $model ) :
+            $table_name_to_delete = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
+            $wpdb->query( "DROP TABLE IF EXISTS $table_name_to_delete" );
+        endforeach;
+
         foreach( $tables as $table ) :
-            // $wpdb->query("ALTER TABLE $table_name ADD $column_name varchar(555)");
             $delete = $wpdb->query("DELETE FROM $table");
         endforeach;
     }
