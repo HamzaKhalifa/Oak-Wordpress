@@ -108,7 +108,7 @@ class Oak {
         Oak::$all_terms = [];
         Oak::$all_terms_without_redundancy = [];
 
-        $this->delete_everything();
+        // $this->delete_everything();
 
         Oak::$field_types = array ( 
             array ( 'value' => 'Texte', 'innerHTML' => 'Texte' ), 
