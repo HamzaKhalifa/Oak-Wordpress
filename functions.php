@@ -123,13 +123,20 @@ class Oak {
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_styles' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_scripts' ) );
 
-        add_action( 'after_setup_theme', array( $this, 'oak_add_theme_support' ) );
+        add_action( 'add_meta_boxes', array ( $this, 'oak_add_meta_box_to_posts' ) );
 
         add_action( 'init', array( $this, 'add_cors_http_header' ) );
 
-        add_action('admin_head', array ( $this, 'oak_wordpress_dashboard' ) );
+        add_action( 'after_setup_theme', array( $this, 'oak_add_theme_support' ) );
+
+        add_action( 'admin_head', array ( $this, 'oak_wordpress_dashboard' ) );
+        
+        $this->oak_elementor_initialization();
         
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
+
+        add_action( 'save_post', array ( $this, 'oak_save_post_meta_fields' ) );
+
         
         $this->oak_ajax_calls();
 
@@ -173,9 +180,12 @@ class Oak {
 
     function oak_enqueue_styles() {
         wp_enqueue_style( 'the_style', get_stylesheet_directory_uri() . '/style.css' );
+        wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
     }
 
     function oak_enqueue_scripts() {
+        wp_enqueue_media();
+
         if ( strpos( get_page_template(), "critical-analysis" ) != false ) :
             wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
             wp_enqueue_script( 'oak_critical_analysis_front', get_template_directory_uri() . '/src/js/critical-analysis-front.js', array('jquery'), false, true);
@@ -216,6 +226,9 @@ class Oak {
 
     function oak_admin_enqueue_scripts( $hook ) { 
         global $wpdb;
+
+        // For the media library
+        wp_enqueue_script( 'oak_media_library', get_template_directory_uri() . '/src/js/vendor/wp-media-modal.js', array('jquery'), false, true );
 
         // Admin menu
         wp_enqueue_script( 'admin_menu_script', get_template_directory_uri() . '/src/js/admin-menu.js', array('jquery'), false, true );
@@ -450,6 +463,150 @@ class Oak {
             endif;
         endif;
     }
+
+    function oak_add_meta_box_to_posts() {
+        // We need to delete all post meta first to avoid old unneccesary data
+        $metas = get_post_meta( get_the_ID() );
+        foreach( $metas as $key => $meta ) :
+            if ( $key != 'objects_selector' ) :
+                delete_post_meta( get_the_ID(), $key );
+            endif;
+        endforeach;
+
+        global $wpdb; 
+
+        $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
+
+        $our_objects = [];
+
+        foreach( Oak::$models_without_redundancy as $model ) :
+            $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
+            $objects = $wpdb->get_results ( "
+                SELECT * 
+                FROM  $table_name
+            " );
+            foreach( $objects as $object ) : 
+                if ( in_array( $object->object_identifier, $selected_objects ) ) :
+                    $our_objects[] = $object;
+                endif;
+            endforeach;
+        endforeach;
+
+        foreach( $our_objects as $index => $object ) :
+            $field_designations_used = [];
+            foreach( $object as $key => $value ) :
+
+                if ( $value == NULL ) :
+                    $value = '';
+                endif;
+
+                if ( $key != 'object_form_selectors' ) :
+                    $key_devided = explode( '_', $key );
+                    $field_name = '';
+                    switch ( $key ) :
+                        case 'object_modification_time' :
+                            $field_name = __( 'Dernière modification', Oak::$text_domain );
+                        break;
+                        case 'object_state' :
+                            $field_name = __( 'Etat', Oak::$text_domain );
+                        break;
+                        case 'object_identifier' :
+                            $field_name = __( 'Identifiant', Oak::$text_domain );
+                        break;
+                        case 'object_trashed' :
+                            $field_name = __( 'Corbeille', Oak::$text_domain );
+                        break;
+                        default :
+                            $field_name = $key_devided[ count( $key_devided ) - 1 ];
+                        break;
+                    endswitch;
+                    $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field_name;
+                    if ( count ( $key_devided ) > 2 ) :
+                        $field_identifier = $key_devided[2];
+                        foreach( Oak::$fields_without_redundancy as $field ) :
+                            if ( $field->field_identifier == $field_identifier ) :
+
+                                $number_of_times_designation_was_used = 0;
+                                foreach( $field_designations_used as $used_designation ) :
+                                    if ( $used_designation == $field->field_designation ) :
+                                        $number_of_times_designation_was_used++;
+                                    endif;
+                                endforeach;
+
+                                $number_of_times_designation_was_used = $number_of_times_designation_was_used == 0 ? '' : $number_of_times_designation_was_used + 1;
+                                $field_designations_used[] = $field->field_designation;
+                                $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field->field_designation . ' ' . $number_of_times_designation_was_used;
+                            endif;
+                        endforeach;
+                    endif;
+                    update_post_meta( get_the_ID(), $field_designation, $value );
+                endif;
+            endforeach;
+        endforeach;
+
+        $posts = [ 'post', 'page' ];
+        foreach( $posts as $post ) :
+            add_meta_box(
+                'objects_selector', // $id
+                'Objets', // $title
+                array( $this, 'oak_add_meta_box_to_posts_view' ), // $callback
+                $post, // $screen
+                'normal', // $context
+                'high' // $priority
+            );
+        endforeach;
+    }
+
+    function oak_add_meta_box_to_posts_view( $post, $args ) {
+        $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
+        ?>
+        <select multiple name="objects_selector[]" class="oak_post_objects_selector">
+            <?php
+            foreach( Oak::$all_objects_without_redundancy as $object ) : 
+                $selected = '';
+                foreach( $selected_objects as $selected_object_identifier ) :
+                    if ( $selected_object_identifier == $object->object_identifier ) :
+                        $selected = 'selected';
+                    endif;
+                endforeach;
+                ?>
+                <option <?php echo( $selected ); ?> value="<?php echo( $object->object_identifier ); ?>"><?php echo( $object->object_designation ); ?></option>
+                <?php
+            endforeach;
+            ?>
+        </select>
+
+        <?php
+    }
+
+    function oak_save_post_meta_fields( $post_id ) {
+        if ( !isset( $_POST['objects_selector'] ) ) :
+            return;
+        endif;
+        
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+            return $post_id;
+        }
+
+        // check permissions
+        if ( 'page' === $_POST['post_type'] ) {
+            if ( !current_user_can( 'edit_page', $post_id ) ) {
+                return $post_id;
+            } elseif ( !current_user_can( 'edit_post', $post_id ) ) {
+                return $post_id;
+            }  
+        }
+        
+        $old = get_post_meta( $post_id, 'objects_selector', true );
+        $new = $_POST['objects_selector'];
+
+        if ( $new && $new !== $old ) {
+            update_post_meta( $post_id, 'objects_selector', $new );
+        } elseif ( '' === $new && $old ) {
+            delete_post_meta( $post_id, 'objects_selector', $old );
+        }
+    }
+
     
     function oak_add_theme_support() {
         add_theme_support('menus');
@@ -461,6 +618,171 @@ class Oak {
         header('Access-Control-Allow-Origin: *');
         // header('Access-Control-Allow-Origin: http://localhost:8888/test/wp-admin/admin-ajax.php');
     }
+
+    
+
+    function oak_elementor_initialization() {
+        if ( get_option('oak_corn') == 'true' ) :
+            if ( !did_action( 'elementor/loaded' ) == 1 ) :
+                add_action( 'admin_notices', array( $this, 'oak_admin_notice_missing_elementor_plugin' ) );
+            else :
+                // This is corn, and elementor is installed. So we do everything related to elementor :) 
+                $this->oak_add_tags();
+                $this->oak_add_widget_categories();
+                $this->oak_add_widgets();
+            endif;
+        endif;
+    }
+
+    function oak_add_tags() {
+        add_action( 'elementor/dynamic_tags/register_tags', function( $dynamic_tags ) {
+            \Elementor\Plugin::$instance->dynamic_tags->register_group( 'oak', [
+                'title' => __( 'Oak', Oak::$text_domain ) 
+            ] );
+
+            include_once get_template_directory() . '/functions/elementor/dynamic_tag.php';
+
+            $tag = new Dynamic_Tag();
+            $tag->set_tag_options( array(
+                'name' => 'field',
+                'title' => 'Le titre',
+                'group' => 'oak',
+                'param_name' => 'param_name',
+            ) ); 
+            $dynamic_tags->register_tag( $tag );
+            // $dynamic_tags->register_tag( 'Dynamic_Tag' );
+        } );
+    }
+
+    function oak_add_widget_categories() {
+        add_action( 'elementor/elements/categories_registered', function( $elements_manager ) {
+            $elements_manager->add_category(
+                'oak',
+                [
+                    'title' => __( 'OAK', Oak::$text_domain ),
+                    'icon' => 'fa fa-plug',
+                ]
+            );
+        } );
+    }
+
+    function oak_add_widgets() {
+        add_action('elementor/widgets/widgets_registered', function( $widgets_manager ) {
+
+            include_once get_template_directory() . '/functions/elementor/generic_widget.php';
+
+            global $wpdb; 
+
+            $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
+
+            $our_objects = [];
+
+            foreach( Oak::$models_without_redundancy as $model ) :
+                $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
+                $objects = $wpdb->get_results ( "
+                    SELECT * 
+                    FROM  $table_name
+                " );
+                $objects = array_reverse( $objects );
+                foreach( $objects as $object ) : 
+                    if ( in_array( $object->object_identifier, $selected_objects ) ) :
+                        $exists = false;
+                        foreach( $our_objects as $already_added_object ) :
+                            if ( $already_added_object->object_identifier == $object->object_identifier ) :
+                                $exists = true;
+                            endif;
+                        endforeach;   
+                        if ( !$exists ) :
+                            $our_objects[] = $object;
+                        endif;
+                    endif;
+                endforeach;
+            endforeach;
+
+            $variables = [];
+            foreach( $our_objects as $index => $object ) :
+                $input_type = 'text';
+                $field_designations_used = [];
+                foreach( $object as $key => $value ) :
+
+                    if ( $value == NULL ) :
+                        $value = '';
+                    endif;
+
+                    if ( $key != 'object_form_selectors' ) :
+                        $key_devided = explode( '_', $key );
+                        $field_name = '';
+                        switch ( $key ) :
+                            case 'object_modification_time' :
+                                $field_name = __( 'Dernière modification', Oak::$text_domain );
+                            break;
+                            case 'object_state' :
+                                $field_name = __( 'Etat', Oak::$text_domain );
+                            break;
+                            case 'object_identifier' :
+                                $field_name = __( 'Identifiant', Oak::$text_domain );
+                            break;
+                            case 'object_trashed' :
+                                $field_name = __( 'Corbeille', Oak::$text_domain );
+                            break;
+                            default :
+                                $field_name = $key_devided[ count( $key_devided ) - 1 ];
+                            break;
+                        endswitch;
+                        $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field_name;
+                        if ( count ( $key_devided ) > 2 ) :
+                            $field_identifier = $key_devided[2];
+                            foreach( Oak::$fields_without_redundancy as $field ) :
+                                if ( $field->field_identifier == $field_identifier ) :
+
+                                    $number_of_times_designation_was_used = 0;
+                                    foreach( $field_designations_used as $used_designation ) :
+                                        if ( $used_designation == $field->field_designation ) :
+                                            $number_of_times_designation_was_used++;
+                                        endif;
+                                    endforeach;
+
+                                    $number_of_times_designation_was_used = $number_of_times_designation_was_used == 0 ? '' : $number_of_times_designation_was_used + 1;
+                                    $field_designations_used[] = $field->field_designation;
+                                    $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field->field_designation . ' ' . $number_of_times_designation_was_used;
+                                endif;
+                            endforeach;
+                        endif;
+
+                        $type = \Elementor\Controls_Manager::TEXT;
+                        if ( filter_var( $value, FILTER_VALIDATE_URL ) ) :
+                            $input_type = 'image';
+                            // $type = \Elementor\Controls_Manager::IMAGE;
+                        endif;
+
+                        $widget_options = array(
+                            'name' => preg_replace( '/\s+/', '', $field_designation ),
+                            'title' => $field_designation,
+                            'icon' => 'fa fa-code',
+                            'categories' => [ 'oak' ],
+                            'value' => $value,
+                            'input_type' => $input_type,
+                            'type' => $type
+                        );
+                        $generic_widget = new Generic_Widget();
+                        $generic_widget->set_widgets_options( $widget_options );
+                        $widgets_manager->register_widget_type( $generic_widget );
+                    endif;
+                endforeach;
+            endforeach;
+        }, 14);
+    }
+
+    function oak_admin_notice_missing_elementor_plugin() {
+        
+		$message = sprintf(
+			esc_html__( 'Pour assurer un bon fonctionnement du "%1$s" , vous devriez avoir "%2$s" installé dans votre environnement.', Oak::$text_domain ),
+			'<strong>' . esc_html__( 'Web Publisher', Oak::$text_domain ) . '</strong>',
+			'<strong>' . esc_html__( 'Elementor', Oak::$text_domain ) . '</strong>'
+        );
+
+        printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', $message );
+	}
 
     function oak_handle_admin_menu() {
         // add_menu_page( 'Admin Menu', 'Admin Menu', 'manage_options', 'admin_menu', , $icon_url, $position)
@@ -959,7 +1281,7 @@ class Oak {
                 $key_divided = explode( '_', $key ); 
                 if ( $property_name_divided[ count( $property_name_divided ) - 1 ] == $key_divided[ count( $key_divided ) - 1 ] ) :
                     if ( $property['input_type'] == 'image' || $property['input_type'] == 'file' ) :
-                        if ( !filter_var( $file, FILTER_VALIDATE_URL ) ) :
+                        if ( !filter_var( $value, FILTER_VALIDATE_URL ) && $value != '' ) :
                         // if ( strpos( $value, 'uploads/' ) == false ) :
                             // if ( $property['input_type'] == 'file' ) :
                             //     $file_url = $this->upload_file( $value );
@@ -1061,7 +1383,7 @@ class Oak {
             $img             = str_replace( 'data:image/' . $image_type . ';base64,', '', $image );
             $img             = str_replace( ' ', '+', $img );
             $decoded         = base64_decode( $img );
-            $filename        = 'random.' . $image_type;
+            $filename        = '.' . $image_type;
             $file_type       = 'image/jpeg';
             $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
             $upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );

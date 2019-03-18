@@ -517,6 +517,7 @@ foreach( Oak::$models as $model ) :
         SELECT * 
         FROM $table_name
     " );
+
     Oak::$all_objects = array_merge( Oak::$all_objects, $model_objects );
 endforeach;
 

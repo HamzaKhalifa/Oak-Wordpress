@@ -9,10 +9,6 @@ header {
   background-color: black;
 }
 
-.site-title-link {
-  text-decoration: none;
-}
-
 .site-title {
   color: white;
   padding-top: 10px;
@@ -1320,6 +1316,10 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 
 .color_additional_container {
   width: 100%;
+}
+
+.oak_calling_selector_image, .oak_calling_selector_file {
+  color: #003366;
 }
 
 .oak_system_bar {

@@ -237,8 +237,10 @@ function createElementData(state) {
         if (document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input')) {
             if (properties[i].input_type == 'text' || properties[i].input_type == 'select' || properties[i].input_type == 'number' || properties[i].input_type == 'color' || properties[i].input_type == 'textarea' )
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').value.toString();
-            else if (properties[i].input_type == 'image' || properties[i].input_type == 'file')
+            else if (properties[i].input_type == 'image')
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').parentNode.querySelector('img').getAttribute('src').toString();
+            else if (properties[i].input_type == 'file')
+                elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').getAttribute('value').toString();
             else if (properties[i].input_type == 'checkbox') 
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').checked.toString();
         }
@@ -658,22 +660,66 @@ function otherElementsCopyButton() {
 }
 
 // Initialize the images/files after page load: 
-function initializeImagesFiles() {
-    var allInputs = document.querySelector('input');
-    for (var i = 0; i < allInputs.length; i++) {
-        if ( allInputs[i].getAttribute('type') == 'file' ) {
-            readUrl(allInputs[i]);
-        }
+initializeImageMediaModals();
+var lastClickedCallingSelector;
+function initializeImageMediaModals() {
+    var allCallingSelectors = document.querySelectorAll('.oak_calling_selector_image');
+    for (var i = 0; i < allCallingSelectors.length; i++) {
+        allCallingSelectors[i].addEventListener('click', function() {
+            lastClickedCallingSelector = this;
+        });
+        
+        var callingSelector = '.calling_selector_' + allCallingSelectors[i].getAttribute('property-name');
+        var mm = new MediaModal(
+            {
+                calling_selector : callingSelector,
+                cb : function(attachments) {
+                    var attachment = attachments[0];
+                    lastClickedCallingSelector.parentNode.querySelector('img').setAttribute('src', attachment.sizes.full.url)
+                }
+            },
+            {
+                title : 'Choisir une image',
+                button : {
+                text : 'Selectionner une image'
+                },
+                library : {
+                type : "image"
+                }
+            }
+        );
     }
 }
 
-function readUrl(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            input.parentNode.querySelector('img').setAttribute('src', e.target.result);
-        };
-        reader.readAsDataURL(input.files[0]);
+initializeFilesMediaModals();
+var lastClickedFileCallingSelector;
+function initializeFilesMediaModals() {
+    var allCallingSelectors = document.querySelectorAll('.oak_calling_selector_file');
+    for (var i = 0; i < allCallingSelectors.length; i++) {
+        allCallingSelectors[i].addEventListener('click', function() {
+            lastClickedFileCallingSelector = this;
+            console.log(lastClickedFileCallingSelector);
+        });
+        
+        var callingSelector = '.calling_selector_' + allCallingSelectors[i].getAttribute('property-name');
+        var mm = new MediaModal(
+            {
+                calling_selector : callingSelector,
+                cb : function(attachments) {
+                    var ids = jQuery.map(attachments, function(attachment){
+                        return attachment.id;
+                    });
+                    ids = JSON.stringify(ids);
+                    lastClickedFileCallingSelector.parentNode.querySelector('input').setAttribute('value', attachments[0].link);
+                }
+            },
+            {
+                multiple: true,
+                library : {
+                  type : "application/pdf"
+                }
+              }
+        );
     }
 }
 

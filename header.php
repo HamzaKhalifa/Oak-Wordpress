@@ -9,7 +9,4 @@
 
     <div class="container">
         <header class="site-header">
-            <a  class="site-title-link" href="<?php echo( home_url() ); ?>"><h1 class="site-title"><?php bloginfo('name') ?></h1></a>
-            <h4><?php bloginfo('description') ?></h4>
-            <?php wp_list_categories(); ?> 
         </header>

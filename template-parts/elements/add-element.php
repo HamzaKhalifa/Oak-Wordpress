@@ -251,9 +251,26 @@ $modification_time_property = $table . '_modification_time';
             elseif ( $property['input_type'] == 'image' || $property['input_type'] == 'file' ) : ?>
                 <div class="oak_checkbox_container oak_add_element_image_container">
                     <div class="oak_checkbox_container__container">
-                        <input name="selector" onChange="readUrl(this)" type="file" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ); ?>">
-                        <img src="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->$property_name ); endif; ?>" class="oak_add_element_image_container" alt="">
+                        <?php if ( $property['input_type'] == 'image' ) : ?>
+                            <a property-name='<?php echo( $property['name'] ); ?>' class="oak_calling_selector_image calling_selector_<?php echo( $property['name'] ); ?>" data-attachment_ids="12" href="#"><?php _e( 'Choisir une image', Oak::$text_domain ); ?></a>
+                            <img id="my-image" class="oak_add_element_image_container <?php echo( 'oak_file_' . $property['name'] ); ?>" src="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->$property_name ); endif; ?>" />
+                            <input class="oak_file_input <?php echo( $table . '_' . $property['name'] . '_input' ); ?>" type="hidden" />
+                        <?php else: ?>
+                            <a 
+                                property-name='<?php echo( $property['name'] ); ?>' 
+                                class="oak_calling_selector_file calling_selector_<?php echo( $property['name'] ); ?>" 
+                                href="#" 
+                                data-uploader_title="<?php _e( 'Selectionnez un fichier' ); ?>" 
+                                data-attachment_ids="[34,35,36]"
+
+                            >
+                            <?php _e( 'Cliquez ici pour attacher un PDF', Oak::$text_domain ); ?>
+                            </a>
+                            <input class="oak_file_input <?php echo( $table . '_' . $property['name'] . '_input' ); ?>" disabled value="<?php if ( count( $revisions ) > 0 ) : echo( $revisions[ count( $revisions ) - 1 ]->$property_name ); endif; ?>" />
+
+                        <?php endif; ?>
                     </div>
+
                     <div class="input_line"></div>
                     <span class="text_field_description"><?php echo ( $property['description'] ); ?></span>
                 </div>

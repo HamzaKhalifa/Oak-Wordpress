@@ -11,11 +11,21 @@
     <hr>
     <br>
     
-    <?php 
+    <?php
         $menu_elements = array(
             array(
                 'title' => __( 'Tableau de bord', Oak::$text_domain ),
                 'url' => '',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
+                'title' => __( 'Postes', Oak::$text_domain ),
+                'url' => 'edit.php',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
+                'title' => __( 'Pages', Oak::$text_domain ),
+                'url' => 'edit.php?post_type=page',
                 'icon' => 'fas fa-th-large'
             ),
         );
@@ -350,6 +360,40 @@
             array(
                 'title' => __( 'Go Pro', Oak::$text_domain ),
                 'url' => 'admin.php?page=go_elementor_pro',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
+                'title' => __( 'Widgeditor', Oak::$text_domain ),
+                'url' => '',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
+                'title' => __( 'Widgets', Oak::$text_domain ),
+                'url' => 'admin.php?page=widgeditor',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
+                'title' => __( 'Ajouter', Oak::$text_domain ),
+                'url' => 'admin.php?page=widgeditor_add_widgets',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
+                'title' => __( 'VizualEditor', Oak::$text_domain ),
+                'url' => '',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
+                'title' => __( 'Tous les styles', Oak::$text_domain ),
+                'url' => 'wp-admin/admin.php?page=vizual-editor',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
+                'title' => __( 'Ajouter', Oak::$text_domain ),
+                'url' => 'admin.php?page=vizual-editor-add',
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),
