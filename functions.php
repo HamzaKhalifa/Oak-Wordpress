@@ -1860,6 +1860,7 @@ class Oak {
                     unset( $element[ $key ] );
                 endif;
             endforeach;
+            
 
             $this->corn_simple_register_element( $element, $new_table_name );
         endforeach;
@@ -1976,6 +1977,7 @@ class Oak {
         foreach( $models as $model ) :
             
             $model_fields = [];
+            $number_of_fields = 0;
             foreach( $models_and_forms as $model_and_form_instance ) :
                 if ( $model_and_form_instance['model_identifier'] == $model['model_identifier'] 
                     && $model_and_form_instance['model_revision_number'] == $model['model_revision_number'] 
@@ -1987,6 +1989,8 @@ class Oak {
                                 if ( $form_and_field_instance['form_identifier'] == $form['form_identifier'] 
                                     && $form_and_field_instance['form_revision_number'] == $form['form_revision_number'] 
                                 ) :
+
+                                    $number_of_fields++;
                                     foreach( $fields as $field ) :
                                         if ( $field['field_identifier'] == $form_and_field_instance['field_identifier'] ) :
                                             $field_copy = $field;
@@ -2067,7 +2071,8 @@ class Oak {
 
         wp_send_json_success( array(
             'functionReturn' => $this->corn_save_element( $fields, Oak::$fields_table_name ),
-            'return' => $this->corn_save_element( $organizations, Oak::$organizations_table_name )
+            'return' => $this->corn_save_element( $organizations, Oak::$organizations_table_name ),
+            'objects' => $objects
         ) );
     }
 

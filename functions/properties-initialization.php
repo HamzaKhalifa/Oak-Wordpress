@@ -616,7 +616,7 @@ Oak::$publication_properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => $organizations_array, 
-        'description' => __( 'Publications', Oak::$text_domain ), 
+        'description' => __( 'Organisation', Oak::$text_domain ), 
         'width' => '50' 
     ),
     array ( 

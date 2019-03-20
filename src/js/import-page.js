@@ -451,7 +451,7 @@ function addObject(objectIdentifier) {
                                                    var exists = false;
                                                    for (var s = 0; s < selectedData.fields.length; s++) {
                                                        if (selectedData.fields[s].field_identifier == fieldIdentifier) {
-                                                           exists = false;
+                                                           exists = true;
                                                        }
                                                    }
                                                    if (!exists) {
