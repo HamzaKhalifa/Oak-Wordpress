@@ -759,7 +759,7 @@ class Oak {
                         $widget_options = array(
                             'name' => preg_replace( '/\s+/', '', $field_designation ),
                             'title' => $field_designation,
-                            'icon' => 'eicon-type-tool',
+                            'icon' => $field_type == 'Image' ? 'eicon-image' : 'eicon-type-tool',
                             'categories' => [ 'oak' ],
                             'value' => $value,
                             'field_type' => $field_type,

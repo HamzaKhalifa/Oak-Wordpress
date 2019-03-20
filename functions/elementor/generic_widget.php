@@ -39,23 +39,25 @@ class Generic_Widget extends \Elementor\Widget_Base {
 			]
 		);
 		
+		// Value
 		$this->add_control(
 			'value',
 			[
 				'label' => __( 'Valeur', Oak::$text_domain ),
 				'type' => \Elementor\Controls_Manager::WYSIWYG,
 				'placeholder' => __( 'Entrer la valeur', Oak::$text_domain ),
-				'default' => wp_http_validate_url( $this->get_widgets_options()['value'] ) == true ? '' : $this->get_widgets_options()['value'],
+				'default' => wp_http_validate_url( $this->get_widgets_options()['value'] ) == true ? '' : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : '',
 			]
 		);
 
+		// Image
 		$this->add_control(
 			'image',
 			[
 				'label' => __( 'Choose Image', Oak::$text_domain ),
 				'type' => \Elementor\Controls_Manager::MEDIA,
 				'default' => [
-					'url' => $this->get_widgets_options()['value'],
+					'url' => wp_http_validate_url( $this->get_widgets_options()['value'] ) != true ? \Elementor\Utils::get_placeholder_image_src() : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : \Elementor\Utils::get_placeholder_image_src(),
 				],
 			]
 		);
@@ -92,6 +94,34 @@ class Generic_Widget extends \Elementor\Widget_Base {
 				'default' => [
 					'url' => '',
 				]
+			]
+		);
+
+		// Alignment
+		$this->add_responsive_control(
+			'align',
+			[
+				'label' => __( 'Alignement', Oak::$text_domain ),
+				'type' => \Elementor\Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', Oak::$text_domain ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', Oak::$text_domain ),
+						'icon' => 'fa fa-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', Oak::$text_domain ),
+						'icon' => 'fa fa-align-right',
+					],
+					'justify' => [
+						'title' => __( 'Justified', Oak::$text_domain ),
+						'icon' => 'fa fa-align-justify',
+					],
+				],
+				'default' => '',
 			]
 		);
 
@@ -227,34 +257,6 @@ class Generic_Widget extends \Elementor\Widget_Base {
 			]
 		);
 
-		// Alignment
-		$this->add_responsive_control(
-			'align',
-			[
-				'label' => __( 'Alignement', Oak::$text_domain ),
-				'type' => \Elementor\Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
-						'title' => __( 'Left', Oak::$text_domain ),
-						'icon' => 'fa fa-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', Oak::$text_domain ),
-						'icon' => 'fa fa-align-center',
-					],
-					'right' => [
-						'title' => __( 'Right', Oak::$text_domain ),
-						'icon' => 'fa fa-align-right',
-					],
-					'justify' => [
-						'title' => __( 'Justified', Oak::$text_domain ),
-						'icon' => 'fa fa-align-justify',
-					],
-				],
-				'default' => '',
-			]
-		);
-
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -264,24 +266,58 @@ class Generic_Widget extends \Elementor\Widget_Base {
 			]
 		);
 
+		// Font Size
+		$this->add_control(
+			'image_width',
+			[
+				'label' => __( 'Largeur', Oak::$text_domain ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'default' => '',
+			]
+		);
+
+		$this->add_control(
+			'image_max_width',
+			[
+				'label' => __( 'Largeur Maximale', Oak::$text_domain ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'default' => '',
+			]
+		);
+
+		$this->add_control(
+			'image_opacity',
+			[
+				'label' => __( 'Opacité', Oak::$text_domain ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'default' => '',
+			]
+		);
+
 		$this->end_controls_section();
 	}
 
 	protected function render() {
 		$settings = $this->get_settings_for_display();
-		// var_dump($settings['value']);
+		// var_dump( $settings['css_filters'] );
 		$before = '';
 		$after = '';
-		if ( $settings['link'] != '' ) :
+		if ( $settings['link']['url'] != '' ) :
 			$before = '<a href="' . $settings['link']['url'] . '">';
 			$after = '</a>';
 		endif;
 
 		if ( wp_http_validate_url( $settings['image']['url'] ) ) :
-			echo( $before . '<img class="' . $settings['class'] . '" src="' . $settings['image']['url'] . '" class="">' . $after );
+			echo('<div class="oak_image_wrapper" style="text-align: ' . $settings['align'] . '">');
+			echo( $before . '<img class="' . $settings['class'] . '" src="' . $settings['image']['url'] . '" class="" style="
+				width: ' . $settings['image_width'] . ';
+				opacity: ' . $settings['image_opacity'] . ';
+				max-width: ' . $settings['image_max_width'] . ';
+			">' . $after );
+			echo('</div>');
 		endif;
 
-		if ( $settings['value'] != '' ) :
+		if ( isset( $settings['value'] ) && $settings['value'] != '' && strpos( $settings['value'], 'undefined' ) == false ) :
 			echo( $before . '<' . $settings['tag'] . ' class="' . $settings['class'] . '" style="
 				color: ' . $settings['color'] . '; 
 				font-size: ' . $settings['font_size'] . '; 

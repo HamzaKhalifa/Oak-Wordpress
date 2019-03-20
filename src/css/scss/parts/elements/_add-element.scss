@@ -401,7 +401,7 @@
 
 .oak_add_element_modal_container_modal_content_revisions_content__revision_data_container, .oak_add_element_modal_container_modal_content__revisions_content__current {
     // width: 40%;
-    display: flex;
+    // display: flex;
     flex-direction: column;
 }
 
@@ -684,4 +684,16 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 
 .oak_calling_selector_image, .oak_calling_selector_file {
     color: #003366;
+}
+
+.publication_file_input {
+    width: 100%;
+    -webkit-appearance: none;
+    border: none !important;
+    box-shadow: none !important;
+    position: relative !important;
+    overflow: visible !important;
+    background-color: #e5e9ef !important;
+    margin-top: 3px;
+    height: 33px;
 }
