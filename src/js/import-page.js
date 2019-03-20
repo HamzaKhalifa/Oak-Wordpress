@@ -30,9 +30,7 @@ var selectedData = {
             },
             success: function(data) {
                 doneLoading();
-                console.log(data);
                 allData = data.data;
-                console.log(allData);
                 populateImportContainer(
                     'Organisations',
                     allData.organizationsWithoutRedundancy, 
@@ -90,10 +88,16 @@ var selectedData = {
                         atLeastOneIsChecked = true;
                     }
                 }
-                if (atLeastOneIsChecked)
-                    document.querySelector('.next_button_container_next').classList.remove('oak_hidden');
-                else
-                    document.querySelector('.next_button_container_next').classList.add('oak_hidden');
+                var buttonNext = document.querySelector('.next_button_container_next');
+                if ( step == 'frame_publications' ) {
+                    buttonNext.classList.remove('oak_hidden');
+                } else {
+                    if (atLeastOneIsChecked)
+                    buttonNext.classList.remove('oak_hidden');
+                    else
+                        buttonNext.classList.add('oak_hidden');
+                }
+                
             });
         }
 
@@ -252,7 +256,9 @@ var selectedData = {
                         'frame_publications',
                         'frame_publications'
                     );
-                    document.querySelector('.next_button_container_next').innerHTML = 'Sauvegarder';
+                    var buttonNext = document.querySelector('.next_button_container_next');
+                    buttonNext.innerHTML = 'Sauvegarder';
+                    buttonNext.classList.remove('oak_hidden');
                 break
                 case 'frame_publications':
                     setLoading();

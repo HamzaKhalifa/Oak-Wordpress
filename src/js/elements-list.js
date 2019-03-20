@@ -291,15 +291,20 @@ function edit() {
     editButton.addEventListener('click', function() {
         var checkboxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
         for (var i = 0; i < checkboxes.length; i++) {
+            var elementsTypeToPutInUrl = DATA.elementsType;
             if (i != 0 && checkboxes[i].checked && !classExists(checkboxes[i].parentNode.parentNode, 'oak_hidden')) {
                 var identifier = checkboxes[i].parentNode.parentNode.getAttribute('identifier');
                 var additionalData = ''
                 if (DATA.elementsType == 'objects') 
                     additionalData = '&model_identifier=' + DATA.tableInPlural;
+                else if (DATA.elementsType == 'term_objects') {
+                    additionalData = '&model_identifier=' + checkboxes[i].parentNode.parentNode.getAttribute('model-identifier');
+                    elementsTypeToPutInUrl = 'objects';
+                }
                 else if ( DATA.elementsType == 'terms' )
                     additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
 
-                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + DATA.elementsType + '&listorformula=formula' + additionalData);
+                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula' + additionalData);
             }
         }
     });

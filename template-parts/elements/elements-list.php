@@ -75,7 +75,7 @@
             $the_second_property = $second_property['property'];
             $the_third_property = $third_property['property'];
         ?>
-            <div identifier="<?php echo( $element->$identifier_property ); ?>" trashed="<?php echo( $element->$trashed_property ); ?>" class="oak_list_row <?php if ( $element->$trashed_property == 'true' ) : echo('oak_hidden'); endif; ?>">
+            <div <?php if( $table == 'object' ) : echo('model-identifier="' . $element->object_model_identifier . '"'); endif; ?> identifier="<?php echo( $element->$identifier_property ); ?>" trashed="<?php echo( $element->$trashed_property ); ?>" class="oak_list_row <?php if ( $element->$trashed_property == 'true' ) : echo('oak_hidden'); endif; ?>">
                 <div class="oak_list_row__container">
                     <input class="oak_list_titles_container__checkbox" type="checkbox">
                     <span class="oak_list_titles_container__title oak_list_titles_container__the_title"><?php echo( esc_attr( $element->$designation_property ) ); ?></span>

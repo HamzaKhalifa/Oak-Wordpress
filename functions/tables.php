@@ -518,6 +518,10 @@ foreach( Oak::$models as $model ) :
         FROM $table_name
     " );
 
+    foreach( $model_objects as $object ) :
+        $object->object_model_identifier = $model->model_identifier;
+    endforeach;
+
     Oak::$all_objects = array_merge( Oak::$all_objects, $model_objects );
 endforeach;
 

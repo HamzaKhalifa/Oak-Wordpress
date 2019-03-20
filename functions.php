@@ -207,6 +207,8 @@ class Oak {
     }
 
     function oak_admin_enqueue_styles( $hook ) {
+        wp_enqueue_media();
+        
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
 
         // Add the color picker css file       
@@ -376,6 +378,9 @@ class Oak {
                     FROM  $object_table_name
                 " );
                 $elements = Oak::$objects;
+                foreach( $elements as $object ) :
+                    $object->object_model_identifier = $_GET['model_identifier'];
+                endforeach;
                 
                 foreach( Oak::$current_model_fields as $key => $field ) :
                     $input_type = 'text';
@@ -730,6 +735,7 @@ class Oak {
                             break;
                         endswitch;
                         $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field_name;
+                        $field_type = 'Texte';
                         if ( count ( $key_devided ) > 2 ) :
                             $field_identifier = $key_devided[2];
                             foreach( Oak::$fields_without_redundancy as $field ) :
@@ -745,24 +751,18 @@ class Oak {
                                     $number_of_times_designation_was_used = $number_of_times_designation_was_used == 0 ? '' : $number_of_times_designation_was_used + 1;
                                     $field_designations_used[] = $field->field_designation;
                                     $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field->field_designation . ' ' . $number_of_times_designation_was_used;
+                                    $field_type = $field->field_type;
                                 endif;
                             endforeach;
                         endif;
-
-                        $type = \Elementor\Controls_Manager::TEXT;
-                        if ( filter_var( $value, FILTER_VALIDATE_URL ) ) :
-                            $input_type = 'image';
-                            // $type = \Elementor\Controls_Manager::IMAGE;
-                        endif;
-
+                        
                         $widget_options = array(
                             'name' => preg_replace( '/\s+/', '', $field_designation ),
                             'title' => $field_designation,
-                            'icon' => 'fa fa-code',
+                            'icon' => 'eicon-type-tool',
                             'categories' => [ 'oak' ],
                             'value' => $value,
-                            'input_type' => $input_type,
-                            'type' => $type
+                            'field_type' => $field_type,
                         );
                         $generic_widget = new Generic_Widget();
                         $generic_widget->set_widgets_options( $widget_options );
@@ -1105,11 +1105,6 @@ class Oak {
                 $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'glossary_parent' );;
             break;
             case 'objects' :
-                $object_table_name = $wpdb->prefix . 'oak_model_' . $_GET['model_identifier'];
-                Oak::$objects = $wpdb->get_results ( "
-                    SELECT * 
-                    FROM $object_table_name
-                " );
                 $reversed_objects = array_reverse( Oak::$objects  );
                 foreach( $reversed_objects as $object ) :
                     $added = false;
@@ -1274,29 +1269,22 @@ class Oak {
         unset( $array_data['copy_identifier'] );
         
         // For the files/images: 
-        $test_file_url = '';
-        foreach( $array_data as $key => $value ) :
-            foreach( $_POST['properties'] as $property ) :
-                $property_name_divided = explode( '_', $property['name'] );
-                $key_divided = explode( '_', $key ); 
-                if ( $property_name_divided[ count( $property_name_divided ) - 1 ] == $key_divided[ count( $key_divided ) - 1 ] ) :
-                    if ( $property['input_type'] == 'image' || $property['input_type'] == 'file' ) :
-                        if ( !filter_var( $value, FILTER_VALIDATE_URL ) && $value != '' ) :
-                        // if ( strpos( $value, 'uploads/' ) == false ) :
-                            // if ( $property['input_type'] == 'file' ) :
-                            //     $file_url = $this->upload_file( $value );
-                            //     $test_file_url = $file_url;
-                            // else :
-                            //     $file_url = $this->upload_image( $value );
-                            // endif;
-                            $file_url = $this->upload_image( $value );
-                            $array_data[ $key ] = $file_url;
-                        endif;
-                    endif;
-                endif;
-            endforeach;
+        // $test_file_url = '';
+        // foreach( $array_data as $key => $value ) :
+        //     foreach( $_POST['properties'] as $property ) :
+        //         $property_name_divided = explode( '_', $property['name'] );
+        //         $key_divided = explode( '_', $key ); 
+        //         if ( $property_name_divided[ count( $property_name_divided ) - 1 ] == $key_divided[ count( $key_divided ) - 1 ] ) :
+        //             if ( $property['input_type'] == 'image' || $property['input_type'] == 'file' ) :
+        //                 if ( !filter_var( $value, FILTER_VALIDATE_URL ) && $value != '' ) :
+        //                     $file_url = $this->upload_image( $value );
+        //                     $array_data[ $key ] = $file_url;
+        //                 endif;
+        //             endif;
+        //         endif;
+        //     endforeach;
 
-        endforeach;
+        // endforeach;
 
         // For objects' terms
         if ( $table = 'object' ) : 
