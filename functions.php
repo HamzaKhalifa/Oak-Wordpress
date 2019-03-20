@@ -696,7 +696,7 @@ class Oak {
                             if ( $already_added_object->object_identifier == $object->object_identifier ) :
                                 $exists = true;
                             endif;
-                        endforeach;   
+                        endforeach;
                         if ( !$exists ) :
                             $our_objects[] = $object;
                         endif;
@@ -764,6 +764,7 @@ class Oak {
                             'value' => $value,
                             'field_type' => $field_type,
                         );
+                        var_dump( $widget_options );
                         $generic_widget = new Generic_Widget();
                         $generic_widget->set_widgets_options( $widget_options );
                         $widgets_manager->register_widget_type( $generic_widget );
