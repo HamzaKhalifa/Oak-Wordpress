@@ -46,7 +46,8 @@ class Generic_Widget extends \Elementor\Widget_Base {
 				'label' => __( 'Valeur', Oak::$text_domain ),
 				'type' => \Elementor\Controls_Manager::WYSIWYG,
 				'placeholder' => __( 'Entrer la valeur', Oak::$text_domain ),
-				'default' => wp_http_validate_url( $this->get_widgets_options()['value'] ) == true ? '' : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : '',
+				'default' => 'the default',
+				// 'default' => wp_http_validate_url( $this->get_widgets_options()['value'] ) == true ? '' : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : '',
 			]
 		);
 

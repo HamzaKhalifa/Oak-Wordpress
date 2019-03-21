@@ -192,7 +192,7 @@ dbDelta( $glossaries_sql );
 
 $qualis_table_name = Oak::$qualis_table_name;
 $qualis_sql = "CREATE TABLE $qualis_table_name (
-    id mediumint(9) NOT NULL AUTO_INCREMENT, NOT NULL,
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
     quali_designation varchar(555) DEFAULT '' NOT NULL,
     quali_identifier varchar(555) DEFAULT '' NOT NULL,
     quali_selector varchar(555),
