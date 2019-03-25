@@ -385,8 +385,15 @@ function addPublicationData(publicationIdentifier, termIdentifiers) {
         }
     }
 
-    // Lets get the glossaries: 
+    // Lets get the good practices: 
+    for (var i = 0; i < allData.goodpracticesWithoutRedundancy.length; i++) {
+        goodpracticePublicationIdentifier = allData.goodpracticesWithoutRedundancy[i].goodpractice_publication;
+        if (goodpracticePublicationIdentifier == publicationIdentifier) {
+            selectedData.goodpractices = addGoodpractice(selectedData.goodpractices, allData.goodpracticesWithoutRedundancy[i].goodpractice_identifier, allData.goodpracticesWithoutRedundancy[i] );
+        }
+    }
 
+    // Lets get the glossaries: 
     for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
         glossaryPublicationIdentifier = allData.glossariesWithoutRedundancy[i].glossary_publication;
         if (glossaryPublicationIdentifier == publicationIdentifier) {
@@ -502,6 +509,41 @@ function addObject(objectIdentifier) {
                } 
             }
         }
+    }
+}
+
+function addGoodpractice(goodpractices, goodpracticeIdentifier, goodpractice) {
+    var exists = false;
+    for (var i = 0; i < goodpractices.length; i++) {
+        if (goodpractices[i].goodpractice_identifier == goodpracticeIdentifier) {
+            exists = true;
+            return goodpractices;
+        }
+    }
+    if (!exists) {
+        if (!goodpractice) {
+        // Lets get the goodpractice
+            for (var i = 0; i < allData.goodpracticesWithoutRedundancy.length; i++) {
+                if (allData.goodpracticesWithoutRedundancy[i].goodpractice_identifier == goodpracticeIdentifier) {
+                    goodpractice = allData.goodpracticesWithoutRedundancy[i];
+                }
+            }
+        }
+        if (goodpractice) {
+            goodpractices.push(goodpractice);
+
+            var objectsIdentifiers = goodpractice.goodpractice_objects.split('|');
+            for (var j = 0; j < objectsIdentifiers.length; j++) {
+                addObject(objectsIdentifiers[j]);
+            }
+
+            var quantisIdentifiers = goodpractice.goodpractice_quantis.split('|');
+            for (var j = 0; j < quantisIdentifiers.length; j++) {
+                addIndicator(selectedData.quantis, quantisIdentifiers[j], 'quanti');
+            }
+        }
+
+        return goodpractices;
     }
 }
 

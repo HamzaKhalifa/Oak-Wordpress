@@ -15,7 +15,7 @@ $fields_sql = "CREATE TABLE $fields_table_name (
     field_function varchar(555),
     field_tag varchar(555),
     field_help varchar(555),
-    field_description varchar(555),
+    field_description LONGTEXT,
     field_selector_options varchar(555),
     PRIMARY KEY (id)
 ) $charset_collate;";
@@ -100,11 +100,11 @@ $taxonomies_sql = "CREATE TABLE $taxonomies_table_name (
     taxonomy_trashed varchar(555),
     taxonomy_state varchar(555),
     taxonomy_modification_time datetime,
-    taxonomy_description varchar(555),
+    taxonomy_description LONGTEXT,
     taxonomy_structure varchar(555),
     taxonomy_numerotation varchar(555),
     taxonomy_title varchar(555),
-    taxonomy_term_description varchar(555),
+    taxonomy_term_description LONGTEXT,
     taxonomy_color varchar(555),
     taxonomy_brand varchar(555),
     taxonomy_publication varchar(555),
@@ -125,7 +125,7 @@ $organizations_sql = "CREATE TABLE $organizations_table_name (
     organization_modification_time datetime,
     organization_acronym varchar(555),
     organization_logo varchar(555),
-    organization_description varchar(555),
+    organization_description LONGTEXT,
     organization_url varchar(555),
     organization_address varchar(555),
     organization_country varchar(555),
@@ -153,7 +153,7 @@ $publications_sql = "CREATE TABLE $publications_table_name (
     publication_headpiece varchar(555),
     publication_format varchar(555),
     publication_file varchar(555),
-    publication_description varchar(555),
+    publication_description LONGTEXT,
     publication_report_or_frame varchar(555),
     publication_local varchar(555),
     publication_country varchar(555),
@@ -207,7 +207,7 @@ $qualis_sql = "CREATE TABLE $qualis_table_name (
     quali_parent varchar(555),
     quali_numerotation_type varchar(555),
     quali_numerotation varchar(555),
-    quali_description varchar(555),
+    quali_description LONGTEXT,
     quali_close varchar(555),
     quali_close_indicators varchar(555),
     PRIMARY KEY (id)
@@ -231,13 +231,36 @@ $quantis_sql = "CREATE TABLE $quantis_table_name (
     quanti_parent varchar(555),
     quanti_numerotation_type varchar(555),
     quanti_numerotation varchar(555),
-    quanti_description varchar(555),
+    quanti_description LONGTEXT,
     quanti_close varchar(555),
     quanti_close_indicators varchar(555),
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 dbDelta( $quantis_sql );
+
+$goodpractices_table_name = Oak::$goodpractices_table_name;
+$goodpractice_sql = "CREATE TABLE $goodpractices_table_name (
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    goodpractice_designation varchar(555) DEFAULT '' NOT NULL,
+    goodpractice_identifier varchar(555) DEFAULT '' NOT NULL,
+    goodpractice_selector varchar(555),
+    goodpractice_locked varchar(555),
+    goodpractice_trashed varchar(555),
+    goodpractice_state varchar(555),
+    goodpractice_modification_time datetime,
+    goodpractice_short_designation varchar(555),
+    goodpractice_description LONGTEXT,
+    goodpractice_illustration TEXT,
+    goodpractice_link TEXT,
+    goodpractice_link_title TEXT,
+    goodpractice_publication TEXT,
+    goodpractice_objects TEXT,
+    goodpractice_quantis TEXT,
+    PRIMARY KEY (id)
+) $charset_collate;";
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $goodpractice_sql );
 
 $terms_and_objects_table_name = Oak::$terms_and_objects_table_name;
 $terms_and_objects_sql= "CREATE TABLE $terms_and_objects_table_name (
@@ -400,6 +423,26 @@ foreach( $reversed_qualis as $quali ) :
     endif;
 endforeach;
 Oak::$qualis_without_redundancy = $qualis_without_redundancy;
+
+$goodpractices_table_name = Oak::$goodpractices_table_name;
+Oak::$goodpractices = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $goodpractices_table_name
+" );
+$reversed_goodpractices = array_reverse( Oak::$goodpractices );
+$goodpractices_without_redundancy = [];
+foreach( $reversed_goodpractices as $goodpractice ) :
+    $added = false;
+    foreach( $goodpractices_without_redundancy as $goodpractice_without_redundancy ) :
+        if ( $goodpractice_without_redundancy->goodpractice_identifier == $goodpractice->goodpractice_identifier) :
+            $added = true;
+        endif;
+    endforeach;
+    if ( !$added ) :
+        $goodpractices_without_redundancy[] = $goodpractice;
+    endif;
+endforeach;
+Oak::$goodpractices_without_redundancy = $goodpractices_without_redundancy;
 
 $glossaries_table_name = Oak::$glossaries_table_name;
 Oak::$glossaries = $wpdb->get_results ( "
@@ -576,7 +619,7 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
         term_modification_time datetime,
         term_numerotation varchar(555),
         term_title varchar(555),
-        term_description varchar(555),
+        term_description LONGTEXT,
         term_color varchar(555),
         term_logo varchar(555),
         term_order varchar(555),

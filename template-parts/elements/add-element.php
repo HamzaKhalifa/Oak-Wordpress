@@ -1,4 +1,5 @@
-<?php $state_property = $table . '_state'; ?>
+<?php $state_property = $table . '_state'; 
+?>
 
 <div class="oak_element_header">
     <div class="oak_element_header_left">
@@ -21,7 +22,6 @@
         </span>
         <?php endif; ?>
     </div>
-
     <div class="oak_element_header_right">
 
         <?php
@@ -142,6 +142,7 @@ $modification_time_property = $table . '_modification_time';
 
         $first = true;
         $form_designation = '';
+        
         foreach( $properties as $key => $property ) :
             if ( isset( $property['model_and_form_instance'] ) ) :
                 // For the form new designation: 
@@ -216,15 +217,21 @@ $modification_time_property = $table . '_modification_time';
             elseif ( $property['input_type'] == 'select' ) : ?>
                 <div class="oak_select_container">
                     <div class="additional_container">
-                        <select type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
+                        <select <?php if( $property['select_multiple'] == 'true' ) : echo('multiple'); endif; ?> type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
                             <?php 
                             $selected = array();
                             foreach( $property['choices'] as $key => $choice ) :
                                 array_push( $selected, 'notselected' );
                                 if ( count( $revisions ) > 0 ) :
-                                    if ( $revisions[ count( $revisions ) - 1 ]->$property_name == $choice['value'] ) :
-                                        $selected[ $key ] = 'selected';
-                                    endif;
+                                    $selected_in_database = explode( '|', $revisions[ count( $revisions ) - 1 ]->$property_name );
+                                    foreach( $selected_in_database as $single_selected_in_database ) :
+                                        if ( $single_selected_in_database ==  $choice['value'] ) :
+                                            $selected[ $key ] = 'selected';
+                                        endif;
+                                    endforeach;
+                                    // if ( $revisions[ count( $revisions ) - 1 ]->$property_name == $choice['value'] ) :
+                                    //     $selected[ $key ] = 'selected';
+                                    // endif;
                                 endif;
                                 ?>
                                 <option <?php echo( esc_attr( $selected[ $key ] ) ); ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
@@ -508,6 +515,7 @@ $modification_time_property = $table . '_modification_time';
         endif;
         ?>
 
+
         <?php
         if ( $table == 'form' || $table == 'model' ) :
             if ( $table == 'form' ) 
@@ -590,6 +598,8 @@ $modification_time_property = $table . '_modification_time';
         endif; 
         ?>
     </div>
+
+    
     
     <div class="oak_add_element_big_container__tabs">
         <div class="oak_add_element_big_container_tabs__titles">
@@ -756,7 +766,6 @@ $modification_time_property = $table . '_modification_time';
     </div>
 </div>
 
-
 <!-- For the modal -->
 <div class="oak_add_element_modal_container">
     <div class="oak_add_element_modal_container__modal">
@@ -767,7 +776,9 @@ $modification_time_property = $table . '_modification_time';
         <div class="oak_add_element_modal_container_modal__content">
 
             <!-- For the browse revisions functionality -->
+            
             <div class="oak_add_element_modal_container_modal_content__revisions_content oak_hidden">
+                
                 <div class="oak_add_element_modal_container_modal_content__revisions_content__current">
                     <h3><?php _e( 'Données Actuelle', Oak::$text_domain); ?></h3>
                     <!-- List of fields here -->
@@ -785,6 +796,7 @@ $modification_time_property = $table . '_modification_time';
                     $which_properties = $table . '_properties'; 
                     $class = new ReflectionClass('Oak');
                     $properties = array_merge( $default_properties, $class->getStaticPropertyValue( $which_properties ) );
+                    
                     foreach( $properties as $property ) : ?>
                         <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                             <label><?php echo( $property['description'] ); ?></label>
@@ -792,6 +804,7 @@ $modification_time_property = $table . '_modification_time';
                         </div>
                     <?php
                     endforeach;
+                    
                     if ( $table == 'form' || $table == 'model' ) : ?>
                         <?php 
                         $element_inputs = array ( 
@@ -819,7 +832,7 @@ $modification_time_property = $table . '_modification_time';
                     endif;
                     ?>
                 </div>
-
+                
                 <div class="oak_add_element_modal_container_modal_content_revisions_content__revision_data_container">
                     <h3><?php _e( 'Données de la révision', Oak::$text_domain); ?></h3>
                     <!-- Liste of fields here -->
@@ -859,6 +872,7 @@ $modification_time_property = $table . '_modification_time';
                 </div>
             </div>
             <!-- Done with the browse revisions Functionality -->
+
         </div>
 
         <span class="oak_add_element_modal_container_modal__error"></span>

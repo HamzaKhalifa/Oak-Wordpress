@@ -10,6 +10,7 @@ class Oak {
     public static $glossaries_table_name;
     public static $qualis_table_name;
     public static $quantis_table_name;
+    public static $goodpractices_table_name;
     public static $taxonomies_table_name;
     public static $terms_and_objects_table_name;
     public static $forms_and_fields_table_name;
@@ -69,6 +70,10 @@ class Oak {
     public static $quantis_without_redundancy;
     public static $quanti_properties;
 
+    public static $goodpractices;
+    public static $goodpractices_without_redundancy;
+    public static $goodpractice_properties;
+
     public static $taxonomies;
     public static $taxonomies_without_redundancy = [];
     public static $taxonomy_properties;
@@ -99,6 +104,7 @@ class Oak {
         Oak::$glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
         Oak::$qualis_table_name = $wpdb->prefix . 'oak_qualis';
         Oak::$quantis_table_name = $wpdb->prefix . 'oak_quantis';
+        Oak::$goodpractices_table_name = $wpdb->prefix . 'oak_goodpractices';
         Oak::$terms_and_objects_table_name = $wpdb->prefix . 'oak_terms_and_objects';
         Oak::$forms_and_fields_table_name = $wpdb->prefix . 'oak_forms_and_fields';
         Oak::$models_and_forms_table_name = $wpdb->prefix . 'oak_models_and_forms';
@@ -241,7 +247,7 @@ class Oak {
         wp_localize_script( 'admin_menu_script', 'DATA', array(
             'ajaxUrl' => admin_url('admin-ajax.php')
         ) );
-        
+
         // Auto complete
         wp_enqueue_script( 'auto_complete', get_template_directory_uri() . '/src/js/autocomplete.js', array('jquery'), false, true );
 
@@ -373,6 +379,12 @@ class Oak {
                 $elements = Oak::$quantis;
                 $properties = array_merge( $properties, Oak::$quanti_properties );
             endif;
+            if ( $_GET['elements'] == 'goodpractices' ) :
+                $table = 'goodpractice';
+                $table_in_plural = 'goodpractices';
+                $elements = Oak::$goodpractices;
+                $properties = array_merge( $properties, Oak::$goodpractice_properties );
+            endif;
             if ( $_GET['elements'] == 'objects' ) :
                 $table = 'object';
                 $table_in_plural = $_GET['model_identifier'];
@@ -466,7 +478,7 @@ class Oak {
                 'termIdentifier' => isset ( $_GET['term_identifier'] ) ? $_GET['term_identifier'] : ''
             );
             $final_data_to_pass = array_merge( $basic_data_to_pass, $additional_data_to_pass );
-
+            
             if ( $_GET['listorformula'] == 'formula' ) :
                 wp_enqueue_script( 'corn_add_element', get_template_directory_uri() . '/src/js/add-element.js', array( 'jquery', 'wp-color-picker' ), false, true );
                 wp_localize_script( 'corn_add_element', 'DATA', $final_data_to_pass );
@@ -1023,6 +1035,11 @@ class Oak {
                 $table = 'quali';
                 $title = __( 'Ajouter un indicateur qualitatif', Oak::$text_domain );
             break;
+            case 'goodpractices':
+                $properties = Oak::$goodpractice_properties;
+                $table = 'goodpractice';
+                $title = __( 'Ajouter une Bonne Pratique', Oak::$text_domain );
+            break;
             case 'glossaries': 
                 $properties = Oak::$glossary_properties;
                 $table = 'glossary';
@@ -1119,6 +1136,14 @@ class Oak {
                 $first_property = array ( 'title' => __( 'Publication', Oak::$text_domain ), 'property' => 'glossary_publication' );
                 $second_property = array ( 'title' => __( 'Parent', Oak::$text_domain ), 'property' => 'glossary_parent' );
                 $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'glossary_parent' );;
+            break;
+            case 'goodpractices' :
+                $title = __( 'Bonnes Pratiques', Oak::$text_domain );
+                $elements = Oak::$goodpractices_without_redundancy;
+                $table = 'goodpractice';
+                $first_property = array ( 'title' => __( 'Nom', Oak::$text_domain ), 'property' => 'goodpractice_designation' );
+                $second_property = array ( 'title' => __( 'Nom Court', Oak::$text_domain ), 'property' => 'goodpractice_short_designation' );
+                $third_property = array ( 'title' => __( 'Lien', Oak::$text_domain ), 'property' => 'goodpractice_link' );;
             break;
             case 'objects' :
                 $reversed_objects = array_reverse( Oak::$objects  );
@@ -1780,6 +1805,25 @@ class Oak {
             endif;
         endforeach;
 
+        $goodpractices_table_name = $wpdb->prefix . 'oak_goodpractices';
+        $goodpractices = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $goodpractices_table_name
+        " );
+        $reversed_goodpractices = array_reverse( $goodpractices );
+        $goodpractices_without_redundancy = [];
+        foreach( $reversed_goodpractices as $goodpractice ) :
+            $added = false;
+            foreach( $goodpractices_without_redundancy as $goodpractice_without_redundancy ) :
+                if ( $goodpractice_without_redundancy->goodpractice_identifier == $goodpractice->goodpractice_identifier ) :
+                    $added = true;
+                endif;
+            endforeach;
+            if ( !$added ) :
+                $goodpractices_without_redundancy[] = $goodpractice;
+            endif;
+        endforeach;
+
         $glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
         $glossaries = $wpdb->get_results ( "
             SELECT * 
@@ -1826,6 +1870,8 @@ class Oak {
             'qualisWithoutRedundancy' => $qualis_without_redundancy,
             'quantis' => $quantis,
             'quantisWithoutRedundancy' => $quantis_without_redundancy,
+            'goodpractices' => $goodpractices,
+            'goodpracticesWithoutRedundancy' => $goodpractices_without_redundancy,
             'glossaries' => $glossaries,
             'glossariesWithoutRedundancy' => $glossaries_without_redundancy,
             'termsAndObjects' => $terms_and_objects

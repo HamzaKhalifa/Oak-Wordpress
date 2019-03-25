@@ -1,3 +1,5 @@
+
+console.log('IM HERE!');
 // Global variables
 var adding = false;
 var canceling = false;
@@ -275,8 +277,21 @@ function createElementData(state) {
 
     for(var i = 0; i < properties.length; i++) {
         if (document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input')) {
-            if (properties[i].input_type == 'text' || properties[i].input_type == 'select' || properties[i].input_type == 'number' || properties[i].input_type == 'color' || properties[i].input_type == 'textarea' || properties[i].input_type == 'quali' || properties[i].input_type == 'quanti' || properties[i].input_type == 'selector' )
-                elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').value.toString();
+            if (properties[i].input_type == 'text' || properties[i].input_type == 'select' || properties[i].input_type == 'number' || properties[i].input_type == 'color' || properties[i].input_type == 'textarea' || properties[i].input_type == 'quali' || properties[i].input_type == 'quanti' || properties[i].input_type == 'selector' ) {
+                // elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').value.toString();
+                elementData[keys[i]] = jQuery('.' + DATA.table + '_' + properties[i].name + '_input').val();
+                if (Array.isArray(elementData[keys[i]])) {
+                    var newValue = '';
+                    for (var j = 0; j < elementData[keys[i]].length; j++) {
+                        var delimiter = '';
+                        if ( j != elementData[keys[i]].length - 1 ) 
+                            delimiter = '|';
+                        console.log(elementData[keys[i]][j]);
+                        newValue = newValue + elementData[keys[i]][j] + delimiter;
+                    }
+                    elementData[keys[i]] = newValue;
+                }
+            }
             else if (properties[i].input_type == 'image')
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').parentNode.querySelector('img').getAttribute('src').toString();
             else if (properties[i].input_type == 'file')

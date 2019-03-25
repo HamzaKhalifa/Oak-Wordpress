@@ -160,6 +160,18 @@
                 'icon' => 'fas fa-th-large',
             ),
             array(
+                'title' => __( 'Objets Spécifiques', Oak::$text_domain ),
+                'url' => '',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
+                'title' => __( 'Bonne Pratique', Oak::$text_domain ),
+                'url' => '?page=oak_elements_list&elements=goodpractices&listorformula=list',
+                'icon' => 'fas fa-th-large',
+                'submenuelement' => true
+            ),
+            array(
                 'title' => __( 'Modèles', Oak::$text_domain ),
                 'url' => '',
                 'icon' => 'fas fa-th-large',
