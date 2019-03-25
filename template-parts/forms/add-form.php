@@ -90,10 +90,13 @@ include get_template_directory() . '/template-parts/oak-admin-header.php';
                                             <label class="oak_add_other_element_label" for="type">Nature</label>
                                             <select class="oak_add_other_elements_list_horizontal__type_select" name="type" id="">
                                                 <option value=""></option>
-                                                <option value="Texte">Texte</option>
-                                                <option value="Zone de Texte">Zone De Texte</option>
-                                                <option value="Image">Image</option>
-                                                <option value="File">Fichier</option>
+                                                
+                                                <?php 
+                                                foreach( Oak::$field_types as $field_type ) : ?>
+                                                    <option value="<?php echo( $field_type ); ?>"><?php _e( $field_type, Oak::$text_domain ); ?></option>
+                                                <?php
+                                                endforeach;
+                                                ?>
                                             </select>
                                         </div>
 

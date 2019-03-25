@@ -283,7 +283,20 @@ Oak::$field_properties =  array (
         'select_multiple' => 'false', 
         'choices' => Oak::$field_types,
         'description' => __( 'Nature des contenus compris dans le champ', Oak::$text_domain ), 
-        'width' => '50' 
+        'width' => '50',
+        'condition' => true
+    ),
+    array ( 
+        'name' => 'selector_options', 
+        'property_name' => 'field_selector_options', 
+        'type' => 'text', 
+        'input_type' => 'text', 
+        'placeholder' => __( 'Valeur', Oak::$text_domain ), 
+        'description' => __( 'Exemple: Valeur1|Valeur2|Valeur3|...', Oak::$text_domain ), 
+        'width' => '50',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'Selecteur' ) )
+        )
     ),
     array ( 
         'name' => 'function', 
@@ -310,12 +323,14 @@ Oak::$field_properties =  array (
         'type' => 'text', 
         'input_type' => 'text', 
         'placeholder' => __( 'Aide au remplissage (Optionnel)', Oak::$text_domain ), 
-        'description' => __( 'Contenu qui apparaitra sous le champ.', Oak::$text_domain ), 'width' => '50' ),
+        'description' => __( 'Contenu qui apparaitra sous le champ.', Oak::$text_domain ), 
+        'width' => '100' 
+    ),
     array ( 
         'name' => 'description', 
         'property_name' => 'field_description', 
         'type' => 'text', 
-        'input_type' => 'text', 
+        'input_type' => 'textarea', 
         'placeholder' => __( 'Description (Optionnel)', Oak::$text_domain ), 
         'description' => __( 'Instruction liée à la forme comme au fond à apporter au contenu. Elle apparaîtront dans le volet des composants (à droite).', Oak::$text_domain ), 
         'width' => '100' 
@@ -970,7 +985,7 @@ Oak::$quali_properties = array (
         'name' => 'numerotation', 
         'property_name' => 'quali_numerotation', 
         'type' => 'text',
-        'input_type' => 'number',
+        'input_type' => 'text',
         'placeholder' => __( 'Numérotation', Oak::$text_domain ), 
         'description' => __( 'Numérotation', Oak::$text_domain ), 
         'width' => '50'
@@ -1077,7 +1092,7 @@ Oak::$quanti_properties = array (
         'name' => 'numerotation', 
         'property_name' => 'quanti_numerotation', 
         'type' => 'text',
-        'input_type' => 'number',
+        'input_type' => 'text',
         'placeholder' => __( 'Numérotation', Oak::$text_domain ), 
         'description' => __( 'Numérotation', Oak::$text_domain ), 
         'width' => '50'
@@ -1122,7 +1137,7 @@ Oak::$term_properties = array (
         'name' => 'numerotation', 
         'property_name' => 'term_numerotation', 
         'type' => 'text',
-        'input_type' => 'number',
+        'input_type' => 'text',
         'placeholder' => __( 'Numérotation ', Oak::$text_domain ),
         'description' => __( 'Numérotation ', Oak::$text_domain ),
         'width' => '50'
@@ -1187,3 +1202,70 @@ Oak::$term_properties = array (
         )
     ),
 );
+
+
+// Oak::$object_properties = array (
+//     array(
+//         'name' => 'quanti', 
+//         'property_name' => 'object_quanti', 
+//         'type' => 'text',
+//         'input_type' => 'select',
+//         'select_multiple' => 'false',
+//         'choices' => $quantis_array,
+//         'placeholder' => __( 'Indicateur Quantitatif:', Oak::$text_domain ), 
+//         'description' => __( 'Indicateur Quantitatif:', Oak::$text_domain ), 
+//         'width' => '50',
+//     ),
+//     array(
+//         'name' => 'title', 
+//         'property_name' => 'object_title', 
+//         'type' => 'text',
+//         'input_type' => 'text',
+//         'placeholder' => __( 'Titre', Oak::$text_domain ),
+//         'description' => __( 'Titre', Oak::$text_domain ),
+//         'width' => '50'
+//     ),
+//     array(
+//         'name' => 'commentary', 
+//         'property_name' => 'object_commentary', 
+//         'type' => 'text',
+//         'input_type' => 'text',
+//         'placeholder' => __( 'Commentaire', Oak::$text_domain ),
+//         'description' => __( 'Commentaire', Oak::$text_domain ),
+//         'width' => '100'
+//     ),
+//     array(
+//         'name' => 'example', 
+//         'property_name' => 'object_example', 
+//         'type' => 'text',
+//         'input_type' => 'text',
+//         'placeholder' => __( 'Exemple', Oak::$text_domain ),
+//         'description' => __( 'Exemple', Oak::$text_domain ),
+//         'width' => '100'
+//     ),
+// );
+
+
+// for ( $i = 1; $i <= 5; $i++ ) :
+//     $year = 5 - $i + 1;
+//     Oak::$object_properties[] = array(
+//         'name' => 'year_' . $year, 
+//         'property_name' => 'object_year_' . $year, 
+//         'type' => 'text',
+//         'input_type' => 'text',
+//         'placeholder' => date('Y') - ( $year ),
+//         'description' => date('Y') - ( $year ),
+//         'width' => $i == 5 ? '100' : '50'
+//     );
+// endfor;
+
+// $next_year = date('Y') + 1;
+// Oak::$object_properties[] = array(
+//     'name' => 'objectif', 
+//     'property_name' => 'object_objectif', 
+//     'type' => 'text',
+//     'input_type' => 'text',
+//     'placeholder' => __( 'Objectif ' . $next_year, Oak::$text_domain ),
+//     'description' => __( 'Objectif ' . $next_year, Oak::$text_domain ),
+//     'width' => '100'
+// );

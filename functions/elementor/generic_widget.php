@@ -1,17 +1,18 @@
 <?php
 use Elementor\Controls_Manager;
 
-
-class Generic_Widget extends \Elementor\Widget_Base {
+/* class Generic_Widget extends \Elementor\Widget_Base {
 
 	private $widget_options;
 
 	public function get_name() {
-		return __( $this->widget_options['name'], Oak::$text_domain );
+		$unique_id = uniqid();
+		$name = $this->widget_options['name'] . ' ' . $unique_id;
+		return $this->widget_options['name'];
 	}
 
 	public function get_title() {
-		return __( $this->widget_options['title'], Oak::$text_domain );
+		return $this->widget_options['title'];
 	}
 
 	public function get_icon() {
@@ -22,7 +23,7 @@ class Generic_Widget extends \Elementor\Widget_Base {
 		return $this->widget_options['categories'];
 	}
 
-  public function set_widgets_options( $widget_options ) {
+  	public function set_widgets_options( $widget_options ) {
 		$this->widget_options = $widget_options;
 	}
 
@@ -46,8 +47,19 @@ class Generic_Widget extends \Elementor\Widget_Base {
 				'label' => __( 'Valeur', Oak::$text_domain ),
 				'type' => \Elementor\Controls_Manager::WYSIWYG,
 				'placeholder' => __( 'Entrer la valeur', Oak::$text_domain ),
-				'default' => 'the default',
-				// 'default' => wp_http_validate_url( $this->get_widgets_options()['value'] ) == true ? '' : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : '',
+				// 'default' => 'the default',
+				'default' => wp_http_validate_url( $this->get_widgets_options()['value'] ) == true ? '' : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : '',
+			]
+		);
+
+		$this->add_control(
+			'title',
+			[
+				'label' => __( 'Valeur', Oak::$text_domain ),
+				'type' => \Elementor\Controls_Manager::WYSIWYG,
+				'placeholder' => __( 'Entrer la valeur', Oak::$text_domain ),
+				// 'default' => 'the default',
+				'default' => wp_http_validate_url( $this->get_widgets_options()['value'] ) == true ? '' : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : '',
 			]
 		);
 
@@ -195,7 +207,7 @@ class Generic_Widget extends \Elementor\Widget_Base {
 
 		// Font Weight
 		$this->add_control(
-			'font-weight',
+			'font_weight',
 			[
 				'label' => _x( 'Weight', 'Typography Control', 'elementor' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
@@ -267,7 +279,6 @@ class Generic_Widget extends \Elementor\Widget_Base {
 			]
 		);
 
-		// Font Size
 		$this->add_control(
 			'image_width',
 			[
@@ -296,11 +307,13 @@ class Generic_Widget extends \Elementor\Widget_Base {
 		);
 
 		$this->end_controls_section();
+
+		
 	}
 
 	protected function render() {
 		$settings = $this->get_settings_for_display();
-		// var_dump( $settings['css_filters'] );
+
 		$before = '';
 		$after = '';
 		if ( $settings['link']['url'] != '' ) :
@@ -308,29 +321,421 @@ class Generic_Widget extends \Elementor\Widget_Base {
 			$after = '</a>';
 		endif;
 
+		$value = '';
+
 		if ( wp_http_validate_url( $settings['image']['url'] ) ) :
-			echo('<div class="oak_image_wrapper" style="text-align: ' . $settings['align'] . '">');
-			echo( $before . '<img class="' . $settings['class'] . '" src="' . $settings['image']['url'] . '" class="" style="
+			$value = '<div class="oak_image_wrapper" style="text-align: ' . $settings['align'] . '">' . $before . '<img class="' . $settings['class'] . '" src="' . $settings['image']['url'] . '" class="" style="
 				width: ' . $settings['image_width'] . ';
 				opacity: ' . $settings['image_opacity'] . ';
 				max-width: ' . $settings['image_max_width'] . ';
-			">' . $after );
-			echo('</div>');
+			">' . $after . '</div>';
 		endif;
 
 		if ( isset( $settings['value'] ) && $settings['value'] != '' && strpos( $settings['value'], 'undefined' ) == false ) :
-			echo( $before . '<' . $settings['tag'] . ' class="' . $settings['class'] . '" style="
-				color: ' . $settings['color'] . '; 
-				font-size: ' . $settings['font_size'] . '; 
-				font-weight: ' . $settings['font-weight'] . ';
-				text-align: ' . $settings['align'] . ';
-				text-transform: ' . $settings['text_transform'] . ';
-				text-decoration: ' . $settings['text_decoration'] . ';
-				line-height: ' . $settings['line_height'] . ';
-				letter-spacing: ' . $settings['letter_spacing'] . ';
-				text-shadow: ' . $settings['text_shadow_text_shadow']['horizontal'] . 'px ' . $settings['text_shadow_text_shadow']['vertical'] . 'px ' . $settings['text_shadow_text_shadow']['blur'] . 'px ' . $settings['text_shadow_text_shadow']['color'] . ';
-				">' . $settings['value'] . '</' . $settings['tag'] . '>' . $after );
+			$color = $settings['color'] != '' ? 'color: ' . $settings['color'] . '; ' : '';
+			$font_size = $settings['font_size'] != '' ? 'font-size: ' . $settings['font_size'] . '; ' : '';
+			$font_weight = $settings['font_weight'] != '' ? 'font-weight: ' . $settings['font_weight'] . '; ' : '';
+			$text_align = $settings['align'] != '' ? 'text-align: ' . $settings['align'] . '; ' : '';
+			$text_transform = $settings['text_transform'] != '' ? 'text-transform: ' . $settings['text_transform'] . '; ' : '';
+			$text_decoration = $settings['text_decoration'] != '' ? 'text-decoration: ' . $settings['text_decoration'] . '; ' : '';
+			$line_height = $settings['line_height'] != '' ? 'line-height: ' . $settings['line_height'] . '; ' : '';
+			$letter_spacing = $settings['letter_spacing'] != '' ? 'letter-spacing: ' . $settings['letter_spacing'] . '; ' : '';
+			$text_shadow_text_shadow = 'text-shadow: ' . $settings['text_shadow_text_shadow']['horizontal'] . 'px ' . $settings['text_shadow_text_shadow']['vertical'] . 'px ' . $settings['text_shadow_text_shadow']['blur'] . 'px ' . $settings['text_shadow_text_shadow']['color'] . '; ';
+
+			$style = $color . $font_size . $font_weight . $text_align . $text_transform . $text_decoration . $line_height . $letter_spacing . $text_shadow_text_shadow;
+			
+			$value = $before . '<' . $settings['tag'] . ' class="' . $settings['class'] . '" style="' . $style . '">' . $settings['value'] . '</' . $settings['tag'] . '>' . $after;
 		endif;
+
+		echo( $value );
 	}
 
+
+} */
+
+class Generic_Widget extends \Elementor\Widget_Base {
+
+	private $widget_options;
+
+	public function get_name() {
+		return $this->get_widgets_options()['name'];
+	}
+
+	public function get_title() {
+		return $this->widget_options['title'];
+	}
+
+	public function get_icon() {
+		return __( $this->widget_options['icon'], Oak::$text_domain );
+	}
+
+	public function get_categories() {
+		return $this->widget_options['categories'];
+	}
+
+	public function get_widgets_options(){
+		return $this->widget_options;
+	}
+
+  	public function set_widgets_options( $widget_options ) {
+		$this->widget_options = $widget_options;
+	}
+
+	public function get_keywords() {
+		return [ 'text', 'editor' ];
+	}
+
+	protected function _register_controls() {
+		$this->start_controls_section(
+			'section_editor',
+			[
+				'label' => __( 'Text Editor', 'elementor' ),
+			]
+		);
+
+		$this->add_control(
+			'editor',
+			[
+				'label' => '',
+				'type' => \Elementor\Controls_Manager::WYSIWYG,
+				'dynamic' => [
+					'active' => true,
+				],
+				'default' => $this->widget_options['value'],
+			]
+		);
+
+		$this->add_control(
+			'the_name',
+			[
+				'label' => '',
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
+				'default' => 'wtf',
+			]
+		);
+
+		$this->add_control(
+			'widget_options',
+			[
+				'label' => __( 'Fuck', Oak::$text_domain ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'default' => wp_json_encode( $this->widget_options ),
+				'show_label' => false,
+				'label_block' => false,
+			]
+		);
+
+		$this->add_control(
+			'drop_cap', [
+				'label' => __( 'Drop Cap', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SWITCHER,
+				'label_off' => __( 'Off', 'elementor' ),
+				'label_on' => __( 'On', 'elementor' ),
+				'prefix_class' => 'elementor-drop-cap-',
+				'frontend_available' => true,
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_style',
+			[
+				'label' => __( 'Text Editor', 'elementor' ),
+				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'align',
+			[
+				'label' => __( 'Alignment', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'elementor' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'elementor' ),
+						'icon' => 'fa fa-align-right',
+					],
+					'justify' => [
+						'title' => __( 'Justified', 'elementor' ),
+						'icon' => 'fa fa-align-justify',
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-text-editor' => 'text-align: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'text_color',
+			[
+				'label' => __( 'Text Color', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}}' => 'color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => \Elementor\Scheme_Color::get_type(),
+					'value' => \Elementor\Scheme_Color::COLOR_3,
+				],
+			]
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' => 'typography',
+				'scheme' => \Elementor\Scheme_Typography::TYPOGRAPHY_3,
+			]
+		);
+
+		$text_columns = range( 1, 10 );
+		$text_columns = array_combine( $text_columns, $text_columns );
+		$text_columns[''] = __( 'Default', 'elementor' );
+
+		$this->add_responsive_control(
+			'text_columns',
+			[
+				'label' => __( 'Columns', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'separator' => 'before',
+				'options' => $text_columns,
+				'selectors' => [
+					'{{WRAPPER}} .elementor-text-editor' => 'columns: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'column_gap',
+			[
+				'label' => __( 'Columns Gap', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'em', 'vw' ],
+				'range' => [
+					'px' => [
+						'max' => 100,
+					],
+					'%' => [
+						'max' => 10,
+						'step' => 0.1,
+					],
+					'vw' => [
+						'max' => 10,
+						'step' => 0.1,
+					],
+					'em' => [
+						'max' => 10,
+						'step' => 0.1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-text-editor' => 'column-gap: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_drop_cap',
+			[
+				'label' => __( 'Drop Cap', 'elementor' ),
+				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+				'condition' => [
+					'drop_cap' => 'yes',
+				],
+			]
+		);
+
+		$this->add_control(
+			'drop_cap_view',
+			[
+				'label' => __( 'View', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'options' => [
+					'default' => __( 'Default', 'elementor' ),
+					'stacked' => __( 'Stacked', 'elementor' ),
+					'framed' => __( 'Framed', 'elementor' ),
+				],
+				'default' => 'default',
+				'prefix_class' => 'elementor-drop-cap-view-',
+				'condition' => [
+					'drop_cap' => 'yes',
+				],
+			]
+		);
+
+		$this->add_control(
+			'drop_cap_primary_color',
+			[
+				'label' => __( 'Primary Color', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}}.elementor-drop-cap-view-stacked .elementor-drop-cap' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}}.elementor-drop-cap-view-framed .elementor-drop-cap, {{WRAPPER}}.elementor-drop-cap-view-default .elementor-drop-cap' => 'color: {{VALUE}}; border-color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => \Elementor\Scheme_Color::get_type(),
+					'value' => \Elementor\Scheme_Color::COLOR_1,
+				],
+				'condition' => [
+					'drop_cap' => 'yes',
+				],
+			]
+		);
+
+		$this->add_control(
+			'drop_cap_secondary_color',
+			[
+				'label' => __( 'Secondary Color', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}}.elementor-drop-cap-view-framed .elementor-drop-cap' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}}.elementor-drop-cap-view-stacked .elementor-drop-cap' => 'color: {{VALUE}};',
+				],
+				'condition' => [
+					'drop_cap_view!' => 'default',
+				],
+			]
+		);
+
+		$this->add_control(
+			'drop_cap_size',
+			[
+				'label' => __( 'Size', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SLIDER,
+				'default' => [
+					'size' => 5,
+				],
+				'range' => [
+					'px' => [
+						'max' => 30,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-drop-cap' => 'padding: {{SIZE}}{{UNIT}};',
+				],
+				'condition' => [
+					'drop_cap_view!' => 'default',
+				],
+			]
+		);
+
+		$this->add_control(
+			'drop_cap_space',
+			[
+				'label' => __( 'Space', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SLIDER,
+				'default' => [
+					'size' => 10,
+				],
+				'range' => [
+					'px' => [
+						'max' => 50,
+					],
+				],
+				'selectors' => [
+					'body:not(.rtl) {{WRAPPER}} .elementor-drop-cap' => 'margin-right: {{SIZE}}{{UNIT}};',
+					'body.rtl {{WRAPPER}} .elementor-drop-cap' => 'margin-left: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'drop_cap_border_radius',
+			[
+				'label' => __( 'Border Radius', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => [ '%', 'px' ],
+				'default' => [
+					'unit' => '%',
+				],
+				'range' => [
+					'%' => [
+						'max' => 50,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-drop-cap' => 'border-radius: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'drop_cap_border_width', [
+				'label' => __( 'Border Width', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::DIMENSIONS,
+				'selectors' => [
+					'{{WRAPPER}} .elementor-drop-cap' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+				'condition' => [
+					'drop_cap_view' => 'framed',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' => 'drop_cap_typography',
+				'selector' => '{{WRAPPER}} .elementor-drop-cap-letter',
+				'exclude' => [
+					'letter_spacing',
+				],
+				'condition' => [
+					'drop_cap' => 'yes',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+	}
+
+	protected function render() {
+		$settings = $this->get_settings_for_display();
+
+		$widget_options = json_decode( $settings['widget_options'] );
+		$editor_content = $widget_options->value;
+
+		$editor_content = $this->parse_text_editor( $editor_content );
+		$settings['editor'] = $editor_content;
+
+		$this->add_render_attribute( 'editor', 'class', [ 'elementor-text-editor', 'elementor-clearfix' ] );
+
+		$this->add_inline_editing_attributes( 'editor', 'advanced' );
+		?>
+		<div <?php echo $this->get_render_attribute_string( 'editor' ); ?>><?php echo $editor_content; ?></div>
+		<?php
+	}
+
+	public function render_plain_content() {
+		// In plain mode, render without shortcode
+		echo $this->get_settings( 'editor' );
+	}
+	
+	protected function _content_template() {
+		?>
+		<#
+		view.addRenderAttribute( 'editor', 'class', [ 'elementor-text-editor', 'elementor-clearfix' ] );
+
+		view.addInlineEditingAttributes( 'editor', 'advanced' );
+		#>
+		<div {{{ view.getRenderAttributeString( 'editor' ) }}}>{{{ settings.editor }}}</div>
+		<?php
+	}
 }
+

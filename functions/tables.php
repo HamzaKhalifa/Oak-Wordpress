@@ -16,6 +16,7 @@ $fields_sql = "CREATE TABLE $fields_table_name (
     field_tag varchar(555),
     field_help varchar(555),
     field_description varchar(555),
+    field_selector_options varchar(555),
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -492,6 +493,18 @@ foreach( $models_without_redundancy as $key => $model ) :
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $models_sql );
+
+
+    // object_quanti varchar (999),
+    // object_title varchar (999),
+    // object_commentary varchar (999),
+    // object_example varchar (999),
+    // object_year_1 varchar (999),
+    // object_year_2 varchar (999),
+    // object_year_3 varchar (999),
+    // object_year_4 varchar (999),
+    // object_year_5 varchar (999),
+    // object_objectif varchar (999),
 
     foreach( $model_fields as $key => $field ) :
         $column_name = 'object_' . $key . '_' . $field->field_identifier;

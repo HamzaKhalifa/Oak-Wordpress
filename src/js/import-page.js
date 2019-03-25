@@ -3,7 +3,7 @@ var allData = [];
 var step = 'organization';
 var selectedData = {
     organization: null,
-    publication: null,
+    publications: [],
     framePublications: [],
     taxonomies: [],
     terms: [],
@@ -29,6 +29,7 @@ var selectedData = {
                 'data': ''
             },
             success: function(data) {
+                console.log(data);
                 doneLoading();
                 allData = data.data;
                 populateImportContainer(
@@ -148,38 +149,34 @@ var selectedData = {
                         publicationsToShow, 
                         ['Titre de la publication', 'Pays', 'Type', 'Année'],
                         ['publication_identifier', 'publication_designation', 'publication_country', 'publication_format', 'publication_year'],
-                        'publication',
-                        'publication'
+                        'publications',
+                        'publications'
                     );
 
                 break;
-                case 'publication':
+                case 'publications':
+                    var publicationsIdentifiers = [];
                     checkBoxes = document.querySelector('.import_container').querySelectorAll('.import_container__element_checkbox');
-                    var foundAChecked = false;
-                    var i = 0;
-                    var publicationName = ''
-                    var publicationIdentfier = '';
-                    do {
+                    for (var i = 0; i < checkBoxes.length; i++) {
                         if (checkBoxes[i].checked) {
-                            foundAChecked = true;
-                            publicationName = checkBoxes[i].parentNode.querySelector('.import_container_line__title').innerHTML;
-                            publicationIdentfier = checkBoxes[i].parentNode.parentNode.getAttribute('identifier');
+                            publicationsIdentifiers.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
                         }
-                        i++;
-                    } while (i < checkBoxes.length && !foundAChecked);
+                    }
                     for (var i = 0; i < allData.publicationsWithoutRedundancy.length; i++) {
-                        if (allData.publicationsWithoutRedundancy[i].publication_identifier == publicationIdentfier) {
-                            selectedData.publication = allData.publicationsWithoutRedundancy[i];
+                        if (publicationsIdentifiers.indexOf(allData.publicationsWithoutRedundancy[i].publication_identifier) != -1) {
+                            selectedData.publications.push(allData.publicationsWithoutRedundancy[i]);
                         }
                     }
                     var taxonomiesToShow = [];
-                    for (var i = 0; i < allData.taxonomiesWithoutRedundancy.length; i++) {
-                        if (allData.taxonomiesWithoutRedundancy[i].taxonomy_publication == publicationIdentfier) {
-                            taxonomiesToShow.push(allData.taxonomiesWithoutRedundancy[i]);
+                    for (var i = 0; i < publicationsIdentifiers.length; i++) {
+                        for (var j = 0; j < allData.taxonomiesWithoutRedundancy.length; j++) {
+                            if (allData.taxonomiesWithoutRedundancy[j].taxonomy_publication == publicationsIdentifiers[i]) {
+                                taxonomiesToShow.push(allData.taxonomiesWithoutRedundancy[j]);
+                            }
                         }
                     }
                     populateImportContainer(
-                        'Taxonomies - ' + publicationName,
+                        'Taxonomies',
                         taxonomiesToShow, 
                         ['Designation', 'Structure', 'Description', 'Dérnière modification'],
                         ['taxonomy_identifier', 'taxonomy_designation', 'taxonomy_structure', 'taxonomy_description', 'taxonomy_modification_time'],
@@ -235,76 +232,18 @@ var selectedData = {
                         }
                     }
                     
-                    var publicationIdentifier = selectedData.publication.publication_identifier;
-                    addPublicationData(publicationIdentifier, termIdentifiers);
+                    for (var i = 0; i < selectedData.publications.length; i++) {
+                        if ( i == selectedData.publications.length - 1 )
+                            addPublicationData(selectedData.publications[i].publication_identifier, termIdentifiers);
+                        else 
+                            addPublicationData(selectedData.publications[i].publication_identifier, []);
+                    }
 
-                    // Lets get all frame publicaitons (Publication de type cadre RSE)
-                    var addedPublicationsIdentifiers = [];
-                    var framePublicationsToShow = [];
-                    for (var i = allData.publications.length - 1; i >= 0; i--) {
-                        if (addedPublicationsIdentifiers.indexOf(allData.publications[i].publication_identifier) == -1 && allData.publications[i].publication_identifier != selectedData.publication.publication_identifier 
-                        && allData.publications[i].publication_report_or_frame == 'frame' ) {
-                            addedPublicationsIdentifiers.push(allData.publications[i].publication_identifier);
-                            framePublicationsToShow.push(allData.publications[i]);
-                        }
-                    }
-                    populateImportContainer(
-                        'Publications Cadres RSE',
-                        framePublicationsToShow, 
-                        ['Titre de la publication', 'Pays', 'Type', 'Année'],
-                        ['publication_identifier', 'publication_designation', 'publication_country', 'publication_format', 'publication_year'],
-                        'frame_publications',
-                        'frame_publications'
-                    );
-                    var buttonNext = document.querySelector('.next_button_container_next');
-                    buttonNext.innerHTML = 'Sauvegarder';
-                    buttonNext.classList.remove('oak_hidden');
-                break
-                case 'frame_publications':
                     setLoading();
-                    
-                    // Here we are gonna add frame publications data: 
-                    checkBoxes = document.querySelector('.import_container').querySelectorAll('.import_container__element_checkbox');
-                    var publicationsIdentifiers = [];
-                    for (var i = 0; i < checkBoxes.length; i++) {
-                        if (checkBoxes[i].checked) {
-                            publicationsIdentifiers.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
-                        }
-                    }
-                    for (var i = 0; i < publicationsIdentifiers.length; i++) {
-                        var addedTermsIdentifiers = [];
-                        for (var j = 0; j < allData.taxonomiesWithoutRedundancy.length; j++) {
-                            if (allData.taxonomiesWithoutRedundancy[j].taxonomy_publication == publicationsIdentifiers[i]) {
-                                selectedData.taxonomies.push(allData.taxonomiesWithoutRedundancy[j]);
-                                var taxonomy = allData.taxonomiesWithoutRedundancy[j];
-                                for (var k = 0; k < allData.allTerms.length; k++) {
-                                    if (allData.allTerms[k].taxonomy_identifier == taxonomy.taxonomy_identifier) {
-                                        for (var n = allData.allTerms[j].terms.length; n >= 0; n--) {
-                                            var term = allData.allTerms[k].terms[n];
-                                            if (term != null && addedTermsIdentifiers.indexOf(term.term_identifier) == -1) {
-                                                term.term_taxonomy_designation = allData.taxonomiesWithoutRedundancy[j].taxonomy_designation;
-                                                term.term_taxonomy_identifier = allData.taxonomiesWithoutRedundancy[j].taxonomy_identifier;
-                                                addedTermsIdentifiers.push(term.term_identifier);
-                                            } 
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        var publication = {}; 
-                        for (var j = 0; j < allData.publicationsWithoutRedundancy.length; j++) {
-                            if (publicationsIdentifiers[i] == allData.publicationsWithoutRedundancy[j].publication_identifier) {
-                                publication = allData.publicationsWithoutRedundancy[j];
-                            }
-                        }
-                        selectedData.framePublications.push(publication);
-                        addPublicationData(publicationsIdentifiers[i], addedTermsIdentifiers);
-                    }
-                    
+
                     // For the terms and objects (Gotta filter this some day)
                     selectedData.termsAndObjects = allData.termsAndObjects;
-
-                    console.log(selectedData);
+                    
                     jQuery(document).ready(function() {
                         jQuery.ajax({
                             type: 'POST',
@@ -324,6 +263,72 @@ var selectedData = {
                             }
                         });
                     });
+
+                    // var publicationIdentifier = selectedData.publication.publication_identifier;
+                    // addPublicationData(publicationIdentifier, termIdentifiers);
+
+                    // Lets get all frame publications (Publication de type cadre RSE)
+                    // var addedPublicationsIdentifiers = [];
+                    // var framePublicationsToShow = [];
+                    // for (var i = allData.publications.length - 1; i >= 0; i--) {
+                    //     if (addedPublicationsIdentifiers.indexOf(allData.publications[i].publication_identifier) == -1 && allData.publications[i].publication_identifier != selectedData.publication.publication_identifier 
+                    //     && allData.publications[i].publication_report_or_frame == 'frame' ) {
+                    //         addedPublicationsIdentifiers.push(allData.publications[i].publication_identifier);
+                    //         framePublicationsToShow.push(allData.publications[i]);
+                    //     }
+                    // }
+                    // populateImportContainer(
+                    //     'Publications Cadres RSE',
+                    //     framePublicationsToShow, 
+                    //     ['Titre de la publication', 'Pays', 'Type', 'Année'],
+                    //     ['publication_identifier', 'publication_designation', 'publication_country', 'publication_format', 'publication_year'],
+                    //     'frame_publications',
+                    //     'frame_publications'
+                    // );
+                    // var buttonNext = document.querySelector('.next_button_container_next');
+                    // buttonNext.innerHTML = 'Sauvegarder';
+                    // buttonNext.classList.remove('oak_hidden');
+                break
+                case 'frame_publications':
+                    
+                    
+                    // Here we are gonna add frame publications data: 
+                    // checkBoxes = document.querySelector('.import_container').querySelectorAll('.import_container__element_checkbox');
+                    // var publicationsIdentifiers = [];
+                    // for (var i = 0; i < checkBoxes.length; i++) {
+                    //     if (checkBoxes[i].checked) {
+                    //         publicationsIdentifiers.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
+                    //     }
+                    // }
+                    // for (var i = 0; i < publicationsIdentifiers.length; i++) {
+                    //     var addedTermsIdentifiers = [];
+                    //     for (var j = 0; j < allData.taxonomiesWithoutRedundancy.length; j++) {
+                    //         if (allData.taxonomiesWithoutRedundancy[j].taxonomy_publication == publicationsIdentifiers[i]) {
+                    //             selectedData.taxonomies.push(allData.taxonomiesWithoutRedundancy[j]);
+                    //             var taxonomy = allData.taxonomiesWithoutRedundancy[j];
+                    //             for (var k = 0; k < allData.allTerms.length; k++) {
+                    //                 if (allData.allTerms[k].taxonomy_identifier == taxonomy.taxonomy_identifier) {
+                    //                     for (var n = allData.allTerms[j].terms.length; n >= 0; n--) {
+                    //                         var term = allData.allTerms[k].terms[n];
+                    //                         if (term != null && addedTermsIdentifiers.indexOf(term.term_identifier) == -1) {
+                    //                             term.term_taxonomy_designation = allData.taxonomiesWithoutRedundancy[j].taxonomy_designation;
+                    //                             term.term_taxonomy_identifier = allData.taxonomiesWithoutRedundancy[j].taxonomy_identifier;
+                    //                             addedTermsIdentifiers.push(term.term_identifier);
+                    //                         }
+                    //                     }
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    //     var publication = {}; 
+                    //     for (var j = 0; j < allData.publicationsWithoutRedundancy.length; j++) {
+                    //         if (publicationsIdentifiers[i] == allData.publicationsWithoutRedundancy[j].publication_identifier) {
+                    //             publication = allData.publicationsWithoutRedundancy[j];
+                    //         }
+                    //     }
+                    //     selectedData.framePublications.push(publication);
+                    //     addPublicationData(publicationsIdentifiers[i], addedTermsIdentifiers);
+                    // }
                 break;
             }
         });
@@ -331,6 +336,7 @@ var selectedData = {
 })();
 
 function addPublicationData(publicationIdentifier, termIdentifiers) {
+    console.log('term identifiers in function', termIdentifiers);
     var addedTermsIdentifiers = [];
     for (var i = 0; i < termIdentifiers.length; i++) {
         for (var j = allData.allTerms.length - 1; j >= 0; j--) {
@@ -357,7 +363,6 @@ function addPublicationData(publicationIdentifier, termIdentifiers) {
     }
 
     // Lets get the glossaries: 
-    var publicationIdentifier = selectedData.publication.publication_identifier;
 
     for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
         glossaryPublicationIdentifier = allData.glossariesWithoutRedundancy[i].glossary_publication;

@@ -235,7 +235,7 @@ function createElementData(state) {
 
     for(var i = 0; i < properties.length; i++) {
         if (document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input')) {
-            if (properties[i].input_type == 'text' || properties[i].input_type == 'select' || properties[i].input_type == 'number' || properties[i].input_type == 'color' || properties[i].input_type == 'textarea' )
+            if (properties[i].input_type == 'text' || properties[i].input_type == 'select' || properties[i].input_type == 'number' || properties[i].input_type == 'color' || properties[i].input_type == 'textarea' || properties[i].input_type == 'quali' || properties[i].input_type == 'quanti' || properties[i].input_type == 'selector' )
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').value.toString();
             else if (properties[i].input_type == 'image')
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').parentNode.querySelector('img').getAttribute('src').toString();
@@ -325,7 +325,7 @@ function createElementData(state) {
         }
         elementData.object_form_selectors = objectFormSelectors;
     }
-    console.log(elementData);
+    console.log('elementData', elementData);
 
     return elementData;
 }
@@ -532,6 +532,7 @@ function handleOtherElementsCheckboxes() {
 }
 
 function checkboxClickListener(checkbox) {
+    console.log(checkbox);
     var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
     if (checkbox.checked) {
         checkbox.parentNode.parentNode.classList.remove('oak_other_elements_single_elements_container__single_element_not_checked');
@@ -629,8 +630,12 @@ function otherElementsDeleteButton() {
     deleteButton.addEventListener('click', function() {
         var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
         for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) 
+            if (checkboxes[i].checked) {
+                checkboxes[i].checked = false;
+                checkboxClickListener(checkboxes[i]);
                 checkboxes[i].parentNode.parentNode.remove();
+            }
+                
         }
     });
 }
@@ -905,6 +910,7 @@ function handleModalButtons() {
                     },
                     success: function(data) {
                         doneLoading();
+                        console.log(data);
                         window.location.reload();
                     },
                     error: function(error) {

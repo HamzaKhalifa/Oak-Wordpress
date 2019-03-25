@@ -87,7 +87,6 @@ deleteButton();
 function deleteButton() {
     var deleteButton = document.querySelector('.oak_element_header_right_delete_button');
     deleteButton.addEventListener('click', function() {
-
         var message = '';
         var trashSelectValue = document.querySelector('.oak_trash_list_select').value;
         if (trashSelectValue == 'trashed') {
@@ -612,7 +611,7 @@ function handleModalButtons() {
             var identifiersToDelete = [];
             var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
             for (var i = 1; i < checkBoxes.length; i++) {
-                if (checkBoxes[i].checked) {
+                if (checkBoxes[i].checked && !classExists(checkBoxes[i].parentNode.parentNode, 'oak_hidden')) {
                     identifiersToDelete.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
                 }
             }

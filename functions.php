@@ -113,8 +113,12 @@ class Oak {
         Oak::$field_types = array ( 
             array ( 'value' => 'Texte', 'innerHTML' => 'Texte' ), 
             array ( 'value' => 'Zone de Texte', 'innerHTML' => 'Zone de Texte'), 
-            array ( 'value' => 'Image', 'innerHTML' => 'Image' ), 
-            array ( 'value' => 'Fichier', 'innerHTML' => 'Fichier' ) 
+            array ( 'value' => 'Image', 'innerHTML' => 'Image' ),
+            array ( 'value' => 'Fichier', 'innerHTML' => 'Fichier' ),
+            array ( 'value' => 'Url', 'innerHTML' => 'Url' ),
+            array ( 'value' => 'Indicateur Qualitatif', 'innerHTML' => 'Indicateur Qualitatif' ),
+            array ( 'value' => 'Indicateur Quantitatif', 'innerHTML' => 'Indicateur Quantitatif' ),
+            array ( 'value' => 'Selecteur', 'innerHTML' => 'Selecteur' ),
         );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
@@ -390,7 +394,13 @@ class Oak {
                         $input_type = 'file';
                     elseif( $field->field_type == 'Zone de Texte' ) :
                         $input_type = 'textarea';
-                    endif;
+                    elseif( $field->field_type == 'Indicateur Qualitatif' ) :
+                        $input_type = 'quali';
+                    elseif( $field->field_type == 'Indicateur Quantitatif' ) :
+                        $input_type = 'quanti';
+                    elseif( $field->field_type == 'Selecteur' ) :
+                        $input_type = 'selector';
+                    endif;;
 
                     Oak::$object_properties[] = array (
                         'name' => $key . '_' . $field->field_identifier,
@@ -469,7 +479,25 @@ class Oak {
         endif;
     }
 
+    
+
     function oak_add_meta_box_to_posts() {
+        $this->oak_add_meta_data();
+
+        $posts = [ 'post', 'page' ];
+        foreach( $posts as $post ) :
+            add_meta_box(
+                'objects_selector', // $id
+                'Objets', // $title
+                array( $this, 'oak_add_meta_box_to_posts_view' ), // $callback
+                $post, // $screen
+                'normal', // $context
+                'high' // $priority
+            );
+        endforeach;
+    }
+
+    function oak_add_meta_data() {
         // We need to delete all post meta first to avoid old unneccesary data
         $metas = get_post_meta( get_the_ID() );
         foreach( $metas as $key => $meta ) :
@@ -547,18 +575,6 @@ class Oak {
                     update_post_meta( get_the_ID(), $field_designation, $value );
                 endif;
             endforeach;
-        endforeach;
-
-        $posts = [ 'post', 'page' ];
-        foreach( $posts as $post ) :
-            add_meta_box(
-                'objects_selector', // $id
-                'Objets', // $title
-                array( $this, 'oak_add_meta_box_to_posts_view' ), // $callback
-                $post, // $screen
-                'normal', // $context
-                'high' // $priority
-            );
         endforeach;
     }
 
@@ -1076,7 +1092,7 @@ class Oak {
                 $title = __( 'Publications', Oak::$text_domain );
                 $elements = Oak::$publications_without_redundancy;
                 $table = 'publication';
-                $first_property = array ( 'title' => __( 'Organisation', Oak::$text_domain ), 'property' => 'publication_organization' );
+                $first_property = array ( 'title' => __( 'Année', Oak::$text_domain ), 'property' => 'publication_year' );
                 $second_property = array ( 'title' => __( 'Format', Oak::$text_domain ), 'property' => 'publication_format' );
                 $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'publication_format' );;
             break; 
@@ -1198,6 +1214,12 @@ class Oak {
         endforeach;
 
         $table = $_POST['table'];
+
+        // We are gonna be unsetting the objet_model_identifier property to not receive a databse error: 
+        if ( $table == "object" && isset( $element['object_model_identifier'] ) ) :
+            unset( $element['object_model_identifier'] );
+        endif;
+
         $prefix = $wpdb->prefix . 'oak_';
         if ( $table == 'object' ) : 
             $prefix = $wpdb->prefix . 'oak_model_';
@@ -1942,8 +1964,7 @@ class Oak {
 
         $organizations = [];
         $organizations[] = $selected_data['organization'];
-        $publications = [];
-        $publications[] = $selected_data['publication'];
+        $publications = $selected_data['publications'];
         $frame_publications = $selected_data['framePublications'];
         $fields = $selected_data['fields'];
         $forms = $selected_data['forms'];

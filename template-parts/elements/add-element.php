@@ -142,6 +142,10 @@ $modification_time_property = $table . '_modification_time';
 
         $first = true;
         $form_designation = '';
+        if ( $table == 'object' ) : ?>
+            <h2 class="oak_add_element_formula_title"><?php _e( 'Indicateurs de performances', Oak::$text_domain ); ?></h2>
+        <?php
+        endif;
         foreach( $properties as $key => $property ) :
             if ( isset( $property['model_and_form_instance'] ) ) :
                 // For the form new designation: 
@@ -236,8 +240,7 @@ $modification_time_property = $table . '_modification_time';
                     <div class="input_line"></div>
                     <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
                     <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
-                </div>
-            <?php
+                </div><?php
             elseif ( $property['input_type'] == 'checkbox' ) : ?>
                 <div class="oak_checkbox_container">
                     <div class="oak_checkbox_container__container">
@@ -273,6 +276,70 @@ $modification_time_property = $table . '_modification_time';
 
                     <div class="input_line"></div>
                     <span class="text_field_description"><?php echo ( $property['description'] ); ?></span>
+                </div>
+            <?php
+            elseif ( $property['input_type'] == 'quali' || $property['input_type'] == 'quanti' ) : ?>
+                <div class="oak_select_container">
+                    <div class="additional_container">
+                        <select type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
+                            <option value="0"><?php _e( 'Aucun indicateur selectionné', Oak::$text_domain ); ?></option>
+                            <?php 
+                            $selected = array();
+                            $choices = $property['input_type'] == 'quali' ? Oak::$qualis_without_redundancy : Oak::$quantis_without_redundancy;
+                            $quali_or_quanti = $property['input_type'] == 'quali' ? 'quali' : 'quanti';
+                            foreach( $choices as $key => $choice ) :
+                                $identifier_property = $quali_or_quanti . '_identifier';
+                                $designation_property = $quali_or_quanti . '_designation';
+                                array_push( $selected, 'notselected' );
+                                if ( count( $revisions ) > 0 ) :
+                                    if ( $revisions[ count( $revisions ) - 1 ]->$property_name == $choice->$identifier_property ) :
+                                        $selected[ $key ] = 'selected';
+                                    endif;
+                                endif;
+                                ?>
+                                <option <?php echo( esc_attr( $selected[ $key ] ) ); ?> value="<?php echo( $choice->$identifier_property ); ?>"><?php echo( $choice->$designation_property ); ?></option>
+                                <?php
+                            endforeach;
+                            ?>
+                        </select>
+                    </div>
+                    <div class="input_line"></div>
+                    <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+                    <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
+                </div> <?php
+            elseif ( $property['input_type'] == 'selector' ) :
+                $choices = [];
+                $field_identifier = explode( '_', $property['name'] )[1];
+                foreach( Oak::$fields_without_redundancy as $field ) :
+                    if ( $field->field_identifier == $field_identifier ) :
+                        $field_selector_options = $field->field_selector_options;
+                        $choices = explode( '|', $field_selector_options );
+                    endif;
+                endforeach;
+                ?>
+                <div class="oak_select_container">
+                    <div class="additional_container">
+                        <select type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
+                            <option value="0"><?php _e( 'Aucune valeur selectionée', Oak::$text_domain ); ?></option>
+                            <?php 
+                            $selected = array();
+                            foreach( $choices as $key => $choice ) :
+                                array_push( $selected, 'notselected' );
+                                if ( count( $revisions ) > 0 ) :
+                                    if ( $revisions[ count( $revisions ) - 1 ]->$property_name == $choice ) :
+                                        $selected[ $key ] = 'selected';
+                                    endif;
+                                endif;
+                                ?>
+                                <option <?php echo( esc_attr( $selected[ $key ] ) ); ?> value="<?php echo( $choice ); ?>"><?php echo( $choice ); ?></option>
+                                <?php
+                            endforeach;
+                            ?>
+                        </select>
+                    </div>
+                    <div class="input_line"></div>
+                    <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+                    <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
                 </div>
             <?php
             endif;

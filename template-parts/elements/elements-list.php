@@ -21,10 +21,12 @@
     <div class="oak_grouped_actions">    
         <select class="oak_grouped_actions__element oak_grouped_actions__all_natures" name="" id="">
             <option value="all-natures"><?php _e( 'Toutes les natures', Oak::$text_domain ); ?></option>
-            <option value="Texte"><?php _e( 'Texte', Oak::$text_domain ); ?></option>
-            <option value="Zone de Texte"><?php _e( 'Zone de Texte', Oak::$text_domain ); ?></option>
-            <option value="Image"><?php _e( 'Image', Oak::$text_domain ); ?></option>
-            <option value="Fichier"><?php _e( 'Fichier', Oak::$text_domain ); ?></option>
+            <?php 
+            foreach( Oak::$field_types as $field_type ) : ?>
+                <option value="<?php echo( $field_type ); ?>"><?php _e( $field_type, Oak::$text_domain ); ?></option>
+            <?php
+            endforeach;
+            ?>
         </select>
 
         <select class="oak_grouped_actions__element oak_grouped_actions__all_functions" name="" id="">
