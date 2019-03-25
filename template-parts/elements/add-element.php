@@ -142,10 +142,6 @@ $modification_time_property = $table . '_modification_time';
 
         $first = true;
         $form_designation = '';
-        if ( $table == 'object' ) : ?>
-            <h2 class="oak_add_element_formula_title"><?php _e( 'Indicateurs de performances', Oak::$text_domain ); ?></h2>
-        <?php
-        endif;
         foreach( $properties as $key => $property ) :
             if ( isset( $property['model_and_form_instance'] ) ) :
                 // For the form new designation: 

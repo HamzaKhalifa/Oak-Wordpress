@@ -517,7 +517,11 @@ foreach( $models_without_redundancy as $key => $model ) :
         endforeach;
 
         if ( !$exists ) {
-            $wpdb->query("ALTER TABLE $table_name ADD $column_name varchar(555)");
+            if ( $field->field_type == 'Zone de Texte' ) :
+                $wpdb->query("ALTER TABLE $table_name ADD $column_name LONGTEXT");
+            else :
+                $wpdb->query("ALTER TABLE $table_name ADD $column_name TEXT");
+            endif;
         }
     endforeach;
 

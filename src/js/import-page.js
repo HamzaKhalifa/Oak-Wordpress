@@ -243,13 +243,13 @@ var selectedData = {
 
                     // For the terms and objects (Gotta filter this some day)
                     selectedData.termsAndObjects = allData.termsAndObjects;
-                    
+                    console.log('selected data', selectedData);
                     jQuery(document).ready(function() {
                         jQuery.ajax({
                             type: 'POST',
                             url: DATA.ajaxUrl,
                             data: {
-                                'selectedData': selectedData,
+                                'selectedData': JSON.stringify(selectedData),
                                 'action': 'corn_save_data'
                             },
                             success: function(data) {
@@ -336,7 +336,6 @@ var selectedData = {
 })();
 
 function addPublicationData(publicationIdentifier, termIdentifiers) {
-    console.log('term identifiers in function', termIdentifiers);
     var addedTermsIdentifiers = [];
     for (var i = 0; i < termIdentifiers.length; i++) {
         for (var j = allData.allTerms.length - 1; j >= 0; j--) {

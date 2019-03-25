@@ -1203,7 +1203,6 @@ Oak::$term_properties = array (
     ),
 );
 
-
 // Oak::$object_properties = array (
 //     array(
 //         'name' => 'quanti', 

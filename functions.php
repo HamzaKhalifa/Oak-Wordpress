@@ -1956,11 +1956,15 @@ class Oak {
     }
 
     function corn_save_data() {
+        // wp_send_json_success(  );
+
         global $wpdb; 
 
         $this->delete_everything();
 
-        $selected_data = $_POST['selectedData'];
+        $selected_data = json_decode( stripslashes( $_POST['selectedData'] ), true );
+
+        // wp_send_json_success( array( 'data' => $selected_data ) );
 
         $organizations = [];
         $organizations[] = $selected_data['organization'];
@@ -2054,7 +2058,12 @@ class Oak {
                 endforeach;
                 
                 if ( !$exists ) {
-                    $wpdb->query("ALTER TABLE $table_name ADD $column_name varchar(555)");
+                    if ( $field->field_type == 'Zone de Texte' ) :
+                        $wpdb->query("ALTER TABLE $table_name ADD $column_name LONGTEXT");
+                    else :
+                        $wpdb->query("ALTER TABLE $table_name ADD $column_name TEXT");
+                    endif;
+                    // $wpdb->query("ALTER TABLE $table_name ADD $column_name varchar(555)");
                 }
             endforeach;
         endforeach;
