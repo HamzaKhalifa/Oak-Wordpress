@@ -2025,6 +2025,7 @@ class Oak {
         $glossaries = $selected_data['glossaries'];
         $qualis = $selected_data['qualis'];
         $quantis = $selected_data['quantis'];
+        $goodpractices = $selected_data['goodpractices'];
         $terms_and_objects = $selected_data['termsAndObjects'];
         $models_and_forms = $selected_data['modelsAndForms'];
         $forms_and_fields = $selected_data['formsAndFields'];
@@ -2039,6 +2040,7 @@ class Oak {
         $this->corn_save_element( $glossaries, Oak::$glossaries_table_name );
         $this->corn_save_element( $qualis, Oak::$qualis_table_name );
         $this->corn_save_element( $quantis, Oak::$quantis_table_name );
+        $this->corn_save_element( $goodpractices, Oak::$goodpractices_table_name );
         $this->corn_save_element( $terms_and_objects, Oak::$terms_and_objects_table_name );
         
         $this->corn_save_element( $forms_and_fields, Oak::$forms_and_fields_table_name );

@@ -14,6 +14,7 @@ var selectedData = {
     glossaries: [],
     qualis: [],
     quantis: [],
+    goodpractices: [],
     formsAndFields: [],
     modelsAndForms: [],
 };
