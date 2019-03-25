@@ -972,10 +972,10 @@ Oak::$quali_properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
-            array( 'value' => 'I', 'innerHTML' => 'I' ),
             array( 'value' => '1', 'innerHTML' => '1' ),
-            array( 'value' => 'A', 'innerHTML' => 'A' ),
+            array( 'value' => 'I', 'innerHTML' => 'I' ),
             array( 'value' => 'a', 'innerHTML' => 'a' ),
+            array( 'value' => '1.a', 'innerHTML' => '1.a' ),
         ),
         'placeholder' => __( 'Type de numérotation', Oak::$text_domain ), 
         'description' => __( 'Type de numérotation', Oak::$text_domain ), 
@@ -985,7 +985,7 @@ Oak::$quali_properties = array (
         'name' => 'numerotation', 
         'property_name' => 'quali_numerotation', 
         'type' => 'text',
-        'input_type' => 'text',
+        'input_type' => 'number',
         'placeholder' => __( 'Numérotation', Oak::$text_domain ), 
         'description' => __( 'Numérotation', Oak::$text_domain ), 
         'width' => '50'
@@ -1079,10 +1079,10 @@ Oak::$quanti_properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
-            array( 'value' => 'I', 'innerHTML' => 'I' ),
             array( 'value' => '1', 'innerHTML' => '1' ),
-            array( 'value' => 'A', 'innerHTML' => 'A' ),
+            array( 'value' => 'I', 'innerHTML' => 'I' ),
             array( 'value' => 'a', 'innerHTML' => 'a' ),
+            array( 'value' => '1.a', 'innerHTML' => '1.a' ),
         ),
         'placeholder' => __( 'Type de numérotation', Oak::$text_domain ), 
         'description' => __( 'Type de numérotation', Oak::$text_domain ), 
@@ -1092,7 +1092,7 @@ Oak::$quanti_properties = array (
         'name' => 'numerotation', 
         'property_name' => 'quanti_numerotation', 
         'type' => 'text',
-        'input_type' => 'text',
+        'input_type' => 'number',
         'placeholder' => __( 'Numérotation', Oak::$text_domain ), 
         'description' => __( 'Numérotation', Oak::$text_domain ), 
         'width' => '50'

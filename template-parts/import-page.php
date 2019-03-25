@@ -1,14 +1,4 @@
 <div class="oak_import_page">
-    <div class="import_header">
-        <div class="import_header__left_side">
-            <i class="import_header_left_side__menu_icon fas fa-bars"></i>
-            <h4 class="import_header_left_side__title"><?php _e( 'Configuration', Oak::$text_domain ); ?></h4>
-        </div>
-        <div class="import_header__right_side">
-            <i class="import_header_right_side__search_icon fas fa-search"></i>
-            <i class="import_header_right_side__right_menu_icon fas fa-ellipsis-v"></i>
-        </div>
-    </div>
 
     <div class="import_header import_header_screen_title_container">
         <div class="import_header__left_side">

@@ -48,7 +48,7 @@ var selectedData = {
         });
     });
 
-    function populateImportContainer(title, data, dataInfo, dataFields, dataType, nextStep) {
+    function populateImportContainer(title, data, dataInfo, dataFields, dataType, nextStep, publicationsThatBelongNumber) {
         document.querySelector('.next_button_container_next').classList.add('oak_hidden');
         document.querySelector('.screen_title').innerHTML = title;
         var importContainer = document.querySelector('.import_container');
@@ -62,8 +62,14 @@ var selectedData = {
             + '<h4 class="import_container_line_column_value import_container_line__title">' + dataInfo[1] + '</h4>'
             + '<h4 class="import_container_line_column_value import_container_line__title">' + dataInfo[2] + '</h4>'
             + '<h4 class="import_container_line_column_value import_container_line__title">' + dataInfo[3] + '</h4>'
-            + '</div>'
+            + '</div>';
+
         for (var i = 0; i < data.length; i++) {
+            var additionalContent = '';
+            if (i == publicationsThatBelongNumber) {
+                additionalContent = '<h2 class="oak_other_publications_title">Autres Publications (N\'appartenant pas à l\'organisation "' + selectedData.organization.organization_designation + '"): </h2>';
+            }
+
             var newLine = '<div class="import_container__line" identifier="' + data[i][dataFields[0]] + '">'
             + '<div class="import_container_line__checkbox_container">'
             + '<input type="checkbox" class="import_container__element_checkbox">'
@@ -73,7 +79,7 @@ var selectedData = {
             + '<h4 class="import_container_line_column_value import_container_line__title">' + data[i][dataFields[3]] + '</h4>'
             + '<h4 class="import_container_line_column_value import_container_line__title">' + data[i][dataFields[4]] + '</h4>'
             + '</div>'
-            importContainer.innerHTML = importContainer.innerHTML + newLine;
+            importContainer.innerHTML = importContainer.innerHTML + additionalContent + newLine;
         }
         checkBoxes = importContainer.querySelectorAll('.import_container__element_checkbox');
         for (var i = 0; i < checkBoxes.length; i++) {
@@ -133,12 +139,30 @@ var selectedData = {
                         }
                         i++;
                     } while (i < checkBoxes.length && !foundAChecked);
-                    var publicationsToShow = [];
+                    var publicationsThatBelongToOrganization = [];
+                    var publicationsThatDontBelongToOrganization = [];
+                    // Filtering publications by selected organization: 
                     for (var i = 0; i < allData.publicationsWithoutRedundancy.length; i++) {
-                        if (allData.publicationsWithoutRedundancy[i].publication_organization == organizationIdentifier) {
-                            publicationsToShow.push(allData.publicationsWithoutRedundancy[i]);
-                        }
+                        // if (allData.publicationsWithoutRedundancy[i].publication_report_or_frame == 'report') {
+                            if (allData.publicationsWithoutRedundancy[i].publication_organization == organizationIdentifier) {
+                                allData.publicationsWithoutRedundancy[i].belongsToOrganization = true;
+                                publicationsThatBelongToOrganization.push(allData.publicationsWithoutRedundancy[i]);
+                            } else {
+                                allData.publicationsWithoutRedundancy[i].belongsToOrganization = false;
+                                publicationsThatDontBelongToOrganization.push(allData.publicationsWithoutRedundancy[i]);
+                            }
+                        // }
                     }
+                    var publicationsThatBelongNumber = publicationsThatBelongToOrganization.length;
+                
+                    var publicationsToShow = [];
+                    for (var i = 0; i < publicationsThatBelongToOrganization.length; i++) {
+                        publicationsToShow.push(publicationsThatBelongToOrganization[i]);
+                    }
+                    for (var i = 0; i < publicationsThatDontBelongToOrganization.length; i++) {
+                        publicationsToShow.push(publicationsThatDontBelongToOrganization[i]);
+                    }
+
                     for (var i = 0; i < allData.organizationsWithoutRedundancy.length; i++) {
                         if (allData.organizationsWithoutRedundancy[i].organization_identifier == organizationIdentifier) {
                             selectedData.organization = allData.organizationsWithoutRedundancy[i];
@@ -150,9 +174,9 @@ var selectedData = {
                         ['Titre de la publication', 'Pays', 'Type', 'Année'],
                         ['publication_identifier', 'publication_designation', 'publication_country', 'publication_format', 'publication_year'],
                         'publications',
-                        'publications'
+                        'publications',
+                        publicationsThatBelongNumber
                     );
-
                 break;
                 case 'publications':
                     var publicationsIdentifiers = [];

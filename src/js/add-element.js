@@ -11,6 +11,46 @@ for (var i = 0; i < properties.length; i++) {
     elementData[DATA.table + '_' + properties[i].name] = '';
 }
 
+// For numerotation format (for quanti and quali): 
+initializeNumerotationFormat();
+function initializeNumerotationFormat() {
+    if (table == 'quanti' || table == 'quali') {
+        var numerotationSelect = document.querySelector('.' + table + '_numerotation_type_input');
+        handleNumerotation(numerotationSelect);
+        numerotationSelect.addEventListener('change', function() {
+            handleNumerotation(this);
+        });
+    }
+}
+
+function handleNumerotation(numerotationSelect) {
+    var numerotationInput = document.querySelector('.' + table + '_numerotation_input');
+    switch(numerotationSelect.value) {
+        case '1' :
+            numerotationInput.setAttribute('type', 'number');
+            numerotationInput.setAttribute('onkeypress', '');
+        break;
+        case 'I': 
+            numerotationInput.setAttribute('type', 'text');
+            numerotationInput.setAttribute('onkeypress', 'return /[a-z]/i.test(event.key)');
+        break;
+        case 'a': 
+            numerotationInput.setAttribute('type', 'text');
+            numerotationInput.setAttribute('onkeypress', 'return /[a-z]/i.test(event.key)');
+        break;
+        case '1.a': 
+            numerotationInput.setAttribute('type', 'text');
+            numerotationInput.setAttribute('onkeypress', '');
+        break;
+    } 
+}
+
+function alphaOnly(event) {
+    // console.log('dkfdkf');
+    var key = event.keyCode;
+    return ((key >= 65 && key <= 90) || key == 8);
+};
+
 // For the text fields animation
 textFieldsAnimations();
 function textFieldsAnimations() {
@@ -703,7 +743,6 @@ function initializeFilesMediaModals() {
     for (var i = 0; i < allCallingSelectors.length; i++) {
         allCallingSelectors[i].addEventListener('click', function() {
             lastClickedFileCallingSelector = this;
-            console.log(lastClickedFileCallingSelector);
         });
         
         var callingSelector = '.calling_selector_' + allCallingSelectors[i].getAttribute('property-name');
@@ -711,11 +750,13 @@ function initializeFilesMediaModals() {
             {
                 calling_selector : callingSelector,
                 cb : function(attachments) {
+                    console.log('Attachments', attachments);
                     var ids = jQuery.map(attachments, function(attachment){
                         return attachment.id;
                     });
                     ids = JSON.stringify(ids);
-                    lastClickedFileCallingSelector.parentNode.querySelector('input').setAttribute('value', attachments[0].link);
+                    console.log('Attachments', attachments);
+                    lastClickedFileCallingSelector.parentNode.querySelector('input').setAttribute('value', attachments[0].url);
                 }
             },
             {

@@ -1870,6 +1870,7 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 .import_container_line__title {
   color: #003366;
   flex: 1;
+  margin-right: 5px;
 }
 
 .import_container_line__checkbox_container {
@@ -1891,6 +1892,12 @@ input.import_container__element_checkbox {
 
 .next_button_container_next {
   padding: 10px;
+}
+
+.oak_other_publications_title {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #000c3b;
 }
 
 .autocomplete {
