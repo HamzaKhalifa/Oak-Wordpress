@@ -274,7 +274,7 @@ $field_functions =  array (
     array ( 'value' => 'Illustration', 'innerHTML' => 'Illustration' )
 );
 
-$business_line = [];
+$business_line = array( array( 'value' => 0, 'innerHTML' => __( 'Aucun périmètre métier selectionné', Oak::$text_domain ) ) );
 $business_line_array = get_option('oak_business_line') == false ? '' : get_option('oak_business_line');
 $business_line_array = explode( '|', $business_line_array );
 foreach( $business_line_array as $single_business_line ) :
@@ -283,7 +283,7 @@ foreach( $business_line_array as $single_business_line ) :
     endif;
 endforeach;
 
-$custom_perimeter = [];
+$custom_perimeter = array( array( 'value' => 0, 'innerHTML' => __( 'Aucun périmètre selectionné', Oak::$text_domain ) ) );
 $custom_perimeter_array = get_option('oak_custom_perimeter') == false ? '' : get_option('oak_custom_perimeter');
 $custom_perimeter_array = explode( '|', $custom_perimeter_array );
 foreach( $custom_perimeter_array as $single_custom_perimeter ) :
