@@ -15,6 +15,7 @@ var selectedData = {
     qualis: [],
     quantis: [],
     goodpractices: [],
+    performances: [],
     formsAndFields: [],
     modelsAndForms: [],
 };
@@ -394,6 +395,14 @@ function addPublicationData(publicationIdentifier, termIdentifiers) {
         }
     }
 
+    // Lets get the performances: 
+    for (var i = 0; i < allData.performancesWithoutRedundancy.length; i++) {
+        performancePublicationIdentifier = allData.performancesWithoutRedundancy[i].performance_publication;
+        if (performancePublicationIdentifier == publicationIdentifier) {
+            selectedData.performances = addPerformance(selectedData.performances, allData.performancesWithoutRedundancy[i].performance_identifier, allData.performancesWithoutRedundancy[i] );
+        }
+    }
+
     // Lets get the glossaries: 
     for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
         glossaryPublicationIdentifier = allData.glossariesWithoutRedundancy[i].glossary_publication;
@@ -545,6 +554,41 @@ function addGoodpractice(goodpractices, goodpracticeIdentifier, goodpractice) {
         }
 
         return goodpractices;
+    }
+}
+
+function addPerformance(performances, performanceIdentifier, performance) {
+    var exists = false;
+    for (var i = 0; i < performances.length; i++) {
+        if (performances[i].performance_identifier == performanceIdentifier) {
+            exists = true;
+            return performances;
+        }
+    }
+    if (!exists) {
+        if (!performance) {
+        // Lets get the performance
+            for (var i = 0; i < allData.performancesWithoutRedundancy.length; i++) {
+                if (allData.performancesWithoutRedundancy[i].performance_identifier == performanceIdentifier) {
+                    performance = allData.performancesWithoutRedundancy[i];
+                }
+            }
+        }
+        if (performance) {
+            performances.push(performance);
+
+            var objectsIdentifiers = performance.performance_objects.split('|');
+            for (var j = 0; j < objectsIdentifiers.length; j++) {
+                addObject(objectsIdentifiers[j]);
+            }
+
+            var quantisIdentifiers = performance.performance_quantis.split('|');
+            for (var j = 0; j < quantisIdentifiers.length; j++) {
+                addIndicator(selectedData.quantis, quantisIdentifiers[j], 'quanti');
+            }
+        }
+
+        return performances;
     }
 }
 

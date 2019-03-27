@@ -1,5 +1,4 @@
 
-console.log('IM HERE!');
 // Global variables
 var adding = false;
 var canceling = false;

@@ -17,6 +17,7 @@ $fields_sql = "CREATE TABLE $fields_table_name (
     field_help varchar(555),
     field_description LONGTEXT,
     field_selector_options varchar(555),
+    field_publication TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -261,6 +262,44 @@ $goodpractice_sql = "CREATE TABLE $goodpractices_table_name (
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 dbDelta( $goodpractice_sql );
+
+$performance_table_name = Oak::$performance_table_name;
+$performance_sql = "CREATE TABLE $performance_table_name (
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    performance_designation varchar(555) DEFAULT '' NOT NULL,
+    performance_identifier varchar(555) DEFAULT '' NOT NULL,
+    performance_selector varchar(555),
+    performance_locked varchar(555),
+    performance_trashed varchar(555),
+    performance_state varchar(555),
+    performance_modification_time datetime,
+    performance_type TEXT,
+    performance_distance_unity TEXT,
+    performance_volume_unity TEXT,
+    performance_mass_unity TEXT,
+    performance_surface_unity TEXT,
+    performance_money_unity TEXT,
+    performance_ratio_unity TEXT,
+    performance_raw_unity TEXT,
+    performance_occupation_perimeter TEXT,
+    performance_country TEXT,
+    performance_region TEXT,
+    performance_custom_perimeter TEXT,
+    performance_goal_year TEXT,
+    performance_goal TEXT,
+    performance_estimated TEXT,
+    performance_year_1 TEXT,
+    performance_year_2 TEXT,
+    perfromance_year_3 TEXT,
+    performance_year_4 TEXT, 
+    performance_year_5 TEXT,
+    performance_publication TEXT,
+    performance_quantis TEXT,
+    performance_objects TEXT,
+    PRIMARY KEY (id)
+) $charset_collate;";
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+dbDelta( $performance_sql );
 
 $terms_and_objects_table_name = Oak::$terms_and_objects_table_name;
 $terms_and_objects_sql= "CREATE TABLE $terms_and_objects_table_name (

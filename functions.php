@@ -11,6 +11,7 @@ class Oak {
     public static $qualis_table_name;
     public static $quantis_table_name;
     public static $goodpractices_table_name;
+    public static $performance_table_name;
     public static $taxonomies_table_name;
     public static $terms_and_objects_table_name;
     public static $forms_and_fields_table_name;
@@ -74,6 +75,10 @@ class Oak {
     public static $goodpractices_without_redundancy;
     public static $goodpractice_properties;
 
+    public static $performances;
+    public static $performances_without_redundancy;
+    public static $performance_properties;
+
     public static $taxonomies;
     public static $taxonomies_without_redundancy = [];
     public static $taxonomy_properties;
@@ -105,6 +110,7 @@ class Oak {
         Oak::$qualis_table_name = $wpdb->prefix . 'oak_qualis';
         Oak::$quantis_table_name = $wpdb->prefix . 'oak_quantis';
         Oak::$goodpractices_table_name = $wpdb->prefix . 'oak_goodpractices';
+        Oak::$performance_table_name = $wpdb->prefix . 'oak_performances';
         Oak::$terms_and_objects_table_name = $wpdb->prefix . 'oak_terms_and_objects';
         Oak::$forms_and_fields_table_name = $wpdb->prefix . 'oak_forms_and_fields';
         Oak::$models_and_forms_table_name = $wpdb->prefix . 'oak_models_and_forms';
@@ -116,7 +122,7 @@ class Oak {
 
         // $this->delete_everything();
 
-        Oak::$field_types = array ( 
+        Oak::$field_types = array (
             array ( 'value' => 'Texte', 'innerHTML' => 'Texte' ), 
             array ( 'value' => 'Zone de Texte', 'innerHTML' => 'Zone de Texte'), 
             array ( 'value' => 'Image', 'innerHTML' => 'Image' ),
@@ -129,6 +135,7 @@ class Oak {
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'oak_custom_elementor' ), 99 );
 
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_styles' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_scripts' ) );
@@ -193,7 +200,14 @@ class Oak {
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
     }
 
+    function oak_custom_elementor() {
+        // For custom elementor
+        wp_register_script('oak_custom_elementor', get_template_directory_uri() . '/src/js/custom-elementor.js', array('jquery'), null, true );
+        wp_enqueue_script('oak_custom_elementor');
+    }
+
     function oak_enqueue_scripts() {
+
         wp_enqueue_media();
 
         if ( strpos( get_page_template(), "critical-analysis" ) != false ) :
@@ -385,6 +399,12 @@ class Oak {
                 $elements = Oak::$goodpractices;
                 $properties = array_merge( $properties, Oak::$goodpractice_properties );
             endif;
+            if ( $_GET['elements'] == 'performances' ) :
+                $table = 'performance';
+                $table_in_plural = 'performances';
+                $elements = Oak::$performances;
+                $properties = array_merge( $properties, Oak::$performance_properties );
+            endif;
             if ( $_GET['elements'] == 'objects' ) :
                 $table = 'object';
                 $table_in_plural = $_GET['model_identifier'];
@@ -509,7 +529,8 @@ class Oak {
         endforeach;
     }
 
-    function oak_add_meta_data() {
+    static function oak_add_meta_data() {
+        $the_returned_fields = [];
         // We need to delete all post meta first to avoid old unneccesary data
         $metas = get_post_meta( get_the_ID() );
         foreach( $metas as $key => $meta ) :
@@ -530,9 +551,18 @@ class Oak {
                 SELECT * 
                 FROM  $table_name
             " );
+            $objects = array_reverse( $objects );
             foreach( $objects as $object ) : 
                 if ( in_array( $object->object_identifier, $selected_objects ) ) :
-                    $our_objects[] = $object;
+                    $exists = false;
+                    foreach( $our_objects as $already_added_object ) :
+                        if ( $already_added_object->object_identifier == $object->object_identifier ) :
+                            $exists = true;
+                        endif;
+                    endforeach;
+                    if ( !$exists ) :
+                        $our_objects[] = $object;
+                    endif;
                 endif;
             endforeach;
         endforeach;
@@ -566,6 +596,7 @@ class Oak {
                         break;
                     endswitch;
                     $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field_name;
+                    $field_type = '';
                     if ( count ( $key_devided ) > 2 ) :
                         $field_identifier = $key_devided[2];
                         foreach( Oak::$fields_without_redundancy as $field ) :
@@ -581,13 +612,38 @@ class Oak {
                                 $number_of_times_designation_was_used = $number_of_times_designation_was_used == 0 ? '' : $number_of_times_designation_was_used + 1;
                                 $field_designations_used[] = $field->field_designation;
                                 $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field->field_designation . ' ' . $number_of_times_designation_was_used;
+                                $field_type = $field->field_type;
                             endif;
                         endforeach;
                     endif;
+                    $the_returned_fields [] = array(
+                        'field_designation' => $field_designation,
+                        'value' => $value,
+                        'field_type' => $field_type
+                    );
                     update_post_meta( get_the_ID(), $field_designation, $value );
                 endif;
             endforeach;
         endforeach;
+
+        $query_images_args = array(
+            'post_type'      => 'attachment',
+            'post_mime_type' => 'image',
+            'post_status'    => 'inherit',
+            'posts_per_page' => - 1,
+        );
+        
+        $query_images = new WP_Query( $query_images_args );	
+        $images = array();
+        foreach ( $query_images->posts as $image ) {
+            $images[] = array ( 'url' => wp_get_attachment_url( $image->ID ), 'id' => $image->ID );
+        }	
+
+        // I pass the data to dynamic tags via the table options (Because there is an error of denied access if I happen to do this in the register controls function)
+        update_option( 'oak_post_elementor_fields', $the_returned_fields );
+        update_option( 'oak_all_images', $images );
+
+        return $the_returned_fields;
     }
 
     function oak_add_meta_box_to_posts_view( $post, $args ) {
@@ -652,8 +708,6 @@ class Oak {
         // header('Access-Control-Allow-Origin: http://localhost:8888/test/wp-admin/admin-ajax.php');
     }
 
-    
-
     function oak_elementor_initialization() {
         if ( get_option('oak_corn') == 'true' ) :
             if ( !did_action( 'elementor/loaded' ) == 1 ) :
@@ -676,14 +730,7 @@ class Oak {
             include_once get_template_directory() . '/functions/elementor/dynamic_tag.php';
 
             $tag = new Dynamic_Tag();
-            $tag->set_tag_options( array(
-                'name' => 'field',
-                'title' => 'Le titre',
-                'group' => 'oak',
-                'param_name' => 'param_name',
-            ) ); 
-            $dynamic_tags->register_tag( $tag );
-            // $dynamic_tags->register_tag( 'Dynamic_Tag' );
+            $dynamic_tags->register_tag( 'Dynamic_Tag' );
         } );
     }
 
@@ -1040,6 +1087,11 @@ class Oak {
                 $table = 'goodpractice';
                 $title = __( 'Ajouter une Bonne Pratique', Oak::$text_domain );
             break;
+            case 'performances':
+                $properties = Oak::$performance_properties;
+                $table = 'performance';
+                $title = __( 'Ajouter une Donnée de performance', Oak::$text_domain );
+            break;
             case 'glossaries': 
                 $properties = Oak::$glossary_properties;
                 $table = 'glossary';
@@ -1144,6 +1196,14 @@ class Oak {
                 $first_property = array ( 'title' => __( 'Nom', Oak::$text_domain ), 'property' => 'goodpractice_designation' );
                 $second_property = array ( 'title' => __( 'Nom Court', Oak::$text_domain ), 'property' => 'goodpractice_short_designation' );
                 $third_property = array ( 'title' => __( 'Lien', Oak::$text_domain ), 'property' => 'goodpractice_link' );;
+            break;
+            case 'performances' :
+                $title = __( 'Données de performances', Oak::$text_domain );
+                $elements = Oak::$performances_without_redundancy;
+                $table = 'performance';
+                $first_property = array ( 'title' => __( 'Nom', Oak::$text_domain ), 'property' => 'performance_designation' );
+                $second_property = array ( 'title' => __( 'Type', Oak::$text_domain ), 'property' => 'performance_type' );
+                $third_property = array ( 'title' => __( 'Objectif', Oak::$text_domain ), 'property' => 'performance_goal' );;
             break;
             case 'objects' :
                 $reversed_objects = array_reverse( Oak::$objects  );
@@ -1824,6 +1884,25 @@ class Oak {
             endif;
         endforeach;
 
+        $performances_table_name = $wpdb->prefix . 'oak_performances';
+        $performances = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $performances_table_name
+        " );
+        $reversed_performances = array_reverse( $performances );
+        $performances_without_redundancy = [];
+        foreach( $reversed_performances as $performance ) :
+            $added = false;
+            foreach( $performances_without_redundancy as $performance_without_redundancy ) :
+                if ( $performance_without_redundancy->performance_identifier == $performance->performance_identifier ) :
+                    $added = true;
+                endif;
+            endforeach;
+            if ( !$added ) :
+                $performances_without_redundancy[] = $performance;
+            endif;
+        endforeach;
+
         $glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
         $glossaries = $wpdb->get_results ( "
             SELECT * 
@@ -1872,6 +1951,8 @@ class Oak {
             'quantisWithoutRedundancy' => $quantis_without_redundancy,
             'goodpractices' => $goodpractices,
             'goodpracticesWithoutRedundancy' => $goodpractices_without_redundancy,
+            'performances' => $performances,
+            'performancesWithoutRedundancy' => $performances_without_redundancy,
             'glossaries' => $glossaries,
             'glossariesWithoutRedundancy' => $glossaries_without_redundancy,
             'termsAndObjects' => $terms_and_objects
@@ -2026,6 +2107,7 @@ class Oak {
         $qualis = $selected_data['qualis'];
         $quantis = $selected_data['quantis'];
         $goodpractices = $selected_data['goodpractices'];
+        $performances = $selected_data['performances'];
         $terms_and_objects = $selected_data['termsAndObjects'];
         $models_and_forms = $selected_data['modelsAndForms'];
         $forms_and_fields = $selected_data['formsAndFields'];
@@ -2041,6 +2123,7 @@ class Oak {
         $this->corn_save_element( $qualis, Oak::$qualis_table_name );
         $this->corn_save_element( $quantis, Oak::$quantis_table_name );
         $this->corn_save_element( $goodpractices, Oak::$goodpractices_table_name );
+        $this->corn_save_element( $performances, Oak::$performances_table_name );
         $this->corn_save_element( $terms_and_objects, Oak::$terms_and_objects_table_name );
         
         $this->corn_save_element( $forms_and_fields, Oak::$forms_and_fields_table_name );

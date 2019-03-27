@@ -335,6 +335,16 @@ Oak::$field_properties =  array (
         'description' => __( 'Instruction liée à la forme comme au fond à apporter au contenu. Elle apparaîtront dans le volet des composants (à droite).', Oak::$text_domain ), 
         'width' => '100' 
     ),
+    array( 
+        'name' => 'publication', 
+        'property_name' => 'field_publication', 
+        'type' => 'text', 
+        'input_type' => 'select', 
+        'select_multiple' => 'false', 
+        'choices' => $publications_array,
+        'description' => __( 'Publication', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
 );
 
 $form_structures = array (
@@ -1284,68 +1294,246 @@ Oak::$goodpractice_properties = array(
     ),
 );
 
-// Oak::$object_properties = array (
-//     array(
-//         'name' => 'quanti', 
-//         'property_name' => 'object_quanti', 
-//         'type' => 'text',
-//         'input_type' => 'select',
-//         'select_multiple' => 'false',
-//         'choices' => $quantis_array,
-//         'placeholder' => __( 'Indicateur Quantitatif:', Oak::$text_domain ), 
-//         'description' => __( 'Indicateur Quantitatif:', Oak::$text_domain ), 
-//         'width' => '50',
-//     ),
-//     array(
-//         'name' => 'title', 
-//         'property_name' => 'object_title', 
-//         'type' => 'text',
-//         'input_type' => 'text',
-//         'placeholder' => __( 'Titre', Oak::$text_domain ),
-//         'description' => __( 'Titre', Oak::$text_domain ),
-//         'width' => '50'
-//     ),
-//     array(
-//         'name' => 'commentary', 
-//         'property_name' => 'object_commentary', 
-//         'type' => 'text',
-//         'input_type' => 'text',
-//         'placeholder' => __( 'Commentaire', Oak::$text_domain ),
-//         'description' => __( 'Commentaire', Oak::$text_domain ),
-//         'width' => '100'
-//     ),
-//     array(
-//         'name' => 'example', 
-//         'property_name' => 'object_example', 
-//         'type' => 'text',
-//         'input_type' => 'text',
-//         'placeholder' => __( 'Exemple', Oak::$text_domain ),
-//         'description' => __( 'Exemple', Oak::$text_domain ),
-//         'width' => '100'
-//     ),
-// );
+Oak::$performance_properties = array(
+    array ( 
+        'name' => 'type', 
+        'property_name' => 'performance_type', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'distance', 'innerHTML' => __( 'Distance', Oak::$text_domain ) ),
+            array( 'value' => 'volume', 'innerHTML' => __( 'Volume', Oak::$text_domain ) ),
+            array( 'value' => 'mass', 'innerHTML' => __( 'Masse', Oak::$text_domain ) ),
+            array( 'value' => 'surface', 'innerHTML' => __( 'Surface', Oak::$text_domain ) ),
+            array( 'value' => 'money', 'innerHTML' => __( 'Monnaie', Oak::$text_domain ) ),
+            array( 'value' => 'ratio', 'innerHTML' => __( 'Ratio', Oak::$text_domain ) ),
+            array( 'value' => 'raw', 'innerHTML' => __( 'Brut', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Indicteurs', Oak::$text_domain ), 
+        'description' => __( 'Indicteurs.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array ( 
+        'name' => 'distance_unity', 
+        'property_name' => 'performance_distance_unity', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'm', 'innerHTML' => __( 'M', Oak::$text_domain ) ),
+            array( 'value' => 'km', 'innerHTML' => __( 'Volume', Oak::$text_domain ) ),
+            array( 'value' => 'ft', 'innerHTML' => __( 'Ft', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Distance', Oak::$text_domain ), 
+        'description' => __( 'Unité de Distance.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array ( 
+        'name' => 'volume_unity', 
+        'property_name' => 'performance_volume_unity', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'm3', 'innerHTML' => __( 'M^3', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Volume', Oak::$text_domain ), 
+        'description' => __( 'Unité de Volume.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array ( 
+        'name' => 'mass_unity', 
+        'property_name' => 'performance_mass_unity', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'kg', 'innerHTML' => __( 'KG', Oak::$text_domain ) ),
+            array( 'value' => 'lb', 'innerHTML' => __( 'LB', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Masse', Oak::$text_domain ), 
+        'description' => __( 'Unité de Masse.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array ( 
+        'name' => 'surface_unity',
+        'property_name' => 'performance_surface_unity', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'm2', 'innerHTML' => __( 'M^2', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Surface', Oak::$text_domain ), 
+        'description' => __( 'Unité de Surface.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array ( 
+        'name' => 'money_unity', 
+        'property_name' => 'performance_money_unity', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => '€', 'innerHTML' => __( '€', Oak::$text_domain ) ),
+            array( 'value' => '$', 'innerHTML' => __( '$', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Monnaie', Oak::$text_domain ), 
+        'description' => __( 'Unité de Monnaie.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array ( 
+        'name' => 'ratio_unity', 
+        'property_name' => 'performance_ratio_unity', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => '%', 'innerHTML' => __( '%', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Ratio', Oak::$text_domain ), 
+        'description' => __( 'Unité de Ratio.', Oak::$text_domain ), 
+        'width' => '50'
+    ),
+    array ( 
+        'name' => 'raw_unity', 
+        'property_name' => 'performance_raw_unity', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            // array( 'value' => '%', 'innerHTML' => __( '%', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Ratio', Oak::$text_domain ), 
+        'description' => __( 'Unité de Ratio.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array (
+        'name' => 'occupation_perimeter', 
+        'property_name' => 'performance_occupation_perimeter', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => '%', 'innerHTML' => __( '%', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Ratio', Oak::$text_domain ), 
+        'description' => __( 'Unité de Ratio.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array (
+        'name' => 'country', 
+        'property_name' => 'performance_country', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => $countries,
+        'placeholder' => __( 'Pays', Oak::$text_domain ), 
+        'description' => __( 'Pays.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array (
+        'name' => 'region', 
+        'property_name' => 'performance_region', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => $countries,
+        'placeholder' => __( 'Région', Oak::$text_domain ), 
+        'description' => __( 'Région.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array (
+        'name' => 'custom_perimeter', 
+        'property_name' => 'performance_custom_perimeter', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
 
+        ),
+        'placeholder' => __( 'Custom Perimeter', Oak::$text_domain ), 
+        'description' => __( 'Custom Perimeter.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array (
+        'name' => 'goal_year', 
+        'property_name' => 'performance_goal_year', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => $years,
+        'placeholder' => __( 'Année', Oak::$text_domain ), 
+        'description' => __( 'Année.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array (
+        'name' => 'goal', 
+        'property_name' => 'performance_goal', 
+        'type' => 'text',
+        'input_type' => 'text',
+        'placeholder' => __( 'Objectif', Oak::$text_domain ), 
+        'description' => __( 'Objectif.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array (
+        'name' => 'estimated', 
+        'property_name' => 'performance_estimated', 
+        'type' => 'text',
+        'input_type' => 'text',
+        'placeholder' => __( 'Estimation', Oak::$text_domain ), 
+        'description' => __( 'Estimation.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    
+);
 
-// for ( $i = 1; $i <= 5; $i++ ) :
-//     $year = 5 - $i + 1;
-//     Oak::$object_properties[] = array(
-//         'name' => 'year_' . $year, 
-//         'property_name' => 'object_year_' . $year, 
-//         'type' => 'text',
-//         'input_type' => 'text',
-//         'placeholder' => date('Y') - ( $year ),
-//         'description' => date('Y') - ( $year ),
-//         'width' => $i == 5 ? '100' : '50'
-//     );
-// endfor;
+for ( $i = 1; $i <= 5; $i++ ) :
+    $year = 5 - $i + 1;
+    Oak::$performance_properties[] = array(
+        'name' => 'year_' . $year, 
+        'property_name' => 'performance_year_' . $year, 
+        'type' => 'text',
+        'input_type' => 'text',
+        'placeholder' => date('Y') - ( $year ),
+        'description' => date('Y') - ( $year ),
+        'width' => $i == 5 ? '100' : '50'
+    );
+endfor;
 
-// $next_year = date('Y') + 1;
-// Oak::$object_properties[] = array(
-//     'name' => 'objectif', 
-//     'property_name' => 'object_objectif', 
-//     'type' => 'text',
-//     'input_type' => 'text',
-//     'placeholder' => __( 'Objectif ' . $next_year, Oak::$text_domain ),
-//     'description' => __( 'Objectif ' . $next_year, Oak::$text_domain ),
-//     'width' => '100'
-// );
+Oak::$performance_properties[] = array(
+    array ( 
+        'name' => 'publication', 
+        'property_name' => 'performance_publication', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => $publications_array,
+        'placeholder' => __( 'Publication', Oak::$text_domain ), 
+        'description' => __( 'Publication.', Oak::$text_domain ), 
+        'width' => '50'
+    ),
+    array ( 
+        'name' => 'quantis', 
+        'property_name' => 'performance_quantis', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'true',
+        'choices' => $quantis_array,
+        'placeholder' => __( 'Indicteurs', Oak::$text_domain ), 
+        'description' => __( 'Indicteurs.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array ( 
+        'name' => 'objects', 
+        'property_name' => 'performance_objects', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'true',
+        'choices' => $objects_array,
+        'placeholder' => __( 'Objects liés', Oak::$text_domain ), 
+        'description' => __( 'Objects liés.', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+);
