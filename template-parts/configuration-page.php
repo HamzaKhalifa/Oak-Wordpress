@@ -6,8 +6,33 @@
     </div>
     <div class="oak_configuration_page_field_container oak_configuration_page_central_url_field_container <?php if( get_option( 'oak_corn' ) != 'true' ) : echo('oak_hidden'); endif; ?>">
         <label class="oak_configuration_page__label" for="central-url"><?php _e( 'Veuillez entrer l\'URL du central: ' ); ?></label>
-        <input value="<?php echo( get_option('oak_central_url') ); ?>" type="text" class="oak_configuration_page_field_container__url_input" name="central-url">
+        <input value="<?php echo( get_option('oak_central_url') ); ?>" type="text" class="oak_configuration_page__input oak_configuration_page_field_container__url_input" name="central-url">
     </div>
+
+    <div class="oak_configuration_page_field_container <?php if( get_option( 'oak_corn' ) != 'true' ) : echo('oak_hidden'); endif; ?>">
+        <label class="oak_configuration_page__label"><?php _e( 'Périmètre métier: ' ); ?></label>
+        <input placeholder="<?php _e( 'Exemple: Valeur 1|Valeur 2|Valeur 3', Oak::$text_domain ) ?>" value="<?php echo( get_option('oak_business_line') ); ?>" type="text" class="oak_configuration_page__input oak_configuration_page_field_container__business_line">
+    </div>
+
+    <h2 class="oak_configuration_page_perimeter_title"><?php _e( 'Périmètre géographique: ' ); ?></h2>
+
+    <div class="oak_confiugration_page__perimeter_field oak_configuration_page_field_container <?php if( get_option( 'oak_corn' ) != 'true' ) : echo('oak_hidden'); endif; ?>">
+        <input type="checkbox" class="oak_configuration_page__perimeter_checkbox">
+        <label class="oak_configuration_page__label"><?php _e( 'Pays' ); ?></label>
+    </div>
+
+    <div class="oak_confiugration_page__perimeter_field oak_configuration_page_field_container <?php if( get_option( 'oak_corn' ) != 'true' ) : echo('oak_hidden'); endif; ?>">
+        <input type="checkbox" class="oak_configuration_page__perimeter_checkbox">
+        <label class="oak_configuration_page__label"><?php _e( 'Régions: ' ); ?></label>
+        <input placeholder="<?php _e( 'Exemple: Valeur 1|Valeur 2|Valeur 3', Oak::$text_domain ) ?>" value="<?php echo( get_option('oak_regions') ); ?>" type="text" class="oak_configuration_page__input oak_configuration_page_field_container__regions">
+    </div>
+
+    <div class="oak_confiugration_page__perimeter_field oak_configuration_page_field_container <?php if( get_option( 'oak_corn' ) != 'true' ) : echo('oak_hidden'); endif; ?>">
+        <input type="checkbox" class="oak_configuration_page__perimeter_checkbox">
+        <label class="oak_configuration_page__label"><?php _e( 'Périmètre personalisé: ' ); ?></label>
+        <input placeholder="<?php _e( 'Exemple: Valeur 1|Valeur 2|Valeur 3', Oak::$text_domain ) ?>" value="<?php echo( get_option('oak_custom_perimeter') ); ?>" type="text" class="oak_configuration_page__input oak_configuration_page_field_container__custom_perimeter">
+    </div>
+
     <span class="oak_configuration_page_save_central_url_button"><?php _e( 'Sauvegarder', Oak::$text_domain ); ?></span>
 </div>
 

@@ -3,6 +3,9 @@
     saveConfigurationButton.addEventListener('click', function() {
         var central = document.querySelector('.oak_configuration_page_checkbox').checked;
         var centralUrl = document.querySelector('.oak_configuration_page_field_container__url_input').value;
+        var businessLine = document.querySelector('.oak_configuration_page_field_container__business_line').value;
+        var regions = document.querySelector('.oak_configuration_page_field_container__regions').value;
+        var customPerimeter = document.querySelector('.oak_configuration_page_field_container__custom_perimeter').value;
         setLoading();
         jQuery(document).ready(function() {
             jQuery.ajax({
@@ -12,7 +15,11 @@
                     'action': 'oak_save_configuration',
                     'data': {
                         central,
-                        centralUrl: centralUrl
+                        centralUrl: centralUrl,
+                        businessLine,
+                        customPerimeter,
+                        whichPerimeter: DATA.whichPerimeter,
+                        regions
                     },
                 },
                 success: function(data) {
@@ -38,6 +45,26 @@
             centralUrlFieldContainer.classList.add('oak_hidden');
     });
 })();
+
+// For the perimeter checkboxes 
+handlePerimetersCheckboxes();
+function handlePerimetersCheckboxes() {
+    var checkboxes = document.querySelectorAll('.oak_configuration_page__perimeter_checkbox');
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (DATA.oakWhichPerimeter == i) {
+            checkboxes[i].checked = true;
+        }
+        checkboxes[i].setAttribute('index', i);
+        checkboxes[i].addEventListener('change', function() {
+            DATA.whichPerimeter = this.getAttribute('index');
+            for (var j = 0; j < checkboxes.length; j++) {
+                if (j != this.getAttribute('index')) {
+                    checkboxes[j].checked = false;
+                }
+            }
+        });
+    }
+}
 
 function openModal(title, twoButtons) {
     var confirmButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');

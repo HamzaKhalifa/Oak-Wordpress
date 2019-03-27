@@ -1803,8 +1803,25 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   margin-top: 1px;
 }
 
-.oak_configuration_page_field_container__url_input {
+.oak_configuration_page__input {
   width: 400px;
+}
+
+.oak_configuration_page__label {
+  width: 200px;
+}
+
+.oak_configuration_page_perimeter_title {
+  margin-bottom: 10px;
+}
+
+.oak_configuration_page__perimeter_checkbox {
+  margin-right: 10px !important;
+  margin-top: 1px !important;
+}
+
+.oak_confiugration_page__perimeter_field {
+  margin-left: 30px;
 }
 
 .oak_import_page {

@@ -263,8 +263,8 @@ $goodpractice_sql = "CREATE TABLE $goodpractices_table_name (
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 dbDelta( $goodpractice_sql );
 
-$performance_table_name = Oak::$performance_table_name;
-$performance_sql = "CREATE TABLE $performance_table_name (
+$performances_table_name = Oak::$performances_table_name;
+$performance_sql = "CREATE TABLE $performances_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     performance_designation varchar(555) DEFAULT '' NOT NULL,
     performance_identifier varchar(555) DEFAULT '' NOT NULL,
@@ -281,7 +281,7 @@ $performance_sql = "CREATE TABLE $performance_table_name (
     performance_money_unity TEXT,
     performance_ratio_unity TEXT,
     performance_raw_unity TEXT,
-    performance_occupation_perimeter TEXT,
+    performance_business_line TEXT,
     performance_country TEXT,
     performance_region TEXT,
     performance_custom_perimeter TEXT,
@@ -290,7 +290,7 @@ $performance_sql = "CREATE TABLE $performance_table_name (
     performance_estimated TEXT,
     performance_year_1 TEXT,
     performance_year_2 TEXT,
-    perfromance_year_3 TEXT,
+    performance_year_3 TEXT,
     performance_year_4 TEXT, 
     performance_year_5 TEXT,
     performance_publication TEXT,
@@ -482,6 +482,26 @@ foreach( $reversed_goodpractices as $goodpractice ) :
     endif;
 endforeach;
 Oak::$goodpractices_without_redundancy = $goodpractices_without_redundancy;
+
+$performances_table_name = Oak::$performances_table_name;
+Oak::$performances = $wpdb->get_results ( "
+    SELECT * 
+    FROM  $performances_table_name
+" );
+$reversed_performances = array_reverse( Oak::$performances );
+$performances_without_redundancy = [];
+foreach( $reversed_performances as $performance ) :
+    $added = false;
+    foreach( $performances_without_redundancy as $performance_without_redundancy ) :
+        if ( $performance_without_redundancy->performance_identifier == $performance->performance_identifier) :
+            $added = true;
+        endif;
+    endforeach;
+    if ( !$added ) :
+        $performances_without_redundancy[] = $performance;
+    endif;
+endforeach;
+Oak::$performances_without_redundancy = $performances_without_redundancy;
 
 $glossaries_table_name = Oak::$glossaries_table_name;
 Oak::$glossaries = $wpdb->get_results ( "

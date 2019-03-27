@@ -172,6 +172,12 @@
                 'submenuelement' => true
             ),
             array(
+                'title' => __( 'Données de Performance', Oak::$text_domain ),
+                'url' => '?page=oak_elements_list&elements=performances&listorformula=list',
+                'icon' => 'fas fa-th-large',
+                'submenuelement' => true
+            ),
+            array(
                 'title' => __( 'Modèles', Oak::$text_domain ),
                 'url' => '',
                 'icon' => 'fas fa-th-large',

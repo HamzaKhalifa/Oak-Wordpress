@@ -11,7 +11,7 @@ class Oak {
     public static $qualis_table_name;
     public static $quantis_table_name;
     public static $goodpractices_table_name;
-    public static $performance_table_name;
+    public static $performances_table_name;
     public static $taxonomies_table_name;
     public static $terms_and_objects_table_name;
     public static $forms_and_fields_table_name;
@@ -110,7 +110,7 @@ class Oak {
         Oak::$qualis_table_name = $wpdb->prefix . 'oak_qualis';
         Oak::$quantis_table_name = $wpdb->prefix . 'oak_quantis';
         Oak::$goodpractices_table_name = $wpdb->prefix . 'oak_goodpractices';
-        Oak::$performance_table_name = $wpdb->prefix . 'oak_performances';
+        Oak::$performances_table_name = $wpdb->prefix . 'oak_performances';
         Oak::$terms_and_objects_table_name = $wpdb->prefix . 'oak_terms_and_objects';
         Oak::$forms_and_fields_table_name = $wpdb->prefix . 'oak_forms_and_fields';
         Oak::$models_and_forms_table_name = $wpdb->prefix . 'oak_models_and_forms';
@@ -269,7 +269,8 @@ class Oak {
         if ( get_current_screen()->id == 'toplevel_page_oak_materiality_reporting' ) :
             wp_enqueue_script( 'oak_configuration_script', get_template_directory_uri() . '/src/js/configuration-page.js', array('jquery'), false, true );
             wp_localize_script( 'oak_configuration_script', 'DATA', array(
-                'ajaxUrl' => admin_url( 'admin-ajax.php' )
+                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                'oakWhichPerimeter' => get_option('oak_which_perimeter') != false ? get_option('oak_which_perimeter') : 0
             ) );
         endif;
 
@@ -1029,9 +1030,17 @@ class Oak {
         $data = $_POST['data'];
         $central = $data['central'];
         $central_url = $data['centralUrl'];
+        $business_line = $data['businessLine'];
+        $which_perimeter = $data['whichPerimeter'];
+        $regions = $data['regions'];
+        $custom_perimeter = $data['customPerimeter'];
 
         update_option( 'oak_corn', $central );
         update_option( 'oak_central_url', $central_url );
+        update_option( 'oak_business_line', $business_line );
+        update_option( 'oak_which_perimeter', $which_perimeter );
+        update_option( 'oak_regions', $regions );
+        update_option( 'oak_custom_perimeter', $custom_perimeter );
 
         wp_send_json_success( array(
             'central' => $central,

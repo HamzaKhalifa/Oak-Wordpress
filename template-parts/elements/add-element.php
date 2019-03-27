@@ -142,16 +142,19 @@ $modification_time_property = $table . '_modification_time';
 
         $first = true;
         $form_designation = '';
+        $model_and_form_id = '';
         
         foreach( $properties as $key => $property ) :
             if ( isset( $property['model_and_form_instance'] ) ) :
                 // For the form new designation: 
                 $form_new_designation = $property['form']->form_designation;
+                $model_and_form_new_id = $property['model_and_form_instance']->id;
                 if ( $property['model_and_form_instance']->form_designation != '' ) :
                     $form_new_designation = $property['model_and_form_instance']->form_designation;
                 endif;
-                if ( $form_designation != $form_new_designation ) :
+                if ( $form_designation != $form_new_designation || $model_and_form_id != $model_and_form_new_id ) :
                     $form_designation = $form_new_designation;
+                    $model_and_form_id = $property['model_and_form_instance']->id;
                 ?>
                     <div class="oak_add_element_container__horizontal_container">
                         <h2 class="oak_add_element_formula_title"><?php echo( $form_new_designation ); ?></h2>
@@ -215,7 +218,7 @@ $modification_time_property = $table . '_modification_time';
                     <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
                 </div><?php
             elseif ( $property['input_type'] == 'select' ) : ?>
-                <div class="oak_select_container">
+                <div class="oak_select_container <?php if( isset( $property['hidden'] ) ) : if( $property['hidden'] == 'true' ) : echo('oak_hidden'); endif; endif; ?>">
                     <div class="additional_container">
                         <select <?php if( $property['select_multiple'] == 'true' ) : echo('multiple'); endif; ?> type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
                             <?php 
@@ -229,9 +232,6 @@ $modification_time_property = $table . '_modification_time';
                                             $selected[ $key ] = 'selected';
                                         endif;
                                     endforeach;
-                                    // if ( $revisions[ count( $revisions ) - 1 ]->$property_name == $choice['value'] ) :
-                                    //     $selected[ $key ] = 'selected';
-                                    // endif;
                                 endif;
                                 ?>
                                 <option <?php echo( esc_attr( $selected[ $key ] ) ); ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
@@ -380,17 +380,15 @@ $modification_time_property = $table . '_modification_time';
             endif;
 
             // For the form selector
-            // var_dump( $property['form']->form_identifier );
             $at_the_end_of_form = false;
             if ( isset( $property['model_and_form_instance'] ) ) :
-                $form_identifier = $property['form']->form_identifier;
+                $model_and_form_id = $property['model_and_form_instance']->id;
                 $at_the_end_of_form = false;
                 if ( $key == count( $properties ) - 1 ) :
                     $at_the_end_of_form = true;
-                elseif( $properties[ $key + 1 ]['form']->form_identifier != $form_identifier ) :
+                elseif( $properties[ $key + 1 ]['model_and_form_instance']->id != $model_and_form_id ) :
                     $at_the_end_of_form = true;
                 endif;
-
 
                 // We are gonna set the selector for the previous form:
                 if ( $property['form']->form_selector == 'true' && $at_the_end_of_form ) :
