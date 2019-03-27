@@ -275,6 +275,16 @@ $field_functions =  array (
 );
 
 Oak::$field_properties =  array (
+    array( 
+        'name' => 'publication', 
+        'property_name' => 'field_publication', 
+        'type' => 'text', 
+        'input_type' => 'select', 
+        'select_multiple' => 'false', 
+        'choices' => $publications_array,
+        'description' => __( 'Publication', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
     array ( 
         'name' => 'type', 
         'property_name' => 'field_type', 
@@ -324,7 +334,7 @@ Oak::$field_properties =  array (
         'input_type' => 'text', 
         'placeholder' => __( 'Aide au remplissage (Optionnel)', Oak::$text_domain ), 
         'description' => __( 'Contenu qui apparaitra sous le champ.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
     array ( 
         'name' => 'description', 
@@ -334,16 +344,6 @@ Oak::$field_properties =  array (
         'placeholder' => __( 'Description (Optionnel)', Oak::$text_domain ), 
         'description' => __( 'Instruction liée à la forme comme au fond à apporter au contenu. Elle apparaîtront dans le volet des composants (à droite).', Oak::$text_domain ), 
         'width' => '100' 
-    ),
-    array( 
-        'name' => 'publication', 
-        'property_name' => 'field_publication', 
-        'type' => 'text', 
-        'input_type' => 'select', 
-        'select_multiple' => 'false', 
-        'choices' => $publications_array,
-        'description' => __( 'Publication', Oak::$text_domain ), 
-        'width' => '50' 
     ),
 );
 
