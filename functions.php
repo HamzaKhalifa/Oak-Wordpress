@@ -352,6 +352,7 @@ class Oak {
                 $elements = Oak::$models;
                 $additional_data_to_pass = array(
                     'fields' => Oak::$fields,
+                    'formsAndFields' => Oak::$all_forms_and_fields,
                     'otherElementProperties' => Oak::$model_other_elements,
                     'attributes' => Oak::$forms_attributes
                 );
@@ -1302,7 +1303,9 @@ class Oak {
     function oak_register_element() {
         global $wpdb;
 
-        $element = $_POST['element'];
+        // $element = $_POST['element'];
+        $element = json_decode( stripslashes( $_POST['element'] ), true );
+
         foreach( $element as $key => $value ) :
             $element[ $key ] = $this->oak_filter_word( $value );
         endforeach;

@@ -11,6 +11,7 @@ var properties = DATA.properties
 for (var i = 0; i < properties.length; i++) {
     elementData[DATA.table + '_' + properties[i].name] = '';
 }
+var numberOfExistingRenamingInputs = 0;
 
 // For numerotation format (for quanti and quali): 
 initializeNumerotationFormat();
@@ -47,7 +48,6 @@ function handleNumerotation(numerotationSelect) {
 }
 
 function alphaOnly(event) {
-    // console.log('dkfdkf');
     var key = event.keyCode;
     return ((key >= 65 && key <= 90) || key == 8);
 };
@@ -61,6 +61,17 @@ function textFieldsAnimations() {
             var input = this.querySelector('input') ? this.querySelector('input') : this.querySelector('textarea');
             input.focus();
         });
+    }
+
+    // Un focus all textfields and handle their state
+    for(var i = 0; i < textFields.length; i++) {
+        if (!jQuery(textFields[i].querySelector('input')).is(':focus')) {
+            var input = textFields[i].querySelector('input') ? textFields[i].querySelector('input') : textFields[i].querySelector('textarea');
+            if ( input.value == '')
+                unfocusTextField(textFields[i]);
+            else 
+                unfocusTextFieldButSomethingWritten(textFields[i]);
+        }   
     }
 
     // Add the focus listener for the input
@@ -285,7 +296,6 @@ function createElementData(state) {
                         var delimiter = '';
                         if ( j != elementData[keys[i]].length - 1 ) 
                             delimiter = '|';
-                        console.log(elementData[keys[i]][j]);
                         newValue = newValue + elementData[keys[i]][j] + delimiter;
                     }
                     elementData[keys[i]] = newValue;
@@ -312,7 +322,6 @@ function createElementData(state) {
             for (var j = 0; j < selectedObjects.length; j++) {
                 elementData.object_selectors += properties[i].name + ':' + selectedObjects[j] + '|';
             }
-            console.log('Object selectors', elementData.object_selectors);
 
             // elementData.object_selectors += properties[i].name + ':' + document.querySelector('.' + DATA.table + '_' + properties[i].name + '_selector').value + '|';
         }
@@ -349,6 +358,20 @@ function createElementData(state) {
         elementData.otherElements = otherElements;
         elementData.otherElementsProperties = DATA.otherElementProperties;
         elementData[table + '_revision_number'] = revisionNumber;
+
+        // Manage fields names:
+        if (table == 'model') {
+            var modelFieldsNames = '';
+            var renamingInputs = document.querySelectorAll('.oak_model_field_renaming_input');
+            for(var r = 0; r < renamingInputs.length; r++) {
+                var delimiter = '|';
+                if (r == renamingInputs.length - 1) 
+                    delimiter = '';
+                var fieldName = renamingInputs[r].value == '' ? ' ' : renamingInputs[r].value;
+                modelFieldsNames = modelFieldsNames + fieldName + delimiter;
+            }
+            elementData.model_fields_names = modelFieldsNames;
+        }
     }
 
     // Manage objects' terms: 
@@ -561,6 +584,26 @@ function addOtherElement(data) {
     var newElement = document.createElement('div');
     newElement.className = 'oak_other_elements_single_elements_container__single_element oak_other_elements_single_elements_container__single_element_not_checked';
     newElement.innerHTML = singleElementContainer;
+
+    // If it's a model, we are gonna allow fields renaming: 
+    if (DATA.table == 'model') {
+        if (data) {
+            addFieldsListToSelectedModelForm(data, newElement.querySelector('.oak_model_fields_renaming_container'), true);
+        }
+        // We are gonna add the listener for the selector change: 
+        var elementsSelect = newElement.querySelector('.oak_other_elements_select');
+        elementsSelect.addEventListener('change', function() {
+            var formIdentifier = this.value;
+            for (var i = 0; i < DATA.otherElementProperties.associative_tab_instances.length; i++) {
+                if (DATA.otherElementProperties.associative_tab_instances[i].form_identifier == formIdentifier 
+                    && DATA.otherElementProperties.associative_tab_instances[i].model_revision_number == DATA.revisions[DATA.revisions.length - 1].model_revision_number) {
+                        addFieldsListToSelectedModelForm(DATA.otherElementProperties.associative_tab_instances[i], this.parentNode.parentNode.parentNode.querySelector('.oak_model_fields_renaming_container'), false);
+                        textFieldsAnimations();
+                }
+            }
+        });
+    }
+
     otherElementsContainer.append(newElement);
 
     if (data) {
@@ -575,6 +618,49 @@ function addOtherElement(data) {
     handleOtherElementsFilters();
 }
 
+function addFieldsListToSelectedModelForm(data, renamingContainer, fieldNameAlreadyStored) {
+    renamingContainer.innerHTML = '';
+    for (var i = 0; i < DATA.otherElementProperties.elements.length; i++) {
+        if (DATA.otherElementProperties.elements[i].form_identifier == data.form_identifier) {
+            var formRevisionNumber = DATA.otherElementProperties.elements[i].form_revision_number;
+            for (var j = 0; j < DATA.formsAndFields.length; j++) {
+                if (DATA.formsAndFields[j].form_identifier == data.form_identifier && DATA.formsAndFields[j].form_revision_number == formRevisionNumber) {
+                    // Found a field identifier that belongs to the current form!
+
+                    var fieldFormName = DATA.formsAndFields[j].field_designation;
+                    var fieldIdentifier = DATA.formsAndFields[j].field_identifier;
+                    var counter = DATA.fields.length - 1;
+                    var foundTheField = false;
+                    do {
+                        if (DATA.fields[counter].field_identifier == fieldIdentifier) {
+                            foundTheField = true;
+                            var fieldOriginalName = DATA.fields[counter].field_designation;
+                            var fieldName = fieldFormName == '' ? fieldOriginalName : fieldFormName;
+                            if (fieldNameAlreadyStored) {
+                                
+                                
+                                fieldName = DATA.revisions[DATA.revisions.length - 1].model_fields_names.split('|')[numberOfExistingRenamingInputs];
+                            }
+
+                            numberOfExistingRenamingInputs++;
+                            var fieldContainer = document.createElement('div');
+                            fieldContainer.className = 'oak_text_field_container';
+                            fieldContainer.innerHTML = '<input type="text" value="" class="oak_text_field oak_model_field_renaming_input">'
+                            + '<span class="oak_text_field_placeholder">Nouvelle Désignation</span>'
+                            + '<div class="text_field_line"></div>'
+                            + '<span class="text_field_description"></span>'
+                            fieldContainer.querySelector('.text_field_description').innerHTML = fieldOriginalName;
+                            fieldContainer.querySelector('input').value = fieldName;
+                            renamingContainer.append(fieldContainer);
+                        }
+                        counter--;
+                    } while (counter >= 0 && !foundTheField);
+                }
+            }
+        }
+    }
+}
+
 handleOtherElementsCheckboxes();
 function handleOtherElementsCheckboxes() {
     var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
@@ -586,7 +672,6 @@ function handleOtherElementsCheckboxes() {
 }
 
 function checkboxClickListener(checkbox) {
-    console.log(checkbox);
     var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
     if (checkbox.checked) {
         checkbox.parentNode.parentNode.classList.remove('oak_other_elements_single_elements_container__single_element_not_checked');
@@ -764,12 +849,10 @@ function initializeFilesMediaModals() {
             {
                 calling_selector : callingSelector,
                 cb : function(attachments) {
-                    console.log('Attachments', attachments);
                     var ids = jQuery.map(attachments, function(attachment){
                         return attachment.id;
                     });
                     ids = JSON.stringify(ids);
-                    console.log('Attachments', attachments);
                     lastClickedFileCallingSelector.parentNode.querySelector('input').setAttribute('value', attachments[0].url);
                 }
             },
@@ -915,14 +998,13 @@ function handleModalButtons() {
         if (adding || updating) {
             closeModals();
             setLoading();
-            console.log(elementData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
                     type: 'POST',
                     data: {
                         'action': 'oak_register_element',
-                        'element': elementData,
+                        'element': JSON.stringify(elementData),
                         'table': table,
                         'tableInPlural': DATA.tableInPlural,
                         'fromRevision': false,
@@ -958,7 +1040,7 @@ function handleModalButtons() {
                     type: 'POST',
                     data: {
                         'action': 'oak_register_element',
-                        'element': revisionWithoutId,
+                        'element': JSON.stringify(revisionWithoutId),
                         'table': table,
                         'tableInPlural': DATA.tableInPlural,
                         'fromRevision': true

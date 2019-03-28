@@ -71,6 +71,7 @@ $models_sql = "CREATE TABLE $models_table_name (
     model_types varchar(555),
     model_publications_categories varchar(555),
     model_separators varchar(100),
+    model_fields_names Text,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

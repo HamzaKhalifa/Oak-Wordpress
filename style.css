@@ -1334,6 +1334,13 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   height: 33px;
 }
 
+.oak_model_fields_renaming_container {
+  margin-top: 30px;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
 .oak_system_bar {
   background-color: #000c3b;
 }

@@ -146,6 +146,15 @@ $modification_time_property = $table . '_modification_time';
         
         foreach( $properties as $key => $property ) :
             if ( isset( $property['model_and_form_instance'] ) ) :
+                // For the field new designation: 
+                $model_fields_names = '';
+                foreach( Oak::$models_without_redundancy as $model ) :
+                    if ( $model->model_identifier == $property['model_and_form_instance']->model_identifier ) :
+                        $model_fields_names = $model->model_fields_names;
+                    endif;
+                endforeach;
+                $model_fields_names_array = explode( '|', $model_fields_names );
+                $property['description'] = $model_fields_names_array[ $key ];
                 // For the form new designation: 
                 $form_new_designation = $property['form']->form_designation;
                 $model_and_form_new_id = $property['model_and_form_instance']->id;
@@ -513,7 +522,6 @@ $modification_time_property = $table . '_modification_time';
         endif;
         ?>
 
-
         <?php
         if ( $table == 'form' || $table == 'model' ) :
             if ( $table == 'form' ) 
@@ -588,6 +596,10 @@ $modification_time_property = $table . '_modification_time';
                                 <?php 
                                 endforeach;
                             ?>
+                        </div>
+
+                        <div class="oak_model_fields_renaming_container">
+
                         </div>
                     </div>
                 </div>
