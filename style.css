@@ -687,10 +687,14 @@ body .oak_hidden {
   flex: 1;
 }
 
-.oak_add_element_container__horizontal_container {
+.oak_add_element_container__horizontal_container, .oak_superficial_results_container {
   display: flex;
   align-items: center;
   padding-bottom: 15px;
+}
+
+.oak_superficial_results_container {
+  width: 100%;
 }
 
 .oak_add_element_container__type_container, .oak_add_element_container__function_container, .oak_add_element_container__default_value_container, .oak_add_element_container__before_container, .oak_add_element_container__after_container, .oak_add_element_container__max_length_container, .oak_add_element_container__selector_container {
@@ -1213,7 +1217,7 @@ input.oak_add_other_elements_list_single_element__chekcbox {
   overflow: hidden;
 }
 
-.oak_other_elements_container__add_button {
+.oak_other_elements_container__add_button, .oak_performance_result_add_button {
   background-color: #1c6bb5;
   position: absolute;
   width: 40px;
@@ -1227,16 +1231,16 @@ input.oak_add_other_elements_list_single_element__chekcbox {
   transition: all 0.2s ease-in-out;
 }
 
-.oak_other_elements_container__add_button i {
+.oak_other_elements_container__add_button i, .oak_performance_result_add_button i {
   color: white;
 }
 
-.oak_other_elements_container__add_button:hover {
+.oak_other_elements_container__add_button:hover, .oak_performance_result_add_button:hover {
   background-color: white;
   cursor: pointer;
 }
 
-.oak_other_elements_container__add_button:hover i {
+.oak_other_elements_container__add_button:hover i, .oak_performance_result_add_button:hover i {
   color: #1c6bb5;
 }
 
@@ -1339,6 +1343,18 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   display: flex;
   width: 100%;
   flex-wrap: wrap;
+}
+
+.oak_formula_title {
+  margin-top: 30px;
+  border-bottom: 1px solid #003366;
+  padding-bottom: 5px;
+  color: #003366;
+}
+
+.oak_performance_results_container {
+  position: relative;
+  margin-bottom: 50px;
 }
 
 .oak_system_bar {

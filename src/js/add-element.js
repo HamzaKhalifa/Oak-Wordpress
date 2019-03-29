@@ -402,7 +402,25 @@ function createElementData(state) {
         }
         elementData.object_form_selectors = objectFormSelectors;
     }
-    console.log('elementData', elementData);
+
+    // Manage performance results: 
+    if (DATA.table == 'performance') {
+        var performanceResults = '';
+        var singlePerformanceResults = document.querySelectorAll('.oak_single_performance_result');
+        for (var i = 0; i < singlePerformanceResults.length; i++) {
+            var delimiter = '|';
+            if ( i == singlePerformanceResults.length - 1 ) 
+                delimiter = '';
+            var year = singlePerformanceResults[i].querySelector('.performance_goal_year_input').value;
+            var goal = singlePerformanceResults[i].querySelector('.performance_goal_input').value;
+            var estimation = singlePerformanceResults[i].querySelector('.performance_estimated_input').checked;
+            var noValue = singlePerformanceResults[i].querySelector('.performance_no_value_input').checked;
+
+            performanceResults += year + ':' + goal + ':' + estimation + ':' + noValue + delimiter;
+
+            elementData.performance_results = performanceResults;
+        }
+    }
 
     return elementData;
 }
@@ -548,6 +566,59 @@ var getKeys = function(obj){
     return keys;
 }
 
+// Everything related to performance results: 
+var singlePerformanceResultModel;
+handlePerformanceResults();
+function handlePerformanceResults() {
+    if (DATA.table == 'performance') {
+        singlePerformanceResultModel = document.querySelector('.oak_single_performance_result').innerHTML;
+        document.querySelector('.oak_single_performance_result').remove();
+    }
+}
+
+initializePerformancesResults();
+function initializePerformancesResults() {
+    if (DATA.table == 'performance' && DATA.revisions.length >= 1) {
+        var performanceResults = DATA.revisions[DATA.revisions.length - 1].performance_results.split('|');
+        for (var i = 0; i < performanceResults.length; i++) {
+            var attributes = performanceResults[i].split(':');
+
+            addPerformanceResult({
+                year: attributes[0],
+                goal: attributes[1],
+                estimation: attributes[2],
+                noValue: attributes[3]
+            });
+        }
+    }
+}
+
+handlePerformanceResultAddButton();
+function handlePerformanceResultAddButton() {
+    if (DATA.table == 'performance') {
+        document.querySelector('.oak_performance_result_add_button').addEventListener('click', function() {
+            addPerformanceResult();
+            // performanceResultsContainer.innerHTML = performanceResultsContainer.innerHTML + singlePerformanceResult;
+        });
+    }
+} 
+
+function addPerformanceResult(data) {
+    var performanceResultsContainer = document.querySelector('.oak_performance_results_container');
+    var singlePerformanceResult = document.createElement('div');
+    singlePerformanceResult.className = 'oak_other_elements_single_elements_container__single_element_not_checked oak_single_performance_result oak_add_element_container__horizontal_container';
+    singlePerformanceResult.innerHTML = singlePerformanceResultModel;
+    performanceResultsContainer.append(singlePerformanceResult);
+    if (data) {
+        singlePerformanceResult.querySelector('.performance_goal_year_input').value = data.year;
+        singlePerformanceResult.querySelector('.performance_goal_input').value = data.goal;
+        singlePerformanceResult.querySelector('.performance_estimated_input').checked = data.estimation == 'true' ? true : false;
+        singlePerformanceResult.querySelector('.performance_no_value_input').checked = data.noValue == 'true' ? true : false;
+    }
+    textFieldsAnimations();
+    handleOtherElementsCheckboxes();
+}
+
 // Everything related to other elements (table relationships like forms using fields and models using forms)
 var singleElementContainer;
 if (DATA.otherElementProperties) 
@@ -684,7 +755,9 @@ function checkboxClickListener(checkbox) {
             numberOfChecked++;
     }
     // Check the number of checked checkboxes
-    document.querySelector('.oak_number_of_other_selected_elements').innerHTML = numberOfChecked;
+    var numberOfOtherSelectedElements = document.querySelector('.oak_number_of_other_selected_elements');
+    if (numberOfOtherSelectedElements)
+        numberOfOtherSelectedElements.innerHTML = numberOfChecked;
     var elementHeadder = document.querySelector('.oak_element_header');
     var otherElementsButtons = document.querySelector('.oak_element_header_right_other_elements_buttons');
     var elementHeaderRightButtons = document.querySelector('.oak_element_header_right');

@@ -1324,6 +1324,17 @@ Oak::$goodpractice_properties = array(
 
 Oak::$performance_properties = array(
     array ( 
+        'name' => 'quantis', 
+        'property_name' => 'performance_quantis', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'true',
+        'choices' => $quantis_array,
+        'placeholder' => __( 'Indicteurs', Oak::$text_domain ), 
+        'description' => __( 'Indicteurs.', Oak::$text_domain ), 
+        'width' => '100',
+    ),
+    array ( 
         'name' => 'type', 
         'property_name' => 'performance_type', 
         'type' => 'text', 
@@ -1338,10 +1349,11 @@ Oak::$performance_properties = array(
             array( 'value' => 'ratio', 'innerHTML' => __( 'Ratio', Oak::$text_domain ) ),
             array( 'value' => 'raw', 'innerHTML' => __( 'Brut', Oak::$text_domain ) ),
         ),
-        'placeholder' => __( 'Indicteurs', Oak::$text_domain ), 
-        'description' => __( 'Indicteurs.', Oak::$text_domain ), 
-        'width' => '100' ,
-        'condition' => true
+        'placeholder' => __( 'Type', Oak::$text_domain ), 
+        'description' => __( 'Type.', Oak::$text_domain ), 
+        'width' => '25' ,
+        'condition' => true,
+        'line' => 'beginning'
     ),
     array ( 
         'name' => 'distance_unity', 
@@ -1356,10 +1368,11 @@ Oak::$performance_properties = array(
         ),
         'placeholder' => __( 'Unité de Distance', Oak::$text_domain ), 
         'description' => __( 'Unité de Distance.', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '25',
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'distance' ) )
-        )
+        ),
+        'line' => 'dont_return'
     ),
     array ( 
         'name' => 'volume_unity', 
@@ -1372,10 +1385,11 @@ Oak::$performance_properties = array(
         ),
         'placeholder' => __( 'Unité de Volume', Oak::$text_domain ), 
         'description' => __( 'Unité de Volume.', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '25',
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'volume' ) )
-        )
+        ),
+        'line' => 'dont_return'
     ),
     array ( 
         'name' => 'mass_unity', 
@@ -1389,10 +1403,11 @@ Oak::$performance_properties = array(
         ),
         'placeholder' => __( 'Unité de Masse', Oak::$text_domain ), 
         'description' => __( 'Unité de Masse.', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '25',
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'mass' ) )
-        )
+        ),
+        'line' => 'dont_return'
     ),
     array ( 
         'name' => 'surface_unity',
@@ -1405,10 +1420,11 @@ Oak::$performance_properties = array(
         ),
         'placeholder' => __( 'Unité de Surface', Oak::$text_domain ), 
         'description' => __( 'Unité de Surface.', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '25',
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'surface' ) )
-        )
+        ),
+        'line' => 'dont_return'
     ),
     array ( 
         'name' => 'money_unity', 
@@ -1422,10 +1438,11 @@ Oak::$performance_properties = array(
         ),
         'placeholder' => __( 'Unité de Monnaie', Oak::$text_domain ), 
         'description' => __( 'Unité de Monnaie.', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '25',
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'money' ) )
-        )
+        ),
+        'line' => 'dont_return'
     ),
     array ( 
         'name' => 'ratio_unity', 
@@ -1438,10 +1455,11 @@ Oak::$performance_properties = array(
         ),
         'placeholder' => __( 'Unité de Ratio', Oak::$text_domain ), 
         'description' => __( 'Unité de Ratio.', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '25',
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'ratio' ) )
-        )
+        ),
+        'line' => 'dont_return'
     ),
     array ( 
         'name' => 'raw_unity', 
@@ -1454,10 +1472,11 @@ Oak::$performance_properties = array(
         ),
         'placeholder' => __( 'Brut', Oak::$text_domain ), 
         'description' => __( 'Brut.', Oak::$text_domain ), 
-        'width' => '100',
+        'width' => '25',
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'raw' ) )
-        )
+        ),
+        'line' => 'dont_return'
     ),
     array (
         'name' => 'business_line', 
@@ -1468,7 +1487,8 @@ Oak::$performance_properties = array(
         'choices' => $business_line,
         'placeholder' => __( 'Périmètre métier', Oak::$text_domain ), 
         'description' => __( 'Périmètre métier.', Oak::$text_domain ), 
-        'width' => '50' 
+        'width' => '25',
+        'line' => 'dont_return'
     ),
     array (
         'name' => 'country', 
@@ -1479,8 +1499,9 @@ Oak::$performance_properties = array(
         'choices' => $countries,
         'placeholder' => __( 'Pays', Oak::$text_domain ), 
         'description' => __( 'Pays.', Oak::$text_domain ), 
-        'width' => '50',
-        'hidden' => get_option('oak_which_perimeter') == false || get_option('oak_which_perimeter') == 0 ? 'false' : 'true'
+        'width' => '25',
+        'hidden' => get_option('oak_which_perimeter') == false || get_option('oak_which_perimeter') == 0 ? 'false' : 'true',
+        'line' => 'dont_return'
     ),
     array (
         'name' => 'region', 
@@ -1491,8 +1512,9 @@ Oak::$performance_properties = array(
         'choices' => $regions,
         'placeholder' => __( 'Région', Oak::$text_domain ), 
         'description' => __( 'Région.', Oak::$text_domain ), 
-        'width' => '50',
-        'hidden' => get_option('oak_which_perimeter') == false || get_option('oak_which_perimeter') != 1 ? 'true' : 'false'
+        'width' => '25',
+        'hidden' => get_option('oak_which_perimeter') == false || get_option('oak_which_perimeter') != 1 ? 'true' : 'false',
+        'line' => 'dont_return'
     ),
     array (
         'name' => 'custom_perimeter',
@@ -1503,8 +1525,9 @@ Oak::$performance_properties = array(
         'choices' => $custom_perimeter,
         'placeholder' => __( 'Périmètre personalisé', Oak::$text_domain ), 
         'description' => __( 'Périmètre personalisé.', Oak::$text_domain ), 
-        'width' => '50',
-        'hidden' => get_option('oak_which_perimeter') == false || get_option('oak_which_perimeter') != 2 ? 'true' : 'false'
+        'width' => '25',
+        'hidden' => get_option('oak_which_perimeter') == false || get_option('oak_which_perimeter') != 2 ? 'true' : 'false',
+        'line' => 'end_of_line'
     ),
     array (
         'name' => 'goal_year', 
@@ -1515,7 +1538,8 @@ Oak::$performance_properties = array(
         'choices' => $years,
         'placeholder' => __( 'Année', Oak::$text_domain ), 
         'description' => __( 'Année.', Oak::$text_domain ), 
-        'width' => '50' 
+        'width' => '25',
+        'line' => 'beginning'
     ),
     array (
         'name' => 'goal', 
@@ -1524,33 +1548,30 @@ Oak::$performance_properties = array(
         'input_type' => 'text',
         'placeholder' => __( 'Objectif', Oak::$text_domain ), 
         'description' => __( 'Objectif.', Oak::$text_domain ), 
-        'width' => '50' 
+        'width' => '25',
+        'line' => 'dont_return'
     ),
     array (
         'name' => 'estimated', 
         'property_name' => 'performance_estimated', 
         'type' => 'text',
-        'input_type' => 'text',
+        'input_type' => 'checkbox',
         'placeholder' => __( 'Estimation', Oak::$text_domain ), 
         'description' => __( 'Estimation.', Oak::$text_domain ), 
-        'width' => '50' 
+        'width' => '25',
+        'line' => 'dont_return'
     ),
-    
-);
-
-for ( $i = 1; $i <= 5; $i++ ) :
-    $year = 5 - $i + 1;
-    Oak::$performance_properties[] = array(
-        'name' => 'year_' . $year, 
-        'property_name' => 'performance_year_' . $year, 
+    array ( 
+        'name' => 'no_value', 
+        'property_name' => 'performance_no_value', 
         'type' => 'text',
-        'input_type' => 'text',
-        'placeholder' => date('Y') - ( $year ),
-        'description' => date('Y') - ( $year ),
-        'width' => '50'
-    );
-endfor;
-
+        'input_type' => 'checkbox',
+        'placeholder' => __( 'Aucune valeur', Oak::$text_domain ), 
+        'description' => __( 'Aucune valeur.', Oak::$text_domain ), 
+        'width' => '50',
+        'line' => 'end_of_line'
+    ),
+);
 
 $performance_other_properties = array(
     array ( 
@@ -1564,17 +1585,6 @@ $performance_other_properties = array(
         'description' => __( 'Publication.', Oak::$text_domain ), 
         'width' => '50'
     ),
-    array ( 
-        'name' => 'quantis', 
-        'property_name' => 'performance_quantis', 
-        'type' => 'text', 
-        'input_type' => 'select',
-        'select_multiple' => 'true',
-        'choices' => $quantis_array,
-        'placeholder' => __( 'Indicteurs', Oak::$text_domain ), 
-        'description' => __( 'Indicteurs.', Oak::$text_domain ), 
-        'width' => '50' 
-    ),
     array (
         'name' => 'objects', 
         'property_name' => 'performance_objects', 
@@ -1584,7 +1594,7 @@ $performance_other_properties = array(
         'choices' => $objects_array,
         'placeholder' => __( 'Objects liés', Oak::$text_domain ), 
         'description' => __( 'Objects liés.', Oak::$text_domain ), 
-        'width' => '100' 
+        'width' => '50' 
     ),
 );
 
