@@ -52,12 +52,14 @@ function submenuClick(element) {
             submenu.classList.add('oak_hidden');
         }
     }
-} 
+}
 
 function containsClass(element, className) {
-    for (var i = 0; i < element.classList.length; i++) {
-        if (className == element.classList[i]) 
-            return true;
+    if (element) {
+        for (var i = 0; i < element.classList.length; i++) {
+            if (className == element.classList[i]) 
+                return true;
+        }
     }
     return false;
 }

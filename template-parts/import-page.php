@@ -20,6 +20,7 @@
     </div>
 
     <div class="next_button_container">
+        <span class="next_button_container_cancel oak_hidden"><?php _e( 'Revenir', Oak::$text_domain ); ?></span>
         <span class="next_button_container_next oak_hidden"><?php _e( 'Etape suivante', Oak::$text_domain ); ?></span>
     </div>
 

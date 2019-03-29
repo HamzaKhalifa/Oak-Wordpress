@@ -708,8 +708,6 @@ function addFieldsListToSelectedModelForm(data, renamingContainer, fieldNameAlre
                             var fieldOriginalName = DATA.fields[counter].field_designation;
                             var fieldName = fieldFormName == '' ? fieldOriginalName : fieldFormName;
                             if (fieldNameAlreadyStored) {
-                                
-                                
                                 fieldName = DATA.revisions[DATA.revisions.length - 1].model_fields_names.split('|')[numberOfExistingRenamingInputs];
                             }
 

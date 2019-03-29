@@ -20,6 +20,8 @@ var selectedData = {
     modelsAndForms: [],
 };
 
+var steps = [];
+
 (function() {
     setLoading();
     jQuery(document).ready(function() {
@@ -50,7 +52,15 @@ var selectedData = {
         });
     });
 
-    function populateImportContainer(title, data, dataInfo, dataFields, dataType, nextStep, publicationsThatBelongNumber) {
+    function populateImportContainer(title, data, dataInfo, dataFields, dataType, nextStep, publicationsThatBelongNumber, fromCancel) {
+        var cancelButton = document.querySelector('.next_button_container_cancel');
+        if ( dataType == 'organization' ) {
+            cancelButton.classList.add('oak_hidden');
+        } else {
+            cancelButton.classList.remove('oak_hidden');
+        }
+        if (!fromCancel)
+            steps.push({title, data, dataInfo, dataFields, dataType, nextStep, publicationsThatBelongNumber});
         document.querySelector('.next_button_container_next').classList.add('oak_hidden');
         document.querySelector('.screen_title').innerHTML = title;
         var importContainer = document.querySelector('.import_container');
@@ -121,6 +131,26 @@ var selectedData = {
         });
 
         step = nextStep;
+    }
+
+    handleCancelButton();
+    function handleCancelButton() {
+        var cancelButtonContainer = document.querySelector('.next_button_container_cancel');
+        cancelButtonContainer.addEventListener('click', function() {
+            if (steps.length > 0) {
+                populateImportContainer(
+                    steps[steps.length - 2].title,
+                    steps[steps.length - 2].data,
+                    steps[steps.length - 2].dataInfo,
+                    steps[steps.length - 2].dataFields,
+                    steps[steps.length - 2].dataType,
+                    steps[steps.length - 2].nextStep,
+                    steps[steps.length - 2].publicationsThatBelongNumber,
+                    true
+                )
+            }
+            steps.splice(steps.length - 1, 1);
+        });
     }
 
     (function() {
@@ -269,7 +299,6 @@ var selectedData = {
 
                     // For the terms and objects (Gotta filter this some day)
                     selectedData.termsAndObjects = allData.termsAndObjects;
-                    console.log('selected data', selectedData);
                     jQuery(document).ready(function() {
                         jQuery.ajax({
                             type: 'POST',
