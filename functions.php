@@ -1029,6 +1029,7 @@ class Oak {
 
     function oak_save_configuration() {
         $data = $_POST['data'];
+        $default_menu = $data['defaultMenu'];
         $central = $data['central'];
         $central_url = $data['centralUrl'];
         $business_line = $data['businessLine'];
@@ -1036,6 +1037,7 @@ class Oak {
         $regions = $data['regions'];
         $custom_perimeter = $data['customPerimeter'];
 
+        update_option( 'oak_default_menu', $default_menu );
         update_option( 'oak_corn', $central );
         update_option( 'oak_central_url', $central_url );
         update_option( 'oak_business_line', $business_line );

@@ -1,7 +1,8 @@
 (function() {
     var saveConfigurationButton = document.querySelector('.oak_configuration_page_save_central_url_button');
     saveConfigurationButton.addEventListener('click', function() {
-        var central = document.querySelector('.oak_configuration_page_checkbox').checked;
+        var defaultMenu = document.querySelector('.oak_configuration_page_default_menu_checkbox').checked;
+        var central = document.querySelector('.oak_configuration_page_corn_checkbox').checked;
         var centralUrl = document.querySelector('.oak_configuration_page_field_container__url_input').value;
         var businessLine = document.querySelector('.oak_configuration_page_field_container__business_line').value;
         var regions = document.querySelector('.oak_configuration_page_field_container__regions').value;
@@ -14,6 +15,7 @@
                 data: {
                     'action': 'oak_save_configuration',
                     'data': {
+                        defaultMenu,
                         central,
                         centralUrl: centralUrl,
                         businessLine,
@@ -36,7 +38,7 @@
 })();
 
 (function() {
-    var central = document.querySelector('.oak_configuration_page_checkbox');
+    var central = document.querySelector('.oak_configuration_page_corn_checkbox');
     central.addEventListener('change', function() {
         var centralUrlFieldContainer = document.querySelector('.oak_configuration_page_central_url_field_container');
         if (this.checked) 
