@@ -494,4 +494,8 @@
     endforeach; ?>
 </div>
 
+<div class="oak_admin_menu_fixed_button">
+    <i class="fab fa-wordpress"></i>
+</div>
+
 <div class="oak_admin_menu__layer"></div>

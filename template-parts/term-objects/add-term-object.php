@@ -1,1 +1,0 @@
-<h1>Adding term object</h1>

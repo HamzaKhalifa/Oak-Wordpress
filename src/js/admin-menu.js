@@ -63,3 +63,14 @@ function containsClass(element, className) {
     }
     return false;
 }
+
+// For wordpress menu button 
+var adminMenuOpen = false;
+handleWordpressMenuButton();
+function handleWordpressMenuButton() {
+    var wordpressMenuButton = document.querySelector('.oak_admin_menu_fixed_button');
+    wordpressMenuButton.addEventListener('click', function() {
+        document.querySelector('#adminmenuwrap').style.display = adminMenuOpen == true ? 'none' : 'block';
+        adminMenuOpen = !adminMenuOpen;
+    });
+}

@@ -135,7 +135,6 @@ class Oak {
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
-        add_action( 'wp_enqueue_scripts', array( $this, 'oak_custom_elementor' ), 99 );
 
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_styles' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_scripts' ) );
@@ -199,13 +198,7 @@ class Oak {
         wp_enqueue_style( 'the_style', get_stylesheet_directory_uri() . '/style.css' );
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
     }
-
-    function oak_custom_elementor() {
-        // For custom elementor
-        wp_register_script('oak_custom_elementor', get_template_directory_uri() . '/src/js/custom-elementor.js', array('jquery'), null, true );
-        wp_enqueue_script('oak_custom_elementor');
-    }
-
+    
     function oak_enqueue_scripts() {
 
         wp_enqueue_media();
