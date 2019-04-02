@@ -237,6 +237,13 @@
             );
             $menu_elements[] = $import_page;
         endif;
+        
+        $data_studio = array(
+            'title' => __( 'Data Studio', Oak::$text_domain ),
+            'url' => '?page=oak_data_studio',
+            'icon' => 'fas fa-th-large'
+        );
+        $menu_elements[] = $data_studio;
 
         $other_menu_elements = array(
             array(

@@ -1328,7 +1328,7 @@ Oak::$performance_properties = array(
         'property_name' => 'performance_quantis', 
         'type' => 'text', 
         'input_type' => 'select',
-        'select_multiple' => 'true',
+        'select_multiple' => 'false',
         'choices' => $quantis_array,
         'placeholder' => __( 'Indicteurs', Oak::$text_domain ), 
         'description' => __( 'Indicteurs.', Oak::$text_domain ), 
@@ -1527,48 +1527,6 @@ Oak::$performance_properties = array(
         'description' => __( 'Périmètre personalisé.', Oak::$text_domain ), 
         'width' => '25',
         'hidden' => get_option('oak_which_perimeter') == false || get_option('oak_which_perimeter') != 2 ? 'true' : 'false',
-        'line' => 'end_of_line'
-    ),
-    array (
-        'name' => 'goal_year', 
-        'property_name' => 'performance_goal_year', 
-        'type' => 'text',
-        'input_type' => 'select',
-        'select_multiple' => 'false',
-        'choices' => $years,
-        'placeholder' => __( 'Année', Oak::$text_domain ), 
-        'description' => __( 'Année.', Oak::$text_domain ), 
-        'width' => '25',
-        'line' => 'beginning'
-    ),
-    array (
-        'name' => 'goal', 
-        'property_name' => 'performance_goal', 
-        'type' => 'text',
-        'input_type' => 'text',
-        'placeholder' => __( 'Objectif', Oak::$text_domain ), 
-        'description' => __( 'Objectif.', Oak::$text_domain ), 
-        'width' => '25',
-        'line' => 'dont_return'
-    ),
-    array (
-        'name' => 'estimated', 
-        'property_name' => 'performance_estimated', 
-        'type' => 'text',
-        'input_type' => 'checkbox',
-        'placeholder' => __( 'Estimation', Oak::$text_domain ), 
-        'description' => __( 'Estimation.', Oak::$text_domain ), 
-        'width' => '25',
-        'line' => 'dont_return'
-    ),
-    array ( 
-        'name' => 'no_value', 
-        'property_name' => 'performance_no_value', 
-        'type' => 'text',
-        'input_type' => 'checkbox',
-        'placeholder' => __( 'Aucune valeur', Oak::$text_domain ), 
-        'description' => __( 'Aucune valeur.', Oak::$text_domain ), 
-        'width' => '50',
         'line' => 'end_of_line'
     ),
 );

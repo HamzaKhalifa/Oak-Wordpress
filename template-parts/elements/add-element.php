@@ -411,9 +411,9 @@ $modification_time_property = $table . '_modification_time';
                                 <div class="additional_container">
                                     <input value="" class="oak_text_field performance_goal_input">
                                 </div>
-                                <span class="oak_text_field_placeholder">Objectif</span>
+                                <span class="oak_text_field_placeholder">Valeur</span>
                                 <div class="text_field_line"></div>
-                                <span class="text_field_description">Objectif.</span>
+                                <span class="text_field_description">Valeur.</span>
                             </div>
                             <div class="oak_checkbox_container">
                                 <div class="oak_checkbox_container__container">

@@ -279,6 +279,33 @@ class Oak {
             ) );
         endif;
 
+        // data studio
+        if ( get_current_screen()->id == 'toplevel_page_oak_data_studio' ) :
+            wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
+            wp_enqueue_script( 'oak_data_studio', get_template_directory_uri() . '/src/js/data-studio.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_data_studio', 'DATA', array(
+                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                'allData' => array(
+                    'organizations' => array(
+                        'organizations' => Oak::$organizations,
+                        'organizationsWithoutRedundancy' => Oak::$organizations_without_redundancy,
+                    ),
+                    'publications' => array(
+                        'publications' => Oak::$publications,
+                        'publicationsWithoutRedundancy' => Oak::$publications_without_redundancy,
+                    ),
+                    'quantis' => array(
+                        'quantis' => Oak::$quantis,
+                        'quantisWithoutRedundancy' => Oak::$quantis_without_redundancy,
+                    ),
+                    'performances' => array(
+                        'performances' => Oak::$performances,
+                        'performancesWithoutRedundancy' => Oak::$performances_without_redundancy,
+                    )
+                )
+            ) );
+        endif;
+
         // Critical analysis configuration
         if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_critical_analysis_configuration' ) :
             wp_enqueue_script( 'oak_critical_analysis_configuration', get_template_directory_uri() . '/src/js/critical-analysis-configuration.js', array('jquery'), false, true);
@@ -860,6 +887,8 @@ class Oak {
 
         add_menu_page( 'Importation des données', 'Importation des données', 'manage_options', 'oak_import_page', array( $this, 'oak_import_page' ), 'dashicons-chart-pie', 100 );
 
+        add_menu_page( 'Data Studio', 'Data Studio', 'manage_options', 'oak_data_studio', array( $this, 'oak_data_studio' ), 'dashicons-chart-pie', 100 );
+
         add_submenu_page( 'oak_materiality_reporting', __('Analyse Critique', Oak::$text_domain), __('Analyse Critique', Oak::$text_domain), 'manage_options', 'oak_critical_analysis', array( $this, 'oak_critical_analysis') );
         add_submenu_page( 'oak_materiality_reporting', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'oak_critical_analysis_configuration', array( $this, 'oak_critical_analysis_configuration') );
 
@@ -894,6 +923,10 @@ class Oak {
 
     function oak_import_page() {
         include get_template_directory() . '/template-parts/import-page.php';
+    }
+
+    function oak_data_studio() {
+        include get_template_directory() . '/template-parts/data-studio.php';
     }
 
     function oak_critical_analysis() {

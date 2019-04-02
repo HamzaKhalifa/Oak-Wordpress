@@ -1853,13 +1853,13 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   margin-top: 40px;
 }
 
-.oak_import_page_button, .next_button_container_next, .next_button_container_cancel {
+.oak_import_page_button, .next_button_container_next, .next_button_container_cancel, .refresh_graph_button {
   color: #003366;
   border: 1px solid #003366;
   transition: all 0.2s ease-in-out;
 }
 
-.oak_import_page_button:hover, .next_button_container_next:hover, .next_button_container_cancel:hover {
+.oak_import_page_button:hover, .next_button_container_next:hover, .next_button_container_cancel:hover, .refresh_graph_button:hover {
   cursor: pointer;
   background-color: #003366;
   color: white;
@@ -1989,6 +1989,102 @@ input.import_container__element_checkbox {
 
 .oak_autocomplete_delete_button:hover {
   cursor: pointer;
+}
+
+.oak_graphs_configuration {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.oak_graphs_configuration_configuration_element_container__labels, .oak_graphs_configuration_configuration_element_container__performances {
+  margin-top: 20px;
+}
+
+.oak_graphs_configuration_element_container__single_element {
+  border: 1px solid #003366;
+  padding: 5px;
+  border-radius: 20px;
+  margin-right: 10px;
+  color: #003366;
+  transition: all 0.2s ease-in-out;
+}
+
+.oak_graphs_configuration_element_container__single_element:hover {
+  cursor: pointer;
+}
+
+.oak_graphs_configuration_configuration_element_container_performances__single_performance_container {
+  margin-bottom: 15px;
+}
+
+.oak_graphs_configuration_element_container_single_element__considered {
+  color: white;
+  background-color: #003366;
+}
+
+.oak_graphs_configuration__configuration_element_container {
+  margin-bottom: 20px;
+}
+
+.oak_performance_title {
+  font-size: 15px;
+}
+
+.oak_performance_container {
+  display: flex;
+  align-items: center;
+}
+
+.oak_performance_checkbox {
+  margin-top: 1px !important;
+  margin-right: 10px !important;
+}
+
+.oak_graph_canvas {
+  margin-top: 10px;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.oak_graph_canvas:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.oak_graphs_configuration__chart_container {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex: 1;
+}
+
+.oak_selected_graph_container {
+  width: 100%;
+}
+
+.oak_single_parameter {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.oak_single_parameter__label {
+  margin-right: 10px;
+  width: 200px;
+}
+
+.oak_single_parameter__input {
+  flex: 1;
+}
+
+.oak_selected_graph_container__configuration {
+  margin-bottom: 20px;
+}
+
+.refresh_graph_button {
+  padding: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */
