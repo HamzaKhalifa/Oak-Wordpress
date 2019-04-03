@@ -27,65 +27,189 @@
                 'title' => __( 'Pages', Oak::$text_domain ),
                 'url' => 'edit.php?post_type=page',
                 'icon' => 'fas fa-th-large'
-            ),
+            )
         );
 
-        // For corn: 
-        $terms_orders = [];
-        foreach( Oak::$all_terms_without_redundancy as $term ) :
-            if ( $term->term_parent == '0' ) :
-                $terms_orders[] = $term->term_order;
-            endif;
-        endforeach;
-        sort( $terms_orders );
+        if ( get_option('oak_corn') == 'true' ) :
+            $menu_elements[] = array(
+                'title' => __( 'Publishing', Oak::$text_domain ),
+                'url' => '',
+                'icon' => 'fas fa-th-large',
+            );
+
+            $categories = get_categories();
+            foreach( $categories as $category ) :
+                $menu_elements[] = array(
+                    'title' => __( $category->name, Oak::$text_domain ),
+                    'url' => 'edit.php?cat=' . $category->term_id,
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                );
+            endforeach;
+
+            $menu_elements[] = array(
+                'title' => __( 'Paramètres', Oak::$text_domain ),
+                'url' => '?page=oak_corn_configuration_page',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            );
+
+            $other_corn_elements = array(
+                array(
+                    'title' => __( 'Catégories', Oak::$text_domain ),
+                    'url' => '',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                ),
+                array(
+                    'title' => __( 'Menus', Oak::$text_domain ),
+                    'url' => 'nav-menus.php?action=edit&menu=0',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                ),
+            );
+            $menu_elements = array_merge( $menu_elements, $other_corn_elements );
+
+            $elementor = array(
+                array(
+                    'title' => __( 'Elementor', Oak::$text_domain ),
+                    'url' => '',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                ),
+                array(
+                    'title' => __( 'Mes templates', Oak::$text_domain ),
+                    'url' => 'edit.php?post_type=elementor_library',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                ),
+                array(
+                    'title' => __( 'Configuration', Oak::$text_domain ),
+                    'url' => 'admin.php?page=elementor',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                ),
+                array(
+                    'title' => __( 'Role manager', Oak::$text_domain ),
+                    'url' => 'admin.php?page=elementor-role-manager',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                ),
+                array(
+                    'title' => __( 'Outils', Oak::$text_domain ),
+                    'url' => 'admin.php?page=elementor-tools',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                ),
+                array(
+                    'title' => __( 'Infos système', Oak::$text_domain ),
+                    'url' => 'admin.php?page=elementor-system-info',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                ),
+                array(
+                    'title' => __( 'Aide', Oak::$text_domain ),
+                    'url' => 'admin.php?page=elementor-getting-started',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                ),
+                array(
+                    'title' => __( 'Custom Fonts', Oak::$text_domain ),
+                    'url' => 'admin.php?page=elementor_custom_fonts',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                ),
+                array(
+                    'title' => __( 'Go Pro', Oak::$text_domain ),
+                    'url' => 'admin.php?page=go_elementor_pro',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                )
+            );
+
+            $menu_elements = array_merge( $menu_elements, $elementor );
+        endif;
+
+        $menu_elements[] = array(
+            'title' => __( 'Editing', Oak::$text_domain ),
+            'url' => '',
+            'icon' => 'fas fa-th-large'
+        );
 
         if ( get_option('oak_corn') == 'true' ) :
-            $incrementer = 0;
-            do {
-                foreach( Oak::$all_terms_without_redundancy as $term ) : 
-                    if ( isset( $terms_orders[ $incrementer ] ) && ( $term->term_order == '' || $term->term_order == $terms_orders[ $incrementer ] ) ) :
-                        $incrementer++;
-                        $children = array();
-                        if ( $term->term_parent == '0' ) :
-                            foreach( Oak::$all_terms_without_redundancy as $potential_term_child ) :
-                                if ( $potential_term_child->term_identifier != $term->term_identifier && $potential_term_child->term_parent == $term->term_identifier ) :
-                                    $children[] = array(
-                                        'title' => $potential_term_child->term_designation,
-                                        'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $potential_term_child->term_identifier . '&listorformula=list',
-                                        'icon' => 'fas fa-th-large',
-                                        'submenu' => true
-                                    );
+            foreach( Oak::$publications_without_redundancy as $publication ) :
+                if ( $publication->publication_report_or_frame == 'report' ) :
+
+                    $menu_elements[] = array(
+                        'title' => $publication->publication_designation,
+                        'url' => '',
+                        'icon' => 'fas fa-th-large',
+                        'submenu' => true
+                    );
+                    foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
+                        if ( $taxonomy->taxonomy_publication == $publication->publication_identifier ) :
+                            $terms_orders = [];
+                            foreach( Oak::$all_terms_without_redundancy as $term ) :
+                                if ( $term->term_parent == '0' ) :
+                                    $terms_orders[] = $term->term_order;
                                 endif;
                             endforeach;
+                            sort( $terms_orders );
+                            var_dump( $terms_orders );
+                            
+                            $incrementer = 0;
+                            do {
+                                foreach( Oak::$all_terms_without_redundancy as $term ) : 
+                                    if ( $term->term_taxonomy_identifier == $taxonomy->taxonomy_identifier && isset( $terms_orders[ $incrementer ] ) && $term->term_parent == '0' && ( $term->term_order == '' || $term->term_order == $terms_orders[ $incrementer ] ) ) :
+                                        var_dump( $term->term_designation );
+                                        $incrementer++;
+                                        $children = array();
+                                        foreach( Oak::$all_terms_without_redundancy as $potential_term_child ) :
+                                            if ( $potential_term_child->term_identifier != $term->term_identifier && $potential_term_child->term_parent == $term->term_identifier ) :
+                                                $children[] = array(
+                                                    'title' => $potential_term_child->term_designation,
+                                                    'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $potential_term_child->term_identifier . '&listorformula=list',
+                                                    'icon' => 'fas fa-th-large',
+                                                    'submenuelement_of_submenu' => true
+                                                );
+                                            endif;
+                                        endforeach;
 
-                            if ( count( $children ) > 0 ) :
-                                $menu_elements[] = array(
-                                    'title' => $term->term_designation,
-                                    'url' => '',
-                                    'icon' => 'fas fa-th-large',
-                                    'order' => $term->term_order == '' ? 0 : $term->term_order
-                                );
-                                $menu_elements[] = array(
-                                    'title' => $term->term_designation,
-                                    'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
-                                    'icon' => 'fas fa-th-large',
-                                    'submenu' => true
-                                );
+                                        if ( count( $children ) > 0 ) :
+                                            $menu_elements[] = array(
+                                                'title' => $term->term_designation,
+                                                'url' => '',
+                                                'icon' => 'fas fa-th-large',
+                                                'order' => $term->term_order == '' ? 0 : $term->term_order,
+                                                'submenuelement' => true
+                                            );
+                                            $menu_elements[] = array(
+                                                'title' => $term->term_designation,
+                                                'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
+                                                'icon' => 'fas fa-th-large',
+                                                'submenuelement_of_submenu' => true
+                                            );
 
-                                $menu_elements = array_merge( $menu_elements, $children );
-                            else :
-                                $menu_elements[] = array(
-                                    'title' => $term->term_designation,
-                                    'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
-                                    'icon' => 'fas fa-th-large',
-                                    'order' => $term->term_order == '' ? 0 : $term->term_order
-                                );
-                            endif;
+                                            $menu_elements = array_merge( $menu_elements, $children );
+                                        else :
+                                            $menu_elements[] = array(
+                                                'title' => $term->term_designation,
+                                                'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
+                                                'icon' => 'fas fa-th-large',
+                                                'order' => $term->term_order == '' ? 0 : $term->term_order,
+                                                'submenuelement' => true
+                                            );
+                                        endif;
+                                    endif;
+                                endforeach;
+                            }
+                            while( $incrementer < count( $terms_orders ) );
                         endif;
-                    endif;
-                endforeach;
-            }
-            while( $incrementer < count( $terms_orders ) );
+                    endforeach;
+                endif;
+            endforeach;
+
+            
         endif;
 
         $after_terms = array(
@@ -238,6 +362,7 @@
             $menu_elements[] = $import_page;
         endif;
         
+        
         $data_studio = array(
             'title' => __( 'Data Studio', Oak::$text_domain ),
             'url' => '?page=oak_data_studio',
@@ -336,59 +461,6 @@
                 'icon' => 'fas fa-th-large'
             ),
             array(
-                'title' => __( 'Elementor', Oak::$text_domain ),
-                'url' => '',
-                'icon' => 'fas fa-th-large'
-            ),
-            array(
-                'title' => __( 'Mes templates', Oak::$text_domain ),
-                'url' => 'edit.php?post_type=elementor_library',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Configuration', Oak::$text_domain ),
-                'url' => 'admin.php?page=elementor',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Role manager', Oak::$text_domain ),
-                'url' => 'admin.php?page=elementor-role-manager',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Outils', Oak::$text_domain ),
-                'url' => 'admin.php?page=elementor-tools',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Infos système', Oak::$text_domain ),
-                'url' => 'admin.php?page=elementor-system-info',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Aide', Oak::$text_domain ),
-                'url' => 'admin.php?page=elementor-getting-started',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Custom Fonts', Oak::$text_domain ),
-                'url' => 'admin.php?page=elementor_custom_fonts',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Go Pro', Oak::$text_domain ),
-                'url' => 'admin.php?page=go_elementor_pro',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
                 'title' => __( 'Widgeditor', Oak::$text_domain ),
                 'url' => '',
                 'icon' => 'fas fa-th-large'
@@ -429,7 +501,7 @@
 
     <?php 
     foreach( $menu_elements as $key => $element ) : 
-        if ( ! isset( $element['submenu'] ) && ! isset( $element['submenuelement'] ) ) :
+        if ( ! isset( $element['submenu'] ) && ! isset( $element['submenuelement'] ) && ! isset( $element['submenuelement_of_submenu'] ) ) :
     ?>
             <a class="oak_admin_menu_element" href="<?php if ( $element['url'] != '' || $key == 0 ) : echo( admin_url( $element['url'] ) ); else : echo('#'); endif; ?>">
                 <div class="oak_admin_menu_element__side_part">
@@ -454,7 +526,7 @@
                 <?php
                     do {
                         ?>
-                            <a class="oak_admin_menu_sub_element" href="<?php if ( $menu_elements[ $index ]['url'] || $key == 0 ) : echo( admin_url( $menu_elements[ $index ]['url'] ) ); else : echo('#'); endif; ?>">
+                            <a class="oak_admin_menu_sub_element" href="<?php if ( $menu_elements[ $index ]['url'] ) : echo( admin_url( $menu_elements[ $index ]['url'] ) ); else : echo('#'); endif; ?>">
                                 <div class="oak_admin_menu_element__side_part">
                                     <i class="oak_admin_menu_element__icon <?php echo( $menu_elements[ $index ]['icon'] ); ?>"></i>
                                     <span class="oak_admin_menu_element__span"><?php echo( $menu_elements[ $index ]['title'] ); ?></span>
@@ -471,9 +543,15 @@
                                 <?php
                                     do {
                                         ?>
-                                            <a class="oak_admin_menu_sub_element" href="<?php echo( admin_url( $menu_elements[ $submenu_index ]['url'] ) ); ?>">
+                                            <a class="oak_admin_menu_sub_element" href="<?php if ( $menu_elements[ $submenu_index ]['url'] != '' ) : echo( admin_url( $menu_elements[ $submenu_index ]['url'] ) ); else : echo('#'); endif; ?>">
                                                 <div class="oak_admin_menu_element__side_part">
                                                     <i class="oak_admin_menu_element__icon <?php echo( $menu_elements[ $submenu_index ]['icon'] ); ?>"></i>
+                                                    <?php 
+                                                    if ( isset( $menu_elements[ $submenu_index ]['order'] ) ) : ?>
+                                                        <span class="oak_admin_menu_element__order"><?php echo( $menu_elements[ $submenu_index ]['order'] ); ?></span>
+                                                    <?php
+                                                    endif;
+                                                    ?>
                                                     <span class="oak_admin_menu_element__span"><?php echo( $menu_elements[ $submenu_index ]['title'] ); ?></span>
                                                 </div>
                                                 
@@ -482,7 +560,34 @@
                                                 </div>
                                             </a>
                                         <?php
-                                        $submenu_index++;
+
+                                        $submenu_of_submenu_index = $submenu_index + 1;
+                                        if ( isset( $menu_elements[ $submenu_of_submenu_index ]['submenuelement_of_submenu'] ) ) :
+                                        ?>
+                                            <div class="oak_admin_menu_element__sub_menu oak_admin_menu_element_sub_menu__sub_menu_of_sub_menu oak_hidden">
+                                                <?php 
+                                                do {
+                                                    ?>
+                                                    <a class="oak_admin_menu_sub_element" href="<?php echo( admin_url( $menu_elements[ $submenu_of_submenu_index ]['url'] ) ); ?>">
+                                                        <div class="oak_admin_menu_element__side_part">
+                                                            <i class="oak_admin_menu_element__icon <?php echo( $menu_elements[ $submenu_of_submenu_index ]['icon'] ); ?>"></i>
+                                                            <span class="oak_admin_menu_element__span"><?php echo( $menu_elements[ $submenu_of_submenu_index ]['title'] ); ?></span>
+                                                        </div>
+                                                        
+                                                        <div class="oak_admin_menu_element__side_part">
+                                                            <i class="oak_admin_menu_element__arrow fas fa-caret-right"></i>
+                                                        </div>
+                                                    </a>
+                                                    <?php
+                                                    $submenu_of_submenu_index++;
+                                                } while( isset( $menu_elements[ $submenu_of_submenu_index ] ) && isset( $menu_elements[ $submenu_of_submenu_index ]['submenuelement_of_submenu'] ) )
+                                                ?>
+                                            </div>
+                                        <?php
+                                        endif;
+                                        $submenu_index = $submenu_of_submenu_index;
+
+                                        // $submenu_index++;
                                     }
                                     while ( isset( $menu_elements[ $submenu_index ] ) && isset( $menu_elements[ $submenu_index ]['submenuelement'] ) && $menu_elements[ $submenu_index ]['submenuelement'] == true );
                                     ?>
