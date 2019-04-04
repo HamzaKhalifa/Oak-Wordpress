@@ -667,7 +667,7 @@ function addOtherElement(data) {
             var formIdentifier = this.value;
             for (var i = 0; i < DATA.otherElementProperties.associative_tab_instances.length; i++) {
                 if (DATA.otherElementProperties.associative_tab_instances[i].form_identifier == formIdentifier 
-                    && DATA.otherElementProperties.associative_tab_instances[i].model_revision_number == DATA.revisions[DATA.revisions.length - 1].model_revision_number) {
+                    /*&& DATA.otherElementProperties.associative_tab_instances[i].model_revision_number == DATA.revisions[DATA.revisions.length - 1].model_revision_number */) {
                         addFieldsListToSelectedModelForm(DATA.otherElementProperties.associative_tab_instances[i], this.parentNode.parentNode.parentNode.querySelector('.oak_model_fields_renaming_container'), false);
                         textFieldsAnimations();
                 }
@@ -697,7 +697,6 @@ function addFieldsListToSelectedModelForm(data, renamingContainer, fieldNameAlre
             for (var j = 0; j < DATA.formsAndFields.length; j++) {
                 if (DATA.formsAndFields[j].form_identifier == data.form_identifier && DATA.formsAndFields[j].form_revision_number == formRevisionNumber) {
                     // Found a field identifier that belongs to the current form!
-
                     var fieldFormName = DATA.formsAndFields[j].field_designation;
                     var fieldIdentifier = DATA.formsAndFields[j].field_identifier;
                     var counter = DATA.fields.length - 1;

@@ -146,66 +146,80 @@
                         'icon' => 'fas fa-th-large',
                         'submenu' => true
                     );
+                    $taxonomies_identifiers = [];
                     foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
                         if ( $taxonomy->taxonomy_publication == $publication->publication_identifier ) :
-                            $terms_orders = [];
-                            foreach( Oak::$all_terms_without_redundancy as $term ) :
-                                if ( $term->term_parent == '0' ) :
-                                    $terms_orders[] = $term->term_order;
-                                endif;
-                            endforeach;
-                            sort( $terms_orders );
-                            var_dump( $terms_orders );
-                            
-                            $incrementer = 0;
-                            do {
-                                foreach( Oak::$all_terms_without_redundancy as $term ) : 
-                                    if ( $term->term_taxonomy_identifier == $taxonomy->taxonomy_identifier && isset( $terms_orders[ $incrementer ] ) && $term->term_parent == '0' && ( $term->term_order == '' || $term->term_order == $terms_orders[ $incrementer ] ) ) :
-                                        var_dump( $term->term_designation );
-                                        $incrementer++;
-                                        $children = array();
-                                        foreach( Oak::$all_terms_without_redundancy as $potential_term_child ) :
-                                            if ( $potential_term_child->term_identifier != $term->term_identifier && $potential_term_child->term_parent == $term->term_identifier ) :
-                                                $children[] = array(
-                                                    'title' => $potential_term_child->term_designation,
-                                                    'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $potential_term_child->term_identifier . '&listorformula=list',
-                                                    'icon' => 'fas fa-th-large',
-                                                    'submenuelement_of_submenu' => true
-                                                );
-                                            endif;
-                                        endforeach;
-
-                                        if ( count( $children ) > 0 ) :
-                                            $menu_elements[] = array(
-                                                'title' => $term->term_designation,
-                                                'url' => '',
-                                                'icon' => 'fas fa-th-large',
-                                                'order' => $term->term_order == '' ? 0 : $term->term_order,
-                                                'submenuelement' => true
-                                            );
-                                            $menu_elements[] = array(
-                                                'title' => $term->term_designation,
-                                                'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
-                                                'icon' => 'fas fa-th-large',
-                                                'submenuelement_of_submenu' => true
-                                            );
-
-                                            $menu_elements = array_merge( $menu_elements, $children );
-                                        else :
-                                            $menu_elements[] = array(
-                                                'title' => $term->term_designation,
-                                                'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
-                                                'icon' => 'fas fa-th-large',
-                                                'order' => $term->term_order == '' ? 0 : $term->term_order,
-                                                'submenuelement' => true
-                                            );
-                                        endif;
-                                    endif;
-                                endforeach;
-                            }
-                            while( $incrementer < count( $terms_orders ) );
+                            $taxonomies_identifiers[] = $taxonomy->taxonomy_identifier;
                         endif;
                     endforeach;
+
+                    $terms_orders = [];
+                    foreach( Oak::$all_terms_without_redundancy as $term ) :
+                        if ( $term->term_parent == '0' ) :
+                            $exists = false;
+                            foreach( $taxonomies_identifiers as $identifier ) :
+                                if ( $term->term_taxonomy_identifier == $identifier ) :
+                                    $exists = true;
+                                endif;
+                            endforeach;
+                            if ( $exists )
+                                $terms_orders[] = $term->term_order;
+                        endif;
+                    endforeach;
+                    sort( $terms_orders );
+                    
+                    $incrementer = 0;
+                    do {
+                        foreach( Oak::$all_terms_without_redundancy as $term ) : 
+                            $exists = false;
+                            foreach( $taxonomies_identifiers as $identifier ) :
+                                if ( $term->term_taxonomy_identifier == $identifier ) :
+                                    $exists = true;
+                                endif;
+                            endforeach;
+                            if ( $exists && isset( $terms_orders[ $incrementer ] ) && $term->term_parent == '0' && ( $term->term_order == '' || $term->term_order == $terms_orders[ $incrementer ] ) ) :
+                                $incrementer++;
+                                $children = array();
+                                foreach( Oak::$all_terms_without_redundancy as $potential_term_child ) :
+                                    if ( $potential_term_child->term_identifier != $term->term_identifier && $potential_term_child->term_parent == $term->term_identifier ) :
+                                        $children[] = array(
+                                            'title' => $potential_term_child->term_designation,
+                                            'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $potential_term_child->term_identifier . '&listorformula=list',
+                                            'icon' => 'fas fa-th-large',
+                                            'submenuelement_of_submenu' => true
+                                        );
+                                    endif;
+                                endforeach;
+
+                                if ( count( $children ) > 0 ) :
+                                    $menu_elements[] = array(
+                                        'title' => $term->term_designation,
+                                        'url' => '',
+                                        'icon' => 'fas fa-th-large',
+                                        'order' => $term->term_order == '' ? 0 : $term->term_order,
+                                        'submenuelement' => true
+                                    );
+                                    $menu_elements[] = array(
+                                        'title' => $term->term_designation,
+                                        'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
+                                        'icon' => 'fas fa-th-large',
+                                        'submenuelement_of_submenu' => true
+                                    );
+
+                                    $menu_elements = array_merge( $menu_elements, $children );
+                                else :
+                                    $menu_elements[] = array(
+                                        'title' => $term->term_designation,
+                                        'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
+                                        'icon' => 'fas fa-th-large',
+                                        'order' => $term->term_order == '' ? 0 : $term->term_order,
+                                        'submenuelement' => true
+                                    );
+                                endif;
+                            endif;
+                        endforeach;
+                    }
+                    while( $incrementer < count( $terms_orders ) );
                 endif;
             endforeach;
 

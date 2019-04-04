@@ -1812,6 +1812,7 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 
 .oak_configuration_page {
   margin-left: 30px;
+  margin-right: 30px;
   margin-top: 40px;
   display: flex;
   flex-direction: column;

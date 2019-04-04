@@ -561,12 +561,12 @@ class Oak {
     static function oak_add_meta_data() {
         $the_returned_fields = [];
         // We need to delete all post meta first to avoid old unneccesary data
-        // $metas = get_post_meta( get_the_ID() );
-        // foreach( $metas as $key => $meta ) :
-        //     if ( $key != 'objects_selector' ) :
-        //         delete_post_meta( get_the_ID(), $key );
-        //     endif;
-        // endforeach;
+        $metas = get_post_meta( get_the_ID() );
+        foreach( $metas as $key => $meta ) :
+            if ( strpos( $key, 'Oak:' ) != false ) :
+                delete_post_meta( get_the_ID(), $key );
+            endif;
+        endforeach;
 
         global $wpdb; 
 
@@ -650,7 +650,7 @@ class Oak {
                         'value' => $value,
                         'field_type' => $field_type
                     );
-                    update_post_meta( get_the_ID(), $field_designation, $value );
+                    update_post_meta( get_the_ID(), 'Oak: ' . $field_designation, $value );
                 endif;
             endforeach;
         endforeach;
