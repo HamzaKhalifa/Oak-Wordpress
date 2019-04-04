@@ -659,18 +659,20 @@ function addOtherElement(data) {
     // If it's a model, we are gonna allow fields renaming: 
     if (DATA.table == 'model') {
         if (data) {
-            addFieldsListToSelectedModelForm(data, newElement.querySelector('.oak_model_fields_renaming_container'), true);
+            console.log('Euh');
+            console.log(data.form_identifier);
+            addFieldsListToSelectedModelForm(data.form_identifier, newElement.querySelector('.oak_model_fields_renaming_container'), true);
         }
         // We are gonna add the listener for the selector change: 
         var elementsSelect = newElement.querySelector('.oak_other_elements_select');
         elementsSelect.addEventListener('change', function() {
             var formIdentifier = this.value;
             for (var i = 0; i < DATA.otherElementProperties.associative_tab_instances.length; i++) {
-                if (DATA.otherElementProperties.associative_tab_instances[i].form_identifier == formIdentifier 
-                    /*&& DATA.otherElementProperties.associative_tab_instances[i].model_revision_number == DATA.revisions[DATA.revisions.length - 1].model_revision_number */) {
-                        addFieldsListToSelectedModelForm(DATA.otherElementProperties.associative_tab_instances[i], this.parentNode.parentNode.parentNode.querySelector('.oak_model_fields_renaming_container'), false);
+                // if (DATA.otherElementProperties.associative_tab_instances[i].form_identifier == formIdentifier 
+                    /*&& DATA.otherElementProperties.associative_tab_instances[i].model_revision_number == DATA.revisions[DATA.revisions.length - 1].model_revision_number ) { */
+                        addFieldsListToSelectedModelForm(formIdentifier, this.parentNode.parentNode.parentNode.querySelector('.oak_model_fields_renaming_container'), false);
                         textFieldsAnimations();
-                }
+                // }
             }
         });
     }
@@ -689,13 +691,14 @@ function addOtherElement(data) {
     handleOtherElementsFilters();
 }
 
-function addFieldsListToSelectedModelForm(data, renamingContainer, fieldNameAlreadyStored) {
+function addFieldsListToSelectedModelForm(formIdentifier, renamingContainer, fieldNameAlreadyStored) {
     renamingContainer.innerHTML = '';
+    console.log( 'form identifier: ' + formIdentifier + ' renaming container: ' + renamingContainer + ' fieldNameAlready stored: ' + fieldNameAlreadyStored );
     for (var i = 0; i < DATA.otherElementProperties.elements.length; i++) {
-        if (DATA.otherElementProperties.elements[i].form_identifier == data.form_identifier) {
+        if (DATA.otherElementProperties.elements[i].form_identifier == formIdentifier) {
             var formRevisionNumber = DATA.otherElementProperties.elements[i].form_revision_number;
             for (var j = 0; j < DATA.formsAndFields.length; j++) {
-                if (DATA.formsAndFields[j].form_identifier == data.form_identifier && DATA.formsAndFields[j].form_revision_number == formRevisionNumber) {
+                if (DATA.formsAndFields[j].form_identifier == formIdentifier && DATA.formsAndFields[j].form_revision_number == formRevisionNumber) {
                     // Found a field identifier that belongs to the current form!
                     var fieldFormName = DATA.formsAndFields[j].field_designation;
                     var fieldIdentifier = DATA.formsAndFields[j].field_identifier;
@@ -1068,6 +1071,7 @@ function handleModalButtons() {
         if (adding || updating) {
             closeModals();
             setLoading();
+            console.log(elementData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,

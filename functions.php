@@ -1369,6 +1369,126 @@ class Oak {
 
         $array_data = array_merge( $element, array( $table . '_modification_time' => date("Y-m-d H:i:s") ) );
 
+        // If we are updating a form, set the models_fields_names to empty for the models that use that form (simplified version): 
+        if ( $table == 'form' ) :
+            // Check if the form exists already or not (to know whether we are updating or adding a new form)
+            $form_exists = false;
+            $form_fields_changed = false;
+            $form_identifier = '';
+            $the_form = null;
+            foreach( Oak::$forms_without_redundancy as $form ) :
+                if ( $form->form_identifier == $element['form_identifier'] ) :
+                    $form_exists = true;
+                    $the_form = $form;
+                    // Lets see if the form's fields changed: 
+                    $form_fields = [];
+                    foreach( Oak::$all_forms_and_fields as $form_and_field ) :
+                        if ( $form_and_field->form_identifier == $the_form->form_identifier && $form_and_field->form_revision_number == $the_form->form_revision_number ) :
+                            $form_fields[] = $form_and_field->field_identifier;
+                        endif;
+                    endforeach; 
+
+                    foreach( $form_fields as $key => $field_identifier ) :
+                        if ( isset( $element['otherElements'][ $key ] ) ) :
+                            if ( $element['otherElements'][ $key ]['elementIdentifier'] != $field_identifier ) :
+                                $form_fields_changed = true;
+                            endif;
+                        else : 
+                            $form_fields_changed = true;
+                        endif;
+                    endforeach;
+
+                    foreach( $element['otherElements'] as $key => $other_element ) :
+                        if ( isset( $form_fields[ $key ] ) ) :
+                            if ( $form_fields[ $key ] != $other_element['elementIdentifier'] ) :
+                                $form_fields_changed = true;
+                            endif;
+                        else :
+                            $form_fields_changed = true;
+                        endif;
+                    endforeach;
+                endif;
+            endforeach;
+
+
+            if ( $form_exists && $form_fields_changed ) :
+                foreach( Oak::$models_without_redundancy as $model ) :
+                    $the_model_uses_the_form = false;
+                    foreach( Oak::$all_models_and_forms as $model_and_form ) :
+                        
+                        
+                        if ( $model_and_form->model_identifier == $model->model_identifier
+                            && $model_and_form->model_revision_number == $model->model_revision_number
+                            && $model_and_form->form_identifier == $the_form->form_identifier ) :
+                            // This is a model that uses the form we are updating :
+                                $the_model_uses_the_form = true;
+                        endif;
+                    endforeach;
+                    
+                    if ( $the_model_uses_the_form ) :
+                        $fields_names = [];
+                        foreach( Oak::$all_models_and_forms as $model_and_form ) :
+
+                            if ( $model_and_form->model_identifier == $model->model_identifier &&
+                                $model_and_form->model_revision_number == $model->model_revision_number ) :
+                                    if ( $model_and_form->form_identifier == $the_form->form_identifier ) :
+                                        
+                                        foreach( $element['otherElements'] as $field ) :
+                                            if ( $field['elementOtherDesignation'] != '' ) :
+                                                $fields_names[] = $field['elementOtherDesignation'];
+                                            else :
+                                                foreach( Oak::$fields_without_redundancy as $single_field_without_redundancy ) :
+                                                    if ( $single_field_without_redundancy->field_identifier == $field['elementIdentifier'] ) :
+                                                        $fields_names[] = $single_field_without_redundancy->field_designation;
+                                                    endif;
+                                                endforeach;
+                                            endif;
+                                        endforeach;
+                                    else :
+                                        // find the form revision number
+                                        foreach( Oak::$forms_without_redundancy as $form ) : 
+                                            if ( $form->form_identifier == $model_and_form->form_identifier ) :
+                                                foreach( Oak::$all_forms_and_fields as $form_and_field ) :
+                                                    if ( $form_and_field->form_identifier == $form->form_identifier && $form_and_field->form_revision_number == $form->form_revision_number ) :
+                                                        if ( $form_and_field->field_designation != '' ) :
+                                                            $fields_names[] = $form_and_field->field_designation;
+                                                        else : 
+                                                            foreach( Oak::$fields_without_redundancy as $field ) :
+                                                                if ( $field->field_identifier == $form_and_field->field_identifier ) :
+                                                                    $fields_names[] = $field->field_designation;
+                                                                endif;
+                                                            endforeach;
+                                                        endif;
+                                                    endif;
+                                                endforeach;
+                                            endif;
+                                        endforeach;
+                                    endif;
+                            endif;
+                        endforeach;
+
+                        $fields_names_string = '';
+                        foreach( $fields_names as $key => $field_name ) :
+                            $delimiter = '|';
+                            if ( $key == count( $fields_names ) - 1 ) :
+                                $delimiter = '';
+                            endif;
+                            $fields_names_string .= $field_name . $delimiter;
+                        endforeach;
+
+                        $result = $wpdb->update(
+                            Oak::$models_table_name,
+                            array (
+                                'model_fields_names' => $fields_names_string,
+                            ),
+                            array( 'model_identifier' => $model->model_identifier, 'model_revision_number' => $model->model_revision_number )
+                        );
+                    endif;
+
+                endforeach;
+            endif;
+        endif;
+
         // Other elements: fields for forms and forms for models
         if ( isset( $element['otherElements'] ) && !$_GET['fromRevision'] ) :
             $other_elements = $element['otherElements'];
