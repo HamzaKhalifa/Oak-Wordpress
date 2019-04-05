@@ -659,8 +659,6 @@ function addOtherElement(data) {
     // If it's a model, we are gonna allow fields renaming: 
     if (DATA.table == 'model') {
         if (data) {
-            console.log('Euh');
-            console.log(data.form_identifier);
             addFieldsListToSelectedModelForm(data.form_identifier, newElement.querySelector('.oak_model_fields_renaming_container'), true);
         }
         // We are gonna add the listener for the selector change: 
@@ -693,7 +691,6 @@ function addOtherElement(data) {
 
 function addFieldsListToSelectedModelForm(formIdentifier, renamingContainer, fieldNameAlreadyStored) {
     renamingContainer.innerHTML = '';
-    console.log( 'form identifier: ' + formIdentifier + ' renaming container: ' + renamingContainer + ' fieldNameAlready stored: ' + fieldNameAlreadyStored );
     for (var i = 0; i < DATA.otherElementProperties.elements.length; i++) {
         if (DATA.otherElementProperties.elements[i].form_identifier == formIdentifier) {
             var formRevisionNumber = DATA.otherElementProperties.elements[i].form_revision_number;
