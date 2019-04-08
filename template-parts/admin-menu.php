@@ -17,18 +17,40 @@
                 'title' => __( 'Tableau de bord', Oak::$text_domain ),
                 'url' => '',
                 'icon' => 'fas fa-th-large'
-            ),
-            array(
-                'title' => __( 'Postes', Oak::$text_domain ),
-                'url' => 'edit.php',
-                'icon' => 'fas fa-th-large'
-            ),
-            array(
-                'title' => __( 'Pages', Oak::$text_domain ),
-                'url' => 'edit.php?post_type=page',
-                'icon' => 'fas fa-th-large'
             )
         );
+        
+        $organizations_and_publications = array( 
+            array(
+                'title' => __( 'Organisations', Oak::$text_domain ),
+                'url' => '?page=oak_elements_list&elements=organizations&listorformula=list',
+                'icon' => 'fas fa-th-large',
+            ),
+            array(
+                'title' => __( 'Publications', Oak::$text_domain ),
+                'url' => '?page=oak_elements_list&elements=publications&listorformula=list',
+                'icon' => 'fas fa-th-large',
+            ),
+        );
+
+        $organizations_and_publications_submenu = array( 
+            array(
+                'title' => __( 'Organisations', Oak::$text_domain ),
+                'url' => '?page=oak_elements_list&elements=organizations&listorformula=list',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
+                'title' => __( 'Publications', Oak::$text_domain ),
+                'url' => '?page=oak_elements_list&elements=publications&listorformula=list',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+        );
+
+        if ( get_option( 'oak_corn' ) != 'true' ) :
+            $menu_elements = array_merge( $menu_elements, $organizations_and_publications );
+        endif;
 
         if ( get_option('oak_corn') == 'true' ) :
             $menu_elements[] = array(
@@ -53,6 +75,23 @@
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             );
+
+            $posts_and_pages = array(
+                array(
+                    'title' => __( 'Postes', Oak::$text_domain ),
+                    'url' => 'edit.php',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                ),
+                array(
+                    'title' => __( 'Pages', Oak::$text_domain ),
+                    'url' => 'edit.php?post_type=page',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                )
+            );
+
+            $menu_elements = array_merge( $menu_elements, $posts_and_pages );
 
             $other_corn_elements = array(
                 array(
@@ -226,24 +265,17 @@
             
         endif;
 
+        $menu_elements[] = array(
+            'title' => __( 'Embeded XP', Oak::$text_domain ),
+            'url' => '',
+            'icon' => 'fas fa-th-large'
+        );
+
+        if ( get_option('oak_corn') == 'true' ) :
+            $menu_elements = array_merge( $menu_elements, $organizations_and_publications_submenu );
+        endif;
+
         $after_terms = array(
-            array(
-                'title' => __( 'Embeded XP', Oak::$text_domain ),
-                'url' => '',
-                'icon' => 'fas fa-th-large'
-            ),
-            array(
-                'title' => __( 'Organisations', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=organizations&listorformula=list',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Publications', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=publications&listorformula=list',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
             array(
                 'title' => __( 'Taxonomies', Oak::$text_domain ),
                 'url' => '',

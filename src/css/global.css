@@ -331,3 +331,16 @@ div {
 .oak_admin_menu_fixed_button:hover .fa-wordpress {
     color: #1c6bb5;
 }
+
+.oak_button {
+    color: #003366;
+    border: 1px solid #003366;
+    transition: all .2s ease-in-out;
+    padding: 10px;
+}
+
+.oak_button:hover {
+    cursor: pointer;
+    background-color: #003366;
+    color: white;
+}

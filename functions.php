@@ -163,6 +163,9 @@ class Oak {
         add_action('wp_ajax_oak_save_configuration', array( $this, 'oak_save_configuration') );
         add_action('wp_ajax_nopriv_oak_save_configuration', array( $this, 'oak_save_configuration') );
 
+        add_action('wp_ajax_oak_corn_save_general_configuration', array( $this, 'oak_corn_save_general_configuration') );
+        add_action('wp_ajax_nopriv_oak_corn_save_general_configuration', array( $this, 'oak_corn_save_general_configuration') );
+
         add_action('wp_ajax_oak_save_analysis_model', array( $this, 'oak_save_analysis_model') );
         add_action('wp_ajax_nopriv_oak_save_analysis_model', array( $this, 'oak_save_analysis_model') );
 
@@ -233,11 +236,11 @@ class Oak {
 
         // if ( isset( $_GET['elements'] ) ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
-            // wp_enqueue_style( 'oak_font_awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
-            // wp_enqueue_style( 'oak_googleapifont_roboto', get_template_directory_uri() . '/src/css/vendor/googleapi-font-roboto.css' );
+            wp_enqueue_style( 'oak_font_awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
+            wp_enqueue_style( 'oak_googleapifont_roboto', get_template_directory_uri() . '/src/css/vendor/googleapi-font-roboto.css' );
             ?>
-            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+            <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"> -->
             
             <?php
         // endif;
@@ -307,7 +310,7 @@ class Oak {
         endif;
 
         if ( get_current_screen()->id == 'toplevel_page_oak_corn_configuration_page' ) :
-            wp_enqueue_script( 'oak_corn_configuration_page', get_template_directory_uri() . '/src/js/corn-configuration-page.js', array(), false, true);
+            wp_enqueue_script( 'oak_corn_configuration_page', get_template_directory_uri() . '/src/js/corn-configuration-page.js', array( 'jquery' ), false, true);
             wp_localize_script( 'oak_data_studio', 'DATA', array(
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
             ) );
@@ -728,6 +731,14 @@ class Oak {
     
     function oak_add_theme_support() {
         add_theme_support('menus');
+        add_theme_support( 'custom-logo', array(
+            'height'      => 100,
+            'width'       => 400,
+            'flex-height' => true,
+            'flex-width'  => true,
+            'header-text' => array( 'site-title', 'site-description' ),
+        ) );
+
         include get_template_directory() . '/functions/tables.php';
         include get_template_directory() . '/functions/properties-initialization.php';
     }
@@ -1087,6 +1098,13 @@ class Oak {
         wp_send_json_success( array(
             'central' => $central,
             'centralUrl' => $central_url
+        ) );
+    }
+
+    function oak_corn_save_general_configuration() {
+        $general_settings = $_POST['oak_corn_save_general_configuration'];
+        wp_send_json_success( array(
+            'generalSettings' => $general_settings
         ) );
     }
 
