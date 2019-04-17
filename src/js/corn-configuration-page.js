@@ -10,7 +10,18 @@ function handleTabsClick() {
                 tabs[j].classList.remove('nav-tab-active');
             }
             this.classList.add('nav-tab-active');
+
+            var tabsContainers = document.querySelectorAll('.oak_tab');
+            for (var i = 0; i < tabsContainers.length; i++) {
+                if (containsClass(tabsContainers[i], 'oak_tab_' + index)) {
+                    tabsContainers[i].classList.remove('oak_hidden');
+                } else {
+                    tabsContainers[i].classList.add('oak_hidden');
+                }
+            }
         })
+
+        
     }
 }
 
@@ -22,11 +33,9 @@ function initializeImageMediaModals() {
     for (var i = 0; i < allCallingSelectors.length; i++) {
         allCallingSelectors[i].addEventListener('click', function() {
             lastClickedCallingSelector = this;
-            console.log('dkf');
         });
         
         var callingSelector = '.' + allCallingSelectors[i].getAttribute('property-name');
-        console.log(callingSelector);
         var mm = new MediaModal(
             {
                 calling_selector : callingSelector,
@@ -365,11 +374,10 @@ handleGeneralSettingsSaveButton();
 function handleGeneralSettingsSaveButton() {
     var generalSettingsSaveButton = document.querySelector('.oak_configuration_page__save_general_settings_button');
     generalSettingsSaveButton.addEventListener('click', function() {
-        console.log('clicked');
         var siteLogo = document.querySelector('.oak_configuration_site_logo').getAttribute('src');
         var tagline = document.querySelector('.oak_configuration_page__tagline').value;
         var siteTitle = document.querySelector('.oak_configuration_page__site_title').value;
-        var organizationName = document.querySelector('.oak_configuration_page__organization_name');
+        var organizationName = document.querySelector('.oak_configuration_page__organization_name').value;
         var siteIcon = document.querySelector('.oak_configuration_site_icon').getAttribute('src');
 
         var generalSettings = {
@@ -381,13 +389,13 @@ function handleGeneralSettingsSaveButton() {
         }
 
         setLoading();
-        jQuery(document).ready(function() {
-            jQuery.ajax({
+        // $(document).ready(function() {
+            $.ajax({
                 url: DATA.ajaxUrl,
                 type: 'POST',
                 data: {
                     'action': 'oak_corn_save_general_configuration',
-                    'generalSettings': generalSettings
+                    'generalSettings': JSON.stringify(generalSettings)
                 },
                 success: function(data) {
                     console.log(data);
@@ -399,10 +407,266 @@ function handleGeneralSettingsSaveButton() {
                     doneLoading();
                 }
             });
-        });
+        // });
     });
 }
 
+
+handleSystemBarSettingsSaveButton();
+function handleSystemBarSettingsSaveButton() {
+    var systemBarSaveButton = document.querySelector('.oak_configuration_page__save_system_bar_settings_button');
+    systemBarSaveButton.addEventListener('click', function() {
+        var socialMediaData = [];
+        for(var i = 0; i < DATA.socialMedias.length; i++) {
+            socialMediaData.push({
+                checked: document.querySelector('.social_media_' + DATA.socialMedias[i].name + '_checkbox' ).checked,
+                value: document.querySelector('.social_media_' + DATA.socialMedias[i].name).value
+            });
+        }
+
+        var systemBarBackgroundColor = document.querySelector('.oak_social_media_background_color_configuration').value
+
+        console.log(socialMediaData);
+        console.log(systemBarBackgroundColor);
+
+        setLoading();
+        // $(document).ready(function() {
+            $.ajax({
+                url: DATA.ajaxUrl,
+                type: 'POST',
+                data: {
+                    'action': 'oak_corn_save_social_media_configuration',
+                    'socialMediaData': socialMediaData,
+                    'socialMediaBackgroundColor': systemBarBackgroundColor
+                },
+                success: function(data) {
+                    console.log(data);
+                    doneLoading();
+                    // window.location.reload()
+                },
+                error: function(error) {
+                    console.log(error);
+                    doneLoading();
+                }
+            });
+        // });
+    });
+}
+
+handleAppBarSettingsSaveButton();
+function handleAppBarSettingsSaveButton() {
+    var saveButton = document.querySelector('.oak_configuration_page__save_app_bar_settings_button');
+    saveButton.addEventListener('click', function() {
+        var checkboxes = document.querySelector('.oak_tab_2').querySelectorAll('.oak_app_bar_configuration_checkbox');
+        var appBarSettings = [];
+        for (var i = 0; i < checkboxes.length; i++) {
+            appBarSettings.push({
+                name: checkboxes[i].getAttribute('id'),
+                value: checkboxes[i].checked
+            });
+        }
+        console.log('app bar settings', appBarSettings);
+        var appBarBackgroundColor = document.querySelector('.oak_app_bar_background_color').value;
+
+        setLoading();
+        jQuery(document).ready(function() {
+            jQuery.ajax({
+                url: DATA.ajaxUrl,
+                type: 'POST',
+                data: {
+                    'action': 'oak_corn_save_app_bar_settings',
+                    'appBarSettings': appBarSettings,
+                    'appBarBackgroundColor': appBarBackgroundColor
+                },
+                success: function(data) {
+                    console.log(data);
+                    doneLoading();
+                    // window.location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    doneLoading();
+                }
+            });
+        })
+    });
+}
+
+// To initialize the color select: 
+jQuery(document).ready(function($){
+    jQuery('.oak_social_media_background_color_configuration').wpColorPicker();
+    jQuery('.oak_app_bar_background_color').wpColorPicker();
+    jQuery('.oak_tab_3').find('.color_input').wpColorPicker();
+    initializeNavBarData();
+});
+
+// Initialize Nav bar data: 
+function initializeNavBarData() {
+    var singleMenusContainers = document.querySelectorAll('.oak_configuration_page__single_menu_container');
+    for (var i = 0; i < singleMenusContainers.length; i++) {
+        var colorButtons = singleMenusContainers[i].querySelectorAll('.wp-color-result');
+        var colorInputs = singleMenusContainers[i].querySelectorAll('.color_input');
+
+        colorButtons[0].style.backgroundColor = DATA.oakNavBarData[i].backgroundColor;
+        colorInputs[0].style.backgroundColor = DATA.oakNavBarData[i].backgroundColor;
+
+        colorButtons[1].style.backgroundColor = DATA.oakNavBarData[i].fontColor;
+        colorInputs[0].style.backgroundColor = DATA.oakNavBarData[i].fontColor;
+    }
+}
+
+handleSaveNavBarSettingsButton();
+function handleSaveNavBarSettingsButton() {
+    var saveButton = document.querySelector('.oak_configuration_page__save_nav_bar_settings_button');
+    saveButton.addEventListener('click', function() {
+        var navBarData = [];
+        var menusContainer = document.querySelectorAll('.oak_configuration_page__single_menu_container');
+        for (var i = 0; i < menusContainer.length; i++) {
+            var menuSlug = menusContainer[i].getAttribute('menu-slug');
+            var colorsInputs = menusContainer[i].querySelectorAll('.color_input');
+            navBarData.push({
+                menuSlug,
+                backgroundColor: colorsInputs[0].value,
+                fontColor: colorsInputs[1].value
+            });
+        }
+
+        setLoading();
+        jQuery(document).ready(function() {
+            jQuery.ajax({
+                url: DATA.ajaxUrl,
+                type: 'POST',
+                data: {
+                    'action': 'oak_corn_save_nav_bar_settings', 
+                    'navBarData': JSON.stringify(navBarData)
+                },
+                success: function(data) {
+                    console.log(data);
+                    doneLoading();
+                },
+                error: function(error) {
+                    console.log(error);
+                    doneLoading();
+                }
+            });
+        })
+    });
+}
+
+function containsClass(element, className) {
+    if (element) {
+        for (var i = 0; i < element.classList.length; i++) {
+            if (className == element.classList[i]) 
+                return true;
+        }
+    }
+    return false;
+}
+
+// Initialize the color container: 
+var singleColorContainer;
+initializeSingleColorContainer();
+function initializeSingleColorContainer() {
+    singleColorContainer = document.querySelector('.oak_configuration_page__single_color_container').innerHTML;
+    document.querySelector('.oak_configuration_page__colors_container').innerHTML = '';
+}
+
+// For the add color button
+handleAddColorButton();
+function handleAddColorButton() {
+    var addButton = document.querySelector('.oak_configuration_page__add_style_button');
+    addButton.addEventListener('click', function() {
+        handleAddNewColorContainer();
+    });
+}
+
+function handleAddNewColorContainer(colorData) {
+    var colorsContainer = document.querySelector('.oak_configuration_page__colors_container');
+
+    var newColorContainer = document.createElement('div');
+    newColorContainer.className = 'oak_configuration_page__single_color_container';
+    newColorContainer.innerHTML = singleColorContainer;
+
+    colorsContainer.append(newColorContainer);
+    jQuery('.oak_configuration_page__style_config').find('.color_input').wpColorPicker({
+        change: function(event, ui) {
+            console.log('changed');
+        }
+    });
+
+    if (colorData) {
+        console.log('Entered the if colordata');
+        for (var i = 0; i < colorData.secondary.length; i++) {
+            colorData.primary.push(colorData.secondary[i]);
+        }
+
+        var colorInputs = newColorContainer.querySelectorAll('.color_input');
+        var colorButtons = newColorContainer.querySelectorAll('button');
+        for (var i = 0; i < colorData.primary.length; i++) {
+            colorInputs[i].value = colorData.primary[i];
+            colorButtons[i].style.backgroundColor = colorData.primary[i];
+        }
+    }
+} 
+
+// Handle save styles button
+handleSaveStylesButton();
+function handleSaveStylesButton() {
+    var saveStyleButton = document.querySelector('.oak_configuration_page__save_styles');
+    saveStyleButton.addEventListener('click', function() {
+        var colors = [];
+        var colorsContainers = document.querySelectorAll('.oak_configuration_page__single_color_container');
+        for (var i = 0; i < colorsContainers.length; i++) {
+            var primaryContainer = colorsContainers[i].querySelector('.oak_configuration_page_single_color_container__primary_container');
+            var primaryColors = [];
+            var primaryContainers = primaryContainer.querySelectorAll('.oak_color_container');
+            for (var j = 0; j < primaryContainers.length; j++) {
+                primaryColors.push(primaryContainers[j].querySelector('.color_input').value);
+            }
+
+            var secondaryContainer = colorsContainers[i].querySelector('.oak_configuration_page_single_color_container__secondary_container');
+            var secondaryColors = [];
+            var secondaryContainers = secondaryContainer.querySelectorAll('.oak_color_container');
+            for (var j = 0; j < secondaryContainers.length; j++) {
+                secondaryColors.push(secondaryContainers[j].querySelector('.color_input').value);
+            }
+
+            colors.push({
+                primary: primaryColors,
+                secondary: secondaryColors
+            });
+        }
+
+        setLoading();
+        jQuery(document).ready(function() {
+            jQuery.ajax({
+                url: DATA.ajaxUrl,
+                type: 'POST',
+                data: {
+                    'action': 'oak_corn_save_styles_settings',
+                    'colors': JSON.stringify(colors)
+                },
+                success: function(data) {
+                    console.log(data);
+                    doneLoading();
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    doneLoading();
+                }
+            });
+        }); 
+    });
+}
+
+initializeColors();
+function initializeColors() {
+    for (var i = 0; i < DATA.oakColors.length; i++) {
+        console.log('euh');
+        handleAddNewColorContainer(DATA.oakColors[i]);
+    }
+}
 
 // Everything related to our modal
 function openModal(title, twoButtons) {

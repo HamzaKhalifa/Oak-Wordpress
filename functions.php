@@ -93,10 +93,22 @@ class Oak {
     public static $secondary_text_color = '#bcc7d9';
     public static $selected_color = '#7b7b7b';
 
+    public static $social_medias;
+
     function __construct() {
         Oak::$text_domain = 'oak';
 
         global $wpdb;
+
+        Oak::$social_medias = array(
+            array( 'name' => 'facebook', 'title' => __( 'Facebook', Oak::$text_domain ) ),
+            array( 'name' => 'twitter', 'title' => __( 'Twitter' , Oak::$text_domain ) ),
+            array( 'name' => 'linkedin', 'title' => __( 'Linkedin', Oak::$text_domain ) ),
+            array( 'name' => 'youtube', 'title' => __( 'Youtube' , Oak::$text_domain ) ),
+            array( 'name' => 'insta', 'title' => __( 'Instagram', Oak::$text_domain ) ),
+            array( 'name' => 'contact', 'title' => __( 'Contact' , Oak::$text_domain) ),
+            array( 'name' => 'website', 'title' => __( 'Site Web', Oak::$text_domain  ) )
+        );
 
         Oak::$revisions = [];
         
@@ -152,7 +164,6 @@ class Oak {
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
 
         add_action( 'save_post', array ( $this, 'oak_save_post_meta_fields' ) );
-
         
         $this->oak_ajax_calls();
 
@@ -165,6 +176,18 @@ class Oak {
 
         add_action('wp_ajax_oak_corn_save_general_configuration', array( $this, 'oak_corn_save_general_configuration') );
         add_action('wp_ajax_nopriv_oak_corn_save_general_configuration', array( $this, 'oak_corn_save_general_configuration') );
+
+        add_action('wp_ajax_oak_corn_save_social_media_configuration', array( $this, 'oak_corn_save_social_media_configuration') );
+        add_action('wp_ajax_nopriv_oak_corn_save_social_media_configuration', array( $this, 'oak_corn_save_social_media_configuration') );
+
+        add_action('wp_ajax_oak_corn_save_app_bar_settings', array( $this, 'oak_corn_save_app_bar_settings') );
+        add_action('wp_ajax_nopriv_oak_corn_save_app_bar_settings', array( $this, 'oak_corn_save_app_bar_settings') );
+
+        add_action('wp_ajax_oak_corn_save_styles_settings', array( $this, 'oak_corn_save_styles_settings') );
+        add_action('wp_ajax_nopriv_oak_corn_save_styles_settings', array( $this, 'oak_corn_save_styles_settings') );
+
+        add_action('wp_ajax_oak_corn_save_nav_bar_settings', array( $this, 'oak_corn_save_nav_bar_settings') );
+        add_action('wp_ajax_nopriv_oak_corn_save_nav_bar_settings', array( $this, 'oak_corn_save_nav_bar_settings') );
 
         add_action('wp_ajax_oak_save_analysis_model', array( $this, 'oak_save_analysis_model') );
         add_action('wp_ajax_nopriv_oak_save_analysis_model', array( $this, 'oak_save_analysis_model') );
@@ -310,9 +333,12 @@ class Oak {
         endif;
 
         if ( get_current_screen()->id == 'toplevel_page_oak_corn_configuration_page' ) :
-            wp_enqueue_script( 'oak_corn_configuration_page', get_template_directory_uri() . '/src/js/corn-configuration-page.js', array( 'jquery' ), false, true);
-            wp_localize_script( 'oak_data_studio', 'DATA', array(
+            wp_enqueue_script( 'oak_corn_configuration_page', get_template_directory_uri() . '/src/js/corn-configuration-page.js', array( 'jquery', 'wp-color-picker' ), false, true);
+            wp_localize_script( 'oak_corn_configuration_page', 'DATA', array(
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                'socialMedias' => Oak::$social_medias,
+                'oakColors' => get_option( 'oak_colors' ) != false ? get_option( 'oak_colors' ) : [],
+                'oakNavBarData' => get_option( 'oak_nav_bar_data' ) != false ? get_option( 'oak_nav_bar_data' ) : [],
             ) );
         endif;
 
@@ -812,7 +838,7 @@ class Oak {
                                 $exists = true;
                             endif;
                         endforeach;
-                        if ( !$exists ) :
+                        if ( !$exists ) : 
                             $our_objects[] = $object;
                         endif;
                     endif;
@@ -885,6 +911,51 @@ class Oak {
                     endif;
                 endforeach;
             endforeach;
+
+            // For site parameters
+            $social_media_data = get_option( 'oak_social_media_data' );
+            if ( $social_media_data != false && is_array( $social_media_data ) ) :
+                foreach( $social_media_data as $key => $social_media ) :
+                    if ( $social_media['checked'] == 'true' ) :
+                        $widget_options = array(
+                            'name' => preg_replace( '/\s+/', '', Oak::$social_medias[ $key ]['name'] ),
+                            'title' => Oak::$social_medias[ $key ]['title'],
+                            'icon' => 'eicon-type-tool',
+                            'categories' => [ 'theme-elements' ],
+                            'value' => $social_media['value'],
+                            'field_type' => 'social_media',
+                        );
+                        $generic_widget = new Generic_Widget();
+                        $generic_widget->set_widgets_options( $widget_options );
+                        $widgets_manager->register_widget_type( $generic_widget );
+                    endif;
+                endforeach;
+            endif;
+
+            // For the organization name: 
+            if ( get_option( 'oak_show_organization_name' ) == 'true' ) :
+                $widget_options = array (
+                    'name' => __( 'organization_name', Oak::$text_domain ),
+                    'title' => __( 'Nom de l\'organisation', Oak::$text_domain ),
+                    'icon' => 'eicon-type-tool',
+                    'categories' => [ 'theme-elements' ],
+                    'value' => get_option( 'oak_organization_name' ),
+                    'field_type' => 'organization_name',
+                );
+                $generic_widget = new Generic_Widget();
+                $generic_widget->set_widgets_options( $widget_options );
+                $widgets_manager->register_widget_type( $generic_widget );
+            endif;
+
+            // To unregister the logo and site title widgets: 
+            if ( get_option( 'oak_show_logo' ) != 'true' ) :
+                $widgets_manager->unregister_widget_type( 'theme-site-logo' );
+            endif;
+
+            if ( get_option( 'oak_show_site_title' ) != 'true' ) :
+                $widgets_manager->unregister_widget_type( 'theme-site-title' );
+            endif;
+
         }, 14);
     }
 
@@ -1071,6 +1142,10 @@ class Oak {
         ) );
     }
 
+    public static function oak_get_all_wordpress_menus(){
+        return get_terms( 'nav_menu', array( 'hide_empty' => true ) ); 
+    }
+
     function oak_save_analyzes() {
         $analyzes = $_POST['analyzes'];
         update_option( 'oak_analyzes', $analyzes );
@@ -1102,10 +1177,94 @@ class Oak {
     }
 
     function oak_corn_save_general_configuration() {
-        $general_settings = $_POST['oak_corn_save_general_configuration'];
+        global $wpdb; 
+
+        $general_settings = json_decode( stripslashes( $_POST['generalSettings'] ), true );
+
+        $site_logo = $general_settings['siteLogo'];
+        $blog_description = $general_settings['tagline'];
+        $blog_name = $general_settings['siteTitle'];
+        $organization_name = $general_settings['organizationName'];
+        $site_icon = $general_settings['siteIcon'];
+
+        $custom_logo_id = get_theme_mod( 'custom_logo' );
+
+        $site_logo_upload_string_position = strpos( $site_logo, 'uploads/' );
+        $site_logo_to_store = substr( $site_logo, $site_logo_upload_string_position + 8, strlen( $site_logo ) - $site_logo_upload_string_position );
+
+        $result = $wpdb->update(
+            $wpdb->prefix . 'postmeta',
+            array (
+                'meta_value' => $site_logo_to_store 
+            ),
+            array( 
+                'post_id' => $custom_logo_id,
+                'meta_key' => '_wp_attached_file'
+            )
+        );
+
+        $custom_site_icon_id = get_option('site_icon');
+
+        $site_icon_upload_string_position = strpos( $site_icon, 'uploads/' );
+        $site_icon_to_store = substr( $site_icon, $site_icon_upload_string_position + 8, strlen( $site_icon ) - $site_icon_upload_string_position );
+
+        $result = $wpdb->update(
+            $wpdb->prefix . 'postmeta',
+            array (
+                'meta_value' => $site_icon_to_store 
+            ),
+            array(
+                'post_id' => $custom_site_icon_id,
+                'meta_key' => '_wp_attached_file'
+            )
+        );
+        
+        $table_name = $wpdb->prefix . 'postmeta';
+        
+        update_option( 'blogdescription', $blog_description );
+        update_option( 'blogname', $blog_name );
+        update_option( 'oak_organization_name', $organization_name );
+        
         wp_send_json_success( array(
-            'generalSettings' => $general_settings
+            'generalSettings' => $general_settings,
+            'result' => $result,
+            'site_icon' => $site_icon,
+            'site_logo_id' => $custom_logo_id
         ) );
+    }
+
+    function oak_corn_save_social_media_configuration() {
+        $social_media_data = $_POST['socialMediaData'];
+        
+        update_option( 'oak_social_media_data', $social_media_data );
+        update_option( 'oak_social_system_bar_background_color', $_POST['socialMediaBackgroundColor'] );
+
+        wp_send_json_success();
+    }
+
+    function oak_corn_save_app_bar_settings() {
+        $app_bar_settings = $_POST['appBarSettings'];
+        foreach( $app_bar_settings as $single_setting ) :
+            update_option( $single_setting['name'], $single_setting['value'] );
+        endforeach;
+        
+        update_option( 'oak_app_bar_background_color', $_POST['appBarBackgroundColor'] );
+
+        wp_send_json_success();
+    }
+
+    function oak_corn_save_nav_bar_settings() {
+        $nav_bar_data = json_decode( stripslashes( $_POST['navBarData'] ) );
+        update_option( 'oak_nav_bar_data', $nav_bar_data );
+
+        wp_send_json_success();
+    }
+
+    function oak_corn_save_styles_settings() {
+        $colors = json_decode( stripslashes( $_POST['colors'] ) );
+        update_option( 'oak_colors', $colors );
+
+        wp_send_json_success();
     }
 
     function oak_add_element() {

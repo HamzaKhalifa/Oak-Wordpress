@@ -48,7 +48,7 @@ class Generic_Widget extends \Elementor\Widget_Base {
 				'type' => \Elementor\Controls_Manager::WYSIWYG,
 				'placeholder' => __( 'Entrer la valeur', Oak::$text_domain ),
 				// 'default' => 'the default',
-				'default' => wp_http_validate_url( $this->get_widgets_options()['value'] ) == true ? '' : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : '',
+				'default' => wp_http_validate_url( $this->get_widgets_options()['value'] ) == true && $this->get_widgets_options()['field_type'] != 'social_media' ? '' : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : '',
 			]
 		);
 
@@ -56,11 +56,23 @@ class Generic_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'image',
 			[
-				'label' => __( 'Choose Image', Oak::$text_domain ),
+				'label' => __( 'Choisir l\'image', Oak::$text_domain ),
 				'type' => \Elementor\Controls_Manager::MEDIA,
 				'default' => [
 					'url' => wp_http_validate_url( $this->get_widgets_options()['value'] ) != true ? \Elementor\Utils::get_placeholder_image_src() : isset( $this->get_widgets_options()['value'] ) ? $this->get_widgets_options()['value'] : \Elementor\Utils::get_placeholder_image_src(),
 				],
+			]
+		);
+
+		$this->add_control(
+			'field_type',
+			[
+				'label' => __( 'Type du widget', Oak::$text_domain ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'placeholder' => __( 'Type du widget', Oak::$text_domain ),
+				'default' => $this->get_widgets_options()['field_type'],
+				'show_label' => false,
+				'label_block' => false
 			]
 		);
 
@@ -337,8 +349,8 @@ class Generic_Widget extends \Elementor\Widget_Base {
 			
 			$value = $before . '<' . $settings['tag'] . ' class="' . $settings['class'] . '" style="' . $style . '">' . $settings['value'] . '</' . $settings['tag'] . '>' . $after;
 		endif;
-
-		if ( wp_http_validate_url( $settings['image']['url'] ) ) :
+		
+		if ( wp_http_validate_url( $settings['image']['url'] ) && $settings['field_type'] != 'social_media' ) :
 			$width = $settings['image_width'] != '' ? 'width: ' . $settings['image_width'] . ';' : '';
 			$opacity = $settings['image_opacity'] != '' ? 'opacity: ' . $settings['image_opacity'] . ';' : '';
 			$max_width = $settings['image_max_width'] != '' ? 'max-width: ' . $settings['image_max_width'] . ';' : '';

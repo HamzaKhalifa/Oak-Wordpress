@@ -10,5 +10,3 @@
         <i class="oak_menu_icon oak_menu_smaller_icon fas fa-ellipsis-v"></i>
     </div>
 </div>
-
-<!-- UPDATE `wp_postmeta` SET meta_value = REPLACE(meta_value, 'http://51.38.191.121', 'https://reporting.orabank.net') WHERE `meta_value` LIKE '%http://51.38.191.121%'; -->

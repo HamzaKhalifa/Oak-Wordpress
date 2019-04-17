@@ -1857,6 +1857,10 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   width: 100%;
 }
 
+.oak_configuration_page__save_general_settings_button, .oak_configuration_page__save_system_bar_settings_button {
+  margin-top: 10px;
+}
+
 .oak_configuration_page__single_parameter {
   margin-bottom: 20px;
   display: flex;
@@ -1881,6 +1885,94 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 
 .oak_configuration_button {
   margin-right: 150px;
+}
+
+.oak_configuration_page__system_bar_config .oak_configuration_page__single_parameter, .oak_configuration_page__nav_bar_config .oak_configuration_page__single_parameter {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.oak_configuration_page__system_bar_config .oak_configuration_page__single_parameter .oak_configuration_page_single_parameter__input_container, .oak_configuration_page__nav_bar_config .oak_configuration_page__single_parameter .oak_configuration_page_single_parameter__input_container {
+  width: 50%;
+}
+
+.oak_configuration_page__system_bar_config .color_additional_container, .oak_configuration_page__nav_bar_config .color_additional_container {
+  margin-top: 50px;
+}
+
+.oak_tab_2 .text_field_description {
+  position: initial;
+  font-size: 15px;
+}
+
+.oak_tab_2 input[type=checkbox] {
+  margin-top: 1px;
+}
+
+.oak_configuration_page__colors_container {
+  width: 600px;
+}
+
+.oak_configuration_page__single_color_container {
+  display: flex;
+  margin-top: 30px;
+}
+
+.oak_configuration_page_single_color_container__primary_container, .oak_configuration_page_single_color_container__secondary_container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.oak_tab_4 .oak_configuration_page__add_style_button {
+  bottom: 10px;
+  top: initial;
+  right: 0px;
+  left: initial;
+}
+
+.oak_tab_4 .oak_text_field_container, .oak_tab_4 .oak_text_field_container_identifier {
+  background-color: none;
+}
+
+.oak_colors_configuration_title {
+  margin-bottom: 20px;
+  text-decoration: underline;
+}
+
+.oak_tab_4 {
+  padding-bottom: 40px;
+  position: relative;
+}
+
+.oak_tab_3 {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.oak_tab_3 .oak_color_container {
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.oak_tab_3 .oak_configuration_page__single_menu_container {
+  margin-bottom: 30px;
+}
+
+.oak_tab_3 .oak_color_container .oak_color_description {
+  width: 300px;
+}
+
+.oak_configuration_page_nav_bar_config__menu_title {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.oak_tab_4 .oak_configuration_page__save_styles {
+  position: relative;
+  top: 20px;
 }
 
 .oak_import_page {
