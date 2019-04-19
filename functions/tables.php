@@ -11,6 +11,7 @@ $fields_sql = "CREATE TABLE $fields_table_name (
     field_trashed varchar(555),
     field_state varchar(555),
     field_modification_time datetime,
+    field_content_language varchar(10) DEFAULT 'fr',
     field_type varchar(555),
     field_function varchar(555),
     field_tag varchar(555),
@@ -34,6 +35,7 @@ $forms_sql = "CREATE TABLE $forms_table_name (
     form_state varchar(555),
     form_modification_time datetime,
     form_revision_number varchar(555),
+    form_content_language varchar(10) DEFAULT 'fr',
     form_structure varchar(555),
     form_attributes varchar(100),
     form_separators varchar(100),
@@ -68,6 +70,7 @@ $models_sql = "CREATE TABLE $models_table_name (
     model_state varchar(555),
     model_modification_time datetime,
     model_revision_number varchar(555),
+    model_content_language varchar(10) DEFAULT 'fr',
     model_types varchar(555),
     model_publications_categories varchar(555),
     model_separators varchar(100),
@@ -102,6 +105,7 @@ $taxonomies_sql = "CREATE TABLE $taxonomies_table_name (
     taxonomy_trashed varchar(555),
     taxonomy_state varchar(555),
     taxonomy_modification_time datetime,
+    taxonomy_content_language varchar(10) DEFAULT 'fr',
     taxonomy_description LONGTEXT,
     taxonomy_structure varchar(555),
     taxonomy_numerotation varchar(555),
@@ -125,6 +129,7 @@ $organizations_sql = "CREATE TABLE $organizations_table_name (
     organization_trashed varchar(555),
     organization_state varchar(555),
     organization_modification_time datetime,
+    organization_content_language varchar(10) DEFAULT 'fr',
     organization_acronym varchar(555),
     organization_logo varchar(555),
     organization_description LONGTEXT,
@@ -150,6 +155,7 @@ $publications_sql = "CREATE TABLE $publications_table_name (
     publication_trashed varchar(555),
     publication_state varchar(555),
     publication_modification_time datetime,
+    publication_content_language varchar(10) DEFAULT 'fr',
     publication_organization varchar(555),
     publication_year varchar(555),
     publication_headpiece varchar(555),
@@ -181,6 +187,7 @@ $glossaries_sql = "CREATE TABLE $glossaries_table_name (
     glossary_trashed varchar(555),
     glossary_state varchar(555),
     glossary_modification_time datetime,
+    glossary_content_language varchar(10) DEFAULT 'fr',
     glossary_publication varchar(555),
     glossary_object varchar(555),
     glossary_depends varchar(555),
@@ -203,6 +210,7 @@ $qualis_sql = "CREATE TABLE $qualis_table_name (
     quali_trashed varchar(555),
     quali_state varchar(555),
     quali_modification_time datetime,
+    quali_content_language varchar(10) DEFAULT 'fr',
     quali_publication varchar(555),
     quali_object varchar(555),
     quali_depends varchar(555),
@@ -227,6 +235,7 @@ $quantis_sql = "CREATE TABLE $quantis_table_name (
     quanti_trashed varchar(555),
     quanti_state varchar(555),
     quanti_modification_time datetime,
+    quanti_content_language varchar(10) DEFAULT 'fr',
     quanti_publication varchar(555),
     quanti_object varchar(555),
     quanti_depends varchar(555),
@@ -251,6 +260,7 @@ $goodpractice_sql = "CREATE TABLE $goodpractices_table_name (
     goodpractice_trashed varchar(555),
     goodpractice_state varchar(555),
     goodpractice_modification_time datetime,
+    goodpractice_content_language varchar(10) DEFAULT 'fr',
     goodpractice_short_designation varchar(555),
     goodpractice_description LONGTEXT,
     goodpractice_illustration TEXT,
@@ -274,6 +284,7 @@ $performance_sql = "CREATE TABLE $performances_table_name (
     performance_trashed varchar(555),
     performance_state varchar(555),
     performance_modification_time datetime,
+    performance_content_language varchar(10) DEFAULT 'fr',
     performance_type TEXT,
     performance_distance_unity TEXT,
     performance_volume_unity TEXT,
@@ -572,7 +583,6 @@ foreach( $models_without_redundancy as $key => $model ) :
         endif;
     endforeach;
 
-
     $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
     $models_sql = "CREATE TABLE $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -583,14 +593,14 @@ foreach( $models_without_redundancy as $key => $model ) :
         object_trashed varchar(555),
         object_state varchar(555),
         object_modification_time datetime,
+        object_content_language varchar(10) DEFAULT 'fr',
         object_selectors varchar(999),
         object_form_selectors varchar(999),
         PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $models_sql );
-
-
+    
     // object_quanti varchar (999),
     // object_title varchar (999),
     // object_commentary varchar (999),
@@ -613,7 +623,7 @@ foreach( $models_without_redundancy as $key => $model ) :
         endforeach;
 
         if ( !$exists ) {
-            if ( $field->field_type == 'Zone de Texte' ) :
+            if ( $field->field_type == 'textarea' ) :
                 $wpdb->query("ALTER TABLE $table_name ADD $column_name LONGTEXT");
             else :
                 $wpdb->query("ALTER TABLE $table_name ADD $column_name TEXT");
@@ -670,6 +680,7 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
         term_trashed varchar(555),
         term_state varchar(555),
         term_modification_time datetime,
+        term_content_language varchar(10) DEFAULT 'fr',
         term_numerotation varchar(555),
         term_title varchar(555),
         term_description LONGTEXT,
