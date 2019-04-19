@@ -74,3 +74,15 @@ function handleWordpressMenuButton() {
         adminMenuOpen = !adminMenuOpen;
     });
 }
+
+console.log('dlfkd');
+// Initializing language: 
+initializeSiteLanguage();
+function initializeSiteLanguage() {
+    var languagesOptions = document.querySelectorAll('.oak_stystem_bar_language_option');
+    for (var i = 0; i < languagesOptions.length; i++) {
+        if (languagesOptions[i].value == DATA.siteLanguage) {
+            languagesOptions[i].selected = true;
+        }
+    }
+}

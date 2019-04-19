@@ -13,6 +13,47 @@ for (var i = 0; i < properties.length; i++) {
 }
 var numberOfExistingRenamingInputs = 0;
 
+// For the languages select change listener 
+handleLanguagesSelectListener();
+function handleLanguagesSelectListener() {
+    var languagesSelect = document.querySelector('.oak_system_bar__languages_select');
+    languagesSelect.addEventListener('change', function() {
+        var theRevision = null;
+        var languageCode = languagesSelect.value;
+        for (var i = 0; i < DATA.revisions.length; i++) {
+            if (DATA.revisions[i][DATA.table + '_content_language'] == languageCode) {
+                theRevision = DATA.revisions[i];
+            }
+        }
+        // Lets change the designation: 
+        var designationInput = document.querySelector('.' + DATA.table + '_designation_input');
+        if (theRevision != null) {
+            designationInput.value = theRevision[DATA.table + '_designation'];
+        } else {
+            designationInput.value = '';
+        }
+
+        // Now lets change the properties
+        for (var i = 0; i < DATA.properties.length; i++) {
+            if (DATA.properties[i].translatable) {
+                var propertyInput = document.querySelector('.' + DATA.table + '_' + DATA.properties[i].name + '_input');
+                if (theRevision != null) {
+                    propertyInput.value = theRevision[DATA.table + '_' + DATA.properties[i].name];
+                } else {
+                    propertyInput.value = '';
+                }
+            } 
+        }
+
+        // Now for other elements (Forms and models)
+        if (DATA.otherElementProperties) {
+            initializeElements();
+        }
+
+        console.log(theRevision);
+    });
+}
+
 // For numerotation format (for quanti and quali): 
 initializeNumerotationFormat();
 function initializeNumerotationFormat() {
@@ -422,6 +463,9 @@ function createElementData(state) {
         }
     }
 
+    // For the language: 
+    elementData[DATA.table + '_content_language'] = document.querySelector('.oak_system_bar__languages_select').value;
+
     return elementData;
 }
 
@@ -632,10 +676,23 @@ if (DATA.otherElementProperties)
     initializeElements();
 function initializeElements() {
     if (DATA.revisions.length > 0) {
+        // Lets remove all the already existing other elements:
+        var otherElementsContainers = document.querySelectorAll('.oak_other_elements_single_elements_container__single_element');
+        for (var i = 0; i < otherElementsContainers.length; i++) {
+            otherElementsContainers[i].remove();
+        }
+
         var otherElements = DATA.otherElementProperties.associative_tab_instances;
+        // Lets look for the revision which language is the selected one: 
+        var theRevision = DATA.revisions[DATA.revisions.length - 1];
+        for (var i = 0; i < DATA.revisions.length; i++) {
+            if (DATA.revisions[i][DATA.table + '_content_language'] == document.querySelector('.oak_system_bar__languages_select').value) {
+                theRevision = DATA.revisions[i];
+            }
+        }
         for (var i = 0; i < otherElements.length; i++) {
-            if ( otherElements[i][table + '_identifier'] == DATA.revisions[DATA.revisions.length - 1][table + '_identifier'] 
-                && otherElements[i][table + '_revision_number'] == DATA.revisions[DATA.revisions.length - 1][table + '_revision_number'] ) {
+            if ( otherElements[i][table + '_identifier'] == theRevision[table + '_identifier'] 
+                && otherElements[i][table + '_revision_number'] == theRevision[table + '_revision_number'] ) {
                     addOtherElement(otherElements[i]);
             }
         }

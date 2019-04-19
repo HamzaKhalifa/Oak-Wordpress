@@ -23,6 +23,9 @@ class Oak {
     public static $fields_without_redundancy;
     public static $field_properties;
     public static $field_types;
+    public static $field_first_property;
+    public static $field_second_property;
+    public static $field_third_property;
 
     public static $forms;
     public static $forms_without_redundancy;
@@ -30,15 +33,25 @@ class Oak {
     public static $form_properties;
     public static $form_other_elements;
     public static $all_forms_and_fields = [];
+    public static $form_first_property;
+    public static $form_second_property;
+    public static $form_third_property;
 
-    public static $terms;
-    public static $terms_without_redundancy = [];
     public static $objects;
     public static $objects_without_redundancy = [];
     public static $all_objects;
-    public static $all_terms;
     public static $all_objects_without_redundancy = [];
+    public static $object_first_property;
+    public static $object_second_property;
+    public static $object_third_property;
+
+    public static $terms;
+    public static $terms_without_redundancy = [];
+    public static $all_terms;
     public static $all_terms_without_redundancy = [];
+    public static $term_first_property;
+    public static $term_second_property;
+    public static $term_third_property;
 
     public static $terms_and_objects = [];
 
@@ -50,38 +63,65 @@ class Oak {
     public static $current_model_fields = [];
     public static $object_properties = [];
     public static $term_properties = [];
+    public static $model_first_property;
+    public static $model_second_property;
+    public static $model_third_property;
     
     public static $organizations;
     public static $organizations_without_redundancy;
     public static $organization_properties;
+    public static $organization_first_property;
+    public static $organization_second_property;
+    public static $organization_third_property;
 
     public static $publications;
     public static $publications_without_redundancy;
     public static $publication_properties;
+    public static $publication_first_property;
+    public static $publication_second_property;
+    public static $publication_third_property;
 
     public static $glossaries;
     public static $glossaries_without_redundancy;
     public static $glossary_properties;
+    public static $glossary_first_property;
+    public static $glossary_second_property;
+    public static $glossary_third_property;
 
     public static $qualis;
     public static $qualis_without_redundancy;
     public static $quali_properties;
+    public static $quali_first_property;
+    public static $quali_second_property;
+    public static $quali_third_property;
 
     public static $quantis;
     public static $quantis_without_redundancy;
     public static $quanti_properties;
+    public static $quanti_first_property;
+    public static $quanti_second_property;
+    public static $quanti_third_property;
 
     public static $goodpractices;
     public static $goodpractices_without_redundancy;
     public static $goodpractice_properties;
+    public static $goodpractice_first_property;
+    public static $goodpractice_second_property;
+    public static $goodpractice_third_property;
 
     public static $performances;
     public static $performances_without_redundancy;
     public static $performance_properties;
+    public static $performance_first_property;
+    public static $performance_second_property;
+    public static $performance_third_property;
 
     public static $taxonomies;
     public static $taxonomies_without_redundancy = [];
     public static $taxonomy_properties;
+    public static $taxonomy_first_property;
+    public static $taxonomy_second_property;
+    public static $taxonomy_third_property;
 
     public static $frame_publications_identifiers = [];
     public static $frame_terms_identifiers = [];
@@ -94,6 +134,8 @@ class Oak {
     public static $selected_color = '#7b7b7b';
 
     public static $social_medias;
+    public static $languages_names = [];
+    public static $site_language;
 
     function __construct() {
         Oak::$text_domain = 'oak';
@@ -109,6 +151,8 @@ class Oak {
             array( 'name' => 'contact', 'title' => __( 'Contact' , Oak::$text_domain) ),
             array( 'name' => 'website', 'title' => __( 'Site Web', Oak::$text_domain  ) )
         );
+
+        include( get_template_directory() . '/functions/elements_to_show_properties.php' );
 
         Oak::$revisions = [];
         
@@ -135,15 +179,17 @@ class Oak {
         // $this->delete_everything();
 
         Oak::$field_types = array (
-            array ( 'value' => 'Texte', 'innerHTML' => 'Texte' ), 
-            array ( 'value' => 'Zone de Texte', 'innerHTML' => 'Zone de Texte'), 
-            array ( 'value' => 'Image', 'innerHTML' => 'Image' ),
-            array ( 'value' => 'Fichier', 'innerHTML' => 'Fichier' ),
-            array ( 'value' => 'Url', 'innerHTML' => 'Url' ),
-            array ( 'value' => 'Indicateur Qualitatif', 'innerHTML' => 'Indicateur Qualitatif' ),
-            array ( 'value' => 'Indicateur Quantitatif', 'innerHTML' => 'Indicateur Quantitatif' ),
-            array ( 'value' => 'Selecteur', 'innerHTML' => 'Selecteur' ),
+            array ( 'value' => 'text', 'innerHTML' => __( 'Texte', Oak::$text_domain ) ), 
+            array ( 'value' => 'textarea', 'innerHTML' => __( 'Zone de Texte', Oak::$text_domain ) ), 
+            array ( 'value' => 'image', 'innerHTML' => __( 'Image', Oak::$text_domain ) ),
+            array ( 'value' => 'file', 'innerHTML' => __( 'Fichier', Oak::$text_domain ) ),
+            array ( 'value' => 'url', 'innerHTML' => __( 'Url', Oak::$text_domain ) ),
+            array ( 'value' => 'quali', 'innerHTML' => __( 'Indicateur Qualitatif', Oak::$text_domain ) ),
+            array ( 'value' => 'quanti', 'innerHTML' => __( 'Indicateur Quantitatif', Oak::$text_domain ) ),
+            array ( 'value' => 'selector', 'innerHTML' => __( 'Selecteur', Oak::$text_domain ) )
         );
+
+        Oak::$site_language = substr( get_locale(), 0, 2 );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
@@ -278,7 +324,8 @@ class Oak {
         // Admin menu
         wp_enqueue_script( 'admin_menu_script', get_template_directory_uri() . '/src/js/admin-menu.js', array('jquery'), false, true );
         wp_localize_script( 'admin_menu_script', 'DATA', array(
-            'ajaxUrl' => admin_url('admin-ajax.php')
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'siteLanguage' => Oak::$site_language
         ) );
 
         // Auto complete
@@ -384,12 +431,19 @@ class Oak {
                 array( 'name' => 'state', 'type' => 'text', 'input_type' => 'checkbox' ),
             );
             $additional_data_to_pass = array();
+
+            $properties_to_show_in_list = array();
             
             if ( $_GET['elements'] == 'fields' ) :
                 $table = 'field';
                 $table_in_plural = 'fields';
                 $elements = Oak::$fields;
                 $properties = array_merge( $properties, Oak::$field_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$field_first_property,
+                    Oak::$field_second_property,
+                    Oak::$field_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'forms' ) :
                 $table = 'form';
@@ -401,6 +455,11 @@ class Oak {
                 );
                 $properties = array_merge( $properties, Oak::$form_properties );
                 $properties[] = array( 'name' => 'revision_number', 'type' => 'text', 'input_type' => 'checkbox' );
+                $properties_to_show_in_list = array(
+                    Oak::$form_first_property,
+                    Oak::$form_second_property,
+                    Oak::$form_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'models' ) :
                 $table = 'model';
@@ -414,54 +473,99 @@ class Oak {
                 );
                 $properties = array_merge( $properties, Oak::$model_properties );
                 $properties[] = array( 'name' => 'revision_number', 'type' => 'text', 'input_type' => 'checkbox' );
+                $properties_to_show_in_list = array(
+                    Oak::$model_first_property,
+                    Oak::$model_second_property,
+                    Oak::$model_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'taxonomies' ) :
                 $table = 'taxonomy';
                 $table_in_plural = 'taxonomies';
                 $elements = Oak::$taxonomies;
                 $properties = array_merge( $properties, Oak::$taxonomy_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$taxonomy_first_property,
+                    Oak::$taxonomy_second_property,
+                    Oak::$taxonomy_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'organizations' ) :
                 $table = 'organization';
                 $table_in_plural = 'organizations';
                 $elements = Oak::$organizations;
                 $properties = array_merge( $properties, Oak::$organization_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$organization_first_property,
+                    Oak::$organization_second_property,
+                    Oak::$organization_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'publications' ) :
                 $table = 'publication';
                 $table_in_plural = 'publications';
                 $elements = Oak::$publications;
                 $properties = array_merge( $properties, Oak::$publication_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$publication_first_property,
+                    Oak::$publication_second_property,
+                    Oak::$publication_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'glossaries' ) :
                 $table = 'glossary';
                 $table_in_plural = 'glossaries';
                 $elements = Oak::$glossaries;
                 $properties = array_merge( $properties, Oak::$glossary_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$glossary_first_property,
+                    Oak::$glossary_second_property,
+                    Oak::$glossary_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'qualis' ) :
                 $table = 'quali';
                 $table_in_plural = 'qualis';
                 $elements = Oak::$qualis;
                 $properties = array_merge( $properties, Oak::$quali_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$quali_first_property,
+                    Oak::$quali_second_property,
+                    Oak::$quali_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'quantis' ) :
                 $table = 'quanti';
                 $table_in_plural = 'quantis';
                 $elements = Oak::$quantis;
                 $properties = array_merge( $properties, Oak::$quanti_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$quanti_first_property,
+                    Oak::$quanti_second_property,
+                    Oak::$quanti_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'goodpractices' ) :
                 $table = 'goodpractice';
                 $table_in_plural = 'goodpractices';
                 $elements = Oak::$goodpractices;
                 $properties = array_merge( $properties, Oak::$goodpractice_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$goodpractice_first_property,
+                    Oak::$goodpractice_second_property,
+                    Oak::$goodpractice_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'performances' ) :
                 $table = 'performance';
                 $table_in_plural = 'performances';
                 $elements = Oak::$performances;
                 $properties = array_merge( $properties, Oak::$performance_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$performance_first_property,
+                    Oak::$performance_second_property,
+                    Oak::$performance_third_property
+                );
             endif;
             if ( $_GET['elements'] == 'objects' ) :
                 $table = 'object';
@@ -477,20 +581,7 @@ class Oak {
                 endforeach;
                 
                 foreach( Oak::$current_model_fields as $key => $field ) :
-                    $input_type = 'text';
-                    if ( $field->field_type == 'Image' ) :
-                        $input_type = 'image';
-                    elseif( $field->field_type == 'Fichier' ) :
-                        $input_type = 'file';
-                    elseif( $field->field_type == 'Zone de Texte' ) :
-                        $input_type = 'textarea';
-                    elseif( $field->field_type == 'Indicateur Qualitatif' ) :
-                        $input_type = 'quali';
-                    elseif( $field->field_type == 'Indicateur Quantitatif' ) :
-                        $input_type = 'quanti';
-                    elseif( $field->field_type == 'Selecteur' ) :
-                        $input_type = 'selector';
-                    endif;;
+                    $input_type = $field->field_type;
 
                     Oak::$object_properties[] = array (
                         'name' => $key . '_' . $field->field_identifier,
@@ -507,6 +598,11 @@ class Oak {
                 endforeach;
 
                 $properties = array_merge( $properties, Oak::$object_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$object_first_property,
+                    Oak::$object_second_property,
+                    Oak::$object_third_property
+                );
             endif;
 
             if ( $_GET['elements'] == 'terms' ) :
@@ -520,6 +616,11 @@ class Oak {
                 $elements = Oak::$terms;
 
                 $properties = array_merge( $properties, Oak::$term_properties );
+                $properties_to_show_in_list = array(
+                    Oak::$term_first_property,
+                    Oak::$term_second_property,
+                    Oak::$term_third_property
+                );
             endif;
 
             if ( $_GET['elements'] == 'term_objects' ) :
@@ -538,6 +639,11 @@ class Oak {
                 $table = 'object';
                 $table_in_plural = 'objects';
                 $elements = Oak::$term_objects_without_redundancy;
+                $properties_to_show_in_list = array(
+                    Oak::$object_first_property,
+                    Oak::$object_second_property,
+                    Oak::$object_third_property
+                );
                 // $properties = array_merge( $properties, Oak::$glossary_properties );
             endif;
 
@@ -553,8 +659,11 @@ class Oak {
                 'elements' => $elements,
                 'elementsType' => $_GET['elements'],
                 'templateDirectoryUri' => get_template_directory_uri(),
-                'termIdentifier' => isset ( $_GET['term_identifier'] ) ? $_GET['term_identifier'] : ''
+                'termIdentifier' => isset ( $_GET['term_identifier'] ) ? $_GET['term_identifier'] : '',
+                'siteLanguage' => Oak::$site_language,
+                'propertiesToShowInList' => $properties_to_show_in_list
             );
+
             $final_data_to_pass = array_merge( $basic_data_to_pass, $additional_data_to_pass );
             
             if ( $_GET['listorformula'] == 'formula' ) :
@@ -876,7 +985,7 @@ class Oak {
                             break;
                         endswitch;
                         $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field_name;
-                        $field_type = 'Texte';
+                        $field_type = 'text';
                         if ( count ( $key_devided ) > 2 ) :
                             $field_identifier = $key_devided[2];
                             foreach( Oak::$fields_without_redundancy as $field ) :
@@ -1058,6 +1167,34 @@ class Oak {
         update_option( 'oak_countries_names', $names );
 
         return $names;
+    }
+
+    static function get_languages_codes() {
+        if ( get_option('oak_languages_codes') ) :
+            return get_option('oak_languages_codes');
+        endif;
+
+        $country_query_result = wp_remote_get( 'https://restcountries.eu/rest/v2/all' );
+        $countries = json_decode( $country_query_result['body'] );
+        $codes = [];
+        $languages = [];
+        foreach( $countries as $key => $country ) :
+            foreach( $country->languages as $language ) :
+                if ( !in_array( $language->name, $languages ) ) :
+                    $languages[] = $language->name;
+                    $codes[] = $language->iso639_1;
+                endif;
+            endforeach;
+        endforeach;
+
+        $languages_codes = array(
+            'languages' => $languages,
+            'codes' => $codes
+        );
+
+        update_option( 'oak_languages_codes', $languages_codes );
+
+        return $languages_codes;
     }
 
     static function oak_get_languages() {
@@ -1344,94 +1481,106 @@ class Oak {
         $elements = [];
         $table = '';
         $title = '';
+
         switch( $_GET['elements'] ) :
             case 'fields' :
                 $title = __( 'Champs', Oak::$text_domain );
                 $elements = Oak::$fields_without_redundancy;
+                $elements_with_redundancy = Oak::$fields;
                 $table = 'field';
-                $first_property = array ( 'title' => __( 'Nature', Oak::$text_domain ), 'property' => 'field_type' );
-                $second_property = array ( 'title' => __( 'Fonction', Oak::$text_domain ), 'property' => 'field_function' );
-                $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'field_function' );;
+                $first_property = Oak::$field_first_property;
+                $second_property = Oak::$field_second_property;
+                $third_property = Oak::$field_third_property;
             break;
             case 'forms' :
                 $title = __( 'Formes', Oak::$text_domain );
                 $elements = Oak::$forms_without_redundancy;
+                $elements_with_redundancy = Oak::$forms;
                 $table = 'form';
-                $first_property = array ( 'title' => __( 'Structure', Oak::$text_domain ), 'property' => 'form_structure' );
-                $second_property = array ( 'title' => __( 'Attributs', Oak::$text_domain ), 'property' => 'form_attributes' );
-                $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'form_attributes' );;
+                $first_property = Oak::$form_first_property;
+                $second_property = Oak::$form_second_property;
+                $third_property = Oak::$form_third_property;
             break;
             case 'models' :
                 $title = __( 'Modèles', Oak::$text_domain );
                 $elements = Oak::$models_without_redundancy;
+                $elements_with_redundancy = Oak::$models;
                 $table = 'model';
-                $first_property = array ( 'title' => __( 'Types', Oak::$text_domain ), 'property' => 'model_types' );
-                $second_property = array ( 'title' => __( 'Catégories de publications', Oak::$text_domain ), 'property' => 'model_publications_categories' );
-                $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'model_publications_categories' );;
+                $first_property = Oak::$model_first_property;
+                $second_property = Oak::$model_second_property;
+                $third_property = Oak::$model_third_property;
             break;
             case 'taxonomies' :
                 $title = __( 'Taxonomies', Oak::$text_domain );
                 $elements = Oak::$taxonomies_without_redundancy;
+                $elements_with_redundancy = Oak::$taxonomies;
                 $table = 'taxonomy';
-                $first_property = array ( 'title' => __( 'Description', Oak::$text_domain ), 'property' => 'taxonomy_description' );
-                $second_property = array ( 'title' => __( 'Structure', Oak::$text_domain ), 'property' => 'taxonomy_structure' );
-                $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'taxonomy_structure' );;
+                $first_property = Oak::$taxonomy_first_property;
+                $second_property = Oak::$taxonomy_second_property;
+                $third_property = Oak::$taxonomy_third_property;
             break;
             case 'organizations' : 
                 $title = __( 'Organisations', Oak::$text_domain );
                 $elements = Oak::$organizations_without_redundancy;
+                $elements_with_redundancy = Oak::$organizations;
                 $table = 'organization';
-                $first_property = array ( 'title' => __( 'Acronyme', Oak::$text_domain ), 'property' => 'organization_acronym' );
-                $second_property = array ( 'title' => __( 'Description', Oak::$text_domain ), 'property' => 'organization_description' );
-                $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'organization_description' );;
+                $first_property = Oak::$organization_first_property;
+                $second_property = Oak::$organization_second_property;
+                $third_property = Oak::$organization_third_property;
             break;
             case 'publications' : 
                 $title = __( 'Publications', Oak::$text_domain );
                 $elements = Oak::$publications_without_redundancy;
+                $elements_with_redundancy = Oak::$publications;
                 $table = 'publication';
-                $first_property = array ( 'title' => __( 'Année', Oak::$text_domain ), 'property' => 'publication_year' );
-                $second_property = array ( 'title' => __( 'Format', Oak::$text_domain ), 'property' => 'publication_format' );
-                $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'publication_format' );;
+                $first_property = Oak::$publication_first_property;
+                $second_property = Oak::$publication_second_property;
+                $third_property = Oak::$publication_third_property;
             break; 
             case 'quantis' : 
                 $title = __( 'Indicateurs Quantitatifs', Oak::$text_domain );
                 $elements = Oak::$quantis_without_redundancy;
+                $elements_with_redundancy = Oak::$quantis;
                 $table = 'quanti';
-                $first_property = array ( 'title' => __( 'Publication', Oak::$text_domain ), 'property' => 'quanti_publication' );
-                $second_property = array ( 'title' => __( 'Parent', Oak::$text_domain ), 'property' => 'quanti_parent' );
-                $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'quanti_parent' );;
+                $first_property = Oak::$quanti_first_property;
+                $second_property = Oak::$quanti_second_property;
+                $third_property = Oak::$quanti_third_property;
             break;
             case 'qualis' :
                 $title = __( 'Indicateurs Qualitatifs', Oak::$text_domain );
                 $elements = Oak::$qualis_without_redundancy;
+                $elements_with_redundancy = Oak::$qualis;
                 $table = 'quali';
-                $first_property = array ( 'title' => __( 'Publication', Oak::$text_domain ), 'property' => 'quali_publication' );
-                $second_property = array ( 'title' => __( 'Parent', Oak::$text_domain ), 'property' => 'quali_parent' );
-                $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'quali_parent' );;
+                $first_property = Oak::$quali_first_property;
+                $second_property = Oak::$quali_second_property;
+                $third_property = Oak::$quali_third_property;
             break;
             case 'glossaries' :
                 $title = __( 'Terminologies', Oak::$text_domain );
                 $elements = Oak::$glossaries_without_redundancy;
+                $elements_with_redundancy = Oak::$glossaries;
                 $table = 'glossary';
-                $first_property = array ( 'title' => __( 'Publication', Oak::$text_domain ), 'property' => 'glossary_publication' );
-                $second_property = array ( 'title' => __( 'Parent', Oak::$text_domain ), 'property' => 'glossary_parent' );
-                $third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'glossary_parent' );;
+                $first_property = Oak::$glossary_first_property;
+                $second_property = Oak::$glossary_second_property;
+                $third_property = Oak::$glossary_third_property;
             break;
             case 'goodpractices' :
                 $title = __( 'Bonnes Pratiques', Oak::$text_domain );
                 $elements = Oak::$goodpractices_without_redundancy;
+                $elements_with_redundancy = Oak::$goodpractices;
                 $table = 'goodpractice';
-                $first_property = array ( 'title' => __( 'Nom', Oak::$text_domain ), 'property' => 'goodpractice_designation' );
-                $second_property = array ( 'title' => __( 'Nom Court', Oak::$text_domain ), 'property' => 'goodpractice_short_designation' );
-                $third_property = array ( 'title' => __( 'Lien', Oak::$text_domain ), 'property' => 'goodpractice_link' );;
+                $first_property = Oak::$goodpractice_first_property;
+                $second_property = Oak::$goodpractice_second_property;
+                $third_property = Oak::$goodpractice_third_property;
             break;
             case 'performances' :
                 $title = __( 'Données de performances', Oak::$text_domain );
                 $elements = Oak::$performances_without_redundancy;
+                $elements_with_redundancy = Oak::$performances;
                 $table = 'performance';
-                $first_property = array ( 'title' => __( 'Nom', Oak::$text_domain ), 'property' => 'performance_designation' );
-                $second_property = array ( 'title' => __( 'Type', Oak::$text_domain ), 'property' => 'performance_type' );
-                $third_property = array ( 'title' => __( 'Objectif', Oak::$text_domain ), 'property' => 'performance_goal' );;
+                $first_property = Oak::$performance_first_property;
+                $second_property = Oak::$performance_second_property;
+                $third_property = Oak::$performance_third_property;
             break;
             case 'objects' :
                 $reversed_objects = array_reverse( Oak::$objects  );
@@ -1449,10 +1598,11 @@ class Oak {
                 
                 $title = __( 'Objets', Oak::$text_domain );
                 $elements = Oak::$objects_without_redundancy;
+                $elements_with_redundancy = Oak::$objects;
                 $table = 'object';
-                $first_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' );
-                $second_property = array ( 'title' => __( 'Sélecteur de cadres RSE', Oak::$text_domain ), 'property' => 'object_selector' );
-                $third_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' );
+                $first_property = Oak::$object_first_property;
+                $second_property = Oak::$object_second_property;
+                $third_property = Oak::$object_third_property;
             break;
             case 'terms' :
                 $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
@@ -1475,19 +1625,20 @@ class Oak {
 
                 $title = __( 'Termes', Oak::$text_domain );
                 $elements = Oak::$terms_without_redundancy;
+                $elements_with_redundancy = Oak::$terms;
                 $table = 'term';
-                $first_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'term_identifier' );
-                $second_property = array ( 'title' => __( 'Sélecteur de cadres RSE', Oak::$text_domain ), 'property' => 'term_selector' );
-                $third_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'term_identifier' );
+                $first_property = Oak::$term_first_property;
+                $second_property = Oak::$term_second_property;
+                $third_property = Oak::$term_third_property;
             break;
             case 'term_objects' :
                 $title = __( 'Objets', Oak::$text_domain );
                 $elements = Oak::$term_objects_without_redundancy;
-
+                $elements_with_redundancy = Oak::$objects;
                 $table = 'object';
-                $first_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' );
-                $second_property = array ( 'title' => __( 'Sélecteur de cadres RSE', Oak::$text_domain ), 'property' => 'object_selector' );
-                $third_property = array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' );
+                $first_property = Oak::$object_first_property;
+                $second_property = Oak::$object_second_property;
+                $third_property = Oak::$object_third_property;
             break;
         endswitch;
         include get_template_directory() . '/template-parts/elements/elements-list.php';
@@ -2521,6 +2672,7 @@ class Oak {
                 object_trashed varchar(555),
                 object_state varchar(555),
                 object_modification_time datetime,
+                object_content_language varchar(10) DEFAULT 'fr',
                 object_selectors varchar(999),
                 object_form_selectors varchar(999),
                 PRIMARY KEY (id)
@@ -2539,7 +2691,7 @@ class Oak {
                 endforeach;
                 
                 if ( !$exists ) {
-                    if ( $field->field_type == 'Zone de Texte' ) :
+                    if ( $field->field_type == 'textarea' ) :
                         $wpdb->query("ALTER TABLE $table_name ADD $column_name LONGTEXT");
                     else :
                         $wpdb->query("ALTER TABLE $table_name ADD $column_name TEXT");
@@ -2565,6 +2717,7 @@ class Oak {
                 term_trashed varchar(555),
                 term_state varchar(555),
                 term_modification_time datetime,
+                term_content_language varchar(10) DEFAULT 'fr',
                 term_numerotation varchar(555),
                 term_title varchar(555),
                 term_description varchar(555),

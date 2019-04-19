@@ -344,3 +344,38 @@ div {
     background-color: #003366;
     color: white;
 }
+
+.oak_system_bar .oak_select_container {
+    flex: initial;
+    display: flex;
+    align-items: center;
+}
+ 
+.oak_system_bar .text_field_description {
+    color: #96CEF0;
+}
+
+.oak_system_bar .input_line {
+    background-color: #96CEF0;
+}
+
+.oak_system_bar .additional_container {
+    height: 30px;
+    margin-top: 5px;
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.oak_system_bar .text_field_description {
+    position: initial;
+    margin-right: 10px;
+}
+
+.oak_system_bar .oak_select_container select {
+    background-color: #96CEF0;
+    border-radius: 5px;
+}
+
+.oak_system_bar .oak_select_container__bottom_arrow {
+    top: 15px;
+}

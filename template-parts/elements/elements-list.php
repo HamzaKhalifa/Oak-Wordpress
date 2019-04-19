@@ -23,7 +23,7 @@
             <option value="all-natures"><?php _e( 'Toutes les natures', Oak::$text_domain ); ?></option>
             <?php 
             foreach( Oak::$field_types as $field_type ) : ?>
-                <option value="<?php echo( $field_type ); ?>"><?php _e( $field_type, Oak::$text_domain ); ?></option>
+                <option value="<?php echo( $field_type['value'] ); ?>"><?php echo( $field_type['innerHTML'] ); ?></option>
             <?php
             endforeach;
             ?>
@@ -69,6 +69,7 @@
 
         <?php
         foreach( $elements as $element ) :
+            $language_property = $table . '_content_language';
             $identifier_property = $table . '_identifier';
             $designation_property = $table . '_designation';
             $trashed_property = $table . '_trashed';
@@ -76,11 +77,31 @@
             $the_first_property = $first_property['property'];
             $the_second_property = $second_property['property'];
             $the_third_property = $third_property['property'];
+
+            $designation_to_show = $element->$designation_property;
+
+            if ( $element->$language_property != Oak::$site_language ) :
+                // The current element doesn't have the same language as the site language. So we look for the last element 
+                $index = count( $elements_with_redundancy ) - 1;
+                $found_element_of_same_language = false;
+                do {
+                    if ( $element->$identifier_property == $elements_with_redundancy[ $index ]->$identifier_property
+                    && $elements_with_redundancy[ $index ]->$language_property == Oak::$site_language ) :
+                        $element = $elements_with_redundancy[ $index ];
+                        $found_element_of_same_language = true;
+                    endif;
+                    $index--;
+                } while ( $index >= 0 && !$found_element_of_same_language );
+                if ( !$found_element_of_same_language ) :
+                    // We are gonna change the designation here: 
+                    $designation_to_show .= ' (' . $element->$language_property . ')';
+                endif;
+            endif;
         ?>
             <div <?php if( $table == 'object' ) : echo('model-identifier="' . $element->object_model_identifier . '"'); endif; ?> identifier="<?php echo( $element->$identifier_property ); ?>" trashed="<?php echo( $element->$trashed_property ); ?>" class="oak_list_row <?php if ( $element->$trashed_property == 'true' ) : echo('oak_hidden'); endif; ?>">
                 <div class="oak_list_row__container">
                     <input class="oak_list_titles_container__checkbox" type="checkbox">
-                    <span class="oak_list_titles_container__title oak_list_titles_container__the_title"><?php echo( esc_attr( $element->$designation_property ) ); ?></span>
+                    <span class="oak_list_titles_container__title oak_list_titles_container__the_title"><?php echo( esc_attr( $designation_to_show ) ); ?></span>
                 </div>
 
                 <div class="oak_list_row__container">

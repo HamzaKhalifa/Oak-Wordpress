@@ -1357,6 +1357,10 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
   margin-bottom: 50px;
 }
 
+.oak_add_element_modal_container_content_revisions_list_of_revisions__language_title {
+  margin-bottom: 10px;
+}
+
 .oak_system_bar {
   background-color: #000c3b;
 }

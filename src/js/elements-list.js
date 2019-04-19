@@ -7,6 +7,49 @@ var choosingModel = false;
 var table = DATA.table;
 var tableInPlural = DATA.tableInPlural;
 
+// For the languages select
+handleLanguagesSelectListener();
+function handleLanguagesSelectListener() {
+    var languagesSelect = document.querySelector('.oak_system_bar__languages_select');
+    languagesSelect.addEventListener('change', function() {
+        var listRows = document.querySelectorAll('.oak_list_row');
+        for (var i = 1; i < listRows.length; i++) {
+            var element = {};
+            var identifier = listRows[i].getAttribute('identifier');
+            j = DATA.elements.length - 1;
+            var foundTheAssociatedLanguageInstance = false;
+            do {
+                if (DATA.elements[j][DATA.table + '_content_language'] == languagesSelect.value
+                    && DATA.elements[j][DATA.table + '_identifier'] == identifier) {
+                    foundTheAssociatedLanguageInstance = true;
+                    element = DATA.elements[j];
+                }
+                j--;
+            } while(!foundTheAssociatedLanguageInstance && j >= 0);
+
+            var language = '';
+            if (!foundTheAssociatedLanguageInstance) {
+                var foundElement = false;
+                j = DATA.elements.length - 1;
+                do {
+                    if (DATA.elements[j][DATA.table + '_identifier'] == identifier) {
+                        foundElement = true;
+                        element = DATA.elements[j];
+                        language = ' (' + DATA.elements[j][DATA.table + '_content_language'] + ')';
+                    }
+                    j--;
+                } while (!foundElement && j >= 0);
+            }
+            var titleContainers = listRows[i].querySelectorAll('.oak_list_titles_container__title');
+            console.log(titleContainers);
+            titleContainers[0].innerHTML = element[DATA.table + '_designation'] + language;
+            for (var k = 0; k < 3; k++) {
+                titleContainers[k + 1].innerHTML = element[DATA.propertiesToShowInList[k].property] + language;
+            }
+        }
+    })
+}
+
 // For the cancel current action OR return to content library button: 
 cancelActionButton();
 function cancelActionButton() {
