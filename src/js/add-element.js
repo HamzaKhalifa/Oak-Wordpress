@@ -928,7 +928,8 @@ function initializeSelectFilters() {
         for(var i = 0; i < properties.length; i++) {
             if (properties[i].input_type == 'select_with_filters') {
                 var theContainer = document.querySelector('.oak_select_container_with_filters_for_' + properties[i].name);
-                var lastRevisionValues = DATA.revisions[DATA.revisions.length - 1][DATA.table + '_' + properties[i].name].split('|');
+
+                var lastRevisionValues = DATA.revisions[DATA.revisions.length - 1][DATA.table + '_' + properties[i].name] ? DATA.revisions[DATA.revisions.length - 1][DATA.table + '_' + properties[i].name].split('|') : [];
                 for(var k = 0; k < lastRevisionValues.length; k++) {
                     var newSingleElement = document.createElement('div');
                     newSingleElement.className = 'oak_select_container_with_filters__single_element';
