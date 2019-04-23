@@ -1,0 +1,1772 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: oak\n"
+"POT-Creation-Date: 2019-04-22 01:28+0200\n"
+"PO-Revision-Date: 2018-12-04 15:20+0100\n"
+"Last-Translator: \n"
+"Language-Team: hamza.khalifa@esprit.tn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr_e\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: node_modules\n"
+
+#: functions.php:146
+msgid "Facebook"
+msgstr ""
+
+#: functions.php:147
+msgid "Twitter"
+msgstr ""
+
+#: functions.php:148
+msgid "Linkedin"
+msgstr ""
+
+#: functions.php:149
+msgid "Youtube"
+msgstr ""
+
+#: functions.php:150
+msgid "Instagram"
+msgstr ""
+
+#: functions.php:151
+msgid "Contact"
+msgstr ""
+
+#: functions.php:152
+msgid "Site Web"
+msgstr ""
+
+#: functions.php:182
+msgid "Texte"
+msgstr ""
+
+#: functions.php:183
+msgid "Zone de Texte"
+msgstr ""
+
+#: functions.php:184
+msgid "Image"
+msgstr ""
+
+#: functions.php:185 functions/properties-initialization.php:718
+msgid "Fichier"
+msgstr ""
+
+#: functions.php:186 functions/properties-initialization.php:598
+msgid "Url"
+msgstr ""
+
+#: functions.php:187
+msgid "Indicateur Qualitatif"
+msgstr ""
+
+#: functions.php:188
+msgid "Indicateur Quantitatif"
+msgstr ""
+
+#: functions.php:189
+msgid "Selecteur"
+msgstr ""
+
+#: functions.php:629 functions.php:1620 functions.php:1656
+msgid "Objets"
+msgstr ""
+
+#: functions.php:668
+msgid "Êtes vous sur de vouloir ajouter cet element?"
+msgstr ""
+
+#: functions.php:669
+msgid "Êtes vous sûr de vouloir modifier cet element?"
+msgstr ""
+
+#: functions.php:670
+msgid "Êtes vous sûr de vouloir ajouter cet element à la liste des elements enregistrés?"
+msgstr ""
+
+#: functions.php:671
+msgid "Veuillez entrer la désignation d'abord"
+msgstr ""
+
+#: functions.php:672
+msgid "Êtes vous sûr de vouloir modifier et diffuser cet element ?"
+msgstr ""
+
+#: functions.php:673
+msgid "Êtes vous sûr de vouloir modifier et renvoyer ce champ à l'état de Brouillon ?"
+msgstr ""
+
+#: functions.php:674 template-parts/elements/add-element.php:1174
+msgid "Liste des révisions"
+msgstr ""
+
+#: functions.php:760 functions.php:993
+#: template-parts/elements/elements-list.php:66
+msgid "Dernière modification"
+msgstr ""
+
+#: functions.php:763 functions.php:996
+msgid "Etat"
+msgstr ""
+
+#: functions.php:766 functions.php:999
+#: functions/elements_to_show_properties.php:46
+#: functions/elements_to_show_properties.php:48
+#: functions/elements_to_show_properties.php:50
+#: functions/elements_to_show_properties.php:52
+#: template-parts/elements/add-element.php:1128
+msgid "Identifiant"
+msgstr ""
+
+#: functions.php:769 functions.php:1002
+#: template-parts/elements/elements-list.php:41
+msgid "Corbeille"
+msgstr ""
+
+#: functions.php:775 functions.php:791 functions.php:1008 functions.php:1024
+msgid "Objet"
+msgstr ""
+
+#: functions.php:923
+msgid "Oak"
+msgstr ""
+
+#: functions.php:938
+msgid "OAK"
+msgstr ""
+
+#: functions.php:1068
+msgid "organization_name"
+msgstr ""
+
+#: functions.php:1069 template-parts/data-studio.php:14
+#: template-parts/import-page.php:14
+msgid "Nom de l'organisation"
+msgstr ""
+
+#: functions.php:1113
+msgid "Analyse Critique"
+msgstr ""
+
+#: functions.php:1116
+msgid "Elements"
+msgstr ""
+
+#: functions.php:1117
+msgid "Ajouter un Element"
+msgstr ""
+
+#: functions.php:1434
+msgid "Ajouter un champ"
+msgstr ""
+
+#: functions.php:1439
+msgid "Nouveau formulaire"
+msgstr ""
+
+#: functions.php:1444
+msgid "Ajouter un modèle"
+msgstr ""
+
+#: functions.php:1449
+msgid "Ajouter une taxonomie"
+msgstr ""
+
+#: functions.php:1454
+msgid "Ajouter une publication"
+msgstr ""
+
+#: functions.php:1459
+msgid "Ajouter une organisation"
+msgstr ""
+
+#: functions.php:1464
+msgid "Ajouter un indicateur quantitatif"
+msgstr ""
+
+#: functions.php:1469
+msgid "Ajouter un indicateur qualitatif"
+msgstr ""
+
+#: functions.php:1474
+msgid "Ajouter une Bonne Pratique"
+msgstr ""
+
+#: functions.php:1479
+msgid "Ajouter une Donnée de performance"
+msgstr ""
+
+#: functions.php:1484
+msgid "Ajouter une términologie"
+msgstr ""
+
+#: functions.php:1489
+msgid "Ajouter un objet"
+msgstr ""
+
+#: functions.php:1494
+msgid "Ajouter un terme"
+msgstr ""
+
+#: functions.php:1508 template-parts/admin-menu.php:387
+msgid "Champs"
+msgstr ""
+
+#: functions.php:1517 template-parts/admin-menu.php:381
+msgid "Formes"
+msgstr ""
+
+#: functions.php:1526 template-parts/admin-menu.php:351
+#: template-parts/admin-menu.php:357
+msgid "Modèles"
+msgstr ""
+
+#: functions.php:1535 template-parts/admin-menu.php:280
+#: template-parts/admin-menu.php:286
+msgid "Taxonomies"
+msgstr ""
+
+#: functions.php:1544 template-parts/admin-menu.php:25
+#: template-parts/admin-menu.php:38 template-parts/data-studio.php:6
+#: template-parts/import-page.php:6
+msgid "Organisations"
+msgstr ""
+
+#: functions.php:1553 template-parts/admin-menu.php:30
+#: template-parts/admin-menu.php:44 template-parts/import-page.php:31
+msgid "Publications"
+msgstr ""
+
+#: functions.php:1562 template-parts/admin-menu.php:310
+msgid "Indicateurs Quantitatifs"
+msgstr ""
+
+#: functions.php:1571 template-parts/admin-menu.php:316
+msgid "Indicateurs Qualitatifs"
+msgstr ""
+
+#: functions.php:1580
+msgid "Terminologies"
+msgstr ""
+
+#: functions.php:1589
+msgid "Bonnes Pratiques"
+msgstr ""
+
+#: functions.php:1598
+msgid "Données de performances"
+msgstr ""
+
+#: functions.php:1647
+msgid "Termes"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:5
+#: functions/elementor/controls/text-editor.php:37
+msgid "Text Editor"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:23
+#: functions/elementor/controls/text-editor.php:146
+msgid "Drop Cap"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:25
+msgid "Off"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:26
+msgid "On"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:45
+msgid "Alignment"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:49
+#: functions/elementor/generic_widget.php:122
+msgid "Left"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:53
+#: functions/elementor/generic_widget.php:126
+msgid "Center"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:57
+#: functions/elementor/generic_widget.php:130
+msgid "Right"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:61
+#: functions/elementor/generic_widget.php:134
+msgid "Justified"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:74
+msgid "Text Color"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:97
+#: functions/elementor/controls/text-editor.php:160
+#: functions/elementor/generic_widget.php:202
+#: functions/elementor/generic_widget.php:228
+#: functions/elementor/generic_widget.php:245
+msgid "Default"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:102
+msgid "Columns"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:115
+msgid "Columns Gap"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:157
+msgid "View"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:161
+msgid "Stacked"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:162
+msgid "Framed"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:175
+msgid "Primary Color"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:194
+msgid "Secondary Color"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:209
+msgid "Size"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:231
+msgid "Space"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:251
+msgid "Border Radius"
+msgstr ""
+
+#: functions/elementor/controls/text-editor.php:270
+msgid "Border Width"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:47
+#: functions/properties-initialization.php:332
+msgid "Valeur"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:49
+msgid "Entrer la valeur"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:59
+msgid "Choisir l'image"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:70
+#: functions/elementor/generic_widget.php:72
+msgid "Type du widget"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:84
+msgid "Paramètres Globaux"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:92 template-parts/admin-menu.php:527
+msgid "VizualEditor"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:97
+msgid "Classe"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:106
+#: functions/elements_to_show_properties.php:40
+#: functions/properties-initialization.php:1289
+msgid "Lien"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:118
+msgid "Alignement"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:147
+msgid "Paramètres Texte"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:155
+#: functions/properties-initialization.php:547
+#: template-parts/corn-configuration-page.php:187
+msgid "Couleur"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:165
+msgid "HTML Tag"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:195
+msgid "Font Size"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:258
+msgid "Line Height"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:268
+msgid "Letter Spacing"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:279
+msgid "Paramètres Image"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:286
+msgid "Largeur"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:295
+msgid "Hauteur"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:304
+msgid "Largeur Maximale"
+msgstr ""
+
+#: functions/elementor/generic_widget.php:313
+msgid "Opacité"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:2
+msgid "Nature"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:3
+msgid "Fonction"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:4
+#: functions/elements_to_show_properties.php:8
+#: functions/elements_to_show_properties.php:12
+#: functions/elements_to_show_properties.php:16
+#: functions/elements_to_show_properties.php:20
+#: functions/elements_to_show_properties.php:24
+#: functions/elements_to_show_properties.php:28
+#: functions/elements_to_show_properties.php:32
+#: functions/elements_to_show_properties.php:36
+msgid "Instances"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:6
+#: functions/elements_to_show_properties.php:27
+msgid "Structure"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:7
+msgid "Attributs"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:10
+msgid "Types"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:11
+msgid "Catégories de publications"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:14
+#: functions/properties-initialization.php:569
+msgid "Acronyme"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:15
+#: functions/elements_to_show_properties.php:26
+#: functions/properties-initialization.php:487
+#: functions/properties-initialization.php:588
+#: functions/properties-initialization.php:729
+#: functions/properties-initialization.php:730
+#: functions/properties-initialization.php:1044
+#: functions/properties-initialization.php:1045
+#: functions/properties-initialization.php:1151
+#: functions/properties-initialization.php:1152
+#: functions/properties-initialization.php:1270
+msgid "Description"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:18
+#: functions/properties-initialization.php:686
+msgid "Année"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:19
+#: functions/properties-initialization.php:709
+msgid "Format"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:22
+#: functions/elements_to_show_properties.php:30
+#: functions/elements_to_show_properties.php:34
+#: functions/properties-initialization.php:313
+#: functions/properties-initialization.php:1310
+#: functions/properties-initialization.php:1555
+msgid "Publication"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:23
+#: functions/elements_to_show_properties.php:31
+#: functions/elements_to_show_properties.php:35
+msgid "Parent"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:38
+#: functions/elements_to_show_properties.php:42
+#: template-parts/elements/add-element.php:121
+msgid "Nom"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:39
+msgid "Nom Court"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:43
+#: functions/properties-initialization.php:1365
+#: template-parts/data-studio.php:17 template-parts/import-page.php:17
+msgid "Type"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:44
+msgid "Objectif"
+msgstr ""
+
+#: functions/elements_to_show_properties.php:47
+#: functions/elements_to_show_properties.php:51
+msgid "Sélecteur de cadres RSE"
+msgstr ""
+
+#: functions/properties-initialization.php:4
+msgid "Aucune Publication sélectionnée"
+msgstr ""
+
+#: functions/properties-initialization.php:15
+msgid "Aucune terminologie sélectionnée"
+msgstr ""
+
+#: functions/properties-initialization.php:21
+#: functions/properties-initialization.php:26
+msgid "Aucun indicateur sélectionné"
+msgstr ""
+
+#: functions/properties-initialization.php:31
+msgid "Aucun terme sélectionné"
+msgstr ""
+
+#: functions/properties-initialization.php:53
+msgid "Aucun objet sélectionné"
+msgstr ""
+
+#: functions/properties-initialization.php:273
+msgid "Information/Description"
+msgstr ""
+
+#: functions/properties-initialization.php:274
+msgid "Exemple"
+msgstr ""
+
+#: functions/properties-initialization.php:275
+msgid "Illustration"
+msgstr ""
+
+#: functions/properties-initialization.php:278
+msgid "Aucun périmètre métier selectionné"
+msgstr ""
+
+#: functions/properties-initialization.php:287
+msgid "Aucun périmètre selectionné"
+msgstr ""
+
+#: functions/properties-initialization.php:323
+#: functions/properties-initialization.php:419
+msgid "Nature des contenus compris dans le champ"
+msgstr ""
+
+#: functions/properties-initialization.php:333
+msgid "Exemple: Valeur1|Valeur2|Valeur3|..."
+msgstr ""
+
+#: functions/properties-initialization.php:346
+#: functions/properties-initialization.php:420
+msgid "Fonction du champ en tant que message"
+msgstr ""
+
+#: functions/properties-initialization.php:354
+msgid "Etiquette (Optionnel)"
+msgstr ""
+
+#: functions/properties-initialization.php:355
+msgid "Contenu qui apparaitra dans le champ lorsqu'inactif et non rempli. A défaut, la designation apparaitra."
+msgstr ""
+
+#: functions/properties-initialization.php:364
+msgid "Aide au remplissage (Optionnel)"
+msgstr ""
+
+#: functions/properties-initialization.php:365
+msgid "Contenu qui apparaitra sous le champ."
+msgstr ""
+
+#: functions/properties-initialization.php:374
+msgid "Description (Optionnel)"
+msgstr ""
+
+#: functions/properties-initialization.php:375
+msgid "Instruction liée à la forme comme au fond à apporter au contenu. Elle apparaîtront dans le volet des composants (à droite)."
+msgstr ""
+
+#: functions/properties-initialization.php:393
+#: functions/properties-initialization.php:445
+#: functions/properties-initialization.php:501
+msgid "Structure du formulaire"
+msgstr ""
+
+#: functions/properties-initialization.php:399
+msgid "Champs du formulaire"
+msgstr ""
+
+#: functions/properties-initialization.php:400
+msgid "Sélectionner un champ"
+msgstr ""
+
+#: functions/properties-initialization.php:401
+msgid "Champ à insérer dans le formulaire"
+msgstr ""
+
+#: functions/properties-initialization.php:402
+msgid "Nom du champ dans ce formulaire"
+msgstr ""
+
+#: functions/properties-initialization.php:403
+msgid "Champ requis ou non lors du remplissage du formulaire"
+msgstr ""
+
+#: functions/properties-initialization.php:425
+msgid "Formulaires du modèle"
+msgstr ""
+
+#: functions/properties-initialization.php:426
+msgid "Sélectionner un formulaire"
+msgstr ""
+
+#: functions/properties-initialization.php:427
+msgid "Formulaire à insérer dans le modèle"
+msgstr ""
+
+#: functions/properties-initialization.php:428
+msgid "Nom du formulaire dans ce modèle"
+msgstr ""
+
+#: functions/properties-initialization.php:429
+msgid "Formulaire requis ou non lors du remplissage de l'objet"
+msgstr ""
+
+#: functions/properties-initialization.php:461
+#: functions/properties-initialization.php:476
+msgid "Type du modèle"
+msgstr ""
+
+#: functions/properties-initialization.php:488
+#: functions/properties-initialization.php:589
+#: functions/properties-initialization.php:1271
+msgid "Description."
+msgstr ""
+
+#: functions/properties-initialization.php:510
+msgid "Publications liée"
+msgstr ""
+
+#: functions/properties-initialization.php:518
+#: functions/properties-initialization.php:1035
+#: functions/properties-initialization.php:1036
+#: functions/properties-initialization.php:1142
+#: functions/properties-initialization.php:1143
+msgid "Numérotation"
+msgstr ""
+
+#: functions/properties-initialization.php:519
+msgid "Numérotation."
+msgstr ""
+
+#: functions/properties-initialization.php:527
+#: template-parts/corn-configuration-page.php:50
+#: template-parts/corn-configuration-page.php:52
+#: template-parts/corn-configuration-page.php:100
+msgid "Titre"
+msgstr ""
+
+#: functions/properties-initialization.php:528
+msgid "Titre."
+msgstr ""
+
+#: functions/properties-initialization.php:537
+msgid "Déscription du terme"
+msgstr ""
+
+#: functions/properties-initialization.php:538
+msgid "Déscription du terme."
+msgstr ""
+
+#: functions/properties-initialization.php:548
+msgid "Couleur."
+msgstr ""
+
+#: functions/properties-initialization.php:556
+#: functions/properties-initialization.php:579
+#: functions/properties-initialization.php:1280
+#: template-parts/corn-configuration-page.php:12
+#: template-parts/corn-configuration-page.php:125
+msgid "Logo"
+msgstr ""
+
+#: functions/properties-initialization.php:557
+#: functions/properties-initialization.php:580
+#: functions/properties-initialization.php:1281
+msgid "Logo."
+msgstr ""
+
+#: functions/properties-initialization.php:570
+msgid "Acronyme."
+msgstr ""
+
+#: functions/properties-initialization.php:599
+msgid "Url."
+msgstr ""
+
+#: functions/properties-initialization.php:607
+msgid "Address"
+msgstr ""
+
+#: functions/properties-initialization.php:608
+msgid "Address."
+msgstr ""
+
+#: functions/properties-initialization.php:619
+#: functions/properties-initialization.php:751
+#: functions/properties-initialization.php:752
+#: functions/properties-initialization.php:1513
+#: template-parts/configuration-page.php:28
+msgid "Pays"
+msgstr ""
+
+#: functions/properties-initialization.php:620
+#: functions/properties-initialization.php:1514
+msgid "Pays."
+msgstr ""
+
+#: functions/properties-initialization.php:628
+msgid "Entreprise ou non"
+msgstr ""
+
+#: functions/properties-initialization.php:629
+msgid "Entreprise ou non."
+msgstr ""
+
+#: functions/properties-initialization.php:644
+msgid "Entreprise"
+msgstr ""
+
+#: functions/properties-initialization.php:645
+msgid "Entreprise."
+msgstr ""
+
+#: functions/properties-initialization.php:653
+msgid "Coté"
+msgstr ""
+
+#: functions/properties-initialization.php:654
+msgid "Coté."
+msgstr ""
+
+#: functions/properties-initialization.php:662
+#: functions/properties-initialization.php:663
+#: functions/properties-initialization.php:842
+#: functions/properties-initialization.php:843
+msgid "Secteurs d'activité"
+msgstr ""
+
+#: functions/properties-initialization.php:676
+msgid "Organisation"
+msgstr ""
+
+#: functions/properties-initialization.php:694
+msgid "Vignette"
+msgstr ""
+
+#: functions/properties-initialization.php:739
+#: functions/properties-initialization.php:740
+msgid "Publication locale"
+msgstr ""
+
+#: functions/properties-initialization.php:765
+#: functions/properties-initialization.php:766 template-parts/system-bar.php:8
+msgid "Langue"
+msgstr ""
+
+#: functions/properties-initialization.php:779
+#: functions/properties-initialization.php:780
+msgid "Rapport/Cadre RSE"
+msgstr ""
+
+#: functions/properties-initialization.php:791
+msgid "Cadres universels"
+msgstr ""
+
+#: functions/properties-initialization.php:792
+msgid "Normes et inititives sectorielles (Déploiement)"
+msgstr ""
+
+#: functions/properties-initialization.php:793
+msgid "Lignes directrices et cadres de référence (Reporting)"
+msgstr ""
+
+#: functions/properties-initialization.php:794
+#: functions/properties-initialization.php:814
+msgid "Initiatives d'évaluation (Notation)"
+msgstr ""
+
+#: functions/properties-initialization.php:795
+#: functions/properties-initialization.php:815
+msgid "Notation extra financière (Classement)"
+msgstr ""
+
+#: functions/properties-initialization.php:797
+#: functions/properties-initialization.php:798
+msgid "Type de cadres"
+msgstr ""
+
+#: functions/properties-initialization.php:811
+msgid "Document de référence"
+msgstr ""
+
+#: functions/properties-initialization.php:812
+msgid "Rapport annuel"
+msgstr ""
+
+#: functions/properties-initialization.php:813
+msgid "Reporting intégré"
+msgstr ""
+
+#: functions/properties-initialization.php:817
+#: functions/properties-initialization.php:818
+msgid "Type de rapport"
+msgstr ""
+
+#: functions/properties-initialization.php:829
+#: functions/properties-initialization.php:830
+msgid "Cadre sectoriel"
+msgstr ""
+
+#: functions/properties-initialization.php:862
+#: functions/properties-initialization.php:863
+msgid "Type GRI de rapport"
+msgstr ""
+
+#: functions/properties-initialization.php:888
+#: functions/properties-initialization.php:889
+msgid "Supplément sectoriel"
+msgstr ""
+
+#: functions/properties-initialization.php:905
+#: functions/properties-initialization.php:906
+msgid "Publication dont est issue la terminologie"
+msgstr ""
+
+#: functions/properties-initialization.php:916
+#: functions/properties-initialization.php:917
+msgid "L'objet auquel appartient la terminologie"
+msgstr ""
+
+#: functions/properties-initialization.php:925
+#: functions/properties-initialization.php:926
+msgid "Terminologie dépendante d’une autre:"
+msgstr ""
+
+#: functions/properties-initialization.php:937
+#: functions/properties-initialization.php:938
+msgid "Terminologie de niveau supérieur:"
+msgstr ""
+
+#: functions/properties-initialization.php:949
+#: functions/properties-initialization.php:950
+msgid "Définition"
+msgstr ""
+
+#: functions/properties-initialization.php:961
+#: functions/properties-initialization.php:962
+msgid "Terminologie(s) proche(s) de la terminologie défnie: "
+msgstr ""
+
+#: functions/properties-initialization.php:975
+#: functions/properties-initialization.php:976
+#: functions/properties-initialization.php:1082
+#: functions/properties-initialization.php:1083
+msgid "Publication(s) dont est issue l'Idicateur: "
+msgstr ""
+
+#: functions/properties-initialization.php:986
+#: functions/properties-initialization.php:987
+#: functions/properties-initialization.php:1093
+#: functions/properties-initialization.php:1094
+msgid "L'objet auquel appartient l'indicateur: "
+msgstr ""
+
+#: functions/properties-initialization.php:995
+#: functions/properties-initialization.php:996
+msgid "Indicateur dépandant d’un autre:"
+msgstr ""
+
+#: functions/properties-initialization.php:1007
+#: functions/properties-initialization.php:1008
+#: functions/properties-initialization.php:1114
+#: functions/properties-initialization.php:1115
+msgid "Indicateur de niveau supérieur:"
+msgstr ""
+
+#: functions/properties-initialization.php:1026
+#: functions/properties-initialization.php:1027
+#: functions/properties-initialization.php:1133
+#: functions/properties-initialization.php:1134
+msgid "Type de numérotation"
+msgstr ""
+
+#: functions/properties-initialization.php:1053
+#: functions/properties-initialization.php:1054
+#: functions/properties-initialization.php:1065
+#: functions/properties-initialization.php:1066
+#: functions/properties-initialization.php:1160
+#: functions/properties-initialization.php:1161
+#: functions/properties-initialization.php:1172
+#: functions/properties-initialization.php:1173
+msgid "Indicateurs proches"
+msgstr ""
+
+#: functions/properties-initialization.php:1102
+#: functions/properties-initialization.php:1103
+msgid "Indicateur dépendant d’une autre:"
+msgstr ""
+
+#: functions/properties-initialization.php:1187
+#: functions/properties-initialization.php:1188
+msgid "Numérotation "
+msgstr ""
+
+#: functions/properties-initialization.php:1196
+#: functions/properties-initialization.php:1197
+msgid "Titre "
+msgstr ""
+
+#: functions/properties-initialization.php:1206
+#: functions/properties-initialization.php:1207
+msgid "Déscription "
+msgstr ""
+
+#: functions/properties-initialization.php:1216
+#: functions/properties-initialization.php:1217
+msgid "Couleur "
+msgstr ""
+
+#: functions/properties-initialization.php:1225
+#: functions/properties-initialization.php:1226
+msgid "Logo "
+msgstr ""
+
+#: functions/properties-initialization.php:1234
+#: functions/properties-initialization.php:1235
+msgid "Ordre dans le menu"
+msgstr ""
+
+#: functions/properties-initialization.php:1245
+#: functions/properties-initialization.php:1246
+msgid "Terme Parent:"
+msgstr ""
+
+#: functions/properties-initialization.php:1260
+msgid "Nom court"
+msgstr ""
+
+#: functions/properties-initialization.php:1261
+msgid "Nom court."
+msgstr ""
+
+#: functions/properties-initialization.php:1290
+msgid "Lien."
+msgstr ""
+
+#: functions/properties-initialization.php:1298
+msgid "Titre du lien"
+msgstr ""
+
+#: functions/properties-initialization.php:1299
+msgid "Titre du lien."
+msgstr ""
+
+#: functions/properties-initialization.php:1311
+#: functions/properties-initialization.php:1556
+msgid "Publication."
+msgstr ""
+
+#: functions/properties-initialization.php:1321
+#: functions/properties-initialization.php:1566
+msgid "Objects liés"
+msgstr ""
+
+#: functions/properties-initialization.php:1322
+#: functions/properties-initialization.php:1567
+msgid "Objects liés."
+msgstr ""
+
+#: functions/properties-initialization.php:1332
+#: functions/properties-initialization.php:1346
+msgid "Indicteurs"
+msgstr ""
+
+#: functions/properties-initialization.php:1333
+#: functions/properties-initialization.php:1347
+msgid "Indicteurs."
+msgstr ""
+
+#: functions/properties-initialization.php:1357
+msgid "Distance"
+msgstr ""
+
+#: functions/properties-initialization.php:1358
+#: functions/properties-initialization.php:1379
+msgid "Volume"
+msgstr ""
+
+#: functions/properties-initialization.php:1359
+msgid "Masse"
+msgstr ""
+
+#: functions/properties-initialization.php:1360
+msgid "Surface"
+msgstr ""
+
+#: functions/properties-initialization.php:1361
+msgid "Monnaie"
+msgstr ""
+
+#: functions/properties-initialization.php:1362
+msgid "Ratio"
+msgstr ""
+
+#: functions/properties-initialization.php:1363
+#: functions/properties-initialization.php:1486
+msgid "Brut"
+msgstr ""
+
+#: functions/properties-initialization.php:1366
+msgid "Type."
+msgstr ""
+
+#: functions/properties-initialization.php:1378
+msgid "M"
+msgstr ""
+
+#: functions/properties-initialization.php:1380
+msgid "Ft"
+msgstr ""
+
+#: functions/properties-initialization.php:1382
+msgid "Unité de Distance"
+msgstr ""
+
+#: functions/properties-initialization.php:1383
+msgid "Unité de Distance."
+msgstr ""
+
+#: functions/properties-initialization.php:1397
+msgid "M^3"
+msgstr ""
+
+#: functions/properties-initialization.php:1399
+msgid "Unité de Volume"
+msgstr ""
+
+#: functions/properties-initialization.php:1400
+msgid "Unité de Volume."
+msgstr ""
+
+#: functions/properties-initialization.php:1414
+msgid "KG"
+msgstr ""
+
+#: functions/properties-initialization.php:1415
+msgid "LB"
+msgstr ""
+
+#: functions/properties-initialization.php:1417
+msgid "Unité de Masse"
+msgstr ""
+
+#: functions/properties-initialization.php:1418
+msgid "Unité de Masse."
+msgstr ""
+
+#: functions/properties-initialization.php:1432
+msgid "M^2"
+msgstr ""
+
+#: functions/properties-initialization.php:1434
+msgid "Unité de Surface"
+msgstr ""
+
+#: functions/properties-initialization.php:1435
+msgid "Unité de Surface."
+msgstr ""
+
+#: functions/properties-initialization.php:1449
+msgid "€"
+msgstr ""
+
+#: functions/properties-initialization.php:1450
+msgid "$"
+msgstr ""
+
+#: functions/properties-initialization.php:1452
+msgid "Unité de Monnaie"
+msgstr ""
+
+#: functions/properties-initialization.php:1453
+msgid "Unité de Monnaie."
+msgstr ""
+
+#: functions/properties-initialization.php:1467
+msgid "%"
+msgstr ""
+
+#: functions/properties-initialization.php:1469
+msgid "Unité de Ratio"
+msgstr ""
+
+#: functions/properties-initialization.php:1470
+msgid "Unité de Ratio."
+msgstr ""
+
+#: functions/properties-initialization.php:1484
+msgid "Pas de sélection"
+msgstr ""
+
+#: functions/properties-initialization.php:1487
+msgid "Brut."
+msgstr ""
+
+#: functions/properties-initialization.php:1501
+msgid "Périmètre métier"
+msgstr ""
+
+#: functions/properties-initialization.php:1502
+msgid "Périmètre métier."
+msgstr ""
+
+#: functions/properties-initialization.php:1526
+msgid "Région"
+msgstr ""
+
+#: functions/properties-initialization.php:1527
+msgid "Région."
+msgstr ""
+
+#: functions/properties-initialization.php:1539
+msgid "Périmètre personalisé"
+msgstr ""
+
+#: functions/properties-initialization.php:1540
+msgid "Périmètre personalisé."
+msgstr ""
+
+#: template-parts/admin-menu.php:10
+msgid "Application centrale"
+msgstr ""
+
+#: template-parts/admin-menu.php:17 template-parts/oak-admin-header.php:13
+msgid "Tableau de bord"
+msgstr ""
+
+#: template-parts/admin-menu.php:57
+msgid "Publishing"
+msgstr ""
+
+#: template-parts/admin-menu.php:73
+msgid "Paramètres"
+msgstr ""
+
+#: template-parts/admin-menu.php:81
+msgid "Postes"
+msgstr ""
+
+#: template-parts/admin-menu.php:87
+msgid "Pages"
+msgstr ""
+
+#: template-parts/admin-menu.php:98
+msgid "Catégories"
+msgstr ""
+
+#: template-parts/admin-menu.php:104 template-parts/admin-menu.php:483
+msgid "Menus"
+msgstr ""
+
+#: template-parts/admin-menu.php:114
+msgid "Elementor"
+msgstr ""
+
+#: template-parts/admin-menu.php:120
+msgid "Mes templates"
+msgstr ""
+
+#: template-parts/admin-menu.php:126
+msgid "Configuration"
+msgstr ""
+
+#: template-parts/admin-menu.php:132
+msgid "Role manager"
+msgstr ""
+
+#: template-parts/admin-menu.php:138 template-parts/admin-menu.php:431
+#: template-parts/oak-admin-header.php:33
+msgid "Outils"
+msgstr ""
+
+#: template-parts/admin-menu.php:144
+msgid "Infos système"
+msgstr ""
+
+#: template-parts/admin-menu.php:150
+msgid "Aide"
+msgstr ""
+
+#: template-parts/admin-menu.php:156
+msgid "Custom Fonts"
+msgstr ""
+
+#: template-parts/admin-menu.php:162
+msgid "Go Pro"
+msgstr ""
+
+#: template-parts/admin-menu.php:173
+msgid "Editing"
+msgstr ""
+
+#: template-parts/admin-menu.php:269 template-parts/oak-admin-header.php:7
+msgid "Embeded XP"
+msgstr ""
+
+#: template-parts/admin-menu.php:322 template-parts/oak-admin-header.php:29
+msgid "Glossaire"
+msgstr ""
+
+#: template-parts/admin-menu.php:328
+msgid "Content Library"
+msgstr ""
+
+#: template-parts/admin-menu.php:333
+msgid "Objets Spécifiques"
+msgstr ""
+
+#: template-parts/admin-menu.php:339
+msgid "Bonne Pratique"
+msgstr ""
+
+#: template-parts/admin-menu.php:345
+msgid "Données de Performance"
+msgstr ""
+
+#: template-parts/admin-menu.php:393
+msgid "Vizual Library"
+msgstr ""
+
+#: template-parts/admin-menu.php:404
+msgid "WebPublisher"
+msgstr ""
+
+#: template-parts/admin-menu.php:413
+msgid "Data Studio"
+msgstr ""
+
+#: template-parts/admin-menu.php:421
+msgid "Utilisateurs"
+msgstr ""
+
+#: template-parts/admin-menu.php:426
+msgid "Extensions"
+msgstr ""
+
+#: template-parts/admin-menu.php:436
+msgid "Outils disponibles"
+msgstr ""
+
+#: template-parts/admin-menu.php:442
+msgid "Import"
+msgstr ""
+
+#: template-parts/admin-menu.php:448
+msgid "Export"
+msgstr ""
+
+#: template-parts/admin-menu.php:454
+msgid "Export des données personnelles"
+msgstr ""
+
+#: template-parts/admin-menu.php:460
+msgid "Suppression des données personnelles"
+msgstr ""
+
+#: template-parts/admin-menu.php:466
+msgid "Apparence"
+msgstr ""
+
+#: template-parts/admin-menu.php:471
+msgid "Thèmes"
+msgstr ""
+
+#: template-parts/admin-menu.php:477
+msgid "Customizer"
+msgstr ""
+
+#: template-parts/admin-menu.php:489
+msgid "Editeur"
+msgstr ""
+
+#: template-parts/admin-menu.php:495
+msgid "Configuration de Oak"
+msgstr ""
+
+#: template-parts/admin-menu.php:500
+msgid "Réglages"
+msgstr ""
+
+#: template-parts/admin-menu.php:505
+msgid "Media"
+msgstr ""
+
+#: template-parts/admin-menu.php:510
+msgid "Widgeditor"
+msgstr ""
+
+#: template-parts/admin-menu.php:515
+msgid "Widgets"
+msgstr ""
+
+#: template-parts/admin-menu.php:521 template-parts/admin-menu.php:538
+msgid "Ajouter"
+msgstr ""
+
+#: template-parts/admin-menu.php:532
+msgid "Tous les styles"
+msgstr ""
+
+#: template-parts/app-bar.php:4
+msgid "Librairie de contenu"
+msgstr ""
+
+#: template-parts/app-bar.php:7
+msgid "Rechercher"
+msgstr ""
+
+#: template-parts/configuration-page.php:2
+msgid "Page de configuration"
+msgstr ""
+
+#: template-parts/configuration-page.php:5
+msgid "Menu wordpress par défaut"
+msgstr ""
+
+#: template-parts/configuration-page.php:10
+msgid "Corn"
+msgstr ""
+
+#: template-parts/configuration-page.php:15
+msgid "Veuillez entrer l'URL du central: "
+msgstr ""
+
+#: template-parts/configuration-page.php:20
+msgid "Périmètre métier: "
+msgstr ""
+
+#: template-parts/configuration-page.php:21
+#: template-parts/configuration-page.php:34
+#: template-parts/configuration-page.php:40
+msgid "Exemple: Valeur 1|Valeur 2|Valeur 3"
+msgstr ""
+
+#: template-parts/configuration-page.php:24
+msgid "Périmètre géographique: "
+msgstr ""
+
+#: template-parts/configuration-page.php:33
+msgid "Régions: "
+msgstr ""
+
+#: template-parts/configuration-page.php:39
+msgid "Périmètre personalisé: "
+msgstr ""
+
+#: template-parts/configuration-page.php:43
+#: template-parts/corn-configuration-page.php:80
+#: template-parts/corn-configuration-page.php:118
+#: template-parts/corn-configuration-page.php:151
+#: template-parts/corn-configuration-page.php:180
+#: template-parts/corn-configuration-page.php:239
+msgid "Sauvegarder"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:3
+msgid "Généraux"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:4
+msgid "System Bar"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:5
+msgid "App Bar"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:6
+msgid "Nav Bar"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:7
+msgid "Style"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:19
+#: template-parts/corn-configuration-page.php:75
+#: template-parts/elements/add-element.php:553
+msgid "Choisir une image"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:25
+msgid "Infos du Site"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:39
+#: template-parts/corn-configuration-page.php:41
+msgid "Slogon"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:61
+#: template-parts/corn-configuration-page.php:63
+msgid "Nom de l'Organisation"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:69
+msgid "Icon"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:114
+#: template-parts/corn-configuration-page.php:147
+msgid "Couleur du background"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:126
+msgid "Nom de l’organisation"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:127
+msgid "Titre du Site"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:163
+msgid "Couleur du background: "
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:170
+msgid "Couleur de la font: "
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:188
+msgid "Light"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:189
+msgid "Dark"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:190
+msgid "50"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:191
+msgid "100"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:192
+msgid "200"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:193
+msgid "300"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:194
+msgid "400"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:195
+msgid "500"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:196
+msgid "600"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:197
+msgid "700"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:198
+msgid "800"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:199
+msgid "900"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:205
+msgid "Primary"
+msgstr ""
+
+#: template-parts/corn-configuration-page.php:220
+msgid "Secondary"
+msgstr ""
+
+#: template-parts/data-studio.php:16 template-parts/import-page.php:16
+msgid "Pays du siège"
+msgstr ""
+
+#: template-parts/data-studio.php:18 template-parts/import-page.php:18
+msgid "Secteur d'activité"
+msgstr ""
+
+#: template-parts/data-studio.php:23 template-parts/import-page.php:23
+msgid "Revenir"
+msgstr ""
+
+#: template-parts/data-studio.php:24 template-parts/import-page.php:24
+msgid "Etape suivante"
+msgstr ""
+
+#: template-parts/data-studio.php:31
+msgid "Labels:"
+msgstr ""
+
+#: template-parts/data-studio.php:38
+msgid "Données de performances:"
+msgstr ""
+
+#: template-parts/data-studio.php:53
+msgid "Rafraîchir"
+msgstr ""
+
+#: template-parts/elements/add-element.php:44
+msgid "Retour à l'état de Brouillon"
+msgstr ""
+
+#: template-parts/elements/add-element.php:64
+msgid "Ajouter au Brouillon"
+msgstr ""
+
+#: template-parts/elements/add-element.php:83
+msgid "Diffuser"
+msgstr ""
+
+#: template-parts/elements/add-element.php:119
+msgid "Designation"
+msgstr ""
+
+#: template-parts/elements/add-element.php:129
+msgid "Identifiant technique"
+msgstr ""
+
+#: template-parts/elements/add-element.php:135
+msgid "Sélecteur de cadre RSE"
+msgstr ""
+
+#: template-parts/elements/add-element.php:139
+msgid "Objects de cadres RSE"
+msgstr ""
+
+#: template-parts/elements/add-element.php:198
+msgid "Résultats"
+msgstr ""
+
+#: template-parts/elements/add-element.php:457
+msgid "Liason"
+msgstr ""
+
+#: template-parts/elements/add-element.php:561
+msgid "Selectionnez un fichier"
+msgstr ""
+
+#: template-parts/elements/add-element.php:565
+msgid "Cliquez ici pour attacher un PDF"
+msgstr ""
+
+#: template-parts/elements/add-element.php:580
+msgid "Aucun indicateur selectionné"
+msgstr ""
+
+#: template-parts/elements/add-element.php:618
+msgid "Aucune valeur selectionée"
+msgstr ""
+
+#: template-parts/elements/add-element.php:650
+#: template-parts/elements/add-element.php:692
+msgid "Aucun object selectionné"
+msgstr ""
+
+#: template-parts/elements/add-element.php:668
+msgid "Selecteur de cadres RSE"
+msgstr ""
+
+#: template-parts/elements/add-element.php:726
+msgid "Selecteur de cadres RSE pour le formulaire"
+msgstr ""
+
+#: template-parts/elements/add-element.php:869
+msgid "Nouvelle désignation"
+msgstr ""
+
+#: template-parts/elements/add-element.php:876
+msgid "Requis"
+msgstr ""
+
+#: template-parts/elements/add-element.php:880
+msgid "Requis ou non lors du remplissage"
+msgstr ""
+
+#: template-parts/elements/add-element.php:922
+msgid "Champ"
+msgstr ""
+
+#: template-parts/elements/add-element.php:927
+msgid "Status et Visibilité: "
+msgstr ""
+
+#: template-parts/elements/add-element.php:929
+msgid "Etat: "
+msgstr ""
+
+#: template-parts/elements/add-element.php:946
+msgid "Révisions: "
+msgstr ""
+
+#: template-parts/elements/add-element.php:957
+msgid "Parcourir"
+msgstr ""
+
+#: template-parts/elements/add-element.php:962
+msgid "Pas encore"
+msgstr ""
+
+#: template-parts/elements/add-element.php:984
+msgid "Enregistré le: "
+msgstr ""
+
+#: template-parts/elements/add-element.php:991
+msgid "Diffusé le: "
+msgstr ""
+
+#: template-parts/elements/add-element.php:999
+msgid "Formulaires: "
+msgstr ""
+
+#: template-parts/elements/add-element.php:1027
+msgid "Accéder"
+msgstr ""
+
+#: template-parts/elements/add-element.php:1032
+msgid "Modèles: "
+msgstr ""
+
+#: template-parts/elements/add-element.php:1076
+msgid "Publications: "
+msgstr ""
+
+#: template-parts/elements/add-element.php:1099
+msgid "Données Actuelle"
+msgstr ""
+
+#: template-parts/elements/add-element.php:1127
+#: template-parts/elements/elements-list.php:49
+msgid "Désignation"
+msgstr ""
+
+#: template-parts/elements/add-element.php:1129
+msgid "renommage"
+msgstr ""
+
+#: template-parts/elements/add-element.php:1130
+msgid "Sélecteur cadres RSE"
+msgstr ""
+
+#: template-parts/elements/add-element.php:1153
+msgid "Données de la révision"
+msgstr ""
+
+#: template-parts/elements/elements-list.php:23
+msgid "Toutes les natures"
+msgstr ""
+
+#: template-parts/elements/elements-list.php:33
+msgid "Toutes les fonctions"
+msgstr ""
+
+#: template-parts/elements/elements-list.php:40
+msgid "Non supprimé"
+msgstr ""
+
+#: template-parts/import-page.php:35
+msgid "Importer"
+msgstr ""
+
+#: template-parts/oak-admin-header.php:17
+msgid "Organisations émettrices"
+msgstr ""
+
+#: template-parts/oak-admin-header.php:21
+msgid "Cadres RSE"
+msgstr ""
+
+#: template-parts/oak-admin-header.php:25
+msgid "Indicateurs quantitatifs"
+msgstr ""
+
+#: template-parts/system-bar.php:11
+msgid "French"
+msgstr ""
+
+#: template-parts/system-bar.php:12
+msgid "English"
+msgstr ""
+
+#: template-parts/system-bar.php:13
+msgid "Arabic"
+msgstr ""

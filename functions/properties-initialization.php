@@ -2,8 +2,12 @@
 // the property type here means type in the database (so a select is gonna have a type of text. So are the images and the files)
 
 $publications_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucune Publication sélectionnée', Oak::$text_domain ) ) ];
+$frame_publications_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucune Publication sélectionnée', Oak::$text_domain ) ) ];
 foreach( Oak::$publications_without_redundancy as $publication ) :
     $publications_array[] = array( 'value' => $publication->publication_identifier, 'innerHTML' => $publication->publication_designation );
+    if ( $publication->publication_report_or_frame == 'frame' ) :
+        $frame_publications_array[] = array( 'value' => $publication->publication_identifier, 'innerHTML' => $publication->publication_designation );
+    endif;
 endforeach;
 
 $organizations_array = [];
@@ -17,15 +21,21 @@ foreach( Oak::$glossaries_without_redundancy as $glossary ) :
     $glossaries_array[] = array( 'value' => $glossary->glossary_identifier, 'innerHTML' => $glossary->glossary_designation );
 endforeach;
 
+$quantis_and_qualis = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun indicateur sélectionné', Oak::$text_domain ), 'indicator' => '' ), 'data' => null ];
+
 $qualis_array = [];
 $qualis_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun indicateur sélectionné', Oak::$text_domain ) ) ];
 foreach( Oak::$qualis_without_redundancy as $quali ) :
-    $qualis_array[] = array( 'value' => $quali->quali_identifier, 'innerHTML' => $quali->quali_designation );
+    $qualis_array[] = array( 'value' => $quali->quali_identifier, 'innerHTML' => $quali->quali_designation, 'indicator' => 'quali' );
+    $quali->quali_indicator_type = 'quali';
+    $quantis_and_qualis[] = array( 'value' => $quali->quali_identifier, 'innerHTML' => $quali->quali_designation, 'indicator' => 'quali', 'data' => $quali );
 endforeach;
 
 $quantis_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun indicateur sélectionné', Oak::$text_domain ) ) ];
 foreach( Oak::$quantis_without_redundancy as $quanti ) :
-    $quantis_array[] = array( 'value' => $quanti->quanti_identifier, 'innerHTML' => $quanti->quanti_designation );
+    $quantis_array[] = array( 'value' => $quanti->quanti_identifier, 'innerHTML' => $quanti->quanti_designation, 'indicator' => 'quanti' );
+    $quanti->quanti_indicator_type = 'quanti';
+    $quantis_and_qualis[] = array( 'value' => $quanti->quanti_identifier, 'innerHTML' => $quanti->quanti_designation, 'indicator' => 'quanti', 'data' => $quanti );
 endforeach;
 
 $terms_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun terme sélectionné', Oak::$text_domain ) ) ];
@@ -650,8 +660,8 @@ Oak::$organization_properties = array(
         'property_name' => 'organization_side', 
         'type' => 'text', 
         'input_type' => 'checkbox',
-        'placeholder' => __( 'Coté', Oak::$text_domain ), 
-        'description' => __( 'Coté.', Oak::$text_domain ), 
+        'placeholder' => __( 'Cotée', Oak::$text_domain ), 
+        'description' => __( 'Cotée.', Oak::$text_domain ), 
         'width' => '50' 
     ),
     array ( 
@@ -1166,9 +1176,30 @@ Oak::$quanti_properties = array (
         'name' => 'close_indicators', 
         'property_name' => 'quanti_close_indicators', 
         'type' => 'text',
-        'input_type' => 'select',
+        'input_type' => 'select_with_filters',
         'select_multiple' => 'true',
-        'choices' => $quantis_array,
+        'choices' => $quantis_and_qualis,
+        'filters' => [
+            array(
+                'description' => __( 'Type d\'indicateur', Oak::$text_domain ),
+                'choices' => array( 
+                    array ( 'value' => '0', 'innerHTML' => __( 'Aucun type d\'indicateur n\'est sélectionné', Oak::$text_domain ) ), 
+                    array ( 'value' => 'quanti', 'innerHTML' => __( 'Quantitative', Oak::$text_domain ) ), 
+                    array ( 'value' => 'quali', 'innerHTML' => __( 'Qualitative', Oak::$text_domain ) )
+                ),
+                'name' => 'indicator_type'
+            ),
+            array(
+                'description' => __( 'Publications Cadres RSE', Oak::$text_domain ),
+                'choices' => $frame_publications_array,
+                'name' => 'publication'
+            ),
+            array(
+                'description' => __( 'Object', Oak::$text_domain ),
+                'choices' => $objects_array,
+                'name' => 'object'
+            )
+        ],
         'placeholder' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'description' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'width' => '100',

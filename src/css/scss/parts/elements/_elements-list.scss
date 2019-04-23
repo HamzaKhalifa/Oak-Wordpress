@@ -106,7 +106,7 @@
     margin-right: 10px;
 }
 
-.oak_list_add_button {
+.oak_list_add_button, .oak_select_container_with_filters__add_button {
     color: #003366;
     background-color: #1c6bb5;
     position: absolute;
@@ -123,17 +123,17 @@
     box-shadow: 1px 2px 10px;
 }
 
-.oak_list_add_button .fa-plus {
+.oak_list_add_button .fa-plus, .oak_select_container_with_filters__add_button .fa-plus {
     color: white;
 }
 
-.oak_list_add_button:hover {
+.oak_list_add_button:hover, .oak_select_container_with_filters__add_button:hover {
     cursor: pointer;
     background-color: white;
     color: #1c6bb5;
 }
 
-.oak_list_add_button:hover .fa-plus {
+.oak_list_add_button:hover .fa-plus, .oak_select_container_with_filters__add_button:hover .fa-plus {
     color: #1c6bb5;
 }
 

@@ -725,3 +725,45 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
 .oak_add_element_modal_container_content_revisions_list_of_revisions__language_title {
     margin-bottom: 10px;
 }
+
+.oak_select_container__filters_container {
+    position: relative;
+    display: flex;
+}
+
+.oak_select_container__single_filter {
+    flex: 1;
+    margin-right: 10px;
+    position: relative;
+}
+
+body .oak_select_container_with_filters .input_line {
+    margin-bottom: 20px;
+}
+
+.oak_select_container__filters_container .input_line {
+    margin-bottom: 0px;
+}
+
+body .oak_select_container_with_filters .text_field_description {
+    bottom: initial;
+    top: 40px;
+}
+
+body .oak_select_container__filters_container .text_field_description {
+    bottom: initial;
+    top: 34px;
+}
+
+body .oak_select_container_with_filters__add_button {
+    bottom: -50px;
+    top: initial;
+    left: 0px;
+}
+
+.oak_select_container_with_filters__single_element {
+    position: relative;
+    border: 1px solid #000c3b;
+    padding: 5px;
+    margin-bottom: 5px;
+}

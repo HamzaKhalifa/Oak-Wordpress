@@ -37,10 +37,13 @@ function handleLanguagesSelectListener() {
         for (var i = 0; i < DATA.properties.length; i++) {
             if (DATA.properties[i].translatable) {
                 var propertyInput = document.querySelector('.' + DATA.table + '_' + DATA.properties[i].name + '_input');
-                if (theRevision != null) {
-                    propertyInput.value = theRevision[DATA.table + '_' + DATA.properties[i].name];
-                } else {
-                    propertyInput.value = '';
+                console.log('.' + DATA.table + '_' + DATA.properties[i].name + '_input');
+                if (propertyInput != null) {
+                    if (theRevision != null) {
+                        propertyInput.value = theRevision[DATA.table + '_' + DATA.properties[i].name];
+                    } else {
+                        propertyInput.value = '';
+                    }
                 }
             } 
         }
@@ -223,7 +226,7 @@ function addButton() {
                 return;
             elementData = createElementData(0);
             adding = true;
-            openModal('Êtes vous sur de vouloir ajouter ce champ?', true);
+            openModal(DATA.addingElementMessage, true);
         });    
     }
 }
@@ -236,7 +239,7 @@ function updateButton() {
         updateButton.addEventListener('click', function() {
             elementData = createElementData(DATA.revisions[DATA.revisions.length - 1].field_state);
             updating = true;
-            openModal('Êtes vous sûr de vouloir modifier ce champ?', true);
+            openModal(DATA.modifyingElementMessage, true);
         });
     }
 }
@@ -257,7 +260,7 @@ function registerButton() {
             } else {
                 updating = true;
             }
-            openModal('Êtes vous sûr de vouloir ajouter ce champ à la liste des champs enregistrés?', true);
+            openModal(DATA.addingToRegisteredElementsListMessage, true);
         });
     }
 }
@@ -266,7 +269,7 @@ function checkOk() {
     ok = true;
     var designation = document.querySelector('.' + DATA.table + '_designation_input').value;
     if (designation.trim() == '') {
-        openModal('Veuillez entrer la désignation d\'abord', false);
+        openModal(DATA.enterDesignationFirstMessage, false);
         ok = false;
     } 
     return ok;
@@ -280,7 +283,7 @@ function broadcastButton() {
         theBroadcastButton.addEventListener('click', function() {
             elementData = createElementData(2);
             updating = true;
-            openModal('Êtes vous sûr de vouloir modifier et diffuser ce champ ?', true);
+            openModal(DATA.modifyAndDiffuseMessage, true);
         });
     }
 }
@@ -293,7 +296,7 @@ function draftButton() {
         draftButton.addEventListener('click', function() {
             elementData = createElementData(0);
             updating = true;
-            openModal('Êtes vous sûr de vouloir modifier et renvoyer ce champ à l\'état de Brouillon ?', true);
+            openModal(DATA.sendToDraftMessage, true);
         });
     }
 }
@@ -348,6 +351,17 @@ function createElementData(state) {
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').getAttribute('value').toString();
             else if (properties[i].input_type == 'checkbox') 
                 elementData[keys[i]] = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').checked.toString();
+            else if (properties[i].input_type == 'select_with_filters') {
+                var dataSelects = document.querySelector('.' + DATA.table + '_' + properties[i].name + '_input').parentNode.parentNode.querySelectorAll('.oak_select_container_with_filters_single_element__data_select');
+                var allTheSelectsValues = '';
+                for (var k = 0; k < dataSelects.length; k++) {
+                    var delimiter = '';
+                    if ( k != dataSelects.length - 1 ) 
+                        delimiter = '|';
+                    allTheSelectsValues = allTheSelectsValues + dataSelects[k].value + delimiter;
+                    elementData[keys[i]] = allTheSelectsValues;
+                }
+            }
         }
 
         // Check for the selector for each property: 
@@ -368,8 +382,9 @@ function createElementData(state) {
         }
     }
     
-    if (state != 0)
+    if (state != 0) {
         elementData[table + '_state'] = state ? state.toString() : DATA.revisions[DATA.revisions.length - 1][table + '_state'].toString();
+    }
     else
         elementData[table + '_state'] = state.toString();
 
@@ -466,6 +481,8 @@ function createElementData(state) {
     // For the language: 
     elementData[DATA.table + '_content_language'] = document.querySelector('.oak_system_bar__languages_select').value;
 
+    console.log(elementData);
+    
     return elementData;
 }
 
@@ -485,7 +502,7 @@ function browseRevisionsButton() {
     theBrowseRevisionsButton = document.querySelector('.oak_add_element_big_container_tabs_single_tab_section_state__browse');
     theBrowseRevisionsButton.addEventListener('click', function() {
         browsingRevisions = true;
-        openModal('Liste des révisions', true);
+        openModal(DATA.revisionsListMessage, true);
         
         elementData = createElementData();
         for (var i = 0; i < properties.length; i++) {
@@ -861,6 +878,87 @@ function filterOtherElements(otherElementContainer) {
     }
 }
 
+// Handle select filters: 
+handleSelectFilters();
+function handleSelectFilters() {
+    var filtersContainers = document.querySelectorAll('.oak_select_container__filters_container');
+    for (var i = 0; i < filtersContainers.length; i++) {
+        var theActualSelect = filtersContainers[i].parentNode.querySelector('select');
+        var singleFilters = filtersContainers[i].querySelectorAll('select');
+        for (var j = 0; j < singleFilters.length; j++) {
+            singleFilters[j].addEventListener('change', function() {
+                var theActualSelectOptions = theActualSelect.querySelectorAll('option');
+                for (var k = 0; k < theActualSelectOptions.length; k++) {
+                    var hide = false;
+                    var allFilters = this.parentNode.parentNode.querySelectorAll('select');
+                    for (var m = 0; m < allFilters.length; m++) {
+                        var propertyName = allFilters[m].getAttribute('property-name');
+                            console.log('value: ', theActualSelectOptions[k].getAttribute(propertyName));
+                            console.log('filter value: ', allFilters[m].value);
+                        if (theActualSelectOptions[k].getAttribute(propertyName) != allFilters[m].value && theActualSelectOptions[k].getAttribute(propertyName) != null && allFilters[m].value != 0) {
+                            hide = true;
+                        }
+                    }
+                    if (hide) {
+                        theActualSelectOptions[k].classList.add('oak_hidden');
+                    } else {
+                        theActualSelectOptions[k].classList.remove('oak_hidden');
+                    }
+                }
+            })
+        }
+    }
+}
+
+// Get select filters views:
+var selectFiltersViews = [];
+getSelectFilterViews();
+function getSelectFilterViews() {
+    var selectFiltersSingleElements = document.querySelectorAll('.oak_select_container_with_filters__single_element');
+    for (var i = 0; i < selectFiltersSingleElements.length; i++) {
+        selectFiltersViews.push(selectFiltersSingleElements[i].innerHTML);
+        selectFiltersSingleElements[i].remove();
+    }
+}
+
+initializeSelectFilters();
+function initializeSelectFilters() {
+    var numberOfPropertiesWithSelectFilters = 0;
+    if ( DATA.revisions.length > 0 ) {
+        for(var i = 0; i < properties.length; i++) {
+            if (properties[i].input_type == 'select_with_filters') {
+                var theContainer = document.querySelector('.oak_select_container_with_filters_for_' + properties[i].name);
+                var lastRevisionValues = DATA.revisions[DATA.revisions.length - 1][DATA.table + '_' + properties[i].name].split('|');
+                for(var k = 0; k < lastRevisionValues.length; k++) {
+                    var newSingleElement = document.createElement('div');
+                    newSingleElement.className = 'oak_select_container_with_filters__single_element';
+                    newSingleElement.innerHTML = selectFiltersViews[numberOfPropertiesWithSelectFilters];
+                    theContainer.append(newSingleElement);
+                    newSingleElement.querySelector('.oak_select_container_with_filters_single_element__data_select').value = lastRevisionValues[k];
+                    handleSelectFilters();
+                }
+                numberOfPropertiesWithSelectFilters++;
+            }
+        }
+    }
+}
+
+// For the select filters add button
+selectFiltersAddButtons();
+function selectFiltersAddButtons() {
+    var addButtons = document.querySelectorAll('.oak_select_container_with_filters__add_button');
+    for (var i =0; i < addButtons.length; i++) {
+        addButtons[i].setAttribute('index', i);
+        addButtons[i].addEventListener('click', function() {
+            var newSingleElement = document.createElement('div');
+            newSingleElement.className = 'oak_select_container_with_filters__single_element';
+            newSingleElement.innerHTML = selectFiltersViews[this.getAttribute('index')];
+            this.parentNode.append(newSingleElement);
+            handleSelectFilters();
+        })
+    }
+}
+
 // For the cancel button on the header: 
 headerCancelButton();
 function headerCancelButton() {
@@ -1125,7 +1223,6 @@ function handleModalButtons() {
         if (adding || updating) {
             closeModals();
             setLoading();
-            console.log(elementData);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,

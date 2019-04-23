@@ -220,7 +220,8 @@ var steps = [];
                     }
                     for (var i = 0; i < allData.publicationsWithoutRedundancy.length; i++) {
                         if (publicationsIdentifiers.indexOf(allData.publicationsWithoutRedundancy[i].publication_identifier) != -1) {
-                            selectedData.publications.push(allData.publicationsWithoutRedundancy[i]);
+                            // selectedData.publications.push(allData.publicationsWithoutRedundancy[i]);
+                            selectedData.publications = addElementAndOtherLanguagesInstancses(allData.publicationsWithoutRedundancy[i].publication_identifier, selectedData.publications, allData.publications, 'publication');
                         }
                     }
                     var taxonomiesToShow = [];
@@ -251,7 +252,8 @@ var steps = [];
                     var termsToPush = [];
                     for (var i = 0; i < allData.taxonomiesWithoutRedundancy.length; i++) {
                         if (taxonomiesIdentifiers.indexOf(allData.taxonomiesWithoutRedundancy[i].taxonomy_identifier) != -1 ) {
-                            selectedData.taxonomies.push(allData.taxonomiesWithoutRedundancy[i]);
+                            // selectedData.taxonomies.push(allData.taxonomiesWithoutRedundancy[i]);
+                            selectedData.taxonomies = addElementAndOtherLanguagesInstancses(allData.taxonomiesWithoutRedundancy[i].taxonomy_identifier, selectedData.taxonomies, allData.taxonomies, 'taxonomy');
                             for (var j = 0; j < allData.allTerms.length; j++) {
                                 if (allData.allTerms[j].taxonomy_identifier == allData.taxonomiesWithoutRedundancy[i].taxonomy_identifier) {
                                     var addedTermsIdentifiers = [];
@@ -468,7 +470,8 @@ function addObject(objectIdentifier) {
                        exists = true;
                }
                if (!exists) {
-                   selectedData.objects.push(allData.allObjects[k].objects[l]);
+                   selectedData.objects = addElementAndOtherLanguagesInstancses(allData.allObjects[k].objects[l].object_identifier, selectedData.objects, allData.allObjects[k].objects, 'object');
+                //    selectedData.objects.push(allData.allObjects[k].objects[l]);
                    // if the object is added, then we are gonna add its model here: 
                    for (var q = 0; q < allData.modelsWihoutRedundancy.length; q++) {
                        if (allData.allObjects[k].objects[l].model == allData.modelsWihoutRedundancy[q].model_identifier) {
@@ -479,7 +482,8 @@ function addObject(objectIdentifier) {
                                }
                            }
                            if (!exists) {
-                               selectedData.models.push(allData.modelsWihoutRedundancy[q]);
+                            //    selectedData.models.push(allData.modelsWihoutRedundancy[q]);
+                               selectedData.models = addElementAndOtherLanguagesInstancses(allData.modelsWihoutRedundancy[q].model_identifier, selectedData.models, allData.models, 'model');
                                // Now that we added the model, lets add the models_and_forms instances related to it: 
                                for (var i = 0; i < allData.modelsAndForms.length; i++) {
                                    if (allData.modelsAndForms[i].model_identifier == allData.modelsWihoutRedundancy[q].model_identifier) {
@@ -507,6 +511,7 @@ function addObject(objectIdentifier) {
                                        for (var g = 0; g < allData.formsWithoutRedundancy.length; g++) {
                                            if (allData.formsWithoutRedundancy[g].form_identifier == formIdentifier) {
                                                selectedData.forms.push(allData.formsWithoutRedundancy[g]);
+                                               selectedData.forms = addElementAndOtherLanguagesInstancses(allData.formsWithoutRedundancy[g].form_identifier, selectedData.forms, allData.forms, 'form');
                                                // Now that we added the model, lets add the models_and_forms instances related to it:
                                                for (var i = 0; i < allData.formsAndFields.length; i++) {
                                                    if (allData.formsAndFields[i].form_identifier == allData.formsWithoutRedundancy[g].form_identifier) {
@@ -533,7 +538,8 @@ function addObject(objectIdentifier) {
                                                        for (var t = 0; t < allData.fieldsWithoutRedundancy.length; t++) {
                                                            if (allData.fieldsWithoutRedundancy[t].field_identifier == fieldIdentifier) {
                                                                var theField = allData.fieldsWithoutRedundancy[t];
-                                                               selectedData.fields.push(theField);
+                                                            //    selectedData.fields.push(theField);
+                                                               selectedData.fields = addElementAndOtherLanguagesInstancses(theField.field_identifier, selectedData.fields, allData.fields, 'field');
                                                            }
                                                        }
                                                    }
@@ -569,16 +575,21 @@ function addGoodpractice(goodpractices, goodpracticeIdentifier, goodpractice) {
             }
         }
         if (goodpractice) {
-            goodpractices.push(goodpractice);
+            // goodpractices.push(goodpractice);
+            goodpractices = addElementAndOtherLanguagesInstancses(goodpractice.goodpractice_identifier, goodpractices, allData.goodpractices, 'goodpractice');
 
-            var objectsIdentifiers = goodpractice.goodpractice_objects.split('|');
-            for (var j = 0; j < objectsIdentifiers.length; j++) {
-                addObject(objectsIdentifiers[j]);
+            if (goodpractice.goodpractice_objects != null) {
+                var objectsIdentifiers = goodpractice.goodpractice_objects.split('|');
+                for (var j = 0; j < objectsIdentifiers.length; j++) {
+                    addObject(objectsIdentifiers[j]);
+                }
             }
 
-            var quantisIdentifiers = goodpractice.goodpractice_quantis.split('|');
-            for (var j = 0; j < quantisIdentifiers.length; j++) {
-                addIndicator(selectedData.quantis, quantisIdentifiers[j], 'quanti');
+            if (goodpractice.goodpractice_quantis != null) {
+                var quantisIdentifiers = goodpractice.goodpractice_quantis.split('|');
+                for (var j = 0; j < quantisIdentifiers.length; j++) {
+                    addIndicator(selectedData.quantis, quantisIdentifiers[j], 'quanti');
+                }
             }
         }
 
@@ -604,16 +615,21 @@ function addPerformance(performances, performanceIdentifier, performance) {
             }
         }
         if (performance) {
-            performances.push(performance);
+            // performances.push(performance);
+            performances = addElementAndOtherLanguagesInstancses(performance.performance_identifier, performances, allData.performances, 'performance');
 
-            var objectsIdentifiers = performance.performance_objects.split('|');
-            for (var j = 0; j < objectsIdentifiers.length; j++) {
-                addObject(objectsIdentifiers[j]);
+            if ( performance.performance_objects != null ) {
+                var objectsIdentifiers = performance.performance_objects.split('|');
+                for (var j = 0; j < objectsIdentifiers.length; j++) {
+                    addObject(objectsIdentifiers[j]);
+                }
             }
 
-            var quantisIdentifiers = performance.performance_quantis.split('|');
-            for (var j = 0; j < quantisIdentifiers.length; j++) {
-                addIndicator(selectedData.quantis, quantisIdentifiers[j], 'quanti');
+            if ( performance.performance_quantis != null) {
+                var quantisIdentifiers = performance.performance_quantis.split('|');
+                for (var j = 0; j < quantisIdentifiers.length; j++) {
+                    addIndicator(selectedData.quantis, quantisIdentifiers[j], 'quanti');
+                }
             }
         }
 
@@ -639,7 +655,10 @@ function addGlossary(glossaries, glossaryIdentifier, glossary) {
             }
         }
         if (glossary) {
-            glossaries.push(glossary);
+            // glossaries.push(glossary);
+            glossaries = addElementAndOtherLanguagesInstancses(glossary.glossary_identifier, glossaries, allData.glossaries, 'glossary');
+
+
             addObject(glossary.glossary_object);
 
             // Lets get the parent glossary as well: 
@@ -674,7 +693,11 @@ function addIndicator(indicators, indicatorIdentifier, whichIndicator, indicator
             }
         }
         if (indicator) {
-            indicators.push(indicator);
+            // indicators.push(indicator);
+            var allTheData = whichIndicator == 'quali' ? allData.qualis : allData.quantis;
+            indicators = addElementAndOtherLanguagesInstancses(indicator.indicator_identifier, indicators, allTheData, whichIndicator);
+
+
             addObject(indicator[whichIndicator + '_object']);
 
             // Lets get the parent indicator as well: 
@@ -688,6 +711,27 @@ function addIndicator(indicators, indicatorIdentifier, whichIndicator, indicator
 
         return indicators;
     }
+}
+
+// To add other instances of other languages
+function addElementAndOtherLanguagesInstancses(elementIdentifier, arrayToAddTo, allInstances, table) {
+    var languages = [];
+    for (var i = allInstances.length - 1; i >= 0; i--) {
+        if(allInstances[i][table + '_identifier'] == elementIdentifier) {
+            // check if language was already added: 
+            var languageAlreadyAdded = false; 
+            for (var j = 0; j < languages.length; j++) {
+                if (languages[j] == allInstances[i][table + '_content_language']) {
+                    languageAlreadyAdded = true;
+                }
+            }
+            if (!languageAlreadyAdded) {
+                languages.push(allInstances[i][table + '_content_language']);
+                arrayToAddTo.push(allInstances[i]);
+            }
+        }
+    }
+    return arrayToAddTo;
 }
 
 // Everything related to our modal

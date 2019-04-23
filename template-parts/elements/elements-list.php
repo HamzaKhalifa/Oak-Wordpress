@@ -89,9 +89,11 @@
                     && $elements_with_redundancy[ $index ]->$language_property == Oak::$site_language ) :
                         $element = $elements_with_redundancy[ $index ];
                         $found_element_of_same_language = true;
+                        $designation_to_show = $element->$designation_property;
                     endif;
                     $index--;
                 } while ( $index >= 0 && !$found_element_of_same_language );
+
                 if ( !$found_element_of_same_language ) :
                     // We are gonna change the designation here: 
                     $designation_to_show .= ' (' . $element->$language_property . ')';

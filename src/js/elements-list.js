@@ -148,7 +148,7 @@ restoreButton();
 function restoreButton() {
     var restoreButton = document.querySelector('.oak_element_header_right_restore_button');
     restoreButton.addEventListener('click', function() {
-        openModal('Êtes vous sûr de vouloir restaurer les élements sélectionnés ?', true);
+        openModal(DATA.restoringSelectedElementsMessage, true);
         restoring = true;
     });
 }
@@ -373,7 +373,7 @@ function add() {
             additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
         else if ( DATA.elementsType == 'term_objects' ) {
             choosingModel = true;
-            openModal('Veuillez choisir le modèle');
+            openModal(DATA.choosingModelMessage);
             return;
         }
         window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&elements=' + DATA.elementsType + '&listorformula=formula' + additionalData);

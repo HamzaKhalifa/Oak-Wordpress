@@ -124,7 +124,7 @@ $modification_time_property = $table . '_modification_time';
             <!-- For the identifier -->
             <div class="oak_text_field_container_identifier">
                 <input placeholder="Identifiant Unique  " type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $last_revision->$identifier_property ) ); endif; ?>" disabled class="oak_text_field <?php echo( $table . '_identifier_input' ); ?>">
-                <span class="oak_text_field_placeholder"><?php _e( '', Oak::$text_domain ); ?></span>
+                <span class="oak_text_field_placeholder"></span>
                 <div class="text_field_line"></div>
                 <span class="text_field_description"><?php _e('Identifiant technique'); ?></span>
             </div>
@@ -637,6 +637,65 @@ $modification_time_property = $table . '_modification_time';
                     <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
                 </div>
             <?php
+            elseif ( $property['input_type'] == 'select_with_filters' ) : ?>
+            <div class="oak_select_container oak_select_container_with_filters_for_<?php echo( $property['name'] ); ?> oak_select_container_with_filters <?php if( isset( $property['hidden'] ) ) : if( $property['hidden'] == 'true' ) : echo('oak_hidden'); endif; endif; ?>">
+                <div class="additional_container">
+                    <input type="text" hidden value="<?php echo( $last_revision->$property_name ); ?>" class="<?php echo( $table . '_' . $property['name'] . '_input' ) ?>" >
+                </div>
+
+                <div class="oak_select_container_with_filters__add_button">
+                    <i class="fas fa-plus"></i>
+                </div>
+
+                <div class="oak_select_container_with_filters__single_element">
+                    <div class="additional_container">
+                        <select type="text" class="oak_add_element_container__input oak_select_container_with_filters_single_element__data_select">
+                            <?php 
+                            $selected = array();
+                            foreach( $property['choices'] as $key => $choice ) :
+                                $filter_properties = '';
+                                foreach( $property['filters'] as $filter ) :
+                                    if ( isset( $choice['data'] ) ) :
+                                        $table = explode( '_', array_keys( get_object_vars( $choice['data'] ) )[1] )[0];
+                                        $filter_property_name = $table . '_' . $filter['name'];
+                                        $filter_properties .= $filter['name'] . '="' . $choice['data']->$filter_property_name . '" ';
+                                    endif;
+                                endforeach;
+                                ?>
+                                <option <?php if( isset( $choice['data'] ) && $filter_properties != '' ) : echo( $filter_properties ); endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
+                                <?php
+                            endforeach;
+                            ?>
+                        </select>
+                    </div>
+                    <div class="input_line"></div>
+                    <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+                    <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
+
+                    <div class="oak_select_container__filters_container">
+                        <?php 
+                        foreach( $property['filters'] as $filter ) : ?>
+                        <div class="oak_select_container__single_filter">
+                            <select property-name="<?php echo( $filter['name'] ); ?>" type="text" class="oak_select_container__filter_select oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
+                                <?php 
+                                foreach( $filter['choices'] as $key => $choice ) :
+                                    ?>
+                                    <option value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
+                                    <?php
+                                endforeach;
+                                ?>
+                            </select>
+                            <div class="input_line"></div>
+                            <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+                            <span class="text_field_description filter_description"><?php echo( $filter['description'] ); ?></span>
+                        </div>
+                        <?php
+                        endforeach;
+                        ?>
+                    </div>
+                </div>
+
+            </div><?php
             endif;
             
             $showed_a_selector = false;

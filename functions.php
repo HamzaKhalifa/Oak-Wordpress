@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Oak {
     public static $text_domain;
@@ -66,7 +66,7 @@ class Oak {
     public static $model_first_property;
     public static $model_second_property;
     public static $model_third_property;
-    
+
     public static $organizations;
     public static $organizations_without_redundancy;
     public static $organization_properties;
@@ -155,7 +155,7 @@ class Oak {
         include( get_template_directory() . '/functions/elements_to_show_properties.php' );
 
         Oak::$revisions = [];
-        
+
         Oak::$fields_table_name = $wpdb->prefix . 'oak_fields';
         Oak::$forms_table_name = $wpdb->prefix . 'oak_forms';
         Oak::$models_table_name = $wpdb->prefix . 'oak_models';
@@ -179,8 +179,8 @@ class Oak {
         // $this->delete_everything();
 
         Oak::$field_types = array (
-            array ( 'value' => 'text', 'innerHTML' => __( 'Texte', Oak::$text_domain ) ), 
-            array ( 'value' => 'textarea', 'innerHTML' => __( 'Zone de Texte', Oak::$text_domain ) ), 
+            array ( 'value' => 'text', 'innerHTML' => __( 'Texte', Oak::$text_domain ) ),
+            array ( 'value' => 'textarea', 'innerHTML' => __( 'Zone de Texte', Oak::$text_domain ) ),
             array ( 'value' => 'image', 'innerHTML' => __( 'Image', Oak::$text_domain ) ),
             array ( 'value' => 'file', 'innerHTML' => __( 'Fichier', Oak::$text_domain ) ),
             array ( 'value' => 'url', 'innerHTML' => __( 'Url', Oak::$text_domain ) ),
@@ -202,20 +202,21 @@ class Oak {
         add_action( 'init', array( $this, 'add_cors_http_header' ) );
 
         add_action( 'after_setup_theme', array( $this, 'oak_add_theme_support' ) );
+        add_action( 'after_setup_theme', array( $this, 'oak_translation_setup' ) );
 
         add_action( 'admin_head', array ( $this, 'oak_wordpress_dashboard' ) );
-        
+
         $this->oak_elementor_initialization();
-        
+
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
 
         add_action( 'save_post', array ( $this, 'oak_save_post_meta_fields' ) );
-        
+
         $this->oak_ajax_calls();
 
         $this->oak_contact_form();
     }
-    
+
     function oak_ajax_calls() {
         add_action('wp_ajax_oak_save_configuration', array( $this, 'oak_save_configuration') );
         add_action('wp_ajax_nopriv_oak_save_configuration', array( $this, 'oak_save_configuration') );
@@ -270,7 +271,7 @@ class Oak {
         wp_enqueue_style( 'the_style', get_stylesheet_directory_uri() . '/style.css' );
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
     }
-    
+
     function oak_enqueue_scripts() {
 
         wp_enqueue_media();
@@ -278,12 +279,12 @@ class Oak {
         if ( strpos( get_page_template(), "critical-analysis" ) != false ) :
             wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
             wp_enqueue_script( 'oak_critical_analysis_front', get_template_directory_uri() . '/src/js/critical-analysis-front.js', array('jquery'), false, true);
-            
+
             $analyzes = get_option('oak_analyzes');
             $analyzes_field = get_field_object('analyzes');
             $selected_analyze = $analyzes_field['choices'][ get_field('analyzes') ];
             $analyzes = get_option('oak_analyzes');
-            $analysis; 
+            $analysis;
             for ( $i = 0; $i < sizeof( $analyzes ); $i++ ) :
                 if ( $analyzes[$i]['title'] == $selected_analyze ) :
                     $analysis = $analyzes[$i];
@@ -297,11 +298,11 @@ class Oak {
 
     function oak_admin_enqueue_styles( $hook ) {
         wp_enqueue_media();
-        
+
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
 
-        // Add the color picker css file       
-        wp_enqueue_style( 'wp-color-picker' ); 
+        // Add the color picker css file
+        wp_enqueue_style( 'wp-color-picker' );
 
         // if ( isset( $_GET['elements'] ) ) :
             wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
@@ -310,12 +311,12 @@ class Oak {
             ?>
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-            
+
             <?php
         // endif;
     }
 
-    function oak_admin_enqueue_scripts( $hook ) { 
+    function oak_admin_enqueue_scripts( $hook ) {
         global $wpdb;
 
         // For the media library
@@ -433,7 +434,7 @@ class Oak {
             $additional_data_to_pass = array();
 
             $properties_to_show_in_list = array();
-            
+
             if ( $_GET['elements'] == 'fields' ) :
                 $table = 'field';
                 $table_in_plural = 'fields';
@@ -579,13 +580,13 @@ class Oak {
                 foreach( $elements as $object ) :
                     $object->object_model_identifier = $_GET['model_identifier'];
                 endforeach;
-                
+
                 foreach( Oak::$current_model_fields as $key => $field ) :
                     $input_type = $field->field_type;
 
                     Oak::$object_properties[] = array (
                         'name' => $key . '_' . $field->field_identifier,
-                        'property_name' => 'object_' . $key . '_' . $field->field_identifier, 
+                        'property_name' => 'object_' . $key . '_' . $field->field_identifier,
                         'type' => 'text',
                         'input_type' => $input_type,
                         'placeholder' => $field->form_and_field_properties->field_designation != '' ? $field->form_and_field_properties->field_designation : $field->field_designation,
@@ -593,7 +594,8 @@ class Oak {
                         'selector' => $field->field_selector,
                         'width' => '50',
                         'model_and_form_instance' => $field->model_and_form_instance,
-                        'form' => $field->form
+                        'form' => $field->form,
+                        'translatable' => true
                     );
                 endforeach;
 
@@ -661,11 +663,22 @@ class Oak {
                 'templateDirectoryUri' => get_template_directory_uri(),
                 'termIdentifier' => isset ( $_GET['term_identifier'] ) ? $_GET['term_identifier'] : '',
                 'siteLanguage' => Oak::$site_language,
-                'propertiesToShowInList' => $properties_to_show_in_list
+                'propertiesToShowInList' => $properties_to_show_in_list,
+                
+                'addingElementMessage' => __( 'Êtes vous sur de vouloir ajouter cet element?', Oak::$text_domain ),
+                'modifyingElementMessage' => __( 'Êtes vous sûr de vouloir modifier cet element?', Oak::$text_domain ),
+                'addingToRegisteredElementsListMessage' => __( 'Êtes vous sûr de vouloir ajouter cet element à la liste des elements enregistrés?', Oak::$text_domain ),
+                'enterDesignationFirstMessage' => __( 'Veuillez entrer la désignation d\'abord', Oak::$text_domain ),
+                'modifyAndDiffuseMessage' => __( 'Êtes vous sûr de vouloir modifier et diffuser cet element ?', Oak::$text_domain ),
+                'sendToDraftMessage' => __( 'Êtes vous sûr de vouloir modifier et renvoyer ce champ à l\'état de Brouillon ?', Oak::$text_domain ),
+                'revisionsListMessage' => __( 'Liste des révisions', Oak::$text_domain ),
+
+                'restoringSelectedElementsMessage' => __( 'Êtes vous sûr de vouloir restaurer les élements sélectionnés ?', Oak::$text_domain ),
+                'choosingModelMessage' => __( 'Veuillez choisir le modèle ?', Oak::$text_domain ),
             );
 
             $final_data_to_pass = array_merge( $basic_data_to_pass, $additional_data_to_pass );
-            
+
             if ( $_GET['listorformula'] == 'formula' ) :
                 wp_enqueue_script( 'corn_add_element', get_template_directory_uri() . '/src/js/add-element.js', array( 'jquery', 'wp-color-picker' ), false, true );
                 wp_localize_script( 'corn_add_element', 'DATA', $final_data_to_pass );
@@ -678,7 +691,7 @@ class Oak {
         endif;
     }
 
-    
+
 
     function oak_add_meta_box_to_posts() {
         $this->oak_add_meta_data();
@@ -706,7 +719,7 @@ class Oak {
             endif;
         endforeach;
 
-        global $wpdb; 
+        global $wpdb;
 
         $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
 
@@ -715,11 +728,11 @@ class Oak {
         foreach( Oak::$models_without_redundancy as $model ) :
             $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
             $objects = $wpdb->get_results ( "
-                SELECT * 
+                SELECT *
                 FROM  $table_name
             " );
             $objects = array_reverse( $objects );
-            foreach( $objects as $object ) : 
+            foreach( $objects as $object ) :
                 if ( in_array( $object->object_identifier, $selected_objects ) ) :
                     $exists = false;
                     foreach( $our_objects as $already_added_object ) :
@@ -799,12 +812,12 @@ class Oak {
             'post_status'    => 'inherit',
             'posts_per_page' => - 1,
         );
-        
-        $query_images = new WP_Query( $query_images_args );	
+
+        $query_images = new WP_Query( $query_images_args );
         $images = array();
         foreach ( $query_images->posts as $image ) {
             $images[] = array ( 'url' => wp_get_attachment_url( $image->ID ), 'id' => $image->ID );
-        }	
+        }
 
         // I pass the data to dynamic tags via the table options (Because there is an error of denied access if I happen to do this in the register controls function)
         update_option( 'oak_post_elementor_fields', $the_returned_fields );
@@ -818,7 +831,7 @@ class Oak {
         ?>
         <select multiple name="objects_selector[]" class="oak_post_objects_selector">
             <?php
-            foreach( Oak::$all_objects_without_redundancy as $object ) : 
+            foreach( Oak::$all_objects_without_redundancy as $object ) :
                 $selected = '';
                 foreach( $selected_objects as $selected_object_identifier ) :
                     if ( $selected_object_identifier == $object->object_identifier ) :
@@ -839,7 +852,7 @@ class Oak {
         if ( !isset( $_POST['objects_selector'] ) ) :
             return;
         endif;
-        
+
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return $post_id;
         }
@@ -850,9 +863,9 @@ class Oak {
                 return $post_id;
             } elseif ( !current_user_can( 'edit_post', $post_id ) ) {
                 return $post_id;
-            }  
+            }
         }
-        
+
         $old = get_post_meta( $post_id, 'objects_selector', true );
         $new = $_POST['objects_selector'];
 
@@ -863,7 +876,7 @@ class Oak {
         }
     }
 
-    
+
     function oak_add_theme_support() {
         add_theme_support('menus');
         add_theme_support( 'custom-logo', array(
@@ -878,6 +891,17 @@ class Oak {
         include get_template_directory() . '/functions/properties-initialization.php';
     }
 
+    function oak_translation_setup() {
+        load_theme_textdomain( Oak::$text_domain, get_template_directory() . '/languages' );
+
+        // $locale = get_locale();
+        // $locale_file = get_template_directory() . "/languages/$locale.po";
+
+        // if ( is_readable( $locale_file ) ) {
+        //     require_once( $locale_file );
+        // }
+    }
+
     function add_cors_http_header() {
         header('Access-Control-Allow-Origin: *');
         // header('Access-Control-Allow-Origin: http://localhost:8888/test/wp-admin/admin-ajax.php');
@@ -888,7 +912,7 @@ class Oak {
             if ( !did_action( 'elementor/loaded' ) == 1 ) :
                 add_action( 'admin_notices', array( $this, 'oak_admin_notice_missing_elementor_plugin' ) );
             else :
-                // This is corn, and elementor is installed. So we do everything related to elementor :) 
+                // This is corn, and elementor is installed. So we do everything related to elementor :)
                 $this->oak_add_tags();
                 $this->oak_add_widget_categories();
                 $this->oak_add_widgets();
@@ -899,7 +923,7 @@ class Oak {
     function oak_add_tags() {
         add_action( 'elementor/dynamic_tags/register_tags', function( $dynamic_tags ) {
             \Elementor\Plugin::$instance->dynamic_tags->register_group( 'oak', [
-                'title' => __( 'Oak', Oak::$text_domain ) 
+                'title' => __( 'Oak', Oak::$text_domain )
             ] );
 
             include_once get_template_directory() . '/functions/elementor/dynamic_tag.php';
@@ -926,7 +950,7 @@ class Oak {
 
             include_once get_template_directory() . '/functions/elementor/generic_widget.php';
 
-            global $wpdb; 
+            global $wpdb;
 
             $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
 
@@ -935,11 +959,11 @@ class Oak {
             foreach( Oak::$models_without_redundancy as $model ) :
                 $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
                 $objects = $wpdb->get_results ( "
-                    SELECT * 
+                    SELECT *
                     FROM  $table_name
                 " );
                 $objects = array_reverse( $objects );
-                foreach( $objects as $object ) : 
+                foreach( $objects as $object ) :
                     if ( in_array( $object->object_identifier, $selected_objects ) ) :
                         $exists = false;
                         foreach( $our_objects as $already_added_object ) :
@@ -947,7 +971,7 @@ class Oak {
                                 $exists = true;
                             endif;
                         endforeach;
-                        if ( !$exists ) : 
+                        if ( !$exists ) :
                             $our_objects[] = $object;
                         endif;
                     endif;
@@ -1005,7 +1029,7 @@ class Oak {
                                 endif;
                             endforeach;
                         endif;
-                        
+
                         $widget_options = array(
                             'name' => preg_replace( '/\s+/', '', $field_designation ),
                             'title' => $field_designation,
@@ -1041,7 +1065,7 @@ class Oak {
                 endforeach;
             endif;
 
-            // For the organization name: 
+            // For the organization name:
             if ( get_option( 'oak_show_organization_name' ) == 'true' ) :
                 $widget_options = array (
                     'name' => __( 'organization_name', Oak::$text_domain ),
@@ -1056,7 +1080,7 @@ class Oak {
                 $widgets_manager->register_widget_type( $generic_widget );
             endif;
 
-            // To unregister the logo and site title widgets: 
+            // To unregister the logo and site title widgets:
             if ( get_option( 'oak_show_logo' ) != 'true' ) :
                 $widgets_manager->unregister_widget_type( 'theme-site-logo' );
             endif;
@@ -1069,7 +1093,7 @@ class Oak {
     }
 
     function oak_admin_notice_missing_elementor_plugin() {
-        
+
 		$message = sprintf(
 			esc_html__( 'Pour assurer un bon fonctionnement du "%1$s" , vous devriez avoir "%2$s" installé dans votre environnement.', Oak::$text_domain ),
 			'<strong>' . esc_html__( 'Web Publisher', Oak::$text_domain ) . '</strong>',
@@ -1119,7 +1143,7 @@ class Oak {
 
     function oak_materility_reporting() {
         include get_template_directory() . '/template-parts/configuration-page.php';
-    } 
+    }
 
     function oak_import_page() {
         include get_template_directory() . '/template-parts/import-page.php';
@@ -1247,7 +1271,7 @@ class Oak {
                 // Uploading the image
                 $upload_dir  = wp_upload_dir();
                 $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
-                
+
                 $img             = str_replace( 'data:image/png;base64,', '', $single_principle['image'] );
                 $img             = str_replace( ' ', '+', $img );
                 $decoded         = base64_decode( $img );
@@ -1262,7 +1286,7 @@ class Oak {
                     'post_status'    => 'inherit',
                     'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
                 );
-            
+
                 $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
                 $url = wp_get_attachment_image_url( $attach_id );
                 $single_principle['image'] = $url;
@@ -1271,7 +1295,7 @@ class Oak {
                 // Done uploading the image
             endif;
         endforeach;
-        
+
 
         update_option( 'oak_principles', $principles, false );
         wp_send_json_success( array(
@@ -1280,7 +1304,7 @@ class Oak {
     }
 
     public static function oak_get_all_wordpress_menus(){
-        return get_terms( 'nav_menu', array( 'hide_empty' => true ) ); 
+        return get_terms( 'nav_menu', array( 'hide_empty' => true ) );
     }
 
     function oak_save_analyzes() {
@@ -1314,7 +1338,7 @@ class Oak {
     }
 
     function oak_corn_save_general_configuration() {
-        global $wpdb; 
+        global $wpdb;
 
         $general_settings = json_decode( stripslashes( $_POST['generalSettings'] ), true );
 
@@ -1332,9 +1356,9 @@ class Oak {
         $result = $wpdb->update(
             $wpdb->prefix . 'postmeta',
             array (
-                'meta_value' => $site_logo_to_store 
+                'meta_value' => $site_logo_to_store
             ),
-            array( 
+            array(
                 'post_id' => $custom_logo_id,
                 'meta_key' => '_wp_attached_file'
             )
@@ -1348,20 +1372,20 @@ class Oak {
         $result = $wpdb->update(
             $wpdb->prefix . 'postmeta',
             array (
-                'meta_value' => $site_icon_to_store 
+                'meta_value' => $site_icon_to_store
             ),
             array(
                 'post_id' => $custom_site_icon_id,
                 'meta_key' => '_wp_attached_file'
             )
         );
-        
+
         $table_name = $wpdb->prefix . 'postmeta';
-        
+
         update_option( 'blogdescription', $blog_description );
         update_option( 'blogname', $blog_name );
         update_option( 'oak_organization_name', $organization_name );
-        
+
         wp_send_json_success( array(
             'generalSettings' => $general_settings,
             'result' => $result,
@@ -1372,7 +1396,7 @@ class Oak {
 
     function oak_corn_save_social_media_configuration() {
         $social_media_data = $_POST['socialMediaData'];
-        
+
         update_option( 'oak_social_media_data', $social_media_data );
         update_option( 'oak_social_system_bar_background_color', $_POST['socialMediaBackgroundColor'] );
 
@@ -1384,7 +1408,7 @@ class Oak {
         foreach( $app_bar_settings as $single_setting ) :
             update_option( $single_setting['name'], $single_setting['value'] );
         endforeach;
-        
+
         update_option( 'oak_app_bar_background_color', $_POST['appBarBackgroundColor'] );
 
         wp_send_json_success();
@@ -1407,37 +1431,37 @@ class Oak {
     function oak_add_element() {
         $revisions = Oak::$revisions;
         switch ( $_GET['elements'] ) :
-            case 'fields': 
+            case 'fields':
                 $properties = Oak::$field_properties;
                 $table = 'field';
                 $title = __( 'Ajouter un champ', Oak::$text_domain );
             break;
-            case 'forms': 
+            case 'forms':
                 $properties = Oak::$form_properties;
                 $table = 'form';
                 $title = __( 'Nouveau formulaire', Oak::$text_domain );
             break;
-            case 'models': 
+            case 'models':
                 $properties = Oak::$model_properties;
                 $table = 'model';
                 $title = __( 'Ajouter un modèle', Oak::$text_domain );
             break;
-            case 'taxonomies': 
+            case 'taxonomies':
                 $properties = Oak::$taxonomy_properties;
                 $table = 'taxonomy';
                 $title = __( 'Ajouter une taxonomie', Oak::$text_domain );
             break;
-            case 'publications': 
+            case 'publications':
                 $properties = Oak::$publication_properties;
                 $table = 'publication';
                 $title = __( 'Ajouter une publication', Oak::$text_domain );
             break;
-            case 'organizations': 
+            case 'organizations':
                 $properties = Oak::$organization_properties;
                 $table = 'organization';
                 $title = __( 'Ajouter une organisation', Oak::$text_domain );
             break;
-            case 'quantis': 
+            case 'quantis':
                 $properties = Oak::$quanti_properties;
                 $table = 'quanti';
                 $title = __( 'Ajouter un indicateur quantitatif', Oak::$text_domain );
@@ -1457,7 +1481,7 @@ class Oak {
                 $table = 'performance';
                 $title = __( 'Ajouter une Donnée de performance', Oak::$text_domain );
             break;
-            case 'glossaries': 
+            case 'glossaries':
                 $properties = Oak::$glossary_properties;
                 $table = 'glossary';
                 $title = __( 'Ajouter une términologie', Oak::$text_domain );
@@ -1475,7 +1499,7 @@ class Oak {
         endswitch;
         include get_template_directory() . '/template-parts/elements/add-element.php';
     }
-    
+
     function oak_elements_list() {
         global $wpdb;
         $elements = [];
@@ -1519,7 +1543,7 @@ class Oak {
                 $second_property = Oak::$taxonomy_second_property;
                 $third_property = Oak::$taxonomy_third_property;
             break;
-            case 'organizations' : 
+            case 'organizations' :
                 $title = __( 'Organisations', Oak::$text_domain );
                 $elements = Oak::$organizations_without_redundancy;
                 $elements_with_redundancy = Oak::$organizations;
@@ -1528,7 +1552,7 @@ class Oak {
                 $second_property = Oak::$organization_second_property;
                 $third_property = Oak::$organization_third_property;
             break;
-            case 'publications' : 
+            case 'publications' :
                 $title = __( 'Publications', Oak::$text_domain );
                 $elements = Oak::$publications_without_redundancy;
                 $elements_with_redundancy = Oak::$publications;
@@ -1536,8 +1560,8 @@ class Oak {
                 $first_property = Oak::$publication_first_property;
                 $second_property = Oak::$publication_second_property;
                 $third_property = Oak::$publication_third_property;
-            break; 
-            case 'quantis' : 
+            break;
+            case 'quantis' :
                 $title = __( 'Indicateurs Quantitatifs', Oak::$text_domain );
                 $elements = Oak::$quantis_without_redundancy;
                 $elements_with_redundancy = Oak::$quantis;
@@ -1595,7 +1619,7 @@ class Oak {
                         Oak::$objects_without_redundancy[] = $object;
                     endif;
                 endforeach;
-                
+
                 $title = __( 'Objets', Oak::$text_domain );
                 $elements = Oak::$objects_without_redundancy;
                 $elements_with_redundancy = Oak::$objects;
@@ -1607,7 +1631,7 @@ class Oak {
             case 'terms' :
                 $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
                 Oak::$objects = $wpdb->get_results ( "
-                    SELECT * 
+                    SELECT *
                     FROM $term_table_name
                 " );
                 $reversed_terms = array_reverse( Oak::$terms  );
@@ -1681,13 +1705,13 @@ class Oak {
 
         $table = $_POST['table'];
 
-        // We are gonna be unsetting the objet_model_identifier property to not receive a databse error: 
+        // We are gonna be unsetting the objet_model_identifier property to not receive a databse error:
         if ( $table == "object" && isset( $element['object_model_identifier'] ) ) :
             unset( $element['object_model_identifier'] );
         endif;
 
         $prefix = $wpdb->prefix . 'oak_';
-        if ( $table == 'object' ) : 
+        if ( $table == 'object' ) :
             $prefix = $wpdb->prefix . 'oak_model_';
         elseif( $table == 'term' ) :
             $prefix = $wpdb->prefix . 'oak_taxonomy_';
@@ -1697,7 +1721,7 @@ class Oak {
 
         $array_data = array_merge( $element, array( $table . '_modification_time' => date("Y-m-d H:i:s") ) );
 
-        // If we are updating a form, set the models_fields_names to empty for the models that use that form (simplified version): 
+        // If we are updating a form, set the models_fields_names to empty for the models that use that form (simplified version):
         if ( $table == 'form' ) :
             // Check if the form exists already or not (to know whether we are updating or adding a new form)
             $form_exists = false;
@@ -1708,20 +1732,20 @@ class Oak {
                 if ( $form->form_identifier == $element['form_identifier'] ) :
                     $form_exists = true;
                     $the_form = $form;
-                    // Lets see if the form's fields changed: 
+                    // Lets see if the form's fields changed:
                     $form_fields = [];
                     foreach( Oak::$all_forms_and_fields as $form_and_field ) :
                         if ( $form_and_field->form_identifier == $the_form->form_identifier && $form_and_field->form_revision_number == $the_form->form_revision_number ) :
                             $form_fields[] = $form_and_field->field_identifier;
                         endif;
-                    endforeach; 
+                    endforeach;
 
                     foreach( $form_fields as $key => $field_identifier ) :
                         if ( isset( $element['otherElements'][ $key ] ) ) :
                             if ( $element['otherElements'][ $key ]['elementIdentifier'] != $field_identifier ) :
                                 $form_fields_changed = true;
                             endif;
-                        else : 
+                        else :
                             $form_fields_changed = true;
                         endif;
                     endforeach;
@@ -1743,8 +1767,8 @@ class Oak {
                 foreach( Oak::$models_without_redundancy as $model ) :
                     $the_model_uses_the_form = false;
                     foreach( Oak::$all_models_and_forms as $model_and_form ) :
-                        
-                        
+
+
                         if ( $model_and_form->model_identifier == $model->model_identifier
                             && $model_and_form->model_revision_number == $model->model_revision_number
                             && $model_and_form->form_identifier == $the_form->form_identifier ) :
@@ -1752,7 +1776,7 @@ class Oak {
                                 $the_model_uses_the_form = true;
                         endif;
                     endforeach;
-                    
+
                     if ( $the_model_uses_the_form ) :
                         $fields_names = [];
                         foreach( Oak::$all_models_and_forms as $model_and_form ) :
@@ -1760,7 +1784,7 @@ class Oak {
                             if ( $model_and_form->model_identifier == $model->model_identifier &&
                                 $model_and_form->model_revision_number == $model->model_revision_number ) :
                                     if ( $model_and_form->form_identifier == $the_form->form_identifier ) :
-                                        
+
                                         foreach( $element['otherElements'] as $field ) :
                                             if ( $field['elementOtherDesignation'] != '' ) :
                                                 $fields_names[] = $field['elementOtherDesignation'];
@@ -1774,13 +1798,13 @@ class Oak {
                                         endforeach;
                                     else :
                                         // find the form revision number
-                                        foreach( Oak::$forms_without_redundancy as $form ) : 
+                                        foreach( Oak::$forms_without_redundancy as $form ) :
                                             if ( $form->form_identifier == $model_and_form->form_identifier ) :
                                                 foreach( Oak::$all_forms_and_fields as $form_and_field ) :
                                                     if ( $form_and_field->form_identifier == $form->form_identifier && $form_and_field->form_revision_number == $form->form_revision_number ) :
                                                         if ( $form_and_field->field_designation != '' ) :
                                                             $fields_names[] = $form_and_field->field_designation;
-                                                        else : 
+                                                        else :
                                                             foreach( Oak::$fields_without_redundancy as $field ) :
                                                                 if ( $field->field_identifier == $form_and_field->field_identifier ) :
                                                                     $fields_names[] = $field->field_designation;
@@ -1843,7 +1867,7 @@ class Oak {
             $associative_table_name = $_POST['table'] == 'form' ? Oak::$forms_and_fields_table_name : Oak::$models_and_forms_table_name;
             $identifier = $element['copy_identifier'];
             $associative_table_instances = $wpdb->get_results ( "
-                SELECT * 
+                SELECT *
                 FROM  $associative_table_name
             " );
 
@@ -1856,7 +1880,7 @@ class Oak {
                 $revision_number_property = $_POST['table'] . '_revision_number';
                 $properties = array( $other_element_identifier_property, $identifier_property, $designation_property, $required_property,
                 $index_property, $revision_number_property );
-                if ( $instance->$identifier_property == $element['copy_identifier'] ) : 
+                if ( $instance->$identifier_property == $element['copy_identifier'] ) :
                     $result = $wpdb->insert(
                         $associative_table_name,
                         array (
@@ -1869,19 +1893,19 @@ class Oak {
                         )
                     );
                 endif;
-            endforeach;   
+            endforeach;
         endif;
 
         unset( $array_data['otherElements'] );
         unset( $array_data['otherElementsProperties'] );
         unset( $array_data['copy_identifier'] );
-        
-        // For the files/images: 
+
+        // For the files/images:
         // $test_file_url = '';
         // foreach( $array_data as $key => $value ) :
         //     foreach( $_POST['properties'] as $property ) :
         //         $property_name_divided = explode( '_', $property['name'] );
-        //         $key_divided = explode( '_', $key ); 
+        //         $key_divided = explode( '_', $key );
         //         if ( $property_name_divided[ count( $property_name_divided ) - 1 ] == $key_divided[ count( $key_divided ) - 1 ] ) :
         //             if ( $property['input_type'] == 'image' || $property['input_type'] == 'file' ) :
         //                 if ( !filter_var( $value, FILTER_VALIDATE_URL ) && $value != '' ) :
@@ -1895,15 +1919,15 @@ class Oak {
         // endforeach;
 
         // For objects' terms
-        if ( $table = 'object' ) : 
+        if ( $table = 'object' ) :
             $terms_identifiers = $array_data['selected_terms'];
 
             foreach( Oak::$terms_and_objects as $term_and_object ) :
-                if ( $term_and_object->object_identifier == $array_data['object_identifier'] 
+                if ( $term_and_object->object_identifier == $array_data['object_identifier']
                     && !in_array( $terms_identifiers, $term_and_object->term_identifier )
                 ) :
-                    $wpdb->delete( 
-                        $wpdb->prefix . 'oak_terms_and_objects',  
+                    $wpdb->delete(
+                        $wpdb->prefix . 'oak_terms_and_objects',
                         array( 'term_identifier' => $term_and_object->term_identifier, 'object_identifier' => $array_data['object_identifier'] )
                     );
                 endif;
@@ -1911,7 +1935,7 @@ class Oak {
 
             foreach( $terms_identifiers as $term_identifier ) :
                 $result = $wpdb->insert(
-                    $wpdb->prefix . 'oak_terms_and_objects', 
+                    $wpdb->prefix . 'oak_terms_and_objects',
                     array(
                         'term_identifier' => $term_identifier,
                         'object_identifier' => $array_data['object_identifier']
@@ -1920,9 +1944,9 @@ class Oak {
             endforeach;
             unset( $array_data['selected_terms'] );
         endif;
-        
+
         $result = $wpdb->insert(
-            $table_name, 
+            $table_name,
             $array_data
         );
 
@@ -1936,14 +1960,14 @@ class Oak {
 
     function upload_file( $file ) {
         $file_url = '';
-        
+
         $file_type = explode( ';', explode( '/', $file )[1] )[0];
 
         if ( !filter_var( $file, FILTER_VALIDATE_URL ) ) :
             // Uploading the image
             $uplad_dir  = wp_upload_dir();
             $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
-            
+
             $file             = str_replace( 'data:application/' . $file_type . ';base64,', '', $file );
             $file             = str_replace( ' ', '+', $file );
             $decoded         = base64_decode( $file );
@@ -1958,24 +1982,24 @@ class Oak {
             //     'post_status'    => 'inherit',
             //     'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
             // );
-        
+
             // $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
             // $file_url = wp_get_attachment_image_url( $attach_id );
         endif;
 
         return $hashed_filename;
-    } 
+    }
 
     function upload_image( $image ) {
         $image_url = '';
-        
+
         $image_type = explode( ';', explode( '/', $image )[1] )[0];
 
         if ( !filter_var( $image, FILTER_VALIDATE_URL ) ) :
             // Uploading the image
             $upload_dir  = wp_upload_dir();
             $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
-            
+
             $img             = str_replace( 'data:image/' . $image_type . ';base64,', '', $image );
             $img             = str_replace( ' ', '+', $img );
             $decoded         = base64_decode( $img );
@@ -1990,7 +2014,7 @@ class Oak {
                 'post_status'    => 'inherit',
                 'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
             );
-        
+
             $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
             $url = wp_get_attachment_image_url( $attach_id );
             $image = $url;
@@ -2010,13 +2034,13 @@ class Oak {
 
         $table_name = $wpdb->prefix . 'oak_' . $table_in_plural;
         if ( $table == 'term' ) :
-            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $table_in_plural; 
+            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $table_in_plural;
         elseif( $table == 'object' ) :
-            $table_name = $wpdb->prefix . 'oak_model_' . $table_in_plural; 
+            $table_name = $wpdb->prefix . 'oak_model_' . $table_in_plural;
         endif;
 
         foreach( $identifiers as $identifier ) :
-        
+
             $result = $wpdb->update(
                 $table_name,
                 array (
@@ -2040,27 +2064,27 @@ class Oak {
 
         $table_name = $wpdb->prefix . 'oak_' . $table_in_plural;
         if ( $table == 'term' ) :
-            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $table_in_plural; 
+            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $table_in_plural;
         elseif( $table == 'object' ) :
-            $table_name = $wpdb->prefix . 'oak_model_' . $table_in_plural; 
+            $table_name = $wpdb->prefix . 'oak_model_' . $table_in_plural;
         endif;
 
         foreach( $identifiers as $identifier ) :
-        
-            $wpdb->delete( 
-                $table_name, 
+
+            $wpdb->delete(
+                $table_name,
                 array( $table . '_identifier' => $identifier )
             );
 
             if ( $data['otherElementsTableName'] ) :
-                $wpdb->delete( 
-                    $data['otherElementsTableName'], 
+                $wpdb->delete(
+                    $data['otherElementsTableName'],
                     array( $table . '_identifier' => $identifier )
                 );
             endif;
 
             // We are deleting the tables for models or taxonomies
-            if ( $table == 'model' || $table == 'taxonomy' ) : 
+            if ( $table == 'model' || $table == 'taxonomy' ) :
                 $table_name_to_delete = $wpdb->prefix . 'oak_' . $table . '_' . $identifier;
                 $wpdb->query( "DROP TABLE IF EXISTS $table_name_to_delete" );
             endif;
@@ -2084,13 +2108,13 @@ class Oak {
 
         $table_name = $wpdb->prefix . 'oak_' . $table_in_plural;
         if ( $table == 'term' ) :
-            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $table_in_plural; 
+            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $table_in_plural;
         elseif( $table == 'object' ) :
-            $table_name = $wpdb->prefix . 'oak_model_' . $table_in_plural; 
+            $table_name = $wpdb->prefix . 'oak_model_' . $table_in_plural;
         endif;
-        
+
         foreach( $identifiers as $identifier ) :
-        
+
             $result = $wpdb->update(
                 $table_name,
                 array (
@@ -2116,16 +2140,16 @@ class Oak {
         if ( $_POST['wellDefinedTableName'] == 'false' ) :
             $table_name = $wpdb->prefix . 'oak_' . $table;
             if ( $single_name == 'term' ) :
-                $table_name = $wpdb->prefix . 'oak_taxonomy_' . $table; 
+                $table_name = $wpdb->prefix . 'oak_taxonomy_' . $table;
             elseif( $single_name == 'object' ) :
-                $table_name = $wpdb->prefix . 'oak_model_' . $table; 
+                $table_name = $wpdb->prefix . 'oak_model_' . $table;
             endif;
         endif;
 
         foreach( $rows as $key => $row ) :
             if ( $key != 0 && !is_null( $row[1] ) ) :
                 $arguments = [];
-                foreach( $rows[0] as $property_key => $property ) : 
+                foreach( $rows[0] as $property_key => $property ) :
                     if ( $property != 'id' && $property_key < count( $rows[0] ) && $property != '' ) :
                         $arguments[ $property ] = $this->oak_filter_word( $row[ $property_key ] );
                     endif;
@@ -2134,12 +2158,12 @@ class Oak {
                     endif;
                 endforeach;
                 $result = $wpdb->insert(
-                    $table_name, 
+                    $table_name,
                     $arguments
                 );
             endif;
         endforeach;
-        
+
         wp_send_json_success();
     }
 
@@ -2148,7 +2172,7 @@ class Oak {
 
         $table_name = $wpdb->prefix . 'oak_organizations';
         $organizations = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM $table_name
         " );
         $organizations_without_redundancy = [];
@@ -2163,11 +2187,11 @@ class Oak {
             if ( !$exists ) :
                 $organizations_without_redundancy[] = $organization;
             endif;
-        endforeach; 
+        endforeach;
 
         $table_name = $wpdb->prefix . 'oak_publications';
         $publications = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM $table_name
         " );
         $publications_without_redundancy = [];
@@ -2182,11 +2206,11 @@ class Oak {
             if ( !$exists ) :
                 $publications_without_redundancy[] = $publication;
             endif;
-        endforeach; 
+        endforeach;
 
         $fields_table_name = $wpdb->prefix . 'oak_fields';
         $fields = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $fields_table_name
         " );
         $fields_without_redundancy = [];
@@ -2205,7 +2229,7 @@ class Oak {
 
         $forms_table_name = $wpdb->prefix . 'oak_forms';
         $forms = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $forms_table_name
         " );
         $forms_without_redundancy = [];
@@ -2224,13 +2248,13 @@ class Oak {
 
         $forms_and_fields_table_name = $wpdb->prefix . 'oak_forms_and_fields';
         $forms_and_fields = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $forms_and_fields_table_name
         " );
 
         $models_table_name = $wpdb->prefix . 'oak_models';
         $models = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $models_table_name
         " );
         $reversed_models = array_reverse( $models );
@@ -2249,10 +2273,10 @@ class Oak {
 
         $models_and_forms_table_name = $wpdb->prefix . 'oak_models_and_forms';
         $models_and_forms = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $models_and_forms_table_name
         " );
-        
+
         $all_objects = [];
         foreach( $models_without_redundancy as $model ) :
             $model_table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
@@ -2273,7 +2297,7 @@ class Oak {
                     $objects_without_redundancy[] = $object;
                 endif;
             endforeach;
-            
+
             $all_objects[] = array(
                 'model_identifier' => $model->model_identifier,
                 'objects' => $objects,
@@ -2283,7 +2307,7 @@ class Oak {
 
         $taxonomies_table_name = $wpdb->prefix . 'oak_taxonomies';
         $taxonomies = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $taxonomies_table_name
         " );
         $reversed_taxonomies = array_reverse( Oak::$taxonomies );
@@ -2304,7 +2328,7 @@ class Oak {
         foreach( $taxonomies_without_redundancy as $taxonomy ) :
             $taxonomy_table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy->taxonomy_identifier;
             $terms = $wpdb->get_results ( "
-                SELECT * 
+                SELECT *
                 FROM  $taxonomy_table_name
             " );
             $reversed_terms = array_reverse( $terms );
@@ -2320,7 +2344,7 @@ class Oak {
                     $terms_without_redundancy[] = $term;
                 endif;
             endforeach;
-            
+
             $all_terms[] = array(
                 'taxonomy_identifier' => $taxonomy->taxonomy_identifier,
                 'terms' => $terms,
@@ -2330,7 +2354,7 @@ class Oak {
 
         $qualis_table_name = $wpdb->prefix . 'oak_qualis';
         $qualis = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $qualis_table_name
         " );
         $reversed_quali = array_reverse( $qualis );
@@ -2349,7 +2373,7 @@ class Oak {
 
         $quantis_table_name = $wpdb->prefix . 'oak_quantis';
         $quantis = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $quantis_table_name
         " );
         $reversed_quanti = array_reverse( $quantis );
@@ -2368,7 +2392,7 @@ class Oak {
 
         $goodpractices_table_name = $wpdb->prefix . 'oak_goodpractices';
         $goodpractices = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $goodpractices_table_name
         " );
         $reversed_goodpractices = array_reverse( $goodpractices );
@@ -2387,7 +2411,7 @@ class Oak {
 
         $performances_table_name = $wpdb->prefix . 'oak_performances';
         $performances = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $performances_table_name
         " );
         $reversed_performances = array_reverse( $performances );
@@ -2406,7 +2430,7 @@ class Oak {
 
         $glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
         $glossaries = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $glossaries_table_name
         " );
         $reversed_glossary = array_reverse( $glossaries );
@@ -2425,7 +2449,7 @@ class Oak {
 
         $terms_and_objects_table_name = Oak::$terms_and_objects_table_name;
         $terms_and_objects = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM $terms_and_objects_table_name
         " );
 
@@ -2468,14 +2492,14 @@ class Oak {
         endforeach;
 
         $result = $wpdb->insert(
-            $table_name, 
+            $table_name,
             $element
         );
     }
 
     function corn_save_element( $elements, $table_name ) {
         global $wpdb;
-        
+
         if ( isset( $table_name ) ) :
             $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
             $columns_names = [];
@@ -2505,12 +2529,12 @@ class Oak {
             endif;
 
             foreach( $element as $key => $value ) :
-                // check if the key is included in the model: 
+                // check if the key is included in the model:
                 if ( !in_array( $key, $columns_names ) ) :
                     unset( $element[ $key ] );
                 endif;
             endforeach;
-            
+
 
             $this->corn_simple_register_element( $element, $new_table_name );
         endforeach;
@@ -2526,7 +2550,7 @@ class Oak {
         // Lets get the taxonomies (because delete_everything is called before tables.php) :
         $taxonomies_table_name = Oak::$taxonomies_table_name;
         Oak::$taxonomies = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $taxonomies_table_name
         " );
         $reversed_taxonomies = array_reverse( Oak::$taxonomies );
@@ -2547,7 +2571,7 @@ class Oak {
         // Now lets get the models :
         $models_table_name = Oak::$models_table_name;
         Oak::$models = $wpdb->get_results ( "
-            SELECT * 
+            SELECT *
             FROM  $models_table_name
         " );
         $reversed_models = array_reverse( Oak::$models );
@@ -2564,7 +2588,7 @@ class Oak {
             endif;
         endforeach;
         Oak::$models_without_redundancy = $models_without_redundancy;
-                
+
 
         // Now lets delete the tables related to the taxonomies we found:
         foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
@@ -2586,7 +2610,7 @@ class Oak {
     function corn_save_data() {
         // wp_send_json_success(  );
 
-        global $wpdb; 
+        global $wpdb;
 
         $this->delete_everything();
 
@@ -2626,25 +2650,25 @@ class Oak {
         $this->corn_save_element( $goodpractices, Oak::$goodpractices_table_name );
         $this->corn_save_element( $performances, Oak::$performances_table_name );
         $this->corn_save_element( $terms_and_objects, Oak::$terms_and_objects_table_name );
-        
+
         $this->corn_save_element( $forms_and_fields, Oak::$forms_and_fields_table_name );
         $this->corn_save_element( $models_and_forms, Oak::$models_and_forms_table_name );
 
         // Creating the tables for models
         foreach( $models as $model ) :
-            
+
             $model_fields = [];
             $number_of_fields = 0;
             foreach( $models_and_forms as $model_and_form_instance ) :
-                if ( $model_and_form_instance['model_identifier'] == $model['model_identifier'] 
-                    && $model_and_form_instance['model_revision_number'] == $model['model_revision_number'] 
+                if ( $model_and_form_instance['model_identifier'] == $model['model_identifier']
+                    && $model_and_form_instance['model_revision_number'] == $model['model_revision_number']
                 ) :
                     $form_identifier = $model_and_form_instance['form_identifier'];
                     foreach( $forms as $form ) :
                         if ( $form['form_identifier'] == $form_identifier ) :
                             foreach ( $forms_and_fields as $form_and_field_instance ) :
-                                if ( $form_and_field_instance['form_identifier'] == $form['form_identifier'] 
-                                    && $form_and_field_instance['form_revision_number'] == $form['form_revision_number'] 
+                                if ( $form_and_field_instance['form_identifier'] == $form['form_identifier']
+                                    && $form_and_field_instance['form_revision_number'] == $form['form_revision_number']
                                 ) :
 
                                     $number_of_fields++;
@@ -2689,7 +2713,7 @@ class Oak {
                         $exists = true;
                     endif;
                 endforeach;
-                
+
                 if ( !$exists ) {
                     if ( $field->field_type == 'textarea' ) :
                         $wpdb->query("ALTER TABLE $table_name ADD $column_name LONGTEXT");
@@ -2701,7 +2725,7 @@ class Oak {
             endforeach;
         endforeach;
 
-        // Lets now add the objects 
+        // Lets now add the objects
 
         $this->corn_save_element( $objects );
 
