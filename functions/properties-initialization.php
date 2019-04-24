@@ -1072,6 +1072,32 @@ Oak::$quali_properties = array (
         'input_type' => 'select',
         'select_multiple' => 'true',
         'choices' => $qualis_array,
+        
+        'input_type' => 'select_with_filters',
+        'select_multiple' => 'true',
+        'choices' => $quantis_and_qualis,
+        'filters' => [
+            array(
+                'description' => __( 'Type d\'indicateur', Oak::$text_domain ),
+                'choices' => array( 
+                    array ( 'value' => '0', 'innerHTML' => __( 'Aucun type d\'indicateur n\'est sélectionné', Oak::$text_domain ) ), 
+                    array ( 'value' => 'quanti', 'innerHTML' => __( 'Quantitative', Oak::$text_domain ) ), 
+                    array ( 'value' => 'quali', 'innerHTML' => __( 'Qualitative', Oak::$text_domain ) )
+                ),
+                'name' => 'indicator_type'
+            ),
+            array(
+                'description' => __( 'Publications Cadres RSE', Oak::$text_domain ),
+                'choices' => $frame_publications_array,
+                'name' => 'publication'
+            ),
+            array(
+                'description' => __( 'Object', Oak::$text_domain ),
+                'choices' => $objects_array,
+                'name' => 'object'
+            )
+        ],
+
         'placeholder' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'description' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'width' => '100',

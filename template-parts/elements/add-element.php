@@ -656,8 +656,8 @@ $modification_time_property = $table . '_modification_time';
                                 $filter_properties = '';
                                 foreach( $property['filters'] as $filter ) :
                                     if ( isset( $choice['data'] ) ) :
-                                        $table = explode( '_', array_keys( get_object_vars( $choice['data'] ) )[1] )[0];
-                                        $filter_property_name = $table . '_' . $filter['name'];
+                                        $the_table = explode( '_', array_keys( get_object_vars( $choice['data'] ) )[1] )[0];
+                                        $filter_property_name = $the_table . '_' . $filter['name'];
                                         $filter_properties .= $filter['name'] . '="' . $choice['data']->$filter_property_name . '" ';
                                     endif;
                                 endforeach;
@@ -1024,6 +1024,7 @@ $modification_time_property = $table . '_modification_time';
                         $last_revision = $revisions[ count( $revisions ) - 1 ];
 
                         $modification_time_property = $table . '_modification_time';
+                        var_dump( $table );
 
                         if ( $last_revision->$state_property == 1 ) :
                             $registration_date = $last_revision->$modification_time_property;
@@ -1235,6 +1236,7 @@ $modification_time_property = $table . '_modification_time';
                     // Lets get the list of languages first: 
                     $languages_codes = [];
                     $language_property = $table . '_content_language';
+                    var_dump( $table );
                     foreach( $revisions as $key => $revision ) :
                         if ( !in_array( $revision->$language_property, $languages_codes ) ) :
                             $languages_codes[] = $revision->$language_property;

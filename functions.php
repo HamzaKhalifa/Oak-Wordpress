@@ -186,7 +186,8 @@ class Oak {
             array ( 'value' => 'url', 'innerHTML' => __( 'Url', Oak::$text_domain ) ),
             array ( 'value' => 'quali', 'innerHTML' => __( 'Indicateur Qualitatif', Oak::$text_domain ) ),
             array ( 'value' => 'quanti', 'innerHTML' => __( 'Indicateur Quantitatif', Oak::$text_domain ) ),
-            array ( 'value' => 'selector', 'innerHTML' => __( 'Selecteur', Oak::$text_domain ) )
+            array ( 'value' => 'selector', 'innerHTML' => __( 'Selecteur', Oak::$text_domain ) ),
+            array ( 'value' => 'checkbox', 'innerHTML' => __( 'Booléen', Oak::$text_domain ) ),
         );
 
         Oak::$site_language = substr( get_locale(), 0, 2 );
