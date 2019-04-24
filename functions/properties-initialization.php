@@ -1410,10 +1410,13 @@ Oak::$performance_properties = array(
         'type' => 'text', 
         'input_type' => 'select',
         'select_multiple' => 'false',
-        'choices' => array(
+        'choices' => array (
             array( 'value' => 'distance', 'innerHTML' => __( 'Distance', Oak::$text_domain ) ),
             array( 'value' => 'volume', 'innerHTML' => __( 'Volume', Oak::$text_domain ) ),
             array( 'value' => 'mass', 'innerHTML' => __( 'Masse', Oak::$text_domain ) ),
+            array( 'value' => 'energy', 'innerHTML' => __( 'Energie', Oak::$text_domain ) ),
+            array( 'value' => 'energy_consumption', 'innerHTML' => __( 'Consommation d\'Energie', Oak::$text_domain ) ),
+            array( 'value' => 'co2_emission', 'innerHTML' => __( 'Emission de CO2', Oak::$text_domain ) ),
             array( 'value' => 'surface', 'innerHTML' => __( 'Surface', Oak::$text_domain ) ),
             array( 'value' => 'money', 'innerHTML' => __( 'Monnaie', Oak::$text_domain ) ),
             array( 'value' => 'ratio', 'innerHTML' => __( 'Ratio', Oak::$text_domain ) ),
@@ -1421,20 +1424,19 @@ Oak::$performance_properties = array(
         ),
         'placeholder' => __( 'Type', Oak::$text_domain ), 
         'description' => __( 'Type.', Oak::$text_domain ), 
-        'width' => '25' ,
+        'width' => '25',
         'condition' => true,
         'line' => 'beginning'
     ),
     array ( 
-        'name' => 'distance_unity', 
-        'property_name' => 'performance_distance_unity', 
+        'name' => 'distance_unity_filter', 
+        'property_name' => 'performance_distance_unity_filter', 
         'type' => 'text', 
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
-            array( 'value' => 'm', 'innerHTML' => __( 'M', Oak::$text_domain ) ),
-            array( 'value' => 'km', 'innerHTML' => __( 'Volume', Oak::$text_domain ) ),
-            array( 'value' => 'ft', 'innerHTML' => __( 'Ft', Oak::$text_domain ) ),
+            array( 'value' => 'm', 'innerHTML' => __( 'Mètre', Oak::$text_domain ) ),
+            array( 'value' => 'ft', 'innerHTML' => __( 'Foot', Oak::$text_domain ) ),
         ),
         'placeholder' => __( 'Unité de Distance', Oak::$text_domain ), 
         'description' => __( 'Unité de Distance.', Oak::$text_domain ), 
@@ -1442,16 +1444,65 @@ Oak::$performance_properties = array(
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'distance' ) )
         ),
+        'condition' => true,
         'line' => 'dont_return'
     ),
     array ( 
-        'name' => 'volume_unity', 
-        'property_name' => 'performance_volume_unity', 
+        'name' => 'distance_unity_meter', 
+        'property_name' => 'performance_distance_unity_meter', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'mm', 'innerHTML' => __( 'Mm', Oak::$text_domain ) ),
+            array( 'value' => 'cm', 'innerHTML' => __( 'Cm', Oak::$text_domain ) ),
+            array( 'value' => 'dm', 'innerHTML' => __( 'Dm', Oak::$text_domain ) ),
+            array( 'value' => 'm', 'innerHTML' => __( 'M', Oak::$text_domain ) ),
+            array( 'value' => 'dekam', 'innerHTML' => __( 'Dm', Oak::$text_domain ) ),
+            array( 'value' => 'hm', 'innerHTML' => __( 'Hm', Oak::$text_domain ) ),
+            array( 'value' => 'km', 'innerHTML' => __( 'Km', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Distance', Oak::$text_domain ), 
+        'description' => __( 'Unité de Distance.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'distance' ) ),
+            array( 'name' => 'distance_unity_filter', 'values' => array( 'm' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'distance_unity_feet', 
+        'property_name' => 'performance_distance_unity_feet', 
         'type' => 'text', 
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
-            array( 'value' => 'm3', 'innerHTML' => __( 'M^3', Oak::$text_domain ) ),
+            array( 'value' => 'inch', 'innerHTML' => __( 'Inch', Oak::$text_domain ) ),
+            array( 'value' => 'foot', 'innerHTML' => __( 'Foot', Oak::$text_domain ) ),
+            array( 'value' => 'yard', 'innerHTML' => __( 'Yard', Oak::$text_domain ) ),
+            array( 'value' => 'chain', 'innerHTML' => __( 'Chain', Oak::$text_domain ) ),
+            array( 'value' => 'furlong', 'innerHTML' => __( 'Furlong', Oak::$text_domain ) ),
+            array( 'value' => 'mile', 'innerHTML' => __( 'Mile', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Distance', Oak::$text_domain ), 
+        'description' => __( 'Unité de Distance.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'distance' ) ),
+            array( 'name' => 'distance_unity_filter', 'values' => array( 'ft' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'volume_unity_filter', 
+        'property_name' => 'performance_volume_unity_filter', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'm3', 'innerHTML' => __( 'M^3/Dm^3/Cm^3', Oak::$text_domain ) ),
+            array( 'value' => 'l', 'innerHTML' => __( 'L/Dl/Cl', Oak::$text_domain ) ),
         ),
         'placeholder' => __( 'Unité de Volume', Oak::$text_domain ), 
         'description' => __( 'Unité de Volume.', Oak::$text_domain ), 
@@ -1459,17 +1510,60 @@ Oak::$performance_properties = array(
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'volume' ) )
         ),
+        'condition' => true,
         'line' => 'dont_return'
     ),
     array ( 
-        'name' => 'mass_unity', 
-        'property_name' => 'performance_mass_unity', 
+        'name' => 'volume_unity_meter', 
+        'property_name' => 'performance_volume_unity_meter', 
         'type' => 'text', 
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
-            array( 'value' => 'kg', 'innerHTML' => __( 'KG', Oak::$text_domain ) ),
-            array( 'value' => 'lb', 'innerHTML' => __( 'LB', Oak::$text_domain ) ),
+            array( 'value' => 'm3', 'innerHTML' => __( 'M^3', Oak::$text_domain ) ),
+            array( 'value' => 'dm3', 'innerHTML' => __( 'Dm^3', Oak::$text_domain ) ),
+            array( 'value' => 'cm3', 'innerHTML' => __( 'Cm^3', Oak::$text_domain ) ),
+            array( 'value' => 'mm3', 'innerHTML' => __( 'MM^3', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Volume', Oak::$text_domain ), 
+        'description' => __( 'Unité de Volume.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array (
+            array( 'name' => 'type', 'values' => array( 'volume' ) ),
+            array( 'name' => 'volume_unity_filter', 'values' => array( 'm3' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'volume_unity_leter', 
+        'property_name' => 'performance_volume_unity_leter', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'l', 'innerHTML' => __( 'L', Oak::$text_domain ) ),
+            array( 'value' => 'dl', 'innerHTML' => __( 'Dl', Oak::$text_domain ) ),
+            array( 'value' => 'cl', 'innerHTML' => __( 'Cl', Oak::$text_domain ) ),
+            array( 'value' => 'ml', 'innerHTML' => __( 'Ml', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Volume', Oak::$text_domain ), 
+        'description' => __( 'Unité de Volume.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'volume' ) ),
+            array( 'name' => 'volume_unity_filter', 'values' => array( 'l' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'mass_unity_filter', 
+        'property_name' => 'performance_mass_unity_filter', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'kg', 'innerHTML' => __( 'T/Kg', Oak::$text_domain ) ),
+            array( 'value' => 'lb', 'innerHTML' => __( 'Lb', Oak::$text_domain ) ),
         ),
         'placeholder' => __( 'Unité de Masse', Oak::$text_domain ), 
         'description' => __( 'Unité de Masse.', Oak::$text_domain ), 
@@ -1477,16 +1571,170 @@ Oak::$performance_properties = array(
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'mass' ) )
         ),
+        'condition' => true,
         'line' => 'dont_return'
     ),
     array ( 
-        'name' => 'surface_unity',
-        'property_name' => 'performance_surface_unity', 
+        'name' => 'mass_unity_kg', 
+        'property_name' => 'performance_mass_unity_kg', 
         'type' => 'text', 
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
-            array( 'value' => 'm2', 'innerHTML' => __( 'M^2', Oak::$text_domain ) ),
+            array( 'value' => 't', 'innerHTML' => __( 'Tonnes', Oak::$text_domain ) ),
+            array( 'value' => 'kg', 'innerHTML' => __( 'Kg', Oak::$text_domain ) ),
+            array( 'value' => 'hg', 'innerHTML' => __( 'Cl', Oak::$text_domain ) ),
+            array( 'value' => 'dekag', 'innerHTML' => __( 'Dg', Oak::$text_domain ) ),
+            array( 'value' => 'g', 'innerHTML' => __( 'G', Oak::$text_domain ) ),
+            array( 'value' => 'dg', 'innerHTML' => __( 'Dg', Oak::$text_domain ) ),
+            array( 'value' => 'cg', 'innerHTML' => __( 'Cg', Oak::$text_domain ) ),
+            array( 'value' => 'mg', 'innerHTML' => __( 'Mg', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Masse', Oak::$text_domain ), 
+        'description' => __( 'Unité de Masse.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'mass' ) ),
+            array( 'name' => 'mass_unity_filter', 'values' => array( 'kg' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'mass_unity_lb', 
+        'property_name' => 'performance_mass_unity_lb', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'lb', 'innerHTML' => __( 'Lb', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Masse', Oak::$text_domain ), 
+        'description' => __( 'Unité de Masse.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array (
+            array( 'name' => 'type', 'values' => array( 'mass' ) ),
+            array( 'name' => 'mass_unity_filter', 'values' => array( 'lb' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'energy_unity_filter', 
+        'property_name' => 'performance_energy_unity_filter', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'w', 'innerHTML' => __( 'W/KW', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité d\'Energie', Oak::$text_domain ), 
+        'description' => __( 'Unité d\'Energie.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'energy' ) )
+        ),
+        'condition' => true,
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'energy_unity_watt', 
+        'property_name' => 'performance_energy_unity_watt', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'w', 'innerHTML' => __( 'W', Oak::$text_domain ) ),
+            array( 'value' => 'kw', 'innerHTML' => __( 'Kw', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité d\'Energie', Oak::$text_domain ), 
+        'description' => __( 'Unité d\'Energie.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'energy' ) ),
+            array( 'name' => 'energy_unity_filter', 'values' => array( 'w' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'energy_consumption_unity_filter', 
+        'property_name' => 'performance_energy_consumption_unity_filter', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'w', 'innerHTML' => __( 'W/KW', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité d\'Energie', Oak::$text_domain ), 
+        'description' => __( 'Unité d\'Energie.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'energy_consumption' ) )
+        ),
+        'condition' => true,
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'energy_consumption_unity_watt', 
+        'property_name' => 'performance_energy_unity_watt', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array (
+            array( 'value' => 'w', 'innerHTML' => __( 'W', Oak::$text_domain ) ),
+            array( 'value' => 'kw', 'innerHTML' => __( 'Kw', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité d\'Energie', Oak::$text_domain ), 
+        'description' => __( 'Unité d\'Energie.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'energy_consumption' ) ),
+            array( 'name' => 'energy_unity_filter', 'values' => array( 'w' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'co2_emission_unity_filter', 
+        'property_name' => 'performance_co2_emission_unity_filter', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 't_eq_co2', 'innerHTML' => __( 'T Eq CO2', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité d\'Emission de CO2', Oak::$text_domain ), 
+        'description' => __( 'Unité d\'Emission de CO2.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'co2_emission' ) )
+        ),
+        'condition' => true,
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'co2_emission_unity_tonne', 
+        'property_name' => 'performance_co2_emission_unity_tonne', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array (
+            array( 'value' => 't_eq_co2', 'innerHTML' => __( 'T Eq CO2', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité d\'Emission de CO2', Oak::$text_domain ), 
+        'description' => __( 'Unité d\'Emission de CO2.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'co2_emission' ) ),
+            array( 'name' => 'co2_emission_unity_filter', 'values' => array( 't_eq_co2' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array ( 
+        'name' => 'surface_unity_filter', 
+        'property_name' => 'performance_surface_unity_filter', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array( 'value' => 'm3', 'innerHTML' => __( 'M^3', Oak::$text_domain ) ),
         ),
         'placeholder' => __( 'Unité de Surface', Oak::$text_domain ), 
         'description' => __( 'Unité de Surface.', Oak::$text_domain ), 
@@ -1494,9 +1742,34 @@ Oak::$performance_properties = array(
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'surface' ) )
         ),
+        'condition' => true,
         'line' => 'dont_return'
     ),
-    array ( 
+    array (
+        'name' => 'surface_unity_meter',
+        'property_name' => 'performance_surface_unity_meter',
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array (
+            array( 'value' => 'mm3', 'innerHTML' => __( 'Mm^3', Oak::$text_domain ) ),
+            array( 'value' => 'cm3', 'innerHTML' => __( 'Cm^3', Oak::$text_domain ) ),
+            array( 'value' => 'dm3', 'innerHTML' => __( 'Dm^3', Oak::$text_domain ) ),
+            array( 'value' => 'm3', 'innerHTML' => __( 'M^3', Oak::$text_domain ) ),
+            array( 'value' => 'dekam3', 'innerHTML' => __( 'Dm^3', Oak::$text_domain ) ),
+            array( 'value' => 'hm3', 'innerHTML' => __( 'Hm^3', Oak::$text_domain ) ),
+            array( 'value' => 'km3', 'innerHTML' => __( 'Km^3', Oak::$text_domain ) ),
+        ),
+        'placeholder' => __( 'Unité de Surface', Oak::$text_domain ), 
+        'description' => __( 'Unité de Surface.', Oak::$text_domain ), 
+        'width' => '25',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'surface' ) ),
+            array( 'name' => 'surface_unity_filter', 'values' => array( 'm3' ) ),
+        ),
+        'line' => 'dont_return'
+    ),
+    array (
         'name' => 'money_unity', 
         'property_name' => 'performance_money_unity', 
         'type' => 'text', 
@@ -1559,6 +1832,7 @@ Oak::$performance_properties = array(
         'description' => __( 'Périmètre métier.', Oak::$text_domain ), 
         'width' => '25',
         'line' => 'dont_return'
+        // 'line' => 'end_of_line'
     ),
     array (
         'name' => 'country', 

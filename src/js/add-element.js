@@ -640,7 +640,10 @@ function handlePerformanceResults() {
 initializePerformancesResults();
 function initializePerformancesResults() {
     if (DATA.table == 'performance' && DATA.revisions.length >= 1) {
-        var performanceResults = DATA.revisions[DATA.revisions.length - 1].performance_results.split('|');
+        var performanceResults = [];
+        if (DATA.revisions[DATA.revisions.length - 1].performance_results) {
+            performanceResults = DATA.revisions[DATA.revisions.length - 1].performance_results.split('|');
+        } 
         for (var i = 0; i < performanceResults.length; i++) {
             var attributes = performanceResults[i].split(':');
 
@@ -1093,7 +1096,7 @@ function initializeFilesMediaModals() {
 }
 
 // For the conditions:
-handlePropertiesConditions(); 
+handlePropertiesConditions();
 function handlePropertiesConditions() {
     for (var i = 0; i < DATA.properties.length; i++) {
         if (DATA.properties[i].condition) {
