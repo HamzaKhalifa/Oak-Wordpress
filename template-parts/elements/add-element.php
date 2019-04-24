@@ -157,7 +157,7 @@ $modification_time_property = $table . '_modification_time';
         $first = true;
         $form_designation = '';
         $model_and_form_id = '';
-        
+        $the_model = null;
         foreach( $properties as $key => $property ) :
             if ( isset( $property['model_and_form_instance'] ) ) :
                 // For the field new designation: 
@@ -165,6 +165,7 @@ $modification_time_property = $table . '_modification_time';
                 foreach( Oak::$models_without_redundancy as $model ) :
                     if ( $model->model_identifier == $property['model_and_form_instance']->model_identifier ) :
                         $model_fields_names = $model->model_fields_names;
+                        $the_model = $model;
                     endif;
                 endforeach;
                 $model_fields_names_array = explode( '|', $model_fields_names );
@@ -788,8 +789,6 @@ $modification_time_property = $table . '_modification_time';
                 endif;
             endif;
 
-
-
             $close_div = $property['width'] == '100' || !$first || $showed_a_selector || $at_the_end_of_form || $key == count( $properties ) - 1;
             if ( isset( $property['line'] ) ) :
                 if ( $property['line'] == 'beginning' || $property['line'] == 'dont_return' ) :
@@ -813,6 +812,45 @@ $modification_time_property = $table . '_modification_time';
                 
                 
         endforeach;
+
+        // For the model selector:
+        if ( $the_model != null ) : 
+            if ( $the_model->model_selector == 'true' ) :
+            ?>
+                <div class="oak_select_container oak_select_container__selector">
+                    <div class="additional_container">
+                        <select multiple type="text" class="oak_add_element_container__input object_model_selector">
+                            <option value="0"><?php _e( 'Aucun object selectionné', Oak::$text_domain ); ?></option>
+                            <?php
+                            $object_model_selector = '';
+                            if ( $last_revision != null ) :
+                                if ( $last_revision->object_model_selector != null ) :
+                                    $object_model_selector = $last_revision->object_model_selector;
+                                endif;
+                            endif;
+                            $selected_objects = explode( '|', $object_model_selector );
+
+                            foreach( Oak::$all_frame_objects_without_redundancy as $frame_object ) : 
+
+                                $selected = '';
+                                if ( in_array( $frame_object->object_identifier, $selected_objects ) ) :
+                                    $selected = 'selected';
+                                endif;
+                            ?>
+                                <option <?php echo( $selected ); ?> value="<?php echo( $frame_object->object_identifier ); ?>"><?php echo( $frame_object->object_designation ); ?></option>
+                            <?php
+                            endforeach;
+                            ?>
+                        </select>
+                    </div>
+                    <div class="input_line"></div>
+                    <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+                    <span class="text_field_description"><?php _e( 'Selecteur de cadres RSE pour l’objec en entier', Oak::$text_domain ); ?></span>
+                </div>
+            <?php
+            endif;
+        endif;
+
         ?>
 
         <!-- // This is for objects (We are gonna associate them to the terms) -->

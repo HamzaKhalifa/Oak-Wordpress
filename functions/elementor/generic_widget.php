@@ -33,7 +33,7 @@ class Generic_Widget extends \Elementor\Widget_Base {
 
 	protected function _register_controls() {
 
-		$this->start_controls_section(
+		$this->start_controls_section (
 			'section_title',
 			[
 				'label' => $this->get_widgets_options()['title'],

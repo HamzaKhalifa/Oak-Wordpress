@@ -710,15 +710,44 @@ class Oak {
         endforeach;
     }
 
-    static function oak_add_meta_data() {
-        $the_returned_fields = [];
-        // We need to delete all post meta first to avoid old unneccesary data
-        $metas = get_post_meta( get_the_ID() );
-        foreach( $metas as $key => $meta ) :
-            if ( strpos( $key, 'Oak:' ) != false ) :
-                delete_post_meta( get_the_ID(), $key );
+    function oak_get_model_fields( $model ) {
+        $model_fields = [];
+        $model_fields_names = explode( '|', $model->model_fields_names );
+        foreach( Oak::$all_models_and_forms as $model_and_form_instance ) :
+            if ( $model_and_form_instance->model_identifier == $model->model_identifier 
+                && $model_and_form_instance->model_revision_number == $model->model_revision_number 
+            ) :
+                $form_identifier = $model_and_form_instance->form_identifier;
+                foreach( Oak::$forms_without_redundancy as $form ) :
+                    if ( $form->form_identifier == $form_identifier ) :
+                        foreach ( Oak::$all_forms_and_fields as $form_and_field_instance ) :
+                            if ( $form_and_field_instance->form_identifier == $form->form_identifier 
+                                && $form_and_field_instance->form_revision_number == $form->form_revision_number 
+                            ) :
+                                foreach( Oak::$fields_without_redundancy as $field ) :
+                                    if ( $field->field_identifier == $form_and_field_instance->field_identifier ) :
+                                        $field_copy = clone $field;
+                                        $field_copy->field_name_in_model = $model_fields_names[ count( $model_fields ) ];
+                                        if ( isset( $_GET['model_identifier'] ) ) :
+                                            if ( $model->model_identifier == $_GET['model_identifier'] ) :
+                                                array_push( Oak::$current_model_fields, $field_copy );
+                                            endif;
+                                        endif;
+                                        array_push( $model_fields, $field_copy );
+                                    endif;
+                                endforeach;
+                            endif;
+                        endforeach;
+                    endif;
+                endforeach;
             endif;
         endforeach;
+
+        return $model_fields;
+    }
+
+    static function oak_add_meta_data() {
+        $the_returned_fields = [];
 
         global $wpdb;
 
@@ -728,6 +757,8 @@ class Oak {
 
         foreach( Oak::$models_without_redundancy as $model ) :
             $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
+            // Lets get the model fields
+
             $objects = $wpdb->get_results ( "
                 SELECT *
                 FROM  $table_name
@@ -742,71 +773,13 @@ class Oak {
                         endif;
                     endforeach;
                     if ( !$exists ) :
+                        $object->object_model = $model;
                         $our_objects[] = $object;
                     endif;
                 endif;
             endforeach;
         endforeach;
-
-        foreach( $our_objects as $index => $object ) :
-            $field_designations_used = [];
-            foreach( $object as $key => $value ) :
-
-                if ( $value == NULL ) :
-                    $value = '';
-                endif;
-
-                if ( $key != 'object_form_selectors' ) :
-                    $key_devided = explode( '_', $key );
-                    $field_name = '';
-                    switch ( $key ) :
-                        case 'object_modification_time' :
-                            $field_name = __( 'Dernière modification', Oak::$text_domain );
-                        break;
-                        case 'object_state' :
-                            $field_name = __( 'Etat', Oak::$text_domain );
-                        break;
-                        case 'object_identifier' :
-                            $field_name = __( 'Identifiant', Oak::$text_domain );
-                        break;
-                        case 'object_trashed' :
-                            $field_name = __( 'Corbeille', Oak::$text_domain );
-                        break;
-                        default :
-                            $field_name = $key_devided[ count( $key_devided ) - 1 ];
-                        break;
-                    endswitch;
-                    $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field_name;
-                    $field_type = '';
-                    if ( count ( $key_devided ) > 2 ) :
-                        $field_identifier = $key_devided[2];
-                        foreach( Oak::$fields_without_redundancy as $field ) :
-                            if ( $field->field_identifier == $field_identifier ) :
-
-                                $number_of_times_designation_was_used = 0;
-                                foreach( $field_designations_used as $used_designation ) :
-                                    if ( $used_designation == $field->field_designation ) :
-                                        $number_of_times_designation_was_used++;
-                                    endif;
-                                endforeach;
-
-                                $number_of_times_designation_was_used = $number_of_times_designation_was_used == 0 ? '' : $number_of_times_designation_was_used + 1;
-                                $field_designations_used[] = $field->field_designation;
-                                $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field->field_designation . ' ' . $number_of_times_designation_was_used;
-                                $field_type = $field->field_type;
-                            endif;
-                        endforeach;
-                    endif;
-                    $the_returned_fields [] = array(
-                        'field_designation' => $field_designation,
-                        'value' => $value,
-                        'field_type' => $field_type
-                    );
-                    update_post_meta( get_the_ID(), 'Oak: ' . $field_designation, $value );
-                endif;
-            endforeach;
-        endforeach;
-
+        
         $query_images_args = array(
             'post_type'      => 'attachment',
             'post_mime_type' => 'image',
@@ -894,13 +867,6 @@ class Oak {
 
     function oak_translation_setup() {
         load_theme_textdomain( Oak::$text_domain, get_template_directory() . '/languages' );
-
-        // $locale = get_locale();
-        // $locale_file = get_template_directory() . "/languages/$locale.po";
-
-        // if ( is_readable( $locale_file ) ) {
-        //     require_once( $locale_file );
-        // }
     }
 
     function add_cors_http_header() {
@@ -973,76 +939,40 @@ class Oak {
                             endif;
                         endforeach;
                         if ( !$exists ) :
+                            $object->object_model_fields = $this->oak_get_model_fields( $model );
+                            $object->object_model_fields_names = $model->model_fields_names;
                             $our_objects[] = $object;
                         endif;
                     endif;
                 endforeach;
             endforeach;
 
-            $variables = [];
+            $metas = get_post_meta( get_the_ID() );
+            foreach( $metas as $key => $meta ) :
+                if ( strpos( $key, 'Oak:' ) !== false ) :
+                    delete_post_meta( get_the_ID(), $key );
+                endif;
+            endforeach;
+            
             foreach( $our_objects as $index => $object ) :
-                $input_type = 'text';
-                $field_designations_used = [];
-                foreach( $object as $key => $value ) :
-
-                    if ( $value == NULL ) :
-                        $value = '';
-                    endif;
-
-                    if ( $key != 'object_form_selectors' ) :
-                        $key_devided = explode( '_', $key );
-                        $field_name = '';
-                        switch ( $key ) :
-                            case 'object_modification_time' :
-                                $field_name = __( 'Dernière modification', Oak::$text_domain );
-                            break;
-                            case 'object_state' :
-                                $field_name = __( 'Etat', Oak::$text_domain );
-                            break;
-                            case 'object_identifier' :
-                                $field_name = __( 'Identifiant', Oak::$text_domain );
-                            break;
-                            case 'object_trashed' :
-                                $field_name = __( 'Corbeille', Oak::$text_domain );
-                            break;
-                            default :
-                                $field_name = $key_devided[ count( $key_devided ) - 1 ];
-                            break;
-                        endswitch;
-                        $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field_name;
-                        $field_type = 'text';
-                        if ( count ( $key_devided ) > 2 ) :
-                            $field_identifier = $key_devided[2];
-                            foreach( Oak::$fields_without_redundancy as $field ) :
-                                if ( $field->field_identifier == $field_identifier ) :
-
-                                    $number_of_times_designation_was_used = 0;
-                                    foreach( $field_designations_used as $used_designation ) :
-                                        if ( $used_designation == $field->field_designation ) :
-                                            $number_of_times_designation_was_used++;
-                                        endif;
-                                    endforeach;
-
-                                    $number_of_times_designation_was_used = $number_of_times_designation_was_used == 0 ? '' : $number_of_times_designation_was_used + 1;
-                                    $field_designations_used[] = $field->field_designation;
-                                    $field_designation = __( 'Objet', Oak::$text_domain ) . ' ' . $index . ': ' . $field->field_designation . ' ' . $number_of_times_designation_was_used;
-                                    $field_type = $field->field_type;
-                                endif;
-                            endforeach;
-                        endif;
-
-                        $widget_options = array(
-                            'name' => preg_replace( '/\s+/', '', $field_designation ),
-                            'title' => $field_designation,
-                            'icon' => $field_type == 'Image' ? 'eicon-image' : 'eicon-type-tool',
-                            'categories' => [ 'oak' ],
-                            'value' => $value,
-                            'field_type' => $field_type,
-                        );
-                        $generic_widget = new Generic_Widget();
-                        $generic_widget->set_widgets_options( $widget_options );
-                        $widgets_manager->register_widget_type( $generic_widget );
-                    endif;
+                $object_model_field_names_array = explode( '|', $object->object_model_fields_names );
+                foreach( $object->object_model_fields as $key => $object_model_field ) :
+                    $column_name = 'object_' . $key . '_' . $object_model_field->field_identifier;
+                    $value = $object->$column_name;
+                    $widget_options = array(
+                        'name' => preg_replace( '/\s+/', '', $object_model_field_names_array[ $key ] ),
+                        'title' => $object_model_field_names_array[ $key ],
+                        'icon' => $object_model_field->field_type == 'Image' ? 'eicon-image' : 'eicon-type-tool',
+                        'categories' => [ 'oak' ],
+                        'value' => $value,
+                        'field_type' => $object_model_field->field_type,
+                    );
+                    
+                    // var_dump( $value );
+                    update_post_meta( get_the_ID(), 'Oak: ' . $object_model_field_names_array[ $key ], $value );
+                    $generic_widget = new Generic_Widget();
+                    $generic_widget->set_widgets_options( $widget_options );
+                    $widgets_manager->register_widget_type( $generic_widget );
                 endforeach;
             endforeach;
 
@@ -2700,6 +2630,7 @@ class Oak {
                 object_content_language varchar(10) DEFAULT 'fr',
                 object_selectors varchar(999),
                 object_form_selectors varchar(999),
+                object_model_selector TEXT,
                 PRIMARY KEY (id)
             ) $charset_collate;";
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

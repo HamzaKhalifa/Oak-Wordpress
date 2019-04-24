@@ -564,6 +564,7 @@ Oak::$models_without_redundancy = $models_without_redundancy;
 // Lets get the fields that are gonna be in the table
 foreach( $models_without_redundancy as $key => $model ) :
     $model_fields = [];
+    $model_fields_names = explode( '|', $model->model_fields_names );
     foreach( Oak::$all_models_and_forms as $model_and_form_instance ) :
         if ( $model_and_form_instance->model_identifier == $model->model_identifier 
             && $model_and_form_instance->model_revision_number == $model->model_revision_number 
@@ -581,6 +582,7 @@ foreach( $models_without_redundancy as $key => $model ) :
                                     $field_copy->form_and_field_properties = $form_and_field_instance;
                                     $field_copy->model_and_form_instance = $model_and_form_instance;
                                     $field_copy->form = $form;
+                                    $field_copy->field_name_in_model = $model_fields_names[ count( $model_fields ) ];
                                     if ( isset( $_GET['model_identifier'] ) ) :
                                         if ( $model->model_identifier == $_GET['model_identifier'] ) :
                                             array_push( Oak::$current_model_fields, $field_copy );
@@ -609,21 +611,11 @@ foreach( $models_without_redundancy as $key => $model ) :
         object_content_language varchar(10) DEFAULT 'fr',
         object_selectors varchar(999),
         object_form_selectors varchar(999),
+        object_model_selector TEXT,
         PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $models_sql );
-    
-    // object_quanti varchar (999),
-    // object_title varchar (999),
-    // object_commentary varchar (999),
-    // object_example varchar (999),
-    // object_year_1 varchar (999),
-    // object_year_2 varchar (999),
-    // object_year_3 varchar (999),
-    // object_year_4 varchar (999),
-    // object_year_5 varchar (999),
-    // object_objectif varchar (999),
 
     foreach( $model_fields as $key => $field ) :
         $column_name = 'object_' . $key . '_' . $field->field_identifier;

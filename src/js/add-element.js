@@ -430,7 +430,7 @@ function createElementData(state) {
         }
     }
 
-    // Manage objects' terms: 
+    // Manage objects' terms and form selectors: 
     if (DATA.table == 'object') {
         var selectedTerms = [];
         var selectedTermsInputs = document.querySelectorAll('.oak_autocomplete_selected_input');
@@ -457,6 +457,21 @@ function createElementData(state) {
             
         }
         elementData.object_form_selectors = objectFormSelectors;
+
+        // Check for model selector: 
+        var objectModelSelector = document.querySelector('.object_model_selector');
+        if (objectModelSelector) {
+            var selectedObjects = jQuery('.object_model_selector').val();
+            var selectedObjectsString = '';
+            for (var i = 0; i < selectedObjects.length; i++) {
+                var delimiter = '|';
+                if (i == selectedObjects.length - 1) 
+                    delimiter = '';
+                
+                selectedObjectsString += selectedObjects[i] + delimiter;
+            }
+            elementData.object_model_selector = selectedObjectsString;
+        }
     }
 
     // Manage performance results: 
