@@ -24,7 +24,7 @@ Class Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
 		$images = get_option('oak_all_images');
 
 		foreach( $fields as $key => $field ) :
-			if ( $field['field_type'] == 'Image' ) :
+			if ( $field['field_type'] == 'image' ) :
 				$id = 1;
 				foreach( $images as $image ) :
 					if ( $image['url'] == $field['value'] ) :

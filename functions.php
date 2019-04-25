@@ -695,7 +695,7 @@ class Oak {
 
 
     function oak_add_meta_box_to_posts() {
-        $this->oak_add_meta_data();
+        // $this->oak_add_meta_data();
 
         $posts = [ 'post', 'page' ];
         foreach( $posts as $post ) :
@@ -779,23 +779,6 @@ class Oak {
                 endif;
             endforeach;
         endforeach;
-
-        $query_images_args = array(
-            'post_type'      => 'attachment',
-            'post_mime_type' => 'image',
-            'post_status'    => 'inherit',
-            'posts_per_page' => - 1,
-        );
-
-        $query_images = new WP_Query( $query_images_args );
-        $images = array();
-        foreach ( $query_images->posts as $image ) {
-            $images[] = array ( 'url' => wp_get_attachment_url( $image->ID ), 'id' => $image->ID );
-        }
-
-        // I pass the data to dynamic tags via the table options (Because there is an error of denied access if I happen to do this in the register controls function)
-        update_option( 'oak_post_elementor_fields', $the_returned_fields );
-        update_option( 'oak_all_images', $images );
 
         return $the_returned_fields;
     }
@@ -922,6 +905,7 @@ class Oak {
             $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
 
             $our_objects = [];
+            $the_returned_fields = [];
 
             foreach( Oak::$models_without_redundancy as $model ) :
                 $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
@@ -939,7 +923,9 @@ class Oak {
                             endif;
                         endforeach;
                         if ( !$exists ) :
-                            $object->object_model_fields = $this->oak_get_model_fields( $model );
+                            $model_fields = $this->oak_get_model_fields( $model );
+                            $object->object_model_fields = $model_fields;
+
                             $object->object_model_fields_names = $model->model_fields_names;
                             $our_objects[] = $object;
                         endif;
@@ -971,24 +957,48 @@ class Oak {
 
                 $object_model_field_names_array = explode( '|', $object->object_model_fields_names );
                 foreach( $object->object_model_fields as $key => $object_model_field ) :
+                    // var_dump( $key );
                     $column_name = 'object_' . $key . '_' . $object_model_field->field_identifier;
                     $value = $object->$column_name;
-                    $widget_options = array(
-                        'name' => preg_replace( '/\s+/', '', $object_model_field_names_array[ $key ] ),
+                    $widget_options = array (
+                        'name' => preg_replace( '/\s+/', '', count( $the_returned_fields ) . $object_model_field_names_array[ $key ] ),
                         'title' => $object_model_field_names_array[ $key ],
                         'icon' => $object_model_field->field_type == 'Image' ? 'eicon-image' : 'eicon-type-tool',
                         'categories' => [ 'oak' ],
                         'value' => $value,
                         'field_type' => $object_model_field->field_type,
                     );
+                    $the_returned_fields [] = array(
+                        'field_designation' => count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ],
+                        'value' => $value,
+                        'field_type' => $object_model_field->field_type
+                    );
                     
                     // var_dump( $value );
-                    update_post_meta( get_the_ID(), 'Oak: ' . $object_model_field_names_array[ $key ], $value );
+                    update_post_meta( get_the_ID(), 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ], $value );
                     $generic_widget = new Generic_Widget();
                     $generic_widget->set_widgets_options( $widget_options );
                     $widgets_manager->register_widget_type( $generic_widget );
                 endforeach;
             endforeach;
+
+            // For the images
+            $query_images_args = array(
+                'post_type'      => 'attachment',
+                'post_mime_type' => 'image',
+                'post_status'    => 'inherit',
+                'posts_per_page' => - 1,
+            );
+    
+            $query_images = new WP_Query( $query_images_args );
+            $images = array();
+            foreach ( $query_images->posts as $image ) {
+                $images[] = array ( 'url' => wp_get_attachment_url( $image->ID ), 'id' => $image->ID );
+            }
+
+            // I pass the data to dynamic tags via the table options (Because there is an error of denied access if I happen to do this in the register controls function)
+            update_option( 'oak_post_elementor_fields', $the_returned_fields );
+            update_option( 'oak_all_images', $images );
 
             // For site parameters
             $social_media_data = get_option( 'oak_social_media_data' );
