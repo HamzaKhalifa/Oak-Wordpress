@@ -779,7 +779,7 @@ class Oak {
                 endif;
             endforeach;
         endforeach;
-        
+
         $query_images_args = array(
             'post_type'      => 'attachment',
             'post_mime_type' => 'image',
@@ -955,6 +955,20 @@ class Oak {
             endforeach;
             
             foreach( $our_objects as $index => $object ) :
+                $widget_options = array(
+                    'name' => 'object_' . $index . '_designation',
+                    'title' => __( 'Designation Objet ' . $index . ' ', Oak::$text_domain ),
+                    'icon' => 'eicon-type-tool',
+                    'categories' => [ 'oak' ],
+                    'value' => $object->object_designation,
+                    'field_type' => 'text',
+                );
+
+                update_post_meta( get_the_ID(), 'Oak: Designation Objet ' . $index, $object->object_designation );
+                $generic_widget = new Generic_Widget();
+                $generic_widget->set_widgets_options( $widget_options );
+                $widgets_manager->register_widget_type( $generic_widget );
+
                 $object_model_field_names_array = explode( '|', $object->object_model_fields_names );
                 foreach( $object->object_model_fields as $key => $object_model_field ) :
                     $column_name = 'object_' . $key . '_' . $object_model_field->field_identifier;
