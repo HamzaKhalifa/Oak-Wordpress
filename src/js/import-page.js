@@ -297,10 +297,12 @@ var steps = [];
                             addPublicationData(selectedData.publications[i].publication_identifier, []);
                     }
 
-                    setLoading();
 
                     // For the terms and objects (Gotta filter this some day)
                     selectedData.termsAndObjects = allData.termsAndObjects;
+
+                    // console.log('selected Data', selectedData);
+                    setLoading();
                     jQuery(document).ready(function() {
                         jQuery.ajax({
                             type: 'POST',
@@ -615,7 +617,6 @@ function addPerformance(performances, performanceIdentifier, performance) {
             }
         }
         if (performance) {
-            // performances.push(performance);
             performances = addElementAndOtherLanguagesInstancses(performance.performance_identifier, performances, allData.performances, 'performance');
 
             if ( performance.performance_objects != null ) {
@@ -695,8 +696,7 @@ function addIndicator(indicators, indicatorIdentifier, whichIndicator, indicator
         if (indicator) {
             // indicators.push(indicator);
             var allTheData = whichIndicator == 'quali' ? allData.qualis : allData.quantis;
-            indicators = addElementAndOtherLanguagesInstancses(indicator.indicator_identifier, indicators, allTheData, whichIndicator);
-
+            indicators = addElementAndOtherLanguagesInstancses(indicator[whichIndicator + ['_identifier']], indicators, allTheData, whichIndicator);
 
             addObject(indicator[whichIndicator + '_object']);
 
@@ -719,7 +719,7 @@ function addElementAndOtherLanguagesInstancses(elementIdentifier, arrayToAddTo, 
     for (var i = allInstances.length - 1; i >= 0; i--) {
         if(allInstances[i][table + '_identifier'] == elementIdentifier) {
             // check if language was already added: 
-            var languageAlreadyAdded = false; 
+            var languageAlreadyAdded = false;
             for (var j = 0; j < languages.length; j++) {
                 if (languages[j] == allInstances[i][table + '_content_language']) {
                     languageAlreadyAdded = true;
