@@ -463,12 +463,14 @@ function createElementData(state) {
         if (objectModelSelector) {
             var selectedObjects = jQuery('.object_model_selector').val();
             var selectedObjectsString = '';
-            for (var i = 0; i < selectedObjects.length; i++) {
-                var delimiter = '|';
-                if (i == selectedObjects.length - 1) 
-                    delimiter = '';
-                
-                selectedObjectsString += selectedObjects[i] + delimiter;
+            if (selectedObjects != null) {
+                for (var i = 0; i < selectedObjects.length; i++) {
+                    var delimiter = '|';
+                    if (i == selectedObjects.length - 1) 
+                        delimiter = '';
+                    
+                    selectedObjectsString += selectedObjects[i] + delimiter;
+                }
             }
             elementData.object_model_selector = selectedObjectsString;
         }

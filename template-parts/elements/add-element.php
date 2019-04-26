@@ -1062,7 +1062,6 @@ $modification_time_property = $table . '_modification_time';
                         $last_revision = $revisions[ count( $revisions ) - 1 ];
 
                         $modification_time_property = $table . '_modification_time';
-                        var_dump( $table );
 
                         if ( $last_revision->$state_property == 1 ) :
                             $registration_date = $last_revision->$modification_time_property;
