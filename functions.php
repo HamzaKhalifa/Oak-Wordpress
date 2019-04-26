@@ -2467,11 +2467,11 @@ class Oak {
 
             foreach( $element as $key => $value ) :
                 // check if the key is included in the model:
+
                 if ( !in_array( $key, $columns_names ) ) :
                     unset( $element[ $key ] );
                 endif;
             endforeach;
-
 
             $this->corn_simple_register_element( $element, $new_table_name );
         endforeach;
@@ -2553,8 +2553,6 @@ class Oak {
 
         $selected_data = json_decode( stripslashes( $_POST['selectedData'] ), true );
 
-        // wp_send_json_success( array( 'data' => $selected_data ) );
-
         $organizations = [];
         $organizations[] = $selected_data['organization'];
         $publications = $selected_data['publications'];
@@ -2593,35 +2591,37 @@ class Oak {
 
         // Creating the tables for models
         foreach( $models as $model ) :
-
+            // Lets look for the model fields: 
             $model_fields = [];
-            $number_of_fields = 0;
-            foreach( $models_and_forms as $model_and_form_instance ) :
-                if ( $model_and_form_instance['model_identifier'] == $model['model_identifier']
-                    && $model_and_form_instance['model_revision_number'] == $model['model_revision_number']
-                ) :
-                    $form_identifier = $model_and_form_instance['form_identifier'];
-                    foreach( $forms as $form ) :
-                        if ( $form['form_identifier'] == $form_identifier ) :
-                            foreach ( $forms_and_fields as $form_and_field_instance ) :
-                                if ( $form_and_field_instance['form_identifier'] == $form['form_identifier']
-                                    && $form_and_field_instance['form_revision_number'] == $form['form_revision_number']
-                                ) :
+            $found_object = false;
+            $counter = 0;
+            do {
+                if ( $objects[ $counter ]['model'] == $model['model_identifier'] ) :
+                    $found_object = true;
+                    $the_object = $objects[ $counter ];
+                    $properties_to_neglect = array('id', 'model', 'object_designation', 'object_identifier', 'object_modification_time', 'object_content_language', 'object_model_selector', 'object_selector',
+                        'object_locked', 'object_state', 'object_trashed', 'object_selectors', 'object_form_selectors', 'object_model_selector');
+                    foreach( $the_object as $key => $value ) :
+                        if ( !in_array( $key, $properties_to_neglect ) ) :
+                            $model_properties_array = explode( '_', $key );
+                            $field_identifier = '';
+                            if ( count( $model_properties_array == 3 ) ) :
+                                $field_identifier = $model_properties_array[2];
+                            endif;
 
-                                    $number_of_fields++;
-                                    foreach( $fields as $field ) :
-                                        if ( $field['field_identifier'] == $form_and_field_instance['field_identifier'] ) :
-                                            $field_copy = $field;
-                                            $field_copy['form_and_field_properties'] = $form_and_field_instance;
-                                            array_push( $model_fields, $field_copy );
-                                        endif;
-                                    endforeach;
+                            foreach( $fields as $field ) :
+                                if ( $field['field_identifier'] == $field_identifier ) :
+                                    $field_copy = $field;
+                                    $field_copy['form_and_field_properties'] = $form_and_field_instance;
+                                    $field_copy['field_key'] = $key;
+                                    array_push( $model_fields, $field_copy );
                                 endif;
                             endforeach;
                         endif;
                     endforeach;
                 endif;
-            endforeach;
+                $counter++;
+            } while( $counter < count( $objects ) - 1 && !$found_object );
 
             $table_name = $wpdb->prefix . 'oak_model_' . $model['model_identifier'];
             $models_sql = "CREATE TABLE $table_name (
@@ -2643,7 +2643,8 @@ class Oak {
             dbDelta( $models_sql );
 
             foreach( $model_fields as $key => $field ) :
-                $column_name = 'object_' . $key . '_' . $field['field_identifier'];
+                // $column_name = 'object_' . $key . '_' . $field['field_identifier'];
+                $column_name = $field['field_key'];
                 $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
                 $exists = false;
                 foreach( $columns as $column ) :
