@@ -457,7 +457,7 @@ function createElementData(state) {
             
         }
         elementData.object_form_selectors = objectFormSelectors;
-
+        
         // Check for model selector: 
         var objectModelSelector = document.querySelector('.object_model_selector');
         if (objectModelSelector) {

@@ -5,9 +5,9 @@ function initializeAutoComplete() {
     for (var i = 0; i < autoCompleteInputs.length; i++) {
         // Lets get the arguments: 
         var args = [];
-        console.log(autoCompleteInputs[i].parentNode);
         var options = autoCompleteInputs[i].parentNode.querySelector('select').querySelectorAll('option');
         for (var j = 0; j < options.length; j++) {
+            console.log(options[j].innerHTML);
             args.push(options[j].innerHTML);
         }
         autocomplete(autoCompleteInputs[i], args);
@@ -51,7 +51,7 @@ function autocomplete(inp, arr) {
             b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
             b.innerHTML += arr[i].substr(val.length);
             /*insert a input field that will hold the current array item's value:*/
-            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+            b.innerHTML += '<input type="hidden" value="' + arr[i] + '">';
             /*execute a function when someone clicks on the item value (DIV element):*/
             b.addEventListener("click", function(e) {
                 /*insert the value for the autocomplete text field:*/
@@ -64,6 +64,7 @@ function autocomplete(inp, arr) {
 
                 var selectedValueInput = document.createElement('input');
                 selectedValueInput.disabled = true;
+                console.log(this.getElementsByTagName("input"));
                 selectedValueInput.value = this.getElementsByTagName("input")[0].value;
                 var identifier = '';
                 var options = inp.parentNode.querySelector('select').querySelectorAll('option');

@@ -1855,24 +1855,6 @@ class Oak {
         unset( $array_data['otherElementsProperties'] );
         unset( $array_data['copy_identifier'] );
 
-        // For the files/images:
-        // $test_file_url = '';
-        // foreach( $array_data as $key => $value ) :
-        //     foreach( $_POST['properties'] as $property ) :
-        //         $property_name_divided = explode( '_', $property['name'] );
-        //         $key_divided = explode( '_', $key );
-        //         if ( $property_name_divided[ count( $property_name_divided ) - 1 ] == $key_divided[ count( $key_divided ) - 1 ] ) :
-        //             if ( $property['input_type'] == 'image' || $property['input_type'] == 'file' ) :
-        //                 if ( !filter_var( $value, FILTER_VALIDATE_URL ) && $value != '' ) :
-        //                     $file_url = $this->upload_image( $value );
-        //                     $array_data[ $key ] = $file_url;
-        //                 endif;
-        //             endif;
-        //         endif;
-        //     endforeach;
-
-        // endforeach;
-
         // For objects' terms
         if ( $table = 'object' ) :
             $terms_identifiers = $array_data['selected_terms'];
