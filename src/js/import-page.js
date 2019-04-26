@@ -314,7 +314,7 @@ var steps = [];
                             success: function(data) {
                                 console.log(data);
                                 doneLoading();
-                                // window.location.reload();
+                                window.location.reload();
                             },
                             error: function(error) {
                                 console.log(error);
