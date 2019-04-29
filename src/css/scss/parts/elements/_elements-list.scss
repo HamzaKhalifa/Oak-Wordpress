@@ -74,6 +74,8 @@
     text-align-last: center;
     height: 50px;
     padding: 0px 10px 0px 10px;
+    width: 300px;
+    z-index: 9999;
 }
 
 .wp-admin select:focus {
@@ -144,7 +146,7 @@
     position: relative;
 }
 
-.oak_list_row {
+.oak_list_row, .oak_list_row_top {
     display: flex;
     align-items: center;
     padding-top: 10px;
@@ -295,6 +297,34 @@
 
 .oak_list_row__first_row {
     border-top: none;
+}
+
+.oak_list_loader_and_pagination_container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.oak_list_pagination_container {
+    text-align: center;
+    margin: 10px 0px 10px 0px;
+}
+
+.pagination__next {
+    margin: 0px 5px 0px 5px;
+    text-decoration: none;
+    color: #003366;
+}
+
+.oak_groupd_actions__filter_button {
+    padding: 16px;
+    background-color: #1c6bb5;
+    margin-right: 0px;
+}
+
+.oak_groupd_actions__filter_button:hover {
+    cursor: pointer;
 }
 
 // For the modal

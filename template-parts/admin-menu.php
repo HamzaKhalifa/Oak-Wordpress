@@ -23,12 +23,12 @@
         $organizations_and_publications = array( 
             array(
                 'title' => __( 'Organisations', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=organizations&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=organizations&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
             ),
             array(
                 'title' => __( 'Publications', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=publications&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=publications&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
             ),
         );
@@ -36,13 +36,13 @@
         $organizations_and_publications_submenu = array( 
             array(
                 'title' => __( 'Organisations', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=organizations&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=organizations&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),
             array(
                 'title' => __( 'Publications', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=publications&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=publications&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),
@@ -223,7 +223,7 @@
                                     if ( $potential_term_child->term_identifier != $term->term_identifier && $potential_term_child->term_parent == $term->term_identifier ) :
                                         $children[] = array(
                                             'title' => $potential_term_child->term_designation,
-                                            'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $potential_term_child->term_identifier . '&listorformula=list',
+                                            'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $potential_term_child->term_identifier . '&listorformula=list&whichpage=0',
                                             'icon' => 'fas fa-th-large',
                                             'submenuelement_of_submenu' => true
                                         );
@@ -240,7 +240,7 @@
                                     );
                                     $menu_elements[] = array(
                                         'title' => $term->term_designation,
-                                        'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
+                                        'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list&whichpage=0',
                                         'icon' => 'fas fa-th-large',
                                         'submenuelement_of_submenu' => true
                                     );
@@ -249,7 +249,7 @@
                                 else :
                                     $menu_elements[] = array(
                                         'title' => $term->term_designation,
-                                        'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list',
+                                        'url' => '?page=oak_elements_list&elements=term_objects&term_identifier=' . $term->term_identifier . '&listorformula=list&whichpage=0',
                                         'icon' => 'fas fa-th-large',
                                         'order' => $term->term_order == '' ? 0 : $term->term_order,
                                         'submenuelement' => true
@@ -284,7 +284,7 @@
             ),
             array(
                 'title' => __( 'Taxonomies', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=taxonomies&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=taxonomies&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenuelement' => true
             )
@@ -297,7 +297,7 @@
             if ( $taxonomy->taxonomy_trashed != 'true' ) :
                 $taxonomy_page_properties = array (
                     'title' => $taxonomy->taxonomy_designation,
-                    'url' => '?page=oak_elements_list&elements=terms&listorformula=list&taxonomy_identifier=' . $taxonomy->taxonomy_identifier,
+                    'url' => '?page=oak_elements_list&elements=terms&listorformula=list&whichpage=0&taxonomy_identifier=' . $taxonomy->taxonomy_identifier,
                     'icon' => 'fas fa-th-large',
                     'submenuelement' => true
                 );
@@ -308,19 +308,19 @@
         $menu_elements_after_taxo = array(
             array(
                 'title' => __( 'Indicateurs Quantitatifs', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=quantis&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=quantis&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),
             array(
                 'title' => __( 'Indicateurs Qualitatifs', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=qualis&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=qualis&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),
             array(
                 'title' => __( 'Glossaire', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=glossaries&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=glossaries&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),
@@ -337,13 +337,13 @@
             ),
             array(
                 'title' => __( 'Bonne Pratique', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=goodpractices&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=goodpractices&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenuelement' => true
             ),
             array(
                 'title' => __( 'Données de Performance', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=performances&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=performances&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenuelement' => true
             ),
@@ -355,7 +355,7 @@
             ),
             array(
                 'title' => __( 'Modèles', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=models&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=models&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenuelement' => true
             ),
@@ -368,7 +368,7 @@
             if ( $model->model_trashed != 'true' ) :
                 $model_page_properties = array (
                     'title' => $model->model_designation,
-                    'url' => '?page=oak_elements_list&elements=objects&listorformula=list&model_identifier=' . $model->model_identifier,
+                    'url' => '?page=oak_elements_list&elements=objects&listorformula=list&whichpage=0&model_identifier=' . $model->model_identifier,
                     'icon' => 'fas fa-th-large',
                     'submenuelement' => true
                 );
@@ -379,13 +379,13 @@
         $menu_elements_after_model = array(
             array(
                 'title' => __( 'Formes', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=forms&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=forms&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),
             array(
                 'title' => __( 'Champs', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=fields&listorformula=list',
+                'url' => '?page=oak_elements_list&elements=fields&listorformula=list&whichpage=0',
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),

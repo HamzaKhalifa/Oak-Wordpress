@@ -1,6 +1,6 @@
 <?php
-Oak::$field_first_property = array ( 'title' => __( 'Nature', Oak::$text_domain ), 'property' => 'field_type' );
-Oak::$field_second_property = array ( 'title' => __( 'Fonction', Oak::$text_domain ), 'property' => 'field_function' );
+Oak::$field_first_property = array ( 'title' => __( 'Nature', Oak::$text_domain ), 'property' => 'field_type', 'choices' => Oak::$field_types );
+Oak::$field_second_property = array ( 'title' => __( 'Fonction', Oak::$text_domain ), 'property' => 'field_function', 'choices' => Oak::$field_functions );
 Oak::$field_third_property = array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'field_function' );
 
 Oak::$form_first_property = array ( 'title' => __( 'Structure', Oak::$text_domain ), 'property' => 'form_structure' );

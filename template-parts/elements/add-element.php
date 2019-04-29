@@ -644,14 +644,14 @@ $modification_time_property = $table . '_modification_time';
                     <input type="text" hidden value="<?php echo( $last_revision->$property_name ); ?>" class="<?php echo( $table . '_' . $property['name'] . '_input' ) ?>" >
                 </div>
 
-                <div class="oak_select_container_with_filters__add_button">
+                <div class="<?php if ( $property['can_add_more'] == 'false' ) : echo('oak_hidden'); endif; ?> oak_select_container_with_filters__add_button">
                     <i class="fas fa-plus"></i>
                 </div>
 
-                <div class="oak_select_container_with_filters__single_element">
+                <div can-add-more="<?php echo( $property['can_add_more'] ); ?>" class="oak_select_container_with_filters__single_element">
                     <div class="additional_container">
                         <select type="text" class="oak_add_element_container__input oak_select_container_with_filters_single_element__data_select">
-                            <?php 
+                            <?php
                             $selected = array();
                             foreach( $property['choices'] as $key => $choice ) :
                                 $filter_properties = '';

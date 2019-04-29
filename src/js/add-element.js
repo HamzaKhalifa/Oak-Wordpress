@@ -913,8 +913,8 @@ function handleSelectFilters() {
                     var allFilters = this.parentNode.parentNode.querySelectorAll('select');
                     for (var m = 0; m < allFilters.length; m++) {
                         var propertyName = allFilters[m].getAttribute('property-name');
-                            console.log('value: ', theActualSelectOptions[k].getAttribute(propertyName));
-                            console.log('filter value: ', allFilters[m].value);
+                            // console.log('value: ', theActualSelectOptions[k].getAttribute(propertyName));
+                            // console.log('filter value: ', allFilters[m].value);
                         if (theActualSelectOptions[k].getAttribute(propertyName) != allFilters[m].value && theActualSelectOptions[k].getAttribute(propertyName) != null && allFilters[m].value != 0) {
                             hide = true;
                         }
@@ -937,7 +937,9 @@ function getSelectFilterViews() {
     var selectFiltersSingleElements = document.querySelectorAll('.oak_select_container_with_filters__single_element');
     for (var i = 0; i < selectFiltersSingleElements.length; i++) {
         selectFiltersViews.push(selectFiltersSingleElements[i].innerHTML);
-        selectFiltersSingleElements[i].remove();
+        if ( selectFiltersSingleElements[i].getAttribute('can-add-more') == 'true' )
+            selectFiltersSingleElements[i].remove();
+        handleSelectFilters();
     }
 }
 
@@ -948,6 +950,11 @@ function initializeSelectFilters() {
         for(var i = 0; i < properties.length; i++) {
             if (properties[i].input_type == 'select_with_filters') {
                 var theContainer = document.querySelector('.oak_select_container_with_filters_for_' + properties[i].name);
+                // Remove what's already in there in case we can't add a new selector: 
+                var alreadyExistingEmptySingleElement = theContainer.querySelector('.oak_select_container_with_filters__single_element');
+                if (alreadyExistingEmptySingleElement) {
+                    alreadyExistingEmptySingleElement.remove();
+                }
 
                 var lastRevisionValues = DATA.revisions[DATA.revisions.length - 1][DATA.table + '_' + properties[i].name] ? DATA.revisions[DATA.revisions.length - 1][DATA.table + '_' + properties[i].name].split('|') : [];
                 for(var k = 0; k < lastRevisionValues.length; k++) {
@@ -998,7 +1005,7 @@ function headerCancelButton() {
             else if ( DATA.elementsType == 'terms' )
                 additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
 
-            window.location.replace(DATA.adminUrl + '?page=oak_elements_list&elements=' + DATA.elementsType + '&listorformula=list' + additionalData);
+            window.location.replace(DATA.adminUrl + '?page=oak_elements_list&elements=' + DATA.elementsType + '&listorformula=list' + additionalData + '&whichpage=0');
         } else {
             for (var i = 0; i < checkboxes.length; i++) {
                 checkboxes[i].checked = false;

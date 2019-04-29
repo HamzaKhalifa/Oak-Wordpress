@@ -318,5 +318,13 @@ body .oak_hidden {
     }
   }
 
+  .oak_infinite_scroll_loader:after {
+    border: 26px solid #003366;
+    border-color: #003366 transparent #003366 transparent;
+  }
+
+  .oak_infinite_scroll_loader {
+      position: initial;
+  }
   
 // Done with the loader

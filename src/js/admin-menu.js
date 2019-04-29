@@ -75,7 +75,6 @@ function handleWordpressMenuButton() {
     });
 }
 
-console.log('dlfkd');
 // Initializing language: 
 initializeSiteLanguage();
 function initializeSiteLanguage() {

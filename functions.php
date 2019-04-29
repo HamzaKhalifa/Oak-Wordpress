@@ -23,6 +23,7 @@ class Oak {
     public static $fields_without_redundancy;
     public static $field_properties;
     public static $field_types;
+    public static $field_functions;
     public static $field_first_property;
     public static $field_second_property;
     public static $field_third_property;
@@ -152,6 +153,24 @@ class Oak {
             array( 'name' => 'website', 'title' => __( 'Site Web', Oak::$text_domain  ) )
         );
 
+        Oak::$field_types = array (
+            array ( 'value' => 'text', 'innerHTML' => __( 'Texte', Oak::$text_domain ) ),
+            array ( 'value' => 'textarea', 'innerHTML' => __( 'Zone de Texte', Oak::$text_domain ) ),
+            array ( 'value' => 'image', 'innerHTML' => __( 'Image', Oak::$text_domain ) ),
+            array ( 'value' => 'file', 'innerHTML' => __( 'Fichier', Oak::$text_domain ) ),
+            array ( 'value' => 'url', 'innerHTML' => __( 'Url', Oak::$text_domain ) ),
+            array ( 'value' => 'quali', 'innerHTML' => __( 'Indicateur Qualitatif', Oak::$text_domain ) ),
+            array ( 'value' => 'quanti', 'innerHTML' => __( 'Indicateur Quantitatif', Oak::$text_domain ) ),
+            array ( 'value' => 'selector', 'innerHTML' => __( 'Selecteur', Oak::$text_domain ) ),
+            array ( 'value' => 'checkbox', 'innerHTML' => __( 'Booléen', Oak::$text_domain ) ),
+        );
+
+        Oak::$field_functions =  array ( 
+            array ( 'value' => 'information/description', 'innerHTML' => __( 'Information/Description', Oak::$text_domain ) ), 
+            array ( 'value' => 'example', 'innerHTML' => __( 'Exemple', Oak::$text_domain ) ), 
+            array ( 'value' => 'illustration', 'innerHTML' => __( 'Illustration', Oak::$text_domain ) )
+        );
+
         include( get_template_directory() . '/functions/elements_to_show_properties.php' );
 
         Oak::$revisions = [];
@@ -177,18 +196,6 @@ class Oak {
         Oak::$all_terms_without_redundancy = [];
 
         // $this->delete_everything();
-
-        Oak::$field_types = array (
-            array ( 'value' => 'text', 'innerHTML' => __( 'Texte', Oak::$text_domain ) ),
-            array ( 'value' => 'textarea', 'innerHTML' => __( 'Zone de Texte', Oak::$text_domain ) ),
-            array ( 'value' => 'image', 'innerHTML' => __( 'Image', Oak::$text_domain ) ),
-            array ( 'value' => 'file', 'innerHTML' => __( 'Fichier', Oak::$text_domain ) ),
-            array ( 'value' => 'url', 'innerHTML' => __( 'Url', Oak::$text_domain ) ),
-            array ( 'value' => 'quali', 'innerHTML' => __( 'Indicateur Qualitatif', Oak::$text_domain ) ),
-            array ( 'value' => 'quanti', 'innerHTML' => __( 'Indicateur Quantitatif', Oak::$text_domain ) ),
-            array ( 'value' => 'selector', 'innerHTML' => __( 'Selecteur', Oak::$text_domain ) ),
-            array ( 'value' => 'checkbox', 'innerHTML' => __( 'Booléen', Oak::$text_domain ) ),
-        );
 
         Oak::$site_language = substr( get_locale(), 0, 2 );
 
@@ -381,6 +388,7 @@ class Oak {
             ) );
         endif;
 
+        // For the corn configuration page
         if ( get_current_screen()->id == 'toplevel_page_oak_corn_configuration_page' ) :
             wp_enqueue_script( 'oak_corn_configuration_page', get_template_directory_uri() . '/src/js/corn-configuration-page.js', array( 'jquery', 'wp-color-picker' ), false, true);
             wp_localize_script( 'oak_corn_configuration_page', 'DATA', array(
@@ -418,6 +426,8 @@ class Oak {
                 'analyzes' => get_option('oak_analyzes') ? get_option('oak_analyzes') : []
             ));
         endif;
+
+        
 
         // For elements
         if ( isset( $_GET['elements'] ) ) :
@@ -687,6 +697,7 @@ class Oak {
 
             if ( $_GET['listorformula'] == 'list' ) :
                 wp_enqueue_script( 'corn_elements_list', get_template_directory_uri() . '/src/js/elements-list.js', array('jquery'), false, true );
+                wp_enqueue_script( 'oak_infinite_scroll', get_template_directory_uri() . '/src/js/vendor/infinite-scroll.js', array(), false, true );
                 wp_localize_script( 'corn_elements_list', 'DATA', $final_data_to_pass );
             endif;
         endif;

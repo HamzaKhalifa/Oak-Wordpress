@@ -26,15 +26,15 @@ $quantis_and_qualis = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun indica
 $qualis_array = [];
 $qualis_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun indicateur sélectionné', Oak::$text_domain ) ) ];
 foreach( Oak::$qualis_without_redundancy as $quali ) :
-    $qualis_array[] = array( 'value' => $quali->quali_identifier, 'innerHTML' => $quali->quali_designation, 'indicator' => 'quali' );
     $quali->quali_indicator_type = 'quali';
+    $qualis_array[] = array( 'value' => $quali->quali_identifier, 'innerHTML' => $quali->quali_designation, 'indicator' => 'quali', 'data' => $quali );
     $quantis_and_qualis[] = array( 'value' => $quali->quali_identifier, 'innerHTML' => $quali->quali_designation, 'indicator' => 'quali', 'data' => $quali );
 endforeach;
 
 $quantis_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun indicateur sélectionné', Oak::$text_domain ) ) ];
 foreach( Oak::$quantis_without_redundancy as $quanti ) :
-    $quantis_array[] = array( 'value' => $quanti->quanti_identifier, 'innerHTML' => $quanti->quanti_designation, 'indicator' => 'quanti' );
     $quanti->quanti_indicator_type = 'quanti';
+    $quantis_array[] = array( 'value' => $quanti->quanti_identifier, 'innerHTML' => $quanti->quanti_designation, 'indicator' => 'quanti', 'data' => $quanti );
     $quantis_and_qualis[] = array( 'value' => $quanti->quanti_identifier, 'innerHTML' => $quanti->quanti_designation, 'indicator' => 'quanti', 'data' => $quanti );
 endforeach;
 
@@ -279,11 +279,6 @@ $years = array(
     array ( 'value' => '3000', 'innerHTML' => '3000' ),
 );
 
-$field_functions =  array ( 
-    array ( 'value' => __( 'Information/Description', Oak::$text_domain ), 'innerHTML' => __( 'Information/Description', Oak::$text_domain ) ), 
-    array ( 'value' => __( 'Exemple', Oak::$text_domain ), 'innerHTML' => __( 'Exemple', Oak::$text_domain ) ), 
-    array ( 'value' => __( 'Illustration', Oak::$text_domain ), 'innerHTML' => __( 'Illustration', Oak::$text_domain ) )
-);
 
 $business_line = array( array( 'value' => 0, 'innerHTML' => __( 'Aucun périmètre métier selectionné', Oak::$text_domain ) ) );
 $business_line_array = get_option('oak_business_line') == false ? '' : get_option('oak_business_line');
@@ -352,7 +347,7 @@ Oak::$field_properties =  array (
         'type' => 'text', 
         'input_type' => 'select', 
         'select_multiple' => 'false', 
-        'choices' => $field_functions,
+        'choices' => Oak::$field_functions,
         'description' => __( 'Fonction du champ en tant que message', Oak::$text_domain ), 
         'width' => '50' 
     ),
@@ -427,7 +422,7 @@ Oak::$form_other_elements = array (
 
     'filters' => array(
         array( 'name_in_database' => 'field_type', 'filter_name' => 'oak_filter_field_type', 'title' => __( 'Nature des contenus compris dans le champ', Oak::$text_domain ), 'first_option' => 'Aucune nature attribuée', 'choices' => Oak::$field_types ),
-        array( 'name_in_database' => 'field_function', 'filter_name' => 'oak_filter_field_function', 'title' => __( 'Fonction du champ en tant que message', Oak::$text_domain ), 'first_option' => 'Aucune fonction attribuée', 'choices' => $field_functions ),
+        array( 'name_in_database' => 'field_function', 'filter_name' => 'oak_filter_field_function', 'title' => __( 'Fonction du champ en tant que message', Oak::$text_domain ), 'first_option' => 'Aucune fonction attribuée', 'choices' => Oak::$field_functions ),
     ),
 );
 
@@ -454,7 +449,7 @@ Oak::$model_other_elements = array (
     'filters' => array(
         array( 'name_in_database' => 'form_structure', 'filter_name' => 'oak_filter_form_structure', 'title' => __( 'Structure du formulaire', Oak::$text_domain ), 'first_option' => 'Aucune structure attribuée', 'choices' => $form_structures ),
         // array( 'name_in_database' => 'field_type', 'filter_name' => 'oak_filter_field_type', 'title' => __( 'Nature des contenus compris dans le champ', Oak::$text_domain ), 'first_option' => 'Aucune nature attribuée', 'choices' => Oak::$field_types ),
-        // array( 'name_in_database' => 'field_function', 'filter_name' => 'oak_filter_field_function', 'title' => __( 'Fonction du champ en tant que message', Oak::$text_domain ), 'first_option' => 'Aucune fonction attribuée', 'choices' => $field_functions ),
+        // array( 'name_in_database' => 'field_function', 'filter_name' => 'oak_filter_field_function', 'title' => __( 'Fonction du champ en tant que message', Oak::$text_domain ), 'first_option' => 'Aucune fonction attribuée', 'choices' => Oak::$field_functions ),
     ),
 );
 
@@ -1004,19 +999,34 @@ Oak::$quali_properties = array (
         'input_type' => 'checkbox',
         'placeholder' => __( 'Indicateur dépandant d’un autre:', Oak::$text_domain ), 
         'description' => __( 'Indicateur dépandant d’un autre:', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '100',
         'condition' => true
     ),
     array(
         'name' => 'parent', 
         'property_name' => 'quali_parent', 
         'type' => 'text',
-        'input_type' => 'select',
-        'select_multiple' => 'false',
+
+        'input_type' => 'select_with_filters',
+        'select_multiple' => 'true',
+        'can_add_more' => 'false',
         'choices' => $qualis_array,
+        'filters' => [
+            array(
+                'description' => __( 'Publications Cadres RSE', Oak::$text_domain ),
+                'choices' => $frame_publications_array,
+                'name' => 'publication'
+            ),
+            array(
+                'description' => __( 'Object', Oak::$text_domain ),
+                'choices' => $objects_array,
+                'name' => 'object'
+            )
+        ],
+
         'placeholder' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
         'description' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '100',
         'depends' => array(
             array( 'name' => 'depends', 'values' => array( 'true' ) )
         )
@@ -1069,11 +1079,8 @@ Oak::$quali_properties = array (
         'name' => 'close_indicators', 
         'property_name' => 'quali_close_indicators', 
         'type' => 'text',
-        'input_type' => 'select',
-        'select_multiple' => 'true',
-        'choices' => $qualis_array,
-        
         'input_type' => 'select_with_filters',
+        'can_add_more' => 'true',
         'select_multiple' => 'true',
         'choices' => $quantis_and_qualis,
         'filters' => [
@@ -1137,19 +1144,32 @@ Oak::$quanti_properties = array (
         'input_type' => 'checkbox',
         'placeholder' => __( 'Indicateur dépendant d’une autre:', Oak::$text_domain ), 
         'description' => __( 'Indicateur dépendant d’une autre:', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '100',
         'condition' => true
     ),
     array(
         'name' => 'parent', 
         'property_name' => 'quanti_parent', 
         'type' => 'text',
-        'input_type' => 'select',
-        'select_multiple' => 'false',
+        'input_type' => 'select_with_filters',
+        'select_multiple' => 'true',
+        'can_add_more' => 'false',
         'choices' => $quantis_array,
+        'filters' => [
+            array(
+                'description' => __( 'Publications Cadres RSE', Oak::$text_domain ),
+                'choices' => $frame_publications_array,
+                'name' => 'publication'
+            ),
+            array(
+                'description' => __( 'Object', Oak::$text_domain ),
+                'choices' => $objects_array,
+                'name' => 'object'
+            )
+        ],
         'placeholder' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
         'description' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '100',
         'depends' => array (
             array( 'name' => 'depends', 'values' => array( 'true' ) )
         )
@@ -1203,6 +1223,7 @@ Oak::$quanti_properties = array (
         'property_name' => 'quanti_close_indicators', 
         'type' => 'text',
         'input_type' => 'select_with_filters',
+        'can_add_more' => 'true',
         'select_multiple' => 'true',
         'choices' => $quantis_and_qualis,
         'filters' => [

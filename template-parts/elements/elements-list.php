@@ -18,32 +18,37 @@
         </div>
     </div>
 
-    <div class="oak_grouped_actions">    
-        <select class="oak_grouped_actions__element oak_grouped_actions__all_natures" name="" id="">
-            <option value="all-natures"><?php _e( 'Toutes les natures', Oak::$text_domain ); ?></option>
+    <div class="oak_grouped_actions"> 
+        <select class="oak_grouped_actions__element oak_grouped_actions__first_property_filter" name="" id="">
+            <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == 'all' ) : echo('selected'); endif; endif; ?> value="all"><?php echo( $first_property['title'] ) ?></option>
             <?php 
-            foreach( Oak::$field_types as $field_type ) : ?>
-                <option value="<?php echo( $field_type['value'] ); ?>"><?php echo( $field_type['innerHTML'] ); ?></option>
+            foreach( $first_property['choices'] as $choice ) : ?>
+                <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
             <?php
             endforeach;
             ?>
         </select>
 
-        <select class="oak_grouped_actions__element oak_grouped_actions__all_functions" name="" id="">
-            <option value="all-functions"><?php _e( 'Toutes les fonctions', Oak::$text_domain ); ?></option>
-            <option value="Information/Description">Information/Description</option>
-            <option  value="Exemple">Exemple</option>
-            <option value="Illustration">Illustration</option>
+        <select class="oak_grouped_actions__element oak_grouped_actions__second_property_filter" name="" id="">
+            <option value="all"><?php echo( $second_property['title'] ); ?></option>
+            <?php
+            foreach( $second_property['choices'] as $choice ) : ?>
+                <option <?php if( isset( $_GET['secondproperty'] ) ) : if ( $_GET['secondproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
+            <?php
+            endforeach;
+            ?>
         </select>
 
         <select class="oak_grouped_actions__element oak_trash_list_select" name="" id="">
             <option value="not-trashed"><?php _e( 'Non supprimé', Oak::$text_domain ); ?></option>
-            <option value="trashed"><?php _e( 'Corbeille', Oak::$text_domain ); ?></option>
+            <option <?php if( isset( $_GET['trashed'] ) ) : if( $_GET['trashed'] == 'true' ) : echo('selected'); endif; endif; ?> value="trashed"><?php _e( 'Corbeille', Oak::$text_domain ); ?></option>
         </select>
+
+        <span class="oak_grouped_actions__element oak_groupd_actions__filter_button"><?php _e( 'Filtrer', Oak::$text_domain ); ?></span>
     </div>
     
     <div class="oak_elements_list">
-        <div class="oak_list_row oak_list_row__first_row">
+        <div class="oak_list_row_top oak_list_row__first_row">
             <div class="oak_list_row__container">
                 <input class="oak_passiv oak_list_titles_container__checkbox oak_select_all_checkbox" type="checkbox">
                 <span class="oak_passiv oak_list_titles_container__title"><?php _e( 'Désignation', Oak::$text_domain ); ?></span>
@@ -67,66 +72,125 @@
             </div>
         </div>
 
-        <?php
+        <?php 
+        $elements_to_show = [];
+        $trashed_property = $table . '_trashed';
         foreach( $elements as $element ) :
-            $language_property = $table . '_content_language';
-            $identifier_property = $table . '_identifier';
-            $designation_property = $table . '_designation';
-            $trashed_property = $table . '_trashed';
-            $modification_time_property = $table . '_modification_time';
-            $the_first_property = $first_property['property'];
-            $the_second_property = $second_property['property'];
-            $the_third_property = $third_property['property'];
+            $show = true;
+            $which_page = $_GET['whichpage'];
+            if ( isset( $_GET['trashed'] ) ) :
+                if ( $_GET['trashed'] == 'true' && $element->$trashed_property == 'false' || $_GET['trashed'] == 'false' && $element->$trashed_property == 'true' ) :
+                    $show = false;
+                endif;
+            elseif( $element->$trashed_property == 'true' ) :
+                $show = false;
+            endif;
 
-            $designation_to_show = $element->$designation_property;
-
-            if ( $element->$language_property != Oak::$site_language ) :
-                // The current element doesn't have the same language as the site language. So we look for the last element 
-                $index = count( $elements_with_redundancy ) - 1;
-                $found_element_of_same_language = false;
-                do {
-                    if ( $element->$identifier_property == $elements_with_redundancy[ $index ]->$identifier_property
-                    && $elements_with_redundancy[ $index ]->$language_property == Oak::$site_language ) :
-                        $element = $elements_with_redundancy[ $index ];
-                        $found_element_of_same_language = true;
-                        $designation_to_show = $element->$designation_property;
-                    endif;
-                    $index--;
-                } while ( $index >= 0 && !$found_element_of_same_language );
-
-                if ( !$found_element_of_same_language ) :
-                    // We are gonna change the designation here: 
-                    $designation_to_show .= ' (' . $element->$language_property . ')';
+            if ( isset( $_GET['firstproperty'] ) && $_GET['firstproperty'] != 'all' ) :
+                $first_property_property_name = $first_property['property'];
+                if ( $element->$first_property_property_name != $_GET['firstproperty'] ) :
+                    $show = false;
                 endif;
             endif;
-        ?>
-            <div <?php if( $table == 'object' ) : echo('model-identifier="' . $element->object_model_identifier . '"'); endif; ?> identifier="<?php echo( $element->$identifier_property ); ?>" trashed="<?php echo( $element->$trashed_property ); ?>" class="oak_list_row <?php if ( $element->$trashed_property == 'true' ) : echo('oak_hidden'); endif; ?>">
-                <div class="oak_list_row__container">
-                    <input class="oak_list_titles_container__checkbox" type="checkbox">
-                    <span class="oak_list_titles_container__title oak_list_titles_container__the_title"><?php echo( esc_attr( $designation_to_show ) ); ?></span>
-                </div>
 
-                <div class="oak_list_row__container">
-                    <span class="oak_list_titles_container__title oak_list_nature"><?php echo( esc_attr( $element->$the_first_property ) ); ?></span>
-                </div>
+            if ( isset( $_GET['secondproperty'] ) && $_GET['secondproperty'] != 'all' ) :
+                $second_property_property_name = $second_property['property'];
+                if ( $element->$second_property_property_name != $_GET['secondproperty'] ) :
+                    $show = false;
+                endif;
+            endif;
 
-                <div class="oak_list_row__container">
-                    <span class="oak_list_titles_container__title oak_list_function"><?php echo( esc_attr( $element->$the_second_property ) ); ?></span>
-                </div>
+            if ( $show ) :
+                $elements_to_show[] = $element;
+            endif;
+        endforeach;
+        
+        $ELEMENTS_PER_PAGE = 10;
+        foreach( $elements_to_show as $key => $element ) :
+            // To handle pagination:
+            $show = false;
+            $which_page = $_GET['whichpage'];
+            if ( $key >= $which_page * $ELEMENTS_PER_PAGE && $key <= ($which_page * $ELEMENTS_PER_PAGE) + $ELEMENTS_PER_PAGE - 1 ) :
+                $show = true;
+            endif;
 
-                <div class="oak_list_row__container">
-                    <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$the_third_property ) ); ?></span>
+            if ( $show ) :
+                $language_property = $table . '_content_language';
+                $identifier_property = $table . '_identifier';
+                $designation_property = $table . '_designation';
+                $modification_time_property = $table . '_modification_time';
+                $the_first_property = $first_property['property'];
+                $the_second_property = $second_property['property'];
+                $the_third_property = $third_property['property'];
+
+                $designation_to_show = $element->$designation_property;
+
+                if ( $element->$language_property != Oak::$site_language ) :
+                    // The current element doesn't have the same language as the site language. So we look for the last element 
+                    $index = count( $elements_with_redundancy ) - 1;
+                    $found_element_of_same_language = false;
+                    do {
+                        if ( $element->$identifier_property == $elements_with_redundancy[ $index ]->$identifier_property
+                        && $elements_with_redundancy[ $index ]->$language_property == Oak::$site_language ) :
+                            $element = $elements_with_redundancy[ $index ];
+                            $found_element_of_same_language = true;
+                            $designation_to_show = $element->$designation_property;
+                        endif;
+                        $index--;
+                    } while ( $index >= 0 && !$found_element_of_same_language );
+
+                    if ( !$found_element_of_same_language ) :
+                        // We are gonna change the designation here: 
+                        $designation_to_show .= ' (' . $element->$language_property . ')';
+                    endif;
+                endif;
+            ?>
+                <div <?php if( $table == 'object' ) : echo('model-identifier="' . $element->object_model_identifier . '"'); endif; ?> identifier="<?php echo( $element->$identifier_property ); ?>" trashed="<?php echo( $element->$trashed_property ); ?>" class="oak_list_row">
+                    <div class="oak_list_row__container">
+                        <input class="oak_list_titles_container__checkbox" type="checkbox">
+                        <span class="oak_list_titles_container__title oak_list_titles_container__the_title"><?php echo( esc_attr( $designation_to_show ) ); ?></span>
+                    </div>
+
+                    <div class="oak_list_row__container">
+                        <span class="oak_list_titles_container__title oak_list_nature"><?php echo( esc_attr( $element->$the_first_property ) ); ?></span>
+                    </div>
+
+                    <div class="oak_list_row__container">
+                        <span class="oak_list_titles_container__title oak_list_function"><?php echo( esc_attr( $element->$the_second_property ) ); ?></span>
+                    </div>
+
+                    <div class="oak_list_row__container">
+                        <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$the_third_property ) ); ?></span>
+                    </div>
+                    
+                    <div class="oak_list_row__container">
+                        <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$modification_time_property ) ); ?></span>
+                    </div>
                 </div>
-                
-                <div class="oak_list_row__container">
-                    <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$modification_time_property ) ); ?></span>
-                </div>
-            </div>
-        <?php
+            <?php
+            endif;
         endforeach;
         ?>
-        
     </div>
+
+    <div class="oak_list_loader_and_pagination_container">
+
+        <div class="oak_list_pagination_container">
+        <?php 
+            $number_of_pages = intval( count( $elements_to_show ) / $ELEMENTS_PER_PAGE );
+            for( $i = 0; $i < $number_of_pages; $i++ ) :
+                if ( $_GET['whichpage'] != $i ) :
+                    $current_link = substr( $_SERVER['QUERY_STRING'], 0, strpos( $_SERVER['QUERY_STRING'], 'whichpage' ) - 1 );
+                ?>
+                    <a class="pagination__next" href="<?php echo( admin_url() . '?' . $current_link . '&whichpage=' . $i ); ?>"><?php echo( $i + 1 ); ?></a>
+                <?php
+                endif;
+            endfor;
+            ?>
+        </div>
+        <div class="oak_loader oak_infinite_scroll_loader"></div>
+    </div>
+    
 </div>
 
 

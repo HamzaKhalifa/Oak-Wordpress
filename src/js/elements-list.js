@@ -231,6 +231,23 @@ function createIdentifier() {
     return text;
 }
 
+// For the infinite scroll
+jQuery(document).ready(function() {
+    jQuery('.oak_elements_list').infiniteScroll({
+        // options
+        path: '.pagination__next',
+        append: '.oak_list_row',
+        history: false,
+        prefill: true,
+        onInit: function() {
+            this.on( 'load', function() {
+              console.log('Infinite Scroll load')
+              checkListeners();
+            });
+        },
+    });
+})
+
 // For the select all checkboxes
 selectAllCheckboxes();
 function selectAllCheckboxes() {
@@ -268,6 +285,8 @@ function checkListeners() {
                     document.querySelector('.oak_element_header_right_upload_button').classList.add('oak_hidden');
                     document.querySelector('.fa-copy').classList.remove('oak_hidden');
                     document.querySelector('.fa-trash-alt').classList.remove('oak_hidden');
+                    if (document.querySelector('.oak_trash_list_select').value == 'trashed')
+                        document.querySelector('.fa-window-restore').classList.remove('oak_hidden');
                 }
             }
             else {
@@ -323,6 +342,8 @@ function manageMenuForNothingSelected() {
     document.querySelector('.oak_element_header_right_upload_button').classList.remove('oak_hidden');
     document.querySelector('.fa-copy').classList.add('oak_hidden');
     document.querySelector('.fa-trash-alt').classList.add('oak_hidden');
+    if (document.querySelector('.oak_trash_list_select').value == 'trashed')
+        document.querySelector('.fa-window-restore').classList.add('oak_hidden');
     document.querySelector('.oak_menu_icon__cancel_icon').classList.remove('fa-times');
 }
 
@@ -346,7 +367,7 @@ function edit() {
                 else if ( DATA.elementsType == 'terms' )
                     additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
 
-                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula' + additionalData);
+                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula');
             }
         }
     });
@@ -509,65 +530,58 @@ function addSlashes(string) {
 // For the filters
 manageFilters();
 function manageFilters() {
-    var allNaturesButton = document.querySelector('.oak_grouped_actions__all_natures');
-    var allFunctionsButton = document.querySelector('.oak_grouped_actions__all_functions');
-    var trashSelect = document.querySelector('.oak_trash_list_select');
-    allNaturesButton.addEventListener('change', function() {
-        filterResult();
-    });
-    allFunctionsButton.addEventListener('change', function() {
-        filterResult();
-    })
-    trashSelect.addEventListener('change', function() {
-        var restoreButton = document.querySelector('.oak_element_header_right_restore_button');
-        if (this.value == 'trashed') {
-            restoreButton.classList.remove('oak_hidden');
-        } else 
-            restoreButton.classList.add('oak_hidden');
-        filterResult();
-    });
-}
-
-function filterResult() {
-    var allNaturesButton = document.querySelector('.oak_grouped_actions__all_natures');
-    var allFunctionsButton = document.querySelector('.oak_grouped_actions__all_functions');
-    var trashSelect = document.querySelector('.oak_trash_list_select');
-    var naturesContainers = document.querySelectorAll('.oak_list_nature');
-    var functionsContainers = document.querySelectorAll('.oak_list_function');
-
-    var considerNature = false;
-    var considerFunction = false;
-
-    if (allNaturesButton.value != 'all-natures') 
-        considerNature = true;
-
-    if (allFunctionsButton.value != 'all-functions')
-        considerFunction = true;
-    
-    for (var i = 0; i < naturesContainers.length; i++) {
-        var hide = false;
+    var filterButton = document.querySelector('.oak_groupd_actions__filter_button');
+    filterButton.addEventListener('click', function() {
         
-        if (considerNature && naturesContainers[i].innerHTML != allNaturesButton.value) {
-            hide = true;
-        }
-
-        if (considerFunction && functionsContainers[i].innerHTML != allFunctionsButton.value) {
-            hide = true;
-        }
-
-        if ( trashSelect.value == 'trashed' && functionsContainers[i].parentNode.parentNode.getAttribute('trashed') != 'true' || trashSelect.value != 'trashed' && functionsContainers[i].parentNode.parentNode.getAttribute('trashed') == 'true' ) {
-            hide = true;
-        }
-
-        if (hide) {
-            naturesContainers[i].parentNode.parentNode.classList.add('oak_hidden');
-            naturesContainers[i].parentNode.parentNode.setAttribute('filtered', true);
-        } else {
-            naturesContainers[i].parentNode.parentNode.classList.remove('oak_hidden');
-            naturesContainers[i].parentNode.parentNode.setAttribute('filtered', false);
-        }
-    }
+        var firstProperty = document.querySelector('.oak_grouped_actions__first_property_filter').value;
+        var secondProperty = document.querySelector('.oak_grouped_actions__second_property_filter').value;
+        var trashed = document.querySelector('.oak_trash_list_select').value == 'trashed' ? 'true' : 'false';
+        
+        var filterUrl = window.location.href.substring(0, window.location.href.indexOf('whichpage')) + 'firstproperty=' + firstProperty + '&secondproperty=' + secondProperty + '&trashed=' + trashed + '&whichpage=0';
+        window.location.replace(filterUrl);
+    });
 }
+
+// function filterResult() {
+//     var allNaturesButton = document.querySelector('.oak_grouped_actions__all_natures');
+//     var allFunctionsButton = document.querySelector('.oak_grouped_actions__all_functions');
+//     var trashSelect = document.querySelector('.oak_trash_list_select');
+//     var naturesContainers = document.querySelectorAll('.oak_list_nature');
+//     var functionsContainers = document.querySelectorAll('.oak_list_function');
+
+//     var considerNature = false;
+//     var considerFunction = false;
+
+//     if (allNaturesButton.value != 'all-natures') 
+//         considerNature = true;
+
+//     if (allFunctionsButton.value != 'all-functions')
+//         considerFunction = true;
+    
+//     for (var i = 0; i < naturesContainers.length; i++) {
+//         var hide = false;
+        
+//         if (considerNature && naturesContainers[i].innerHTML != allNaturesButton.value) {
+//             hide = true;
+//         }
+
+//         if (considerFunction && functionsContainers[i].innerHTML != allFunctionsButton.value) {
+//             hide = true;
+//         }
+
+//         if ( trashSelect.value == 'trashed' && functionsContainers[i].parentNode.parentNode.getAttribute('trashed') != 'true' || trashSelect.value != 'trashed' && functionsContainers[i].parentNode.parentNode.getAttribute('trashed') == 'true' ) {
+//             hide = true;
+//         }
+
+//         if (hide) {
+//             naturesContainers[i].parentNode.parentNode.classList.add('oak_hidden');
+//             naturesContainers[i].parentNode.parentNode.setAttribute('filtered', true);
+//         } else {
+//             naturesContainers[i].parentNode.parentNode.classList.remove('oak_hidden');
+//             naturesContainers[i].parentNode.parentNode.setAttribute('filtered', false);
+//         }
+//     }
+// }
 // Done with the all natures button
 
 // Everything related to our modal:
@@ -646,6 +660,7 @@ handleModalButtons();
 function handleModalButtons() {
     var confirmButton = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function() {
+        console.log('kdfjdkfkd');
         if (importing) {
             var input = document.querySelector('.oak_csv_file_input');
             readCSV(input);

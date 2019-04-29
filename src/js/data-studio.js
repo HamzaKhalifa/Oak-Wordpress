@@ -380,8 +380,6 @@ function handleGraphConfigurationScreen() {
 }
 
 function generateChart(config) {
-    
-
     console.log('config', config);
     var allDataGraphData = {
         selectedLabels: [],
@@ -438,7 +436,6 @@ function generateChart(config) {
         }
     }
 
-    console.log('all data graph data', allDataGraphData);
     // Generating graphs for each specific label (average year values or last year value by data):
     for (var i = 0; i < allDataGraphData.selectedLabels.length; i++) {
         var actualLabels = [];
@@ -465,8 +462,6 @@ function generateChart(config) {
                 actualAverageData.push(averageValue);
             }
         }
-        console.log('actualData', actualData);
-        console.log('actualAverageData', actualAverageData);
         var graphTitle = allDataGraphData.selectedLabels[i];
         var chartCanvas = createChartCanvas(actualLabels, actualData, config.graph, graphTitle);
         createChart(chartCanvas, config.graph, graphTitle, actualLabels, actualData, {});
