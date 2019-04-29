@@ -239,14 +239,29 @@ jQuery(document).ready(function() {
         append: '.oak_list_row',
         history: false,
         prefill: true,
+        loadOnScroll: false,
+        loading:  { 
+            finishedMsg: 'No more items to load', 
+            // img: 'images/ajax-loading.gif' 
+        },
         onInit: function() {
             this.on( 'load', function() {
-              console.log('Infinite Scroll load')
               checkListeners();
+              document.querySelector('.oak_infinite_scroll_loader').classList.add('oak_hidden');
             });
         },
     });
 })
+
+// For infinite scroll load next
+handleLoadNext();
+function handleLoadNext() {
+    var loadNextButton = document.querySelector('.oak_list_loader_and_pagination_container__load_next');
+    loadNextButton.addEventListener('click', function() {
+        jQuery('.oak_elements_list').infiniteScroll('loadNextPage');
+        document.querySelector('.oak_infinite_scroll_loader').classList.remove('oak_hidden');
+    });
+}
 
 // For the select all checkboxes
 selectAllCheckboxes();

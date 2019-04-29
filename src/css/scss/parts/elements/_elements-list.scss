@@ -327,6 +327,19 @@
     cursor: pointer;
 }
 
+.oak_list_loader_and_pagination_container__load_next {
+    color: #003366;
+}
+
+.oak_list_loader_and_pagination_container__load_next:hover {
+    cursor: pointer;
+}
+
+.oak_selected_page_style {
+    font-weight: bold;
+    font-size: 20px;
+}
+
 // For the modal
 .oak_add_element_modal_container {
     position: fixed;

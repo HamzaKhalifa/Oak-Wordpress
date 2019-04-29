@@ -179,16 +179,20 @@
         <?php 
             $number_of_pages = intval( count( $elements_to_show ) / $ELEMENTS_PER_PAGE );
             for( $i = 0; $i < $number_of_pages; $i++ ) :
-                if ( $_GET['whichpage'] != $i ) :
+                // if ( $_GET['whichpage'] != $i ) :
                     $current_link = substr( $_SERVER['QUERY_STRING'], 0, strpos( $_SERVER['QUERY_STRING'], 'whichpage' ) - 1 );
                 ?>
-                    <a class="pagination__next" href="<?php echo( admin_url() . '?' . $current_link . '&whichpage=' . $i ); ?>"><?php echo( $i + 1 ); ?></a>
+                    <a class="pagination__next <?php if( $_GET['whichpage'] == $i ) : echo( 'oak_selected_page_style' ); endif; ?>" href="<?php echo( admin_url() . '?' . $current_link . '&whichpage=' . $i ); ?>"><?php echo( $i ); ?></a>
                 <?php
-                endif;
+                // endif;
             endfor;
             ?>
         </div>
-        <div class="oak_loader oak_infinite_scroll_loader"></div>
+
+        
+        <div class="oak_loader oak_infinite_scroll_loader oak_hidden"></div>
+
+        <span class="oak_list_loader_and_pagination_container__load_next"><?php _e( 'Next', Oak::$text_domain ); ?></span>
     </div>
     
 </div>
