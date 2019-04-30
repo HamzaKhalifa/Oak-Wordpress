@@ -238,7 +238,7 @@ jQuery(document).ready(function() {
         path: '.pagination__next',
         append: '.oak_list_row',
         history: false,
-        prefill: true,
+        // prefill: true,
         loadOnScroll: false,
         loading:  { 
             finishedMsg: 'No more items to load', 
@@ -247,6 +247,7 @@ jQuery(document).ready(function() {
         onInit: function() {
             this.on( 'load', function() {
               checkListeners();
+              setTimeout(checkListeners, 1000);
               document.querySelector('.oak_infinite_scroll_loader').classList.add('oak_hidden');
             });
         },
@@ -259,6 +260,7 @@ function handleLoadNext() {
     var loadNextButton = document.querySelector('.oak_list_loader_and_pagination_container__load_next');
     loadNextButton.addEventListener('click', function() {
         jQuery('.oak_elements_list').infiniteScroll('loadNextPage');
+        checkListeners();
         document.querySelector('.oak_infinite_scroll_loader').classList.remove('oak_hidden');
     });
 }
