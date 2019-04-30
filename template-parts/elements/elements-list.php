@@ -118,19 +118,21 @@
 
         if ( isset( $_GET['sort'] ) ) :
 
-            if ( $_GET['sort'] == 'designation' ) :
-                $property = $table . '_designation';
-            elseif ( $_GET['sort'] == 'first_property' ) :
-                $property = $first_property['property'];
-            elseif ( $_GET['sort'] == 'second_property' ) :
-                $property = $second_property['property'];
-            endif;
-            update_option( 'oak_sort_property', $property );
+            if ( $_GET['sort'] != 'default' ) :
+                if ( $_GET['sort'] == 'designation' ) :
+                    $property = $table . '_designation';
+                elseif ( $_GET['sort'] == 'first_property' ) :
+                    $property = $first_property['property'];
+                elseif ( $_GET['sort'] == 'second_property' ) :
+                    $property = $second_property['property'];
+                endif;
+                update_option( 'oak_sort_property', $property );
 
-            usort( $elements_to_show, function( $a, $b ) {
-                $property = get_option( 'oak_sort_property' );
-                return strcmp( $a->$property, $b->$property );
-            } );
+                usort( $elements_to_show, function( $a, $b ) {
+                    $property = get_option( 'oak_sort_property' );
+                    return strcmp( $a->$property, $b->$property );
+                } );
+            endif;
         endif;
         
         $ELEMENTS_PER_PAGE = 10;
