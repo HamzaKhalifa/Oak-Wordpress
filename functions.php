@@ -675,6 +675,7 @@ class Oak {
                 'termIdentifier' => isset ( $_GET['term_identifier'] ) ? $_GET['term_identifier'] : '',
                 'siteLanguage' => Oak::$site_language,
                 'propertiesToShowInList' => $properties_to_show_in_list,
+                'termsAndObjects' => Oak::$terms_and_objects,
                 
                 'addingElementMessage' => __( 'Êtes vous sur de vouloir ajouter cet element?', Oak::$text_domain ),
                 'modifyingElementMessage' => __( 'Êtes vous sûr de vouloir modifier cet element?', Oak::$text_domain ),
@@ -1671,6 +1672,46 @@ class Oak {
 
         $table = $_POST['table'];
 
+        // Handling the copying of terms to the new copy of the object
+        if ( $table == 'object' && isset( $_POST['copy'] ) ) :
+            $new_terms_and_objects_to_insert = [];
+            foreach( Oak::$terms_and_objects as $term_and_object ) :
+                if ( $term_and_object->object_identifier == $element['copy_identifier'] ) :
+                    // Check if term and object already exists by reparsing the terms and objects instances again: 
+                    $exists = false;
+                    $terms_and_objects_table_name = Oak::$terms_and_objects_table_name;
+                    $all_terms_and_objects = $wpdb->get_results ( "
+                        SELECT * 
+                        FROM $terms_and_objects_table_name
+                    " );
+                    foreach( $all_terms_and_objects as $checking_term_and_object ) :
+                        if ( $checking_term_and_object->object_identifier == $element['object_identifier']
+                            && $checking_term_and_object->term_identifier == $term_and_object->term_identifier ) :
+                                $exists = true;
+                        endif;
+                    endforeach;
+                    
+                    if ( !$exists ) :
+                        $new_term_and_object = clone $term_and_object;
+                        $new_term_and_object->object_identifier = $element['object_identifier'];
+                        
+                        $new_term_and_object_to_insert = array(
+                            'term_identifier' => $new_term_and_object->term_identifier,
+                            'object_identifier' => $new_term_and_object->object_identifier
+                        );
+                        $new_terms_and_objects_to_insert[] = $new_term_and_object_to_insert;
+                    endif;
+                endif;
+            endforeach;
+
+            foreach( $new_terms_and_objects_to_insert as $term_and_object) :
+                $result = $wpdb->insert(
+                    Oak::$terms_and_objects_table_name,
+                    $term_and_object
+                );
+            endforeach;
+        endif;
+
         // We are gonna be unsetting the objet_model_identifier property to not receive a databse error:
         if ( $table == "object" && isset( $element['object_model_identifier'] ) ) :
             unset( $element['object_model_identifier'] );
@@ -1844,9 +1885,10 @@ class Oak {
                 $required_property = $other_table . '_required';
                 $index_property = $other_table . '_index';
                 $revision_number_property = $_POST['table'] . '_revision_number';
+                
                 $properties = array( $other_element_identifier_property, $identifier_property, $designation_property, $required_property,
                 $index_property, $revision_number_property );
-                if ( $instance->$identifier_property == $element['copy_identifier'] ) :
+                if ( $instance->$identifier_property == $element['copy_identifier'] && $instance->$revision_number_property == $element[ $table . '_revision_number' ] ) :
                     $result = $wpdb->insert(
                         $associative_table_name,
                         array (
@@ -1867,7 +1909,7 @@ class Oak {
         unset( $array_data['copy_identifier'] );
 
         // For objects' terms
-        if ( $table = 'object' ) :
+        if ( $table == 'object' ) :
             $terms_identifiers = $array_data['selected_terms'];
 
             foreach( Oak::$terms_and_objects as $term_and_object ) :
@@ -1897,6 +1939,7 @@ class Oak {
             $table_name,
             $array_data
         );
+
 
         wp_send_json_success( array(
             'properties' => $_POST['properties'],

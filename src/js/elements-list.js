@@ -13,7 +13,7 @@ function handleLanguagesSelectListener() {
     var languagesSelect = document.querySelector('.oak_system_bar__languages_select');
     languagesSelect.addEventListener('change', function() {
         var listRows = document.querySelectorAll('.oak_list_row');
-        for (var i = 1; i < listRows.length; i++) {
+        for (var i = 0; i < listRows.length; i++) {
             var element = {};
             var identifier = listRows[i].getAttribute('identifier');
             j = DATA.elements.length - 1;
@@ -171,52 +171,60 @@ function copy() {
             do {
                 if (DATA.elements[counter][DATA.table + '_identifier'] == selectedIdentifiers[i]) {
                     foundIt = true;
-                    var copy = {};
-                    var keys = getKeys(DATA.elements[counter]);
-                    for (var k = 0; k < keys.length; k++) {
-                        if (keys[k] != table + '_identifier' && keys[k] != table + '_designation' && keys[k] != 'id') {
-                            copy[keys[k]] = DATA.elements[counter][keys[k]];
+                    var newIdentifier = createIdentifier();
+                    for(var j = 0; j < DATA.elements.length; j++) {
+                        if (DATA.elements[j][DATA.table + '_identifier'] == selectedIdentifiers[i]) {
+                            var copy = {};
+                            var keys = getKeys(DATA.elements[j]);
+                            for (var k = 0; k < keys.length; k++) {
+                                if (keys[k] != table + '_identifier' && keys[k] != table + '_designation' && keys[k] != 'id') {
+                                    copy[keys[k]] = DATA.elements[j][keys[k]];
+                                }
+                            }
+                            copy[table + '_identifier'] = newIdentifier;
+                            copy[table + '_designation'] = DATA.elements[j][table + '_designation'] + ' (copy)';
+                            copy['copy_identifier'] = DATA.elements[j][DATA.table + '_identifier'];
+                            copies.push(copy);
                         }
                     }
-                    copy[table + '_identifier'] = createIdentifier();
-                    copy[table + '_designation'] = DATA.elements[counter][table + '_designation'] + ' (copy)';
-                    copy['copy_identifier'] = DATA.elements[counter][DATA.table + '_identifier'];
-                    copies.push(copy);
                 }
                 counter--;
             } while(!foundIt && counter >= 0 );
         }
-
         var numberOfReturns = 0;
         setLoading();
+        var whichCall = 0;
         for (var i = 0; i < copies.length; i++) {
-            jQuery(document).ready(function() {
-                jQuery.ajax({
-                    url: DATA.ajaxUrl,
-                    type: 'POST',
-                    data: {
-                        'action': 'oak_register_element',
-                        'element': copies[i],
-                        'table': DATA.table,
-                        'tableInPlural': DATA.tableInPlural,
-                        'fromRevision': false,
-                        'properties': DATA.properties,
-                        'copy': true
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        numberOfReturns++;
-
-                        if (numberOfReturns == copies.length) {
-                            window.location.reload();
+            setTimeout(function() {
+                jQuery(document).ready(function() {
+                    jQuery.ajax({
+                        url: DATA.ajaxUrl,
+                        type: 'POST',
+                        data: {
+                            'action': 'oak_register_element',
+                            'element': JSON.stringify(copies[whichCall]),
+                            'table': DATA.table,
+                            'tableInPlural': DATA.tableInPlural,
+                            'fromRevision': false,
+                            'properties': DATA.properties,
+                            'copy': true,
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            numberOfReturns++;
+    
+                            if (numberOfReturns == copies.length) {
+                                window.location.reload();
+                                doneLoading();
+                            }
+                        },
+                        error: function(error) {
                             doneLoading();
                         }
-                    },
-                    error: function(error) {
-                        doneLoading();
-                    }
+                    });
+                    whichCall++;
                 });
-            });
+            }, 1000);
         }
     });
 }
@@ -384,7 +392,7 @@ function edit() {
                 else if ( DATA.elementsType == 'terms' )
                     additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
 
-                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula');
+                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula' + additionalData);
             }
         }
     });
@@ -441,7 +449,6 @@ function handleSortSelector() {
         for (var i = difference.length; i > 0; i--) {
             whichpage += window.location.href[window.location.href.length - i];
         }
-        console.log('whichpage', whichpage);
         var currentLinkWithoutPage = window.location.href.substring(0, window.location.href.indexOf('whichpage='));
         var theUrl = currentLinkWithoutPage + '&sort=' + this.value + '&whichpage=' + whichpage;
         window.location.replace(theUrl);

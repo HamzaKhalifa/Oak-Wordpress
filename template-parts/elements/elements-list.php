@@ -117,7 +117,6 @@
         endforeach;
 
         if ( isset( $_GET['sort'] ) ) :
-
             if ( $_GET['sort'] != 'default' ) :
                 if ( $_GET['sort'] == 'designation' ) :
                     $property = $table . '_designation';

@@ -37,7 +37,6 @@ function handleLanguagesSelectListener() {
         for (var i = 0; i < DATA.properties.length; i++) {
             if (DATA.properties[i].translatable) {
                 var propertyInput = document.querySelector('.' + DATA.table + '_' + DATA.properties[i].name + '_input');
-                console.log('.' + DATA.table + '_' + DATA.properties[i].name + '_input');
                 if (propertyInput != null) {
                     if (theRevision != null) {
                         propertyInput.value = theRevision[DATA.table + '_' + DATA.properties[i].name];
@@ -52,8 +51,6 @@ function handleLanguagesSelectListener() {
         if (DATA.otherElementProperties) {
             initializeElements();
         }
-
-        console.log(theRevision);
     });
 }
 
@@ -497,8 +494,6 @@ function createElementData(state) {
 
     // For the language: 
     elementData[DATA.table + '_content_language'] = document.querySelector('.oak_system_bar__languages_select').value;
-
-    console.log(elementData);
     
     return elementData;
 }
@@ -913,8 +908,6 @@ function handleSelectFilters() {
                     var allFilters = this.parentNode.parentNode.querySelectorAll('select');
                     for (var m = 0; m < allFilters.length; m++) {
                         var propertyName = allFilters[m].getAttribute('property-name');
-                            // console.log('value: ', theActualSelectOptions[k].getAttribute(propertyName));
-                            // console.log('filter value: ', allFilters[m].value);
                         if (theActualSelectOptions[k].getAttribute(propertyName) != allFilters[m].value && theActualSelectOptions[k].getAttribute(propertyName) != null && allFilters[m].value != 0) {
                             hide = true;
                         }
