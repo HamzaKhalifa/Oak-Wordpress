@@ -297,7 +297,7 @@
             if ( $taxonomy->taxonomy_trashed != 'true' ) :
                 $taxonomy_page_properties = array (
                     'title' => $taxonomy->taxonomy_designation,
-                    'url' => '?page=oak_elements_list&elements=terms&listorformula=list&whichpage=0&taxonomy_identifier=' . $taxonomy->taxonomy_identifier,
+                    'url' => '?page=oak_elements_list&elements=terms&listorformula=list&taxonomy_identifier=' . $taxonomy->taxonomy_identifier . '&whichpage=0',
                     'icon' => 'fas fa-th-large',
                     'submenuelement' => true
                 );
@@ -368,7 +368,7 @@
             if ( $model->model_trashed != 'true' ) :
                 $model_page_properties = array (
                     'title' => $model->model_designation,
-                    'url' => '?page=oak_elements_list&elements=objects&listorformula=list&whichpage=0&model_identifier=' . $model->model_identifier,
+                    'url' => '?page=oak_elements_list&elements=objects&listorformula=list&model_identifier=' . $model->model_identifier . '&whichpage=0',
                     'icon' => 'fas fa-th-large',
                     'submenuelement' => true
                 );
