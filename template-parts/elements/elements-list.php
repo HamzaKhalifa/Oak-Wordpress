@@ -18,33 +18,44 @@
         </div>
     </div>
 
-    <div class="oak_grouped_actions"> 
-        <select class="oak_grouped_actions__element oak_grouped_actions__first_property_filter" name="" id="">
-            <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == 'all' ) : echo('selected'); endif; endif; ?> value="all"><?php echo( $first_property['title'] ) ?></option>
-            <?php 
-            foreach( $first_property['choices'] as $choice ) : ?>
-                <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
-            <?php
-            endforeach;
-            ?>
-        </select>
+    <div class="oak_grouped_actions">
+        <div>
+            <select class="oak_grouped_actions__element oak_grouped_actions__first_property_filter" name="" id="">
+                <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == 'all' ) : echo('selected'); endif; endif; ?> value="all"><?php echo( $first_property['title'] ) ?></option>
+                <?php 
+                foreach( $first_property['choices'] as $choice ) : ?>
+                    <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
+                <?php
+                endforeach;
+                ?>
+            </select>
 
-        <select class="oak_grouped_actions__element oak_grouped_actions__second_property_filter" name="" id="">
-            <option value="all"><?php echo( $second_property['title'] ); ?></option>
-            <?php
-            foreach( $second_property['choices'] as $choice ) : ?>
-                <option <?php if( isset( $_GET['secondproperty'] ) ) : if ( $_GET['secondproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
-            <?php
-            endforeach;
-            ?>
-        </select>
+            <select class="oak_grouped_actions__element oak_grouped_actions__second_property_filter" name="" id="">
+                <option value="all"><?php echo( $second_property['title'] ); ?></option>
+                <?php
+                foreach( $second_property['choices'] as $choice ) : ?>
+                    <option <?php if( isset( $_GET['secondproperty'] ) ) : if ( $_GET['secondproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
+                <?php
+                endforeach;
+                ?>
+            </select>
 
-        <select class="oak_grouped_actions__element oak_trash_list_select" name="" id="">
-            <option value="not-trashed"><?php _e( 'Non supprimé', Oak::$text_domain ); ?></option>
-            <option <?php if( isset( $_GET['trashed'] ) ) : if( $_GET['trashed'] == 'true' ) : echo('selected'); endif; endif; ?> value="trashed"><?php _e( 'Corbeille', Oak::$text_domain ); ?></option>
-        </select>
+            <select class="oak_grouped_actions__element oak_trash_list_select" name="" id="">
+                <option value="not-trashed"><?php _e( 'Non supprimé', Oak::$text_domain ); ?></option>
+                <option <?php if( isset( $_GET['trashed'] ) ) : if( $_GET['trashed'] == 'true' ) : echo('selected'); endif; endif; ?> value="trashed"><?php _e( 'Corbeille', Oak::$text_domain ); ?></option>
+            </select>
+            
+            <span class="oak_grouped_actions__element oak_groupd_actions__filter_button"><?php _e( 'Filtrer', Oak::$text_domain ); ?></span>
+        </div>
 
-        <span class="oak_grouped_actions__element oak_groupd_actions__filter_button"><?php _e( 'Filtrer', Oak::$text_domain ); ?></span>
+        <div>
+            <select class="oak_grouped_actions__element oak_elements_list__sort_select" id="">
+                <option value="default"><?php _e( 'Dernière modification', Oak::$text_domain ); ?></option>
+                <option <?php if( isset( $_GET['sort'] ) ) : if( $_GET['sort'] == 'designation' ) : echo( 'selected' ); endif; endif; ?> value="designation"><?php _e( 'Désignation', Oak::$text_domain ); ?></option>
+                <option <?php if( isset( $_GET['sort'] ) ) : if( $_GET['sort'] == 'first_property' ) : echo( 'selected' ); endif; endif; ?> value="first_property"><?php echo( $first_property['title'] ); ?></option>
+                <option <?php if( isset( $_GET['sort'] ) ) : if( $_GET['sort'] == 'second_property' ) : echo( 'selected' ); endif; endif; ?> value="second_property"><?php echo( $second_property['title'] ); ?></option>
+            </select>
+        </div>
     </div>
     
     <div class="oak_elements_list">
@@ -104,6 +115,23 @@
                 $elements_to_show[] = $element;
             endif;
         endforeach;
+
+        if ( isset( $_GET['sort'] ) ) :
+
+            if ( $_GET['sort'] == 'designation' ) :
+                $property = $table . '_designation';
+            elseif ( $_GET['sort'] == 'first_property' ) :
+                $property = $first_property['property'];
+            elseif ( $_GET['sort'] == 'second_property' ) :
+                $property = $second_property['property'];
+            endif;
+            update_option( 'oak_sort_property', $property );
+
+            usort( $elements_to_show, function( $a, $b ) {
+                $property = get_option( 'oak_sort_property' );
+                return strcmp( $a->$property, $b->$property );
+            } );
+        endif;
         
         $ELEMENTS_PER_PAGE = 10;
         foreach( $elements_to_show as $key => $element ) :

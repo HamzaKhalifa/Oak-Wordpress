@@ -430,6 +430,25 @@ function importButton() {
 }
 // Done with the import button
 
+// For the sort selector: 
+handleSortSelector();
+function handleSortSelector() {
+    var sortSelector = document.querySelector('.oak_elements_list__sort_select');
+    sortSelector.addEventListener('change', function() {
+        var difference = window.location.href.length - window.location.href.indexOf('whichpage=') - 10;
+        difference = difference + '';
+        var whichpage = '';
+        for (var i = difference.length; i > 0; i--) {
+            whichpage += window.location.href[window.location.href.length - i];
+        }
+        console.log('whichpage', whichpage);
+        var currentLinkWithoutPage = window.location.href.substring(0, window.location.href.indexOf('whichpage='));
+        var theUrl = currentLinkWithoutPage + '&sort=' + this.value + '&whichpage=' + whichpage;
+        window.location.replace(theUrl);
+    })
+}
+// Done with the sort selector
+
 // For the model download button
 exportButton();
 function exportButton() {

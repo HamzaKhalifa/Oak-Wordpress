@@ -1647,7 +1647,7 @@ body .oak_select_container_with_filters__add_button {
 
 .oak_grouped_actions {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-top: 40px;
   position: fixed;
   bottom: 0px;
@@ -1731,7 +1731,7 @@ body .oak_select_container_with_filters__add_button {
 }
 
 .oak_groupd_actions__filter_button {
-  padding: 16px;
+  padding: 15px 16px 19px 16px;
   background-color: #1c6bb5;
   margin-right: 0px;
 }
