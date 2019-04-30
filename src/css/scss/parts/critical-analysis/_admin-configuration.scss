@@ -284,7 +284,7 @@ body .oak_hidden {
 
 
 // For the loader
-.oak_loader {
+.oak_loader, .oak_infinite_scroll_loader {
     display: inline-block;
     position: relative;
     width: 64px;
@@ -292,7 +292,7 @@ body .oak_hidden {
     position: fixed;
     top: 30%;
 }
-  .oak_loader:after {
+  .oak_loader:after, .oak_infinite_scroll_loader:after {
     content: " ";
     display: block;
     border-radius: 50%;
@@ -317,6 +317,7 @@ body .oak_hidden {
       transform: rotate(1800deg);
     }
   }
+  
 
   .oak_infinite_scroll_loader:after {
     border: 26px solid #003366;

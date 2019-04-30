@@ -219,7 +219,7 @@
         </div>
 
         
-        <div class="oak_loader oak_infinite_scroll_loader oak_hidden"></div>
+        <div class="oak_infinite_scroll_loader oak_hidden"></div>
 
         <span class="oak_list_loader_and_pagination_container__load_next"><?php _e( 'Next', Oak::$text_domain ); ?></span>
     </div>
