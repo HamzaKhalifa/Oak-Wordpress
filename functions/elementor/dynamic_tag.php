@@ -1,4 +1,5 @@
 <?php
+require_once get_template_directory() . '/functions/class-download-remote-image.php';
 
 Class Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
 
@@ -31,6 +32,7 @@ Class Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
 						$id = $image['id'];
 					endif;
 				endforeach;
+
 				$this->add_control(
 					preg_replace( '/\s+/', '', $field['field_designation'] ),
 					[

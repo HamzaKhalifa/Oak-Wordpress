@@ -1007,7 +1007,6 @@ class Oak {
             foreach ( $query_images->posts as $image ) {
                 $images[] = array ( 'url' => wp_get_attachment_url( $image->ID ), 'id' => $image->ID );
             }
-
             // I pass the data to dynamic tags via the table options (Because there is an error of denied access if I happen to do this in the register controls function)
             update_option( 'oak_post_elementor_fields', $the_returned_fields );
             update_option( 'oak_all_images', $images );
@@ -2489,10 +2488,23 @@ class Oak {
     }
 
     function corn_simple_register_element( $element, $table_name ) {
+        require_once get_template_directory() . '/functions/class-download-remote-image.php';
+
         global $wpdb;
 
         foreach( $element as $key => $value ) :
-            $element[ $key ] = $this->oak_filter_word( $value );
+            $the_value = $value;
+            if ( strpos( $value, 'ttps://' ) != false || strpos( $value, 'ttp://' ) != false ) :
+                if (  wp_http_validate_url( $value ) ) :
+                    if ( @getimagesize( $value ) ) :
+                        $download_remote_image = new KM_Download_Remote_Image( $value, array() );
+                        $id = $download_remote_image->download();
+                        $the_value = get_post( $id )->guid;
+                    endif;
+                endif;
+            endif;
+
+            $element[ $key ] = $this->oak_filter_word( $the_value );
         endforeach;
 
         $result = $wpdb->insert(
@@ -2534,7 +2546,6 @@ class Oak {
 
             foreach( $element as $key => $value ) :
                 // check if the key is included in the model:
-
                 if ( !in_array( $key, $columns_names ) ) :
                     unset( $element[ $key ] );
                 endif;
