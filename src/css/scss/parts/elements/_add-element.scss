@@ -232,11 +232,11 @@
 // Done with the text field;
 
 .oak_add_element_container__add_button, .oak_add_element_container__update_button, .oak_add_element_container__register_button, .oak_add_element_container__broadcast_button, .oak_add_element_container__draft_button, .oak_add_element_container__trash_button {
-    border: 1px solid #24E08C;
-    background-color: #24E08C;
+    border: 1px solid #96CEF0;
+    background-color: #96CEF0;
     transition: all .2s ease-in-out;
     text-align: center;
-    padding: 5px;
+    padding: 5px; 
     padding-right: 10px;
     padding-left: 10px;
     align-self: flex-end;
@@ -254,7 +254,7 @@
 }
 
 .oak_add_element_container__add_button:hover span, .oak_add_element_container__update_button:hover span, .oak_add_element_container__register_button:hover span, .oak_add_element_container__broadcast_button:hover span, .oak_add_element_container__draft_button:hover span {
-    color: #24E08C
+    color: #96CEF0;
 }
 
 .oak_add_element_container__trash_button:hover span {
@@ -618,6 +618,10 @@ input.oak_add_other_elements_list_single_element__chekcbox {
 
 .oak_element_header i {
     color: white;
+}
+
+.oak_element_header .fa-caret-down {
+    color: initial;
 }
 
 span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_elements {

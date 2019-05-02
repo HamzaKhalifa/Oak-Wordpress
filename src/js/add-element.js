@@ -1154,6 +1154,26 @@ function conditionListener(input) {
     }
 }
 
+handleSelectOtherElement();
+function handleSelectOtherElement() {
+    var selector = document.querySelector('.oak_element_header_right__elements_select');
+    selector.addEventListener('change', function() {
+        var elementsTypeToPutInUrl = DATA.elementsType;
+        var identifier = this.value;
+        var additionalData = ''
+        if (DATA.elementsType == 'objects') 
+            additionalData = '&model_identifier=' + DATA.tableInPlural;
+        else if (DATA.elementsType == 'term_objects') {
+            additionalData = '&model_identifier=' + checkboxes[i].parentNode.parentNode.getAttribute('model-identifier');
+            elementsTypeToPutInUrl = 'objects';
+        }
+        else if ( DATA.elementsType == 'terms' )
+            additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
+
+        window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula' + additionalData);
+    });
+}
+
 // Everything related to our modal:
 function openModal(title, twoButtons) {
     var confirmButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_add_button_container__text');

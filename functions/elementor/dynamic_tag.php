@@ -52,8 +52,9 @@ Class Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
 		);
 
 		$fields = get_option('oak_post_elementor_fields');
+		
 		foreach( $fields as $field ) :
-			if ( $field['field_type'] == 'Image' ) :
+			if ( $field['field_type'] == 'image' ) :
 				$single_data = $this->get_settings( preg_replace( '/\s+/', '', $field['field_designation'] ) );
 				if ( $single_data['url'] != '' ) :
 					$image_data = $single_data;

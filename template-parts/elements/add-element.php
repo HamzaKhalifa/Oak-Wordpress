@@ -15,6 +15,17 @@ if ( count( $revisions ) > 0 ) :
 endif;
 ?>
 
+<!-- initializing property names -->
+<?php 
+$designation_property = $table . '_designation';
+$identifier_property = $table . '_identifier';
+$selector_property = $table . '_selector';
+$locked_property = $table . '_locked';
+$trashed_property = $table . '_trashed';
+$state_property = $table . '_state';
+$modification_time_property = $table . '_modification_time';
+?>
+
 <div class="oak_element_header">
     <div class="oak_element_header_left">
         <i class="oak_menu_icon oak_menu_icon__cancel_icon fas fa-times"></i>
@@ -37,6 +48,20 @@ endif;
         <?php endif; ?>
     </div>
     <div class="oak_element_header_right">
+        <div class="oak_select_container">
+            <span class="text_field_description"><?php _e( 'Langue', Oak::$text_domain ); ?></span>
+            <div class="additional_container">
+                <select class="oak_element_header_right__elements_select">
+                    <?php
+                    foreach( $elements as $element ) : ?>
+                        <option <?php if( $_GET[ $identifer_property ] == $element->$identifier_property ) : echo('selected'); endif; ?> value="<?php echo( $element->$identifier_property); ?>"><?php echo( $element->$designation_property ); ?></option>
+                    <?php
+                    endforeach;
+                    ?>
+                </select>
+            </div>
+            <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+        </div>
 
         <?php
         if ( isset( $_GET[ $table . '_identifier'] ) && $last_revision->$state_property == 1 ) : ?>
@@ -94,16 +119,6 @@ endif;
 </div>
 <!-- Done with the top bars -->
 
-<!-- initializing property names -->
-<?php 
-$designation_property = $table . '_designation';
-$identifier_property = $table . '_identifier';
-$selector_property = $table . '_selector';
-$locked_property = $table . '_locked';
-$trashed_property = $table . '_trashed';
-$state_property = $table . '_state';
-$modification_time_property = $table . '_modification_time';
-?>
 <div class="oak_add_element_container__header">
     <img class="oak_add_element_container_header_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/fields.png' ); ?>" alt="">
     <h3 class="oak_add_element_container__title"><?php echo( $title ); ?></h3>

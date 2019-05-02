@@ -1402,66 +1402,79 @@ class Oak {
                 $properties = Oak::$field_properties;
                 $table = 'field';
                 $title = __( 'Ajouter un champ', Oak::$text_domain );
+                $elements = Oak::$fields_without_redundancy;
             break;
             case 'forms':
                 $properties = Oak::$form_properties;
                 $table = 'form';
                 $title = __( 'Nouveau formulaire', Oak::$text_domain );
+                $elements = Oak::$forms_without_redundancy;
             break;
             case 'models':
                 $properties = Oak::$model_properties;
                 $table = 'model';
                 $title = __( 'Ajouter un modèle', Oak::$text_domain );
+                $elements = Oak::$models_without_redundancy;
             break;
             case 'taxonomies':
                 $properties = Oak::$taxonomy_properties;
                 $table = 'taxonomy';
                 $title = __( 'Ajouter une taxonomie', Oak::$text_domain );
+                $elements = Oak::$models_without_redundancy;
             break;
             case 'publications':
                 $properties = Oak::$publication_properties;
                 $table = 'publication';
                 $title = __( 'Ajouter une publication', Oak::$text_domain );
+                $elements = Oak::$publications_without_redundancy;
             break;
             case 'organizations':
                 $properties = Oak::$organization_properties;
                 $table = 'organization';
                 $title = __( 'Ajouter une organisation', Oak::$text_domain );
+                $elements = Oak::$publications_without_redundancy;
             break;
             case 'quantis':
                 $properties = Oak::$quanti_properties;
                 $table = 'quanti';
                 $title = __( 'Ajouter un indicateur quantitatif', Oak::$text_domain );
+                $elements = Oak::$quantis_without_redundancy;
             break;
             case 'qualis':
                 $properties = Oak::$quali_properties;
                 $table = 'quali';
                 $title = __( 'Ajouter un indicateur qualitatif', Oak::$text_domain );
+                $elements = Oak::$qualis_without_redundancy;
             break;
             case 'goodpractices':
                 $properties = Oak::$goodpractice_properties;
                 $table = 'goodpractice';
                 $title = __( 'Ajouter une Bonne Pratique', Oak::$text_domain );
+                $elements = Oak::$goodpractices_without_redundancy;
             break;
             case 'performances':
                 $properties = Oak::$performance_properties;
                 $table = 'performance';
                 $title = __( 'Ajouter une Donnée de performance', Oak::$text_domain );
+                $elements = Oak::$performances_without_redundancy;
             break;
             case 'glossaries':
                 $properties = Oak::$glossary_properties;
                 $table = 'glossary';
                 $title = __( 'Ajouter une términologie', Oak::$text_domain );
+                $elements = Oak::$glossaries_without_redundancy;
             break;
             case 'objects' :
                 $properties = Oak::$object_properties;
                 $table = 'object';
                 $title = __( 'Ajouter un objet', Oak::$text_domain );
+                $elements = Oak::$objects_without_redundancy;
             break;
             case 'terms' :
                 $properties = Oak::$term_properties;
                 $table = 'term';
                 $title = __( 'Ajouter un terme', Oak::$text_domain );
+                $elements = Oak::$terms_without_redundancy;
             break;
         endswitch;
         include get_template_directory() . '/template-parts/elements/add-element.php';
