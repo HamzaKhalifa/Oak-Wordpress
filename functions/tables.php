@@ -653,6 +653,27 @@ foreach( Oak::$models as $model ) :
     Oak::$all_objects = array_merge( Oak::$all_objects, $model_objects );
 endforeach;
 
+if ( isset( $_GET['elements'] ) && isset( $_GET['model_identifier'] ) ) :
+    $object_table_name = $wpdb->prefix . 'oak_model_' . $_GET['model_identifier'];
+    Oak::$objects = $wpdb->get_results ( "
+        SELECT *
+        FROM  $object_table_name
+    " );
+
+    $reversed_objects = array_reverse( Oak::$objects  );
+    foreach( $reversed_objects as $object ) :
+        $added = false;
+        foreach( Oak::$objects_without_redundancy as $object_without_redundancy ) :
+            if ( $object_without_redundancy->object_identifier == $object->object_identifier) :
+                $added = true;
+            endif;
+        endforeach;
+        if ( !$added ) :
+            Oak::$objects_without_redundancy[] = $object;
+        endif;
+    endforeach;
+endif;
+
 // For taxonomies
 $taxonomies_table_name = Oak::$taxonomies_table_name;
 Oak::$taxonomies = $wpdb->get_results ( "
@@ -724,6 +745,26 @@ foreach( $taxonomies_without_redundancy as $taxonomy ) :
 
     Oak::$all_terms = array_merge( Oak::$all_terms, $terms );
 endforeach;
+
+if ( isset( $_GET['taxonomy_identifier'] ) ) :
+    $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
+    Oak::$terms = $wpdb->get_results ( "
+        SELECT *
+        FROM $term_table_name
+    " );
+    $reversed_terms = array_reverse( Oak::$terms  );
+    foreach( $reversed_terms as $term ) :
+        $added = false;
+        foreach( Oak::$terms_without_redundancy as $term_without_redundancy ) :
+            if ( $term_without_redundancy->term_identifier == $term->term_identifier) :
+                $added = true;
+            endif;
+        endforeach;
+        if ( !$added ) :
+            Oak::$terms_without_redundancy[] = $term;
+        endif;
+    endforeach;
+endif;
 
 $objects_reversed = array_reverse( Oak::$all_objects );
 foreach( $objects_reversed as $object ) :

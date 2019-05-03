@@ -49,12 +49,15 @@ $modification_time_property = $table . '_modification_time';
     </div>
     <div class="oak_element_header_right">
         <div class="oak_select_container">
-            <span class="text_field_description"><?php _e( 'Langue', Oak::$text_domain ); ?></span>
+            <span class="text_field_description"><?php _e( 'Eléments', Oak::$text_domain ); ?></span>
             <div class="additional_container">
+                <?php 
+                ?>
                 <select class="oak_element_header_right__elements_select">
                     <?php
-                    foreach( $elements as $element ) : ?>
-                        <option <?php if( $_GET[ $identifer_property ] == $element->$identifier_property ) : echo('selected'); endif; ?> value="<?php echo( $element->$identifier_property); ?>"><?php echo( $element->$designation_property ); ?></option>
+                    foreach( $elements as $element ) : 
+                    ?>
+                        <option <?php if( isset( $_GET[ $identifier_property ] ) ) : if( $_GET[ $identifier_property ] == $element->$identifier_property ) : echo('selected'); endif; endif; ?> value="<?php echo( $element->$identifier_property); ?>"><?php echo( $element->$designation_property ); ?></option>
                     <?php
                     endforeach;
                     ?>
@@ -1059,7 +1062,7 @@ $modification_time_property = $table . '_modification_time';
                     <div class="oak_add_element_big_container_tabs_single_tab_section_state__info_container">
                         <span><?php 
                             if ( count( $revisions ) > 0 ) :
-                                echo( count( $revisions ) - 1 );
+                                echo( count( $revisions ) );
                             else :
                                 echo('0');
                             endif; 
@@ -1288,34 +1291,24 @@ $modification_time_property = $table . '_modification_time';
                     // Lets get the list of languages first: 
                     $languages_codes = [];
                     $language_property = $table . '_content_language';
-                    var_dump( $table );
                     foreach( $revisions as $key => $revision ) :
                         if ( !in_array( $revision->$language_property, $languages_codes ) ) :
                             $languages_codes[] = $revision->$language_property;
                             ?>
                                 <h2 class="oak_add_element_modal_container_content_revisions_list_of_revisions__language_title"><?php echo( $revision->$language_property ); ?></h2>
                             <?php 
-                            foreach( $revisions as $revision_to_add ) :
+                            foreach( $revisions as $new_key => $revision_to_add ) :
                                 if ( $revision_to_add->$language_property == $revision->$language_property ) : ?>
-                                    <div index="<?php echo( $key ) ?>" class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
+                                    <div index="<?php echo( $new_key ) ?>" class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
                                         <?php
                                         ?>
-                                        <span class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( esc_attr( $revision->$modification_time_property ) ); ?></span>
+                                        <span class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( esc_attr( $revision_to_add->$modification_time_property ) ); ?></span>
                                     </div>
                                 <?php
 
                                 endif;
                             endforeach;
                         endif;
-                        /*if ( $key != count( $revisions ) - 1 ) :
-                        ?>
-                            <div index="<?php echo( $key ) ?>" class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision">
-                                <?php
-                                ?>
-                                <span class="oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions_single_revision__date"><?php echo( esc_attr( $revision->$modification_time_property ) ); ?></span>
-                            </div>
-                        <?php
-                        endif;*/
                     endforeach;
                     ?>
                 </div>

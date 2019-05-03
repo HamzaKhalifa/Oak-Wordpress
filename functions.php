@@ -427,8 +427,6 @@ class Oak {
             ));
         endif;
 
-        
-
         // For elements
         if ( isset( $_GET['elements'] ) ) :
             $table = '';
@@ -582,11 +580,7 @@ class Oak {
             if ( $_GET['elements'] == 'objects' ) :
                 $table = 'object';
                 $table_in_plural = $_GET['model_identifier'];
-                $object_table_name = $wpdb->prefix . 'oak_model_' . $_GET['model_identifier'];
-                Oak::$objects = $wpdb->get_results ( "
-                    SELECT *
-                    FROM  $object_table_name
-                " );
+
                 $elements = Oak::$objects;
                 foreach( $elements as $object ) :
                     $object->object_model_identifier = $_GET['model_identifier'];
@@ -1467,6 +1461,20 @@ class Oak {
                 $properties = Oak::$object_properties;
                 $table = 'object';
                 $title = __( 'Ajouter un objet', Oak::$text_domain );
+
+                $reversed_objects = array_reverse( Oak::$objects  );
+                foreach( $reversed_objects as $object ) :
+                    $added = false;
+                    foreach( Oak::$objects_without_redundancy as $object_without_redundancy ) :
+                        if ( $object_without_redundancy->object_identifier == $object->object_identifier) :
+                            $added = true;
+                        endif;
+                    endforeach;
+                    if ( !$added ) :
+                        Oak::$objects_without_redundancy[] = $object;
+                    endif;
+                endforeach;
+
                 $elements = Oak::$objects_without_redundancy;
             break;
             case 'terms' :
@@ -1586,19 +1594,6 @@ class Oak {
                 $third_property = Oak::$performance_third_property;
             break;
             case 'objects' :
-                $reversed_objects = array_reverse( Oak::$objects  );
-                foreach( $reversed_objects as $object ) :
-                    $added = false;
-                    foreach( Oak::$objects_without_redundancy as $object_without_redundancy ) :
-                        if ( $object_without_redundancy->object_identifier == $object->object_identifier) :
-                            $added = true;
-                        endif;
-                    endforeach;
-                    if ( !$added ) :
-                        Oak::$objects_without_redundancy[] = $object;
-                    endif;
-                endforeach;
-
                 $title = __( 'Objets', Oak::$text_domain );
                 $elements = Oak::$objects_without_redundancy;
                 $elements_with_redundancy = Oak::$objects;
@@ -1608,23 +1603,23 @@ class Oak {
                 $third_property = Oak::$object_third_property;
             break;
             case 'terms' :
-                $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
-                Oak::$objects = $wpdb->get_results ( "
-                    SELECT *
-                    FROM $term_table_name
-                " );
-                $reversed_terms = array_reverse( Oak::$terms  );
-                foreach( $reversed_terms as $term ) :
-                    $added = false;
-                    foreach( Oak::$terms_without_redundancy as $term_without_redundancy ) :
-                        if ( $term_without_redundancy->term_identifier == $term->term_identifier) :
-                            $added = true;
-                        endif;
-                    endforeach;
-                    if ( !$added ) :
-                        Oak::$terms_without_redundancy[] = $term;
-                    endif;
-                endforeach;
+                // $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
+                // Oak::$terms = $wpdb->get_results ( "
+                //     SELECT *
+                //     FROM $term_table_name
+                // " );
+                // $reversed_terms = array_reverse( Oak::$terms  );
+                // foreach( $reversed_terms as $term ) :
+                //     $added = false;
+                //     foreach( Oak::$terms_without_redundancy as $term_without_redundancy ) :
+                //         if ( $term_without_redundancy->term_identifier == $term->term_identifier) :
+                //             $added = true;
+                //         endif;
+                //     endforeach;
+                //     if ( !$added ) :
+                //         Oak::$terms_without_redundancy[] = $term;
+                //     endif;
+                // endforeach;
 
                 $title = __( 'Termes', Oak::$text_domain );
                 $elements = Oak::$terms_without_redundancy;
