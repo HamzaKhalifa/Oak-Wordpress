@@ -203,25 +203,35 @@
     </div>
 
     <div class="oak_list_loader_and_pagination_container">
+        <?php 
+        $number_of_pages = intval( count( $elements_to_show ) / $ELEMENTS_PER_PAGE );
+        $number_of_pages++;
+        ?>
 
         <div class="oak_list_pagination_container">
         <?php 
-            $number_of_pages = intval( count( $elements_to_show ) / $ELEMENTS_PER_PAGE );
-            for( $i = 0; $i < $number_of_pages; $i++ ) :
-                // if ( $_GET['whichpage'] != $i ) :
-                    $current_link = substr( $_SERVER['QUERY_STRING'], 0, strpos( $_SERVER['QUERY_STRING'], 'whichpage' ) - 1 );
-                ?>
-                    <a class="pagination__next <?php if( $_GET['whichpage'] == $i ) : echo( 'oak_selected_page_style' ); endif; ?>" href="<?php echo( admin_url() . '?' . $current_link . '&whichpage=' . $i ); ?>"><?php echo( $i ); ?></a>
-                <?php
-                // endif;
-            endfor;
+            
+            if ( $number_of_pages > 1 ) :
+                for( $i = 0; $i < $number_of_pages; $i++ ) :
+                    // if ( $_GET['whichpage'] != $i ) :
+                        $current_link = substr( $_SERVER['QUERY_STRING'], 0, strpos( $_SERVER['QUERY_STRING'], 'whichpage' ) - 1 );
+                    ?>
+                        <a class="<?php if ( $_GET['whichpage'] != $i ) : echo( 'pagination__next' ); endif; ?> pagination_link <?php if( $_GET['whichpage'] == $i ) : echo( 'oak_selected_page_style' ); endif; ?>" href="<?php echo( admin_url() . '?' . $current_link . '&whichpage=' . $i ); ?>"><?php echo( $i + 1 ); ?></a>
+                    <?php
+                    // endif;
+                endfor;
+            endif;
             ?>
         </div>
-
         
         <div class="oak_infinite_scroll_loader oak_hidden"></div>
 
-        <span class="oak_list_loader_and_pagination_container__load_next"><?php _e( 'Next', Oak::$text_domain ); ?></span>
+        <?php
+        if ( $number_of_pages > 1 ) : ?>
+            <span class="oak_list_loader_and_pagination_container__load_next"><?php _e( 'Next', Oak::$text_domain ); ?></span>
+        <?php
+        endif; 
+        ?>
     </div>
     
 </div>

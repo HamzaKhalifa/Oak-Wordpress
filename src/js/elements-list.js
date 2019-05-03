@@ -241,6 +241,9 @@ function createIdentifier() {
 
 // For the infinite scroll
 jQuery(document).ready(function() {
+    if (!document.querySelector('.pagination__next'))
+        return;
+
     jQuery('.oak_elements_list').infiniteScroll({
         // options
         path: '.pagination__next',
@@ -260,11 +263,19 @@ jQuery(document).ready(function() {
             });
         },
     });
+
+    jQuery('.oak_elements_list').on('last.infiniteScroll', function(event, response, path) {
+        console.log('last page loaded');
+        document.querySelector('.oak_list_loader_and_pagination_container__load_next').classList.add('oak_hidden');
+    })
 })
 
 // For infinite scroll load next
 handleLoadNext();
 function handleLoadNext() {
+    if (!document.querySelector('.pagination__next'))
+            return;
+
     var loadNextButton = document.querySelector('.oak_list_loader_and_pagination_container__load_next');
     loadNextButton.addEventListener('click', function() {
         jQuery('.oak_elements_list').infiniteScroll('loadNextPage');

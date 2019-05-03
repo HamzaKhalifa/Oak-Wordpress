@@ -309,9 +309,14 @@
 .oak_list_pagination_container {
     text-align: center;
     margin: 10px 0px 10px 0px;
+    overflow: scroll;
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    padding-bottom: 20px;
 }
 
-.pagination__next {
+.pagination_link {
     margin: 0px 5px 0px 5px;
     text-decoration: none;
     color: #003366;
