@@ -394,3 +394,10 @@ div {
 .oak_element_header .oak_select_container__bottom_arrow {
     color: white!important;
 }
+
+.oak_element_header__sticky {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 9999;
+}

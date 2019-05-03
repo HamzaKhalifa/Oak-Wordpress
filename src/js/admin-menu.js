@@ -85,3 +85,33 @@ function initializeSiteLanguage() {
         }
     }
 }
+
+// For the sticky app bar
+handleStickyMenu();
+function handleStickyMenu() {
+    var header = document.querySelector('.oak_element_header');
+    var headerHeight = header.offsetHeight;
+
+    var containerHeader = document.querySelector('.oak_add_element_container__header');
+    var elementsList = document.querySelector('.oak_elements_list');
+    var elementTopDropDown = containerHeader ? containerHeader : elementsList;
+
+    var defaultMargin = parseInt(window.getComputedStyle(elementTopDropDown).getPropertyValue('margin-top'));
+    var droppedDownMargin = defaultMargin + headerHeight;
+
+    var topLimit = document.querySelector('#wpwrap').offsetTop;
+    handleScroll();
+    window.addEventListener('scroll', function() {
+        handleScroll();
+    })
+
+    function handleScroll() {
+        if (window.pageYOffset > topLimit) {
+            header.classList.add('oak_element_header__sticky');
+            elementTopDropDown.style.marginTop = droppedDownMargin + 'px';
+        } else {
+            header.classList.remove('oak_element_header__sticky');
+            elementTopDropDown.style.marginTop = defaultMargin + 'px'; 
+        }
+    }
+}
