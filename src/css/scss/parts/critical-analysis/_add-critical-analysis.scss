@@ -43,7 +43,7 @@ body #wpcontent {
 }
 
 .oak_admin_analysis_list_tile_container__add_analysis_button, .oak_admin_analysis_modals_container_add_modal__cancel_button, .oak_admin_analysis_modals_container_add_modal__add_button {
-    background-color: #24E08C;
+    background-color: #96CEF0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,7 +52,7 @@ body #wpcontent {
     text-align: center;
     border-radius: 10px;
     transition: all .2s ease-in-out;
-    border: 1px solid #24E08C;
+    border: 1px solid #96CEF0;
 }
 
 .oak_admin_analysis_list_tile_container__add_analysis_button:hover, .oak_admin_analysis_modals_container_add_modal__cancel_button:hover, .oak_admin_analysis_modals_container_add_modal__add_button:hover {
@@ -61,7 +61,7 @@ body #wpcontent {
 }
 
 .oak_admin_analysis_list_tile_container__add_analysis_button:hover span, .oak_admin_analysis_modals_container_add_modal__add_button:hover span {
-    color: #24E08C;
+    color: #96CEF0;
 }
 
 .oak_admin_analysis_list_tile_container_add_analysis_button__text, .oak_admin_analysis_modals_container_add_modal_cancel_button__text, .oak_admin_analysis_modals_container_add_modal_add_button__text {
@@ -104,7 +104,7 @@ body #wpcontent {
     padding-bottom: 30px;
     padding-top: 30px;
     margin: 0px;
-    color: #FC394D;
+    color: #f06648;
 }
 
 .oak_admin_analysis_list_single_analysis_single_principle__single_criteria {
@@ -210,7 +210,7 @@ body #wpcontent {
 }
 
 .oak_admin_analysis_modals_container_add_modal__error {
-    color: #FC394D;
+    color: #f06648;
     margin-top: 5px;
     font-weight: bold;
 }
@@ -224,12 +224,12 @@ body #wpcontent {
 }
 
 .oak_admin_analysis_modals_container_add_modal__cancel_button {
-    background-color: #FC394D;
-    border: 1px solid #FC394D;
+    background-color: #f06648;
+    border: 1px solid #f06648;
 }
 
 .oak_admin_analysis_modals_container_add_modal__cancel_button:hover span {
-    color: #FC394D;
+    color: #f06648;
 }
 
 // Done with the add modal

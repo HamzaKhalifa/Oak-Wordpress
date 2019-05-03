@@ -11,7 +11,7 @@ if (DATA.analysis.principles) {
     var barChart = document.querySelector('.oak_final_result_bar_chart');
     var barChartCreator = barChart.getContext('2d');
     
-    var colors = ['#389EF0', '#FC394D', '#e67e22', '#f1c40f', '#d35400', '#e74c3c', '#8e44ad', '#34495e',
+    var colors = ['#389EF0', '#f06648', '#e67e22', '#f1c40f', '#d35400', '#e74c3c', '#8e44ad', '#34495e',
     '#95a5a6', '#16a085', '#3498db', '#c0392b', '#16a085', '#706fd3', '#40407a', '#ff5252', '#b33939', '#84817a', '#ffb142', '#218c74'];
     
     var principles = DATA.analysis.principles;
@@ -38,7 +38,7 @@ if (DATA.analysis.principles) {
         data: {
             datasets: [{
                 data: [entireResultPercentage, 100 - entireResultPercentage],
-                backgroundColor: ['#389EF0', '#FC394D']
+                backgroundColor: ['#389EF0', '#f06648']
             }],
             labels: ['A Pérenniser', 'A améliorer']
         },
@@ -113,7 +113,7 @@ if (DATA.analysis.principles) {
                 label: principles[i].principle,
                 datasets: [{
                     data: [averages[i], 100 - averages[i]],
-                    backgroundColor: ['#389EF0', '#FC394D']
+                    backgroundColor: ['#389EF0', '#f06648']
                 }],
                 labels: ['A Pérenniser', 'A améliorer']
             },

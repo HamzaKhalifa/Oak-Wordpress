@@ -33,7 +33,7 @@ body .oak_hidden {
 }
 
 .oak_critical_analysis_configuration_principles_title_container__add_principle_button, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button, .oak_critical_analysis_configuration_principles_principle_add_container__add_button {
-    background-color: #24E08C;
+    background-color: #96CEF0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -42,7 +42,7 @@ body .oak_hidden {
     text-align: center;
     border-radius: 10px;
     transition: all .2s ease-in-out;
-    border: 1px solid #24E08C;
+    border: 1px solid #96CEF0;
 }
 
 .oak_critical_analysis_configuration_principles_title_container__add_principle_button:hover, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button:hover, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button:hover, .oak_critical_analysis_configuration_principles_principle_add_container__add_button:hover {
@@ -51,7 +51,7 @@ body .oak_hidden {
 }
 
 .oak_critical_analysis_configuration_principles_title_container__add_principle_button:hover span, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button:hover span {
-    color: #24E08C;
+    color: #96CEF0;
 }
 
 .oak_critical_analysis_configuration_principles_title_container_add_principle_button__text, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container_add_button__text, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container_cancel_button__text, .oak_critical_analysis_configuration_principles_principle_add_container_add_button__text {
@@ -166,7 +166,7 @@ body .oak_hidden {
 }
 
 .fa-minus-square, .fa-trash-alt {
-    color: #FC394D;
+    color: #f06648;
     font-size: 18px;
 }
 
@@ -266,16 +266,16 @@ body .oak_hidden {
 }
 
 .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button {
-    background-color: #FC394D;
-    border: 1px solid #FC394D;
+    background-color: #f06648;
+    border: 1px solid #f06648;
 }
 
 .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button:hover span {
-    color: #FC394D;
+    color: #f06648;
 }
 
 .oak_critical_analysis_configuration_modals_container_add_principle_modal__error, .oak_critical_analysis_configuration__load_default_data_error {
-    color: #FC394D;
+    color: #f06648;
     margin-top: 5px;
     font-weight: bold;
 }

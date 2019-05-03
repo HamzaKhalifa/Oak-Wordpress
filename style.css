@@ -103,7 +103,7 @@ body #wpcontent {
 }
 
 .oak_admin_analysis_list_tile_container__add_analysis_button, .oak_admin_analysis_modals_container_add_modal__cancel_button, .oak_admin_analysis_modals_container_add_modal__add_button {
-  background-color: #24E08C;
+  background-color: #96CEF0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,7 +112,7 @@ body #wpcontent {
   text-align: center;
   border-radius: 10px;
   transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
+  border: 1px solid #96CEF0;
 }
 
 .oak_admin_analysis_list_tile_container__add_analysis_button:hover, .oak_admin_analysis_modals_container_add_modal__cancel_button:hover, .oak_admin_analysis_modals_container_add_modal__add_button:hover {
@@ -121,7 +121,7 @@ body #wpcontent {
 }
 
 .oak_admin_analysis_list_tile_container__add_analysis_button:hover span, .oak_admin_analysis_modals_container_add_modal__add_button:hover span {
-  color: #24E08C;
+  color: #96CEF0;
 }
 
 .oak_admin_analysis_list_tile_container_add_analysis_button__text, .oak_admin_analysis_modals_container_add_modal_cancel_button__text, .oak_admin_analysis_modals_container_add_modal_add_button__text {
@@ -164,7 +164,7 @@ body #wpcontent {
   padding-bottom: 30px;
   padding-top: 30px;
   margin: 0px;
-  color: #FC394D;
+  color: #f06648;
 }
 
 .oak_admin_analysis_list_single_analysis_single_principle__single_criteria {
@@ -265,7 +265,7 @@ body #wpcontent {
 }
 
 .oak_admin_analysis_modals_container_add_modal__error {
-  color: #FC394D;
+  color: #f06648;
   margin-top: 5px;
   font-weight: bold;
 }
@@ -279,12 +279,12 @@ body #wpcontent {
 }
 
 .oak_admin_analysis_modals_container_add_modal__cancel_button {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
+  background-color: #f06648;
+  border: 1px solid #f06648;
 }
 
 .oak_admin_analysis_modals_container_add_modal__cancel_button:hover span {
-  color: #FC394D;
+  color: #f06648;
 }
 
 .oak_admin_analysis__save_container {
@@ -350,7 +350,7 @@ body .oak_hidden {
 }
 
 .oak_critical_analysis_configuration_principles_title_container__add_principle_button, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button, .oak_critical_analysis_configuration_principles_principle_add_container__add_button {
-  background-color: #24E08C;
+  background-color: #96CEF0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -359,7 +359,7 @@ body .oak_hidden {
   text-align: center;
   border-radius: 10px;
   transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
+  border: 1px solid #96CEF0;
 }
 
 .oak_critical_analysis_configuration_principles_title_container__add_principle_button:hover, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button:hover, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button:hover, .oak_critical_analysis_configuration_principles_principle_add_container__add_button:hover {
@@ -368,7 +368,7 @@ body .oak_hidden {
 }
 
 .oak_critical_analysis_configuration_principles_title_container__add_principle_button:hover span, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__add_button:hover span {
-  color: #24E08C;
+  color: #96CEF0;
 }
 
 .oak_critical_analysis_configuration_principles_title_container_add_principle_button__text, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container_add_button__text, .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container_cancel_button__text, .oak_critical_analysis_configuration_principles_principle_add_container_add_button__text {
@@ -483,7 +483,7 @@ body .oak_hidden {
 }
 
 .fa-minus-square, .fa-trash-alt {
-  color: #FC394D;
+  color: #f06648;
   font-size: 18px;
 }
 
@@ -577,16 +577,16 @@ body .oak_hidden {
 }
 
 .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
+  background-color: #f06648;
+  border: 1px solid #f06648;
 }
 
 .oak_critical_analysis_configuration_modals_container_add_principle_modal_buttons_container__cancel_button:hover span {
-  color: #FC394D;
+  color: #f06648;
 }
 
 .oak_critical_analysis_configuration_modals_container_add_principle_modal__error, .oak_critical_analysis_configuration__load_default_data_error {
-  color: #FC394D;
+  color: #f06648;
   margin-top: 5px;
   font-weight: bold;
 }
@@ -897,8 +897,8 @@ body .oak_hidden {
 }
 
 .oak_add_element_container__trash_button {
-  border: 1px solid #FC394D;
-  background-color: #FC394D;
+  border: 1px solid #f06648;
+  background-color: #f06648;
 }
 
 .oak_add_element_container__add_button:hover, .oak_add_element_container__update_button:hover, .oak_add_element_container__register_button:hover, .oak_add_element_container__broadcast_button:hover, .oak_add_element_container__draft_button:hover, .oak_add_element_container__trash_button:hover {
@@ -911,7 +911,7 @@ body .oak_hidden {
 }
 
 .oak_add_element_container__trash_button:hover span {
-  color: #FC394D;
+  color: #f06648;
 }
 
 .oak_add_element_container__add_button span, .oak_add_element_container__update_button span, .oak_add_element_container__register_button span, .oak_add_element_container__broadcast_button span, .oak_add_element_container__draft_button span, .oak_add_element_container__trash_button span {
@@ -928,7 +928,7 @@ body .oak_hidden {
 .oak_add_element_container__saved_field_container__delete_button {
   position: absolute;
   right: 10px;
-  color: #FC394D;
+  color: #f06648;
 }
 
 .oak_add_element_container__saved_field_container__delete_button:hover {
@@ -1075,7 +1075,7 @@ body .oak_hidden {
 }
 
 .oak_object_model_add_formula_modal_container_modal_content_revisions_content_list_of_revisions__single_revision_selected {
-  border: 2px solid #24E08C;
+  border: 2px solid #96CEF0;
 }
 
 .oak_add_element_modal_container_modal_content_revisions_content_list_of_revisions__single_revision:hover {
@@ -1102,7 +1102,7 @@ body .oak_hidden {
 }
 
 .oak_error {
-  border: 1px solid #FC394D !important;
+  border: 1px solid #f06648 !important;
 }
 
 .oak_add_element_big_container_tabs_single_tab_section_state__info {
@@ -1642,11 +1642,11 @@ body .oak_select_container_with_filters__add_button {
   height: 10px;
   width: 10px;
   border-radius: 100%;
-  background-color: #24E08C;
+  background-color: #96CEF0;
 }
 
 .oak_dot_false {
-  background-color: #FC394D;
+  background-color: #f06648;
 }
 
 .oak_grouped_actions {
@@ -1709,7 +1709,7 @@ body .oak_select_container_with_filters__add_button {
 }
 
 .oak_list_highlighted {
-  background-color: #FC394D;
+  background-color: #f06648;
 }
 
 .oak_list_row__first_row {
@@ -1814,13 +1814,13 @@ body .oak_select_container_with_filters__add_button {
 }
 
 .oak_add_element_modal_container_modal__error {
-  color: #FC394D;
+  color: #f06648;
   margin-top: 5px;
   font-weight: bold;
 }
 
 .oak_add_element_modal_container_modal_buttons_container__cancel_button_container, .oak_add_element_modal_container_modal_buttons_container__add_button_container, .oak_add_element_modal_container_modal_buttons_container__ok_button_container {
-  background-color: #24E08C;
+  background-color: #96CEF0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1829,7 +1829,7 @@ body .oak_select_container_with_filters__add_button {
   text-align: center;
   border-radius: 10px;
   transition: all 0.2s ease-in-out;
-  border: 1px solid #24E08C;
+  border: 1px solid #96CEF0;
 }
 
 .oak_add_element_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_add_element_modal_container_modal_buttons_container__add_button_container:hover, .oak_add_element_modal_container_modal_buttons_container__ok_button_container:hover {
@@ -1838,16 +1838,16 @@ body .oak_select_container_with_filters__add_button {
 }
 
 .oak_add_element_modal_container_modal_buttons_container__cancel_button_container {
-  background-color: #FC394D;
-  border: 1px solid #FC394D;
+  background-color: #f06648;
+  border: 1px solid #f06648;
 }
 
 .oak_add_element_modal_container_modal_buttons_container__cancel_button_container:hover span {
-  color: #FC394D;
+  color: #f06648;
 }
 
 .oak_add_element_modal_container_modal_buttons_container__add_button_container:hover span, .oak_add_element_modal_container_modal_buttons_container__ok_button_container:hover span {
-  color: #24E08C;
+  color: #96CEF0;
 }
 
 .oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text, .oak_add_element_modal_container_modal_buttons_container_add_button_container__text {

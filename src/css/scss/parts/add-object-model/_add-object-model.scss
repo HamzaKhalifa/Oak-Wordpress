@@ -29,7 +29,7 @@
 }
 
 .oak_object_model__custom_post_types_lists_single_post_type_container__delete_button {
-    color: #FC394D;
+    color: #f06648;
 }
 
 .oak_object_model__custom_post_types_lists_single_post_type_container__delete_button:hover {
@@ -55,12 +55,12 @@
 }
 
 .oak_object_model_add_formula_element__field_container {
-    background-color: #24E08C;
+    background-color: #96CEF0;
     width: 200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #24E08C;
+    border: 1px solid #96CEF0;
     transition: .2s all ease-in-out;
     margin-bottom: 10px;
     margin-right: 10px;
@@ -81,16 +81,16 @@
 }
 
 .oak_object_model_add_formula_element__field_container:hover span, .oak_object_model_add_formula_element__field_container:hover i  {
-    color: #24E08C;
+    color: #96CEF0;
 }
 
 .oak_object_model_add_formula_element__field_container_already_added {
-    background-color: #FC394D;
-    border-color: #FC394D;
+    background-color: #f06648;
+    border-color: #f06648;
 }
 
 .oak_object_model_add_formula_element__field_container_already_added:hover span, .oak_object_model_add_formula_element__field_container_already_added:hover i {
-    color: #FC394D;
+    color: #f06648;
 }
 
 // Adding specific fields
@@ -113,7 +113,7 @@
 }
 
 .oak_tax_add_formula_element_specific_field_delete_button {
-    color: #FC394D;
+    color: #f06648;
     position: absolute;
     right: 10px;
 }
@@ -132,7 +132,7 @@
 }
 
 .oak_object_model_add_formula_element_specific_fields_container_single_field_container__plus_container:hover i, .oak_tax_add_formula_element_specific_fields_container_single_field_container__plus_container:hover span {
-    color: #24E08C;
+    color: #96CEF0;
 }
 
 .oak_object_model_add_formula_element_specific_fields_container_single_field_container_types_container__single_type {
@@ -141,7 +141,7 @@
 }
 
 .oak_object_model_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i {
-    color: #FC394D;
+    color: #f06648;
 }
 
 .oak_object_model_add_formula_element_specific_fields_container_single_field_container_types_container__single_type i:hover {
@@ -153,7 +153,7 @@
 }
 
 .oak_object_model_add_formula_element_specific_field_delete_button {
-    color: #FC394D;
+    color: #f06648;
     position: absolute;
     right: 10px;
 }
@@ -215,13 +215,13 @@
 }
 
 .oak_add_element_modal_container_modal__error {
-    color: #FC394D;
+    color: #f06648;
     margin-top: 5px;
     font-weight: bold;
 }
 
 .oak_add_element_modal_container_modal_buttons_container__cancel_button_container, .oak_add_element_modal_container_modal_buttons_container__add_button_container, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container {
-    background-color: #24E08C;
+    background-color: #96CEF0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -230,7 +230,7 @@
     text-align: center;
     border-radius: 10px;
     transition: all .2s ease-in-out;
-    border: 1px solid #24E08C;
+    border: 1px solid #96CEF0;
 }
 
 .oak_add_element_modal_container_modal_buttons_container__cancel_button_container:hover, .oak_add_element_modal_container_modal_buttons_container__add_button_container:hover, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover {
@@ -239,16 +239,16 @@
 }
 
 .oak_add_element_modal_container_modal_buttons_container__cancel_button_container {
-    background-color: #FC394D;
-    border: 1px solid #FC394D;
+    background-color: #f06648;
+    border: 1px solid #f06648;
 }
 
 .oak_add_element_modal_container_modal_buttons_container__cancel_button_container:hover span {
-    color: #FC394D;
+    color: #f06648;
 }
 
 .oak_add_element_modal_container_modal_buttons_container__add_button_container:hover span, .oak_object_model_add_formula_modal_container_modal_buttons_container__ok_button_container:hover span {
-    color: #24E08C;
+    color: #96CEF0;
 }
 
 .oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text, .oak_add_element_modal_container_modal_buttons_container_add_button_container__text {
