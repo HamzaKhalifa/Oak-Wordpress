@@ -9,6 +9,9 @@
     display: flex;
     overflow: scroll;
     width: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-bottom: 17px;
 }
 
 .oak_graphs_configuration_element_container__single_element {
@@ -18,6 +21,14 @@
     margin-right: 10px;
     color: #003366;
     transition: all .2s ease-in-out;
+    white-space: nowrap;
+}
+
+.oak_graphs_configuration_configuration_element_container_performances__single_performance_container .oak_graphs_configuration_element_container__single_element {
+    margin-left: 25px;
+    margin-bottom: 10px;
+    width: 150px;
+    text-align: center;
 }
 
 .oak_graphs_configuration_element_container__single_element:hover {
@@ -26,6 +37,12 @@
 
 .oak_graphs_configuration_configuration_element_container_performances__single_performance_container {
     margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-left: 1px solid #003366;
+    margin-right: 10px;
+    padding-left: 5px;
 }
 
 .oak_graphs_configuration_element_container_single_element__considered {
@@ -40,11 +57,15 @@
 
 .oak_performance_title {
     font-size: 15px;
+    margin: 0px;
+    margin-bottom: 10px;
+    height: 80px;
+    width: 300px;
 }
 
 .oak_performance_container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .oak_performance_checkbox {
@@ -53,8 +74,6 @@
 }
 
 .oak_graph_canvas {
-    // width: 50%!important;
-    // height: auto!important;
     margin-top: 10px;
     border-radius: 10px;
     transition: all .2s ease-in-out;
@@ -71,6 +90,7 @@
     flex-wrap: wrap;
     justify-content: center;
     flex: 1;
+    padding-left: 10px;
 }
 
 .oak_selected_graph_container {
@@ -96,10 +116,12 @@
     margin-bottom: 20px;
 }
 
-.refresh_graph_button {
+.refresh_graph_button, .oak_save_graph_button {
     padding: 5px;
 }
 
 .oak_graphs_actual_config {
-    width: 100%;
+    width: 50%;
+    border-right: 1px solid #003366;
+    padding-right: 10px;
 }

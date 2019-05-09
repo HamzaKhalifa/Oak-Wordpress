@@ -90,6 +90,9 @@ function initializeSiteLanguage() {
 handleStickyMenu();
 function handleStickyMenu() {
     var header = document.querySelector('.oak_element_header');
+    if (!header) 
+        return;
+        
     var headerHeight = header.offsetHeight;
 
     var containerHeader = document.querySelector('.oak_add_element_container__header');

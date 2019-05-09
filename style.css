@@ -1416,6 +1416,10 @@ body .oak_select_container_with_filters__add_button {
   margin-bottom: 5px;
 }
 
+.oak_vertical_space {
+  margin-top: 50px;
+}
+
 .oak_system_bar {
   background-color: #000c3b;
 }
@@ -2088,13 +2092,13 @@ body .oak_select_container_with_filters__add_button {
   margin-top: 40px;
 }
 
-.oak_import_page_button, .next_button_container_next, .next_button_container_cancel, .refresh_graph_button {
+.oak_import_page_button, .next_button_container_next, .next_button_container_cancel, .refresh_graph_button, .oak_save_graph_button {
   color: #003366;
   border: 1px solid #003366;
   transition: all 0.2s ease-in-out;
 }
 
-.oak_import_page_button:hover, .next_button_container_next:hover, .next_button_container_cancel:hover, .refresh_graph_button:hover {
+.oak_import_page_button:hover, .next_button_container_next:hover, .next_button_container_cancel:hover, .refresh_graph_button:hover, .oak_save_graph_button:hover {
   cursor: pointer;
   background-color: #003366;
   color: white;
@@ -2237,6 +2241,9 @@ input.import_container__element_checkbox {
   display: flex;
   overflow: scroll;
   width: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-bottom: 17px;
 }
 
 .oak_graphs_configuration_element_container__single_element {
@@ -2246,6 +2253,14 @@ input.import_container__element_checkbox {
   margin-right: 10px;
   color: #003366;
   transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+.oak_graphs_configuration_configuration_element_container_performances__single_performance_container .oak_graphs_configuration_element_container__single_element {
+  margin-left: 25px;
+  margin-bottom: 10px;
+  width: 150px;
+  text-align: center;
 }
 
 .oak_graphs_configuration_element_container__single_element:hover {
@@ -2254,6 +2269,12 @@ input.import_container__element_checkbox {
 
 .oak_graphs_configuration_configuration_element_container_performances__single_performance_container {
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-left: 1px solid #003366;
+  margin-right: 10px;
+  padding-left: 5px;
 }
 
 .oak_graphs_configuration_element_container_single_element__considered {
@@ -2268,11 +2289,15 @@ input.import_container__element_checkbox {
 
 .oak_performance_title {
   font-size: 15px;
+  margin: 0px;
+  margin-bottom: 10px;
+  height: 80px;
+  width: 300px;
 }
 
 .oak_performance_container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .oak_performance_checkbox {
@@ -2297,6 +2322,7 @@ input.import_container__element_checkbox {
   flex-wrap: wrap;
   justify-content: center;
   flex: 1;
+  padding-left: 10px;
 }
 
 .oak_selected_graph_container {
@@ -2322,12 +2348,14 @@ input.import_container__element_checkbox {
   margin-bottom: 20px;
 }
 
-.refresh_graph_button {
+.refresh_graph_button, .oak_save_graph_button {
   padding: 5px;
 }
 
 .oak_graphs_actual_config {
-  width: 100%;
+  width: 50%;
+  border-right: 1px solid #003366;
+  padding-right: 10px;
 }
 
 /*# sourceMappingURL=style.css.map */

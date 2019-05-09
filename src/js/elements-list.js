@@ -41,10 +41,9 @@ function handleLanguagesSelectListener() {
                 } while (!foundElement && j >= 0);
             }
             var titleContainers = listRows[i].querySelectorAll('.oak_list_titles_container__title');
-            console.log(titleContainers);
             titleContainers[0].innerHTML = element[DATA.table + '_designation'] + language;
             for (var k = 0; k < 3; k++) {
-                titleContainers[k + 1].innerHTML = element[DATA.propertiesToShowInList[k].property] + language;
+                titleContainers[k + 1].innerHTML = element[DATA.filters[k].property] + language;
             }
         }
     })

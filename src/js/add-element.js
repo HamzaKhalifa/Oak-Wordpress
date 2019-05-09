@@ -394,7 +394,15 @@ function createElementData(state) {
 
         var revisionNumber = 1;
         if (DATA.revisions.length != 0) {
-            revisionNumber = parseInt(DATA.revisions[DATA.revisions.length - 1][DATA.table + '_revision_number']) + 1;
+            // Look for the higest revision:
+            var highestRevision = 1; 
+            for (var i = 0; i < DATA.revisions.length; i++) {
+                var revisionRevisionNumber = parseInt(DATA.revisions[i][DATA.table + '_revision_number']);
+                if ( revisionRevisionNumber > highestRevision ) {
+                    highestRevision = revisionRevisionNumber;
+                }
+            }
+            revisionNumber = highestRevision + 1;
         }
 
         var otherElements = [];
@@ -494,8 +502,9 @@ function createElementData(state) {
 
     // For the language: 
     elementData[DATA.table + '_content_language'] = document.querySelector('.oak_system_bar__languages_select').value;
-    
+
     console.log('Element data', elementData);
+    
     return elementData;
 }
 
@@ -600,7 +609,9 @@ function browseRevisionsSelectButton() {
                 }
 
                 for (var j = 0; j < DATA.otherElementProperties.associative_tab_instances.length; j++) {
-                    if ( selectedRevision[table + '_revision_number'] == DATA.otherElementProperties.associative_tab_instances[j][table + '_revision_number'] ) {
+                    if ( selectedRevision[table + '_revision_number'] == DATA.otherElementProperties.associative_tab_instances[j][table + '_revision_number'] 
+                        && DATA.otherElementProperties.associative_tab_instances[j][table + '_identifier'] == selectedRevision[table + '_identifier']
+                    ) {
                         // Lets get the other Element real name
                         var name = '';
                         for (var k = 0; k < DATA.otherElementProperties.elements.length; k++) {
@@ -1279,7 +1290,6 @@ function handleModalButtons() {
                     },
                     success: function(data) {
                         doneLoading();
-                        console.log(data);
                         window.location.reload();
                     },
                     error: function(error) {
@@ -1299,6 +1309,8 @@ function handleModalButtons() {
                     revisionWithoutId[revisionKeys[i]] = revision[revisionKeys[i]];
                 }
             }
+            // console.log('revision', revisionWithoutId);
+            // return;
             closeModals();
             setLoading();
             jQuery(document).ready(function() {
@@ -1314,7 +1326,6 @@ function handleModalButtons() {
                     },
                     success: function(data) {
                         doneLoading();
-                        console.log(data);
                         window.location.reload();
                     },
                     error: function(error) {

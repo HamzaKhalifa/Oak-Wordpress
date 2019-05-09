@@ -21,9 +21,9 @@
     <div class="oak_grouped_actions">
         <div>
             <select class="oak_grouped_actions__element oak_grouped_actions__first_property_filter" name="" id="">
-                <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == 'all' ) : echo('selected'); endif; endif; ?> value="all"><?php echo( $first_property['title'] ) ?></option>
+                <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == 'all' ) : echo('selected'); endif; endif; ?> value="all"><?php echo( $filters[0]['title'] ) ?></option>
                 <?php 
-                foreach( $first_property['choices'] as $choice ) : ?>
+                foreach( $filters[0]['choices'] as $choice ) : ?>
                     <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
                 <?php
                 endforeach;
@@ -31,9 +31,10 @@
             </select>
 
             <select class="oak_grouped_actions__element oak_grouped_actions__second_property_filter" name="" id="">
-                <option value="all"><?php echo( $second_property['title'] ); ?></option>
+                <option value="all"><?php echo( $filters[1]['title'] ); ?></option>
                 <?php
-                foreach( $second_property['choices'] as $choice ) : ?>
+                var_dump( $filters[1] );
+                foreach( $filters[1]['choices'] as $choice ) : ?>
                     <option <?php if( isset( $_GET['secondproperty'] ) ) : if ( $_GET['secondproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
                 <?php
                 endforeach;
@@ -52,8 +53,8 @@
             <select class="oak_grouped_actions__element oak_elements_list__sort_select" id="">
                 <option value="default"><?php _e( 'Dernière modification', Oak::$text_domain ); ?></option>
                 <option <?php if( isset( $_GET['sort'] ) ) : if( $_GET['sort'] == 'designation' ) : echo( 'selected' ); endif; endif; ?> value="designation"><?php _e( 'Désignation', Oak::$text_domain ); ?></option>
-                <option <?php if( isset( $_GET['sort'] ) ) : if( $_GET['sort'] == 'first_property' ) : echo( 'selected' ); endif; endif; ?> value="first_property"><?php echo( $first_property['title'] ); ?></option>
-                <option <?php if( isset( $_GET['sort'] ) ) : if( $_GET['sort'] == 'second_property' ) : echo( 'selected' ); endif; endif; ?> value="second_property"><?php echo( $second_property['title'] ); ?></option>
+                <option <?php if( isset( $_GET['sort'] ) ) : if( $_GET['sort'] == 'first_property' ) : echo( 'selected' ); endif; endif; ?> value="first_property"><?php echo( $filters[0]['title'] ); ?></option>
+                <option <?php if( isset( $_GET['sort'] ) ) : if( $_GET['sort'] == 'second_property' ) : echo( 'selected' ); endif; endif; ?> value="second_property"><?php echo( $filters[1]['title'] ); ?></option>
             </select>
         </div>
     </div>
@@ -66,15 +67,15 @@
             </div>
 
             <div class="oak_list_row__container">
-                <span class="oak_passiv oak_list_titles_container__title"><?php echo( $first_property['title'] ); ?></span>
+                <span class="oak_passiv oak_list_titles_container__title"><?php echo( $filters[0]['title'] ); ?></span>
             </div>
 
             <div class="oak_list_row__container">
-                <span class="oak_passiv oak_list_titles_container__title"><?php echo( $second_property['title'] ); ?></span>
+                <span class="oak_passiv oak_list_titles_container__title"><?php echo( $filters[1]['title'] ); ?></span>
             </div>
 
             <div class="oak_list_row__container">
-                <span class="oak_passiv oak_list_titles_container__title"><?php echo( $third_property['title'] ); ?></span>
+                <span class="oak_passiv oak_list_titles_container__title"><?php echo( $filters[2]['title'] ); ?></span>
             </div>
 
             <div class="oak_list_row__container">
@@ -98,14 +99,14 @@
             endif;
 
             if ( isset( $_GET['firstproperty'] ) && $_GET['firstproperty'] != 'all' ) :
-                $first_property_property_name = $first_property['property'];
+                $first_property_property_name = $filters[0]['property'];
                 if ( $element->$first_property_property_name != $_GET['firstproperty'] ) :
                     $show = false;
                 endif;
             endif;
 
             if ( isset( $_GET['secondproperty'] ) && $_GET['secondproperty'] != 'all' ) :
-                $second_property_property_name = $second_property['property'];
+                $second_property_property_name = $filters[1]['property'];
                 if ( $element->$second_property_property_name != $_GET['secondproperty'] ) :
                     $show = false;
                 endif;
@@ -121,9 +122,9 @@
                 if ( $_GET['sort'] == 'designation' ) :
                     $property = $table . '_designation';
                 elseif ( $_GET['sort'] == 'first_property' ) :
-                    $property = $first_property['property'];
+                    $property = $filters[0]['property'];
                 elseif ( $_GET['sort'] == 'second_property' ) :
-                    $property = $second_property['property'];
+                    $property = $filters[1]['property'];
                 endif;
                 update_option( 'oak_sort_property', $property );
 
@@ -148,9 +149,9 @@
                 $identifier_property = $table . '_identifier';
                 $designation_property = $table . '_designation';
                 $modification_time_property = $table . '_modification_time';
-                $the_first_property = $first_property['property'];
-                $the_second_property = $second_property['property'];
-                $the_third_property = $third_property['property'];
+                $the_first_property = $filters[0]['property'];
+                $the_second_property = $filters[1]['property'];
+                $the_third_property = $filters[2]['property'];
 
                 $designation_to_show = $element->$designation_property;
 

@@ -4,13 +4,13 @@
     margin-top: 40px;
 }
 
-.oak_import_page_button, .next_button_container_next, .next_button_container_cancel, .refresh_graph_button {
+.oak_import_page_button, .next_button_container_next, .next_button_container_cancel, .refresh_graph_button, .oak_save_graph_button {
     color: #003366;
     border: 1px solid #003366;
     transition: all .2s ease-in-out;
 }
 
-.oak_import_page_button:hover, .next_button_container_next:hover, .next_button_container_cancel:hover, .refresh_graph_button:hover {
+.oak_import_page_button:hover, .next_button_container_next:hover, .next_button_container_cancel:hover, .refresh_graph_button:hover, .oak_save_graph_button:hover {
     cursor: pointer;
     background-color: #003366;
     color: white;

@@ -657,6 +657,8 @@ $modification_time_property = $table . '_modification_time';
                 </div>
             <?php
             elseif ( $property['input_type'] == 'select_with_filters' ) : ?>
+            <div class="oak_vertical_space"></div>
+            <h2><?php echo( $property['description'] ); ?></h2>
             <div class="oak_select_container oak_select_container_with_filters_for_<?php echo( $property['name'] ); ?> oak_select_container_with_filters <?php if( isset( $property['hidden'] ) ) : if( $property['hidden'] == 'true' ) : echo('oak_hidden'); endif; endif; ?>">
                 <div class="additional_container">
                     <input type="text" hidden value="<?php echo( $last_revision->$property_name ); ?>" class="<?php echo( $table . '_' . $property['name'] . '_input' ) ?>" >
@@ -934,9 +936,9 @@ $modification_time_property = $table . '_modification_time';
         <?php
         if ( $table == 'form' || $table == 'model' ) :
             if ( $table == 'form' ) 
-                $other_properties = Oak::$form_other_elements;
+                $other_properties = Forms::$other_elements;
             if ( $table == 'model' )
-                $other_properties = Oak::$model_other_elements;
+                $other_properties = Models::$other_elements;
         ?>
             <div class="oak_other_elements_container">
                 <h2 class="oak_other_elements_container__title"><?php echo( $other_properties['title'] ); ?></h2>
@@ -1224,11 +1226,12 @@ $modification_time_property = $table . '_modification_time';
                         );
                     ?>
                     <?php 
-                    $which_properties = $table . '_properties'; 
-                    $class = new ReflectionClass('Oak');
-                    $properties = array_merge( $default_properties, $class->getStaticPropertyValue( $which_properties ) );
+                    // $which_properties = $table . '_properties'; 
+                    // $class = new ReflectionClass('Oak');
+                    // $properties = array_merge( $default_properties, $class->getStaticPropertyValue( $which_properties ) );
+                    $revision_properties = array_merge( $default_properties, $properties );
                     
-                    foreach( $properties as $property ) : ?>
+                    foreach( $revision_properties as $property ) : ?>
                         <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                             <label><?php echo( $property['description'] ); ?></label>
                             <input name="type" type="text" disabled class="oak_revision_<?php echo( $property['name'] ); ?>_field_current" value="">
@@ -1268,7 +1271,7 @@ $modification_time_property = $table . '_modification_time';
                     <h3><?php _e( 'Données de la révision', Oak::$text_domain); ?></h3>
                     <!-- Liste of fields here -->
                     <?php
-                    foreach( $properties as $property ) : ?>
+                    foreach( $revision_properties as $property ) : ?>
                         <div class="oak_add_element_modal_container_modal_content_revisions_data_content__single_data">
                             <label><?php echo( $property['description'] ); ?></label>
                             <input name="type" type="text" disabled class="oak_revision_<?php echo( $property['name'] ); ?>_field" value="">

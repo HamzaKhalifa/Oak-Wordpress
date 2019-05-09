@@ -401,3 +401,7 @@ div {
     width: 100%;
     z-index: 9999;
 }
+
+.oak_post_objects_selector, .oak_post_good_practices_selector, .oak_post_quantis_selector {
+    max-height: 300px;
+}

@@ -316,7 +316,12 @@ function handleGraphConfigurationScreen() {
         var singleLabel = document.createElement('span');
         singleLabel.className = 'oak_graphs_configuration_label oak_graphs_configuration_element_container__single_element';
         singleLabel.innerHTML = selectedData.quantis[i].quanti_designation;
+        singleLabel.setAttribute('identifier', selectedData.quantis[i].quanti_identifier);
         selectedData.labels.push(selectedData.quantis[i].quanti_designation);
+        selectedData.labels.push({
+            labelDesignation: selectedData.quantis[i].quanti_designation,
+            labelIdentifier: selectedData.quantis[i].quanti_identifier
+        });
 
         labelsContainer.append(singleLabel);
     }
@@ -326,6 +331,7 @@ function handleGraphConfigurationScreen() {
 
         var singlePerformance = document.createElement('div');
         singlePerformance.className = 'oak_graphs_configuration_configuration_element_container_performances__single_performance_container';
+        singlePerformance.setAttribute('identifier', selectedData.performances[i].performance_identifier);
 
         var performanceTitleContainer = document.createElement('div');
         performanceTitleContainer.className = 'oak_performance_container';
@@ -350,6 +356,8 @@ function handleGraphConfigurationScreen() {
             singleYear.className = 'oak_graphs_configuration_year oak_graphs_configuration_element_container__single_element';
             var yearData = results[j].split(':');
             yearsData.push(yearData);
+            singleYear.setAttribute('year', yearData[0]);
+            singleYear.setAttribute('value', yearData[1]);
             singleYear.innerHTML = 'Année ' + yearData[0] + ': ' + yearData[1];
             
             singlePerformance.append(singleYear);
@@ -358,8 +366,10 @@ function handleGraphConfigurationScreen() {
         for (var j = 0; j < selectedData.quantis.length; j++) {
             if (selectedData.quantis[j].quanti_identifier == selectedData.performances[i].performance_quantis) {
                 selectedData.values.push({
-                    label: selectedData.quantis[j].quanti_designation,
-                    performanceName: selectedData.performances[i].performance_designation,
+                    labelDesignation: selectedData.quantis[j].quanti_designation,
+                    labelIdentifier: selectedData.quantis[j].quanti_identifier,
+                    performanceDesignation: selectedData.performances[i].performance_designation,
+                    performanceIdentifier: selectedData.performances[i].performance_identifier,
                     yearsData: yearsData
                 });
 
@@ -390,34 +400,43 @@ function generateChart(config) {
         var isSelected = false;
         var labels = document.querySelectorAll('.oak_graphs_configuration_label');
         for (var j = 0; j < labels.length; j++) {
-            if (labels[j].innerHTML == config.labels[i] && containsClass(labels[j], 'oak_graphs_configuration_element_container_single_element__considered')) 
+            if (labels[j].getAttribute('identifier') == config.labels[i].labelIdentifier && containsClass(labels[j], 'oak_graphs_configuration_element_container_single_element__considered')) 
                 isSelected = true;
         }
         if (isSelected) {
-            allDataGraphData.selectedLabels.push(config.labels[i]);
+            allDataGraphData.selectedLabels.push(config.labels[i].labelDesignation);
             for (var j = 0; j < config.values.length; j++) {
-                if (config.values[j].label == config.labels[i]) {
+                if (config.values[j].labelIdentifier == config.labels[i].labelIdentifier) {
                     enteredOnce = true;
                     var actualLabels = [];
                     var actualData = [];
                     var performanceContainers = document.querySelectorAll('.oak_graphs_configuration_configuration_element_container_performances__single_performance_container');
                     var performanceContainer = null;
+
+                    // Lets look for the performance container associated with the current value to see if it is checked.
                     for (var k = 0; k < performanceContainers.length; k++) {
-                        var title = performanceContainers[k].querySelector('h3').innerHTML;
-                        if (title == config.values[j].performanceName + ' (' + config.labels[i] + ')') {
+                        if (performanceContainers[k].getAttribute('identifier') == config.values[j].performanceIdentifier) {
                             performanceContainer = performanceContainers[k];
                         }
+                        // var title = performanceContainers[k].querySelector('h3').innerHTML;
+                        // if (title == config.values[j].performanceDesignation + ' (' + config.labels[i] + ')') {
+                        //     performanceContainer = performanceContainers[k];
+                        // }
                     }
                     if (performanceContainer && performanceContainer.querySelector('.oak_performance_checkbox').checked == true) {
                         allDataGraphData.selectedPerformances.push({
-                            labelName: config.labels[i],
-                            performanceName: config.values[j].performanceName,
+                            labelDesignation: config.labels[i].labelDesignation,
+                            labelIdentifier: config.labels[i].labelIdentifier,
+                            performanceDesignation: config.values[j].performanceDesignation,
+                            performanceIdentifier: config.values[j].performanceIdentifier,
                             performanceValues: []
                         });
                         for (var k = 0; k < config.values[j].yearsData.length; k++) {
                             var yearsContainers = performanceContainer.querySelectorAll('.oak_graphs_configuration_year');
                             for (var m = 0; m < yearsContainers.length; m++) {
-                                if (yearsContainers[m].innerHTML == 'Année ' + config.values[j].yearsData[k][0] + ': ' + config.values[j].yearsData[k][1] && containsClass(yearsContainers[m], 'oak_graphs_configuration_element_container_single_element__considered')) {
+                                console.log('test', config.values[j].yearsData[k]);
+                                if (yearsContainers[m].getAttribute('year') == config.values[j].yearsData[k][0] && yearsContainers[m].getAttribute('value') == config.values[j].yearsData[k][1]
+                                    && containsClass(yearsContainers[m], 'oak_graphs_configuration_element_container_single_element__considered')) {
                                     actualLabels.push(config.values[j].yearsData[k][0]);
                                     actualData.push(config.values[j].yearsData[k][1]);
                                     allDataGraphData.selectedPerformances[allDataGraphData.selectedPerformances.length - 1].performanceValues.push({
@@ -427,7 +446,7 @@ function generateChart(config) {
                                 }
                             }
                         }
-                        var graphTitle = config.values[j].label + '; ' + config.values[j].performanceName;
+                        var graphTitle = config.values[j].labelDesignation + ';\n' + config.values[j].performanceDesignation;
                         var chartCanvas = createChartCanvas(actualLabels, actualData, config.graph, graphTitle);
                         createChart(chartCanvas, config.graph, graphTitle, actualLabels, actualData, {});
                     }
@@ -443,14 +462,13 @@ function generateChart(config) {
         var actualAverageData = [];
         for (var j = 0; j < allDataGraphData.selectedPerformances.length; j++) {
 
-            if (allDataGraphData.selectedPerformances[j].labelName == allDataGraphData.selectedLabels[i]) {
-                actualLabels.push(allDataGraphData.selectedPerformances[j].performanceName);
+            if (allDataGraphData.selectedPerformances[j].labelDesignation == allDataGraphData.selectedLabels[i]) {
+                actualLabels.push(allDataGraphData.selectedPerformances[j].performanceDesignation);
                 var averageValue = 0;
                 var sum = 0;
                 for (var k = 0; k < allDataGraphData.selectedPerformances[j].performanceValues.length; k++) {
                     sum += parseFloat(allDataGraphData.selectedPerformances[j].performanceValues[k].value);
                 }
-                console.log(allDataGraphData.selectedPerformances[j].performanceName + ' sum: ' + sum);
                 if ( allDataGraphData.selectedPerformances[j].performanceValues.length > 0 ) {
                     averageValue = parseFloat(sum) / parseFloat(allDataGraphData.selectedPerformances[j].performanceValues.length);
                 }
@@ -539,6 +557,8 @@ function handleConfigurationElementsListeners() {
             } else {
                 this.classList.add('oak_graphs_configuration_element_container_single_element__considered');
             }
+            console.log('labels', selectedData.labels);
+            console.log('Values', selectedData.values);
             generateChart({
                 graph: selectedData.graph.graph_identifier,
                 labels: selectedData.labels,
@@ -575,7 +595,20 @@ handleRefreshGraphButton();
 function handleRefreshGraphButton() {
     var refreshGraphButton = document.querySelector('.refresh_graph_button');
     refreshGraphButton.addEventListener('click', function() {
-        var parametersInputs = document.querySelectorAll('.oak_single_parameter__input');
+        var graphParameters = getGraphParameters();
+
+        var datasetProperties = graphParameters.datasetProperties;
+        var labels = graphParameters.labels;
+        var data = graphParameters = graphParameters.data;
+        
+        
+        var selectedChartCanvas = document.querySelector('.oak_selected_graph');
+        createChart(selectedChartCanvas, chosenGraphData.graph, chosenGraphData.title, labels, data, datasetProperties);
+    });
+}
+
+function getGraphParameters() {
+    var parametersInputs = document.querySelectorAll('.oak_single_parameter__input');
         var datasetProperties = [];
         for (var i = 0; i < parametersInputs.length; i++) {
             var value = parametersInputs[i].value;
@@ -594,10 +627,71 @@ function handleRefreshGraphButton() {
         // Lets get the labels: the before last input:
         var labels = parametersInputs[parametersInputs.length - 2].value.split(',');
         var data = parametersInputs[parametersInputs.length - 1].value.split(',');
+
+        return({
+            datasetProperties,
+            labels,
+            data
+        });
+}
+
+function createIdentifier() {
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+  
+    for (var i = 0; i < 20; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    
+    return text;
+}
+
+handleSaveGraphButton();
+function handleSaveGraphButton() {
+    var saveButton = document.querySelector('.oak_save_graph_button');
+    saveButton.addEventListener('click', function() {
+        setLoading();
+        var graphParameters = getGraphParameters();
+        // console.log('choseGraphData graph', chosenGraphData.graph);
+        // console.log('chosenGraphData title', chosenGraphData.title);
+        // console.log('labels', graphParameters.labels);
+        // console.log('data', graphParameters.data);
+        // console.log('data set properties', graphParameters.datasetProperties);
+        var labelsString = '';
+        var dataString = '';
+        for (var i = 0; i < graphParameters.labels.length; i++) {
+            var delimiter = '|';
+            if ( i == graphParameters.labels.length - 1 )
+                delimiter = '';
+            labelsString += graphParameters.labels[i] + delimiter;
+            if ( graphParameters.data[i] )
+                dataString += graphParameters.data[i] + delimiter;
+        }
+        var graphData = {
+            graph_title: chosenGraphData.title,
+            graph_identifier: createIdentifier(),
+            graph_labels: labelsString,
+            graph_data: dataString
+        }
         
-        var selectedChartCanvas = document.querySelector('.oak_selected_graph');
-        createChart(selectedChartCanvas, chosenGraphData.graph, chosenGraphData.title, labels, data, datasetProperties);
-    });
+        jQuery(document).ready(function() {
+            jQuery.ajax({
+                url: DATA.ajaxUrl,
+                type: 'POST',
+                data: {
+                    'action': 'oak_save_graph',
+                    'data': JSON.stringify(graphData)
+                },
+                success: function(data) {
+                    doneLoading();
+                    console.log(data);
+                },
+                error: function(error) {
+                    console.log(error);
+                    doneLoading();
+                }
+            });
+        });
+    })
 }
 
 // Everything related to our modal

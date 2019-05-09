@@ -53,6 +53,8 @@
             <span class="refresh_graph_button"><?php _e( 'Rafraîchir', Oak::$text_domain ); ?></span>
 
             <canvas class="oak_selected_graph"></canvas>
+
+            <span class="oak_save_graph_button"><?php _e( 'Sauvegarder le graphe', Oak::$text_domain ); ?></span>
         </div>
         
     </div>
