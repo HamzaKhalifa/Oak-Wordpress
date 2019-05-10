@@ -38,7 +38,7 @@ Quantis::$properties = array (
         'type' => 'text',
         'input_type' => 'select_with_filters',
         'select_multiple' => 'true',
-        'can_add_more' => 'false',
+        'can_add_more' => 'true',
         'choices' => Oak::$quantis_array,
         'filters' => [
             array(
@@ -52,10 +52,39 @@ Quantis::$properties = array (
                 'name' => 'object'
             )
         ],
-        'placeholder' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
-        'description' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
+        'placeholder' => __( 'Indicateurs de niveau supérieur:', Oak::$text_domain ), 
+        'description' => __( 'Indicateurs de niveau supérieur:', Oak::$text_domain ), 
         'width' => '100',
         'depends' => array (
+            array( 'name' => 'depends', 'values' => array( 'true' ) )
+        )
+    ),
+    array(
+        'name' => 'parent_object', 
+        'property_name' => 'quanti_parent_object', 
+        'type' => 'text',
+
+        'input_type' => 'select_with_filters',
+        'select_multiple' => 'true',
+        'can_add_more' => 'true',
+        'choices' => Oak::$objects_array,
+        'filters' => [
+            // array(
+            //     'description' => __( 'Publications Cadres RSE', Oak::$text_domain ),
+            //     'choices' => Oak::$frame_publications_array,
+            //     'name' => 'publication'
+            // ),
+            // array(
+            //     'description' => __( 'Object', Oak::$text_domain ),
+            //     'choices' => Oak::$objects_array,
+            //     'name' => 'object'
+            // )
+        ],
+
+        'placeholder' => __( 'Objets de niveau supérieur:', Oak::$text_domain ), 
+        'description' => __( 'Objets de niveau supérieur:', Oak::$text_domain ), 
+        'width' => '100',
+        'depends' => array(
             array( 'name' => 'depends', 'values' => array( 'true' ) )
         )
     ),
@@ -134,6 +163,42 @@ Quantis::$properties = array (
         ],
         'placeholder' => __( 'Indicateurs proches', Oak::$text_domain ), 
         'description' => __( 'Indicateurs proches', Oak::$text_domain ), 
+        'width' => '100',
+        'depends' => array (
+            array( 'name' => 'close', 'values' => array( 'true' ) )
+        )
+    ),
+    array (
+        'name' => 'close_objects', 
+        'property_name' => 'quanti_close_objects', 
+        'type' => 'text',
+        'input_type' => 'select_with_filters',
+        'can_add_more' => 'true',
+        'select_multiple' => 'true',
+        'choices' => Oak::$objects_array,
+        'filters' => [
+            // array (
+            //     'description' => __( 'Type d\'indicateur', Oak::$text_domain ),
+            //     'choices' => array( 
+            //         array ( 'value' => '0', 'innerHTML' => __( 'Aucun type d\'indicateur n\'est sélectionné', Oak::$text_domain ) ), 
+            //         array ( 'value' => 'quanti', 'innerHTML' => __( 'Quantitative', Oak::$text_domain ) ), 
+            //         array ( 'value' => 'quanti', 'innerHTML' => __( 'quantitative', Oak::$text_domain ) )
+            //     ),
+            //     'name' => 'indicator_type'
+            // ),
+            // array(
+            //     'description' => __( 'Publications Cadres RSE', Oak::$text_domain ),
+            //     'choices' => Oak::$frame_publications_array,
+            //     'name' => 'publication'
+            // ),
+            // array(
+            //     'description' => __( 'Object', Oak::$text_domain ),
+            //     'choices' => Oak::$objects_array,
+            //     'name' => 'object'
+            // )
+        ],
+        'placeholder' => __( 'Objets proches', Oak::$text_domain ), 
+        'description' => __( 'Objets proches', Oak::$text_domain ), 
         'width' => '100',
         'depends' => array (
             array( 'name' => 'close', 'values' => array( 'true' ) )

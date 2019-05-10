@@ -40,7 +40,7 @@ Qualis::$properties = array (
 
         'input_type' => 'select_with_filters',
         'select_multiple' => 'true',
-        'can_add_more' => 'false',
+        'can_add_more' => 'true',
         'choices' => Oak::$qualis_array,
         'filters' => [
             array(
@@ -55,8 +55,37 @@ Qualis::$properties = array (
             )
         ],
 
-        'placeholder' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
-        'description' => __( 'Indicateur de niveau supérieur:', Oak::$text_domain ), 
+        'placeholder' => __( 'Indicateurs de niveau supérieur:', Oak::$text_domain ), 
+        'description' => __( 'Indicateurs de niveau supérieur:', Oak::$text_domain ), 
+        'width' => '100',
+        'depends' => array(
+            array( 'name' => 'depends', 'values' => array( 'true' ) )
+        )
+    ),
+    array(
+        'name' => 'parent_object', 
+        'property_name' => 'quali_parent_object', 
+        'type' => 'text',
+
+        'input_type' => 'select_with_filters',
+        'select_multiple' => 'true',
+        'can_add_more' => 'true',
+        'choices' => Oak::$objects_array,
+        'filters' => [
+            // array(
+            //     'description' => __( 'Publications Cadres RSE', Oak::$text_domain ),
+            //     'choices' => Oak::$frame_publications_array,
+            //     'name' => 'publication'
+            // ),
+            // array(
+            //     'description' => __( 'Object', Oak::$text_domain ),
+            //     'choices' => Oak::$objects_array,
+            //     'name' => 'object'
+            // )
+        ],
+
+        'placeholder' => __( 'Objets de niveau supérieur:', Oak::$text_domain ), 
+        'description' => __( 'Objets de niveau supérieur:', Oak::$text_domain ), 
         'width' => '100',
         'depends' => array(
             array( 'name' => 'depends', 'values' => array( 'true' ) )

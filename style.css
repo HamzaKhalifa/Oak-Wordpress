@@ -1404,9 +1404,7 @@ body .oak_select_container__filters_container .text_field_description {
 }
 
 body .oak_select_container_with_filters__add_button {
-  bottom: -50px;
-  top: initial;
-  left: 0px;
+  position: initial;
 }
 
 .oak_select_container_with_filters__single_element {
@@ -1418,6 +1416,29 @@ body .oak_select_container_with_filters__add_button {
 
 .oak_vertical_space {
   margin-top: 50px;
+}
+
+.oak_select_container_with_filters__title {
+  margin-right: 20px;
+}
+
+.oak_select_container_with_filters_single_element__delete_button {
+  position: absolute;
+  right: -10px;
+  top: -15px;
+  z-index: 66;
+  font-size: 30px;
+  color: #f06648;
+}
+
+.oak_select_container_with_filters_single_element__delete_button:hover {
+  cursor: pointer;
+}
+
+.oak_select_container_with_filters__title_container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
 .oak_system_bar {

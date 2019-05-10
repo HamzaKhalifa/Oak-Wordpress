@@ -503,8 +503,6 @@ function createElementData(state) {
     // For the language: 
     elementData[DATA.table + '_content_language'] = document.querySelector('.oak_system_bar__languages_select').value;
 
-    console.log('Element data', elementData);
-    
     return elementData;
 }
 
@@ -910,10 +908,10 @@ handleSelectFilters();
 function handleSelectFilters() {
     var filtersContainers = document.querySelectorAll('.oak_select_container__filters_container');
     for (var i = 0; i < filtersContainers.length; i++) {
-        var theActualSelect = filtersContainers[i].parentNode.querySelector('select');
         var singleFilters = filtersContainers[i].querySelectorAll('select');
         for (var j = 0; j < singleFilters.length; j++) {
             singleFilters[j].addEventListener('change', function() {
+                var theActualSelect = this.parentNode.parentNode.parentNode.querySelector('.oak_select_container_with_filters_single_element__data_select');
                 var theActualSelectOptions = theActualSelect.querySelectorAll('option');
                 for (var k = 0; k < theActualSelectOptions.length; k++) {
                     var hide = false;
@@ -935,12 +933,24 @@ function handleSelectFilters() {
     }
 }
 
+function handleSelectFiltersDeleteButtons() {
+    var deleteButtons = document.querySelectorAll('.oak_select_container_with_filters_single_element__delete_button');
+    for (var i = 0; i < deleteButtons.length; i++) {
+        deleteButtons[i].addEventListener('click', function() {
+            this.parentNode.remove();
+        });
+    }
+}
+
 // Get select filters views:
 var selectFiltersViews = [];
 getSelectFilterViews();
 function getSelectFilterViews() {
     var selectFiltersSingleElements = document.querySelectorAll('.oak_select_container_with_filters__single_element');
     for (var i = 0; i < selectFiltersSingleElements.length; i++) {
+        // Add a margin bottom to the parent component:
+        // selectFiltersSingleElements[i].parentNode.parentNode.style.marginBottom = '40px';
+
         selectFiltersViews.push(selectFiltersSingleElements[i].innerHTML);
         if ( selectFiltersSingleElements[i].getAttribute('can-add-more') == 'true' )
             selectFiltersSingleElements[i].remove();
@@ -969,6 +979,7 @@ function initializeSelectFilters() {
                     theContainer.append(newSingleElement);
                     newSingleElement.querySelector('.oak_select_container_with_filters_single_element__data_select').value = lastRevisionValues[k];
                     handleSelectFilters();
+                    handleSelectFiltersDeleteButtons();
                 }
                 numberOfPropertiesWithSelectFilters++;
             }
@@ -986,8 +997,9 @@ function selectFiltersAddButtons() {
             var newSingleElement = document.createElement('div');
             newSingleElement.className = 'oak_select_container_with_filters__single_element';
             newSingleElement.innerHTML = selectFiltersViews[this.getAttribute('index')];
-            this.parentNode.append(newSingleElement);
+            this.parentNode.parentNode.append(newSingleElement);
             handleSelectFilters();
+            handleSelectFiltersDeleteButtons();
         })
     }
 }
@@ -1309,8 +1321,6 @@ function handleModalButtons() {
                     revisionWithoutId[revisionKeys[i]] = revision[revisionKeys[i]];
                 }
             }
-            // console.log('revision', revisionWithoutId);
-            // return;
             closeModals();
             setLoading();
             jQuery(document).ready(function() {

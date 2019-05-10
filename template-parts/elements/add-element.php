@@ -657,18 +657,21 @@ $modification_time_property = $table . '_modification_time';
                 </div>
             <?php
             elseif ( $property['input_type'] == 'select_with_filters' ) : ?>
-            <div class="oak_vertical_space"></div>
-            <h2><?php echo( $property['description'] ); ?></h2>
             <div class="oak_select_container oak_select_container_with_filters_for_<?php echo( $property['name'] ); ?> oak_select_container_with_filters <?php if( isset( $property['hidden'] ) ) : if( $property['hidden'] == 'true' ) : echo('oak_hidden'); endif; endif; ?>">
+                <div class="oak_select_container_with_filters__title_container">
+                    <h2 class="oak_select_container_with_filters__title"><?php echo( $property['description'] ); ?></h2>
+
+                    <div class="<?php if ( $property['can_add_more'] == 'false' ) : echo('oak_hidden'); endif; ?> oak_select_container_with_filters__add_button">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+                
                 <div class="additional_container">
                     <input type="text" hidden value="<?php echo( $last_revision->$property_name ); ?>" class="<?php echo( $table . '_' . $property['name'] . '_input' ) ?>" >
                 </div>
 
-                <div class="<?php if ( $property['can_add_more'] == 'false' ) : echo('oak_hidden'); endif; ?> oak_select_container_with_filters__add_button">
-                    <i class="fas fa-plus"></i>
-                </div>
-
                 <div can-add-more="<?php echo( $property['can_add_more'] ); ?>" class="oak_select_container_with_filters__single_element">
+                    <i class="fas fa-times oak_select_container_with_filters_single_element__delete_button"></i>
                     <div class="additional_container">
                         <select type="text" class="oak_add_element_container__input oak_select_container_with_filters_single_element__data_select">
                             <?php
@@ -829,8 +832,6 @@ $modification_time_property = $table . '_modification_time';
             if ( !$close_div && $first ) :
                 $first = false;
             endif;
-                
-                
         endforeach;
 
         // For the model selector:

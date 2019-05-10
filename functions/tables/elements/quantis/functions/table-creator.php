@@ -16,11 +16,13 @@ $quantis_sql = "CREATE TABLE $quantis_table_name (
     quanti_object varchar(555),
     quanti_depends varchar(555),
     quanti_parent varchar(555),
+    quanti_parent_object varchar(555),
     quanti_numerotation_type varchar(555),
     quanti_numerotation varchar(555),
     quanti_description LONGTEXT,
     quanti_close varchar(555),
     quanti_close_indicators varchar(555),
+    quanti_close_objects varchar(555),
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
