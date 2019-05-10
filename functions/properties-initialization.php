@@ -13,11 +13,12 @@ Oak::$social_medias = array(
 Oak::$publications_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucune Publication sélectionnée', Oak::$text_domain ) ) ];
 Oak::$frame_publications_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucune Publication sélectionnée', Oak::$text_domain ) ) ];
 foreach( Oak::$publications_without_redundancy as $publication ) :
-    $publications_array[] = array( 'value' => $publication->publication_identifier, 'innerHTML' => $publication->publication_designation );
+    Oak::$publications_array[] = array( 'value' => $publication->publication_identifier, 'innerHTML' => $publication->publication_designation );
     if ( $publication->publication_report_or_frame == 'frame' ) :
         Oak::$frame_publications_array[] = array( 'value' => $publication->publication_identifier, 'innerHTML' => $publication->publication_designation );
     endif;
 endforeach;
+
 
 Oak::$organizations_array = [];
 foreach( Oak::$organizations_without_redundancy as $organization ) :

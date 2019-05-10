@@ -8,11 +8,11 @@ include $template_directory . '/functions/tables/elements/forms/index.php';
 include $template_directory . '/functions/tables/elements/forms-and-fields/index.php';
 include $template_directory . '/functions/tables/elements/models/index.php';
 include $template_directory . '/functions/tables/elements/models-and-forms/index.php';
-include $template_directory . '/functions/tables/elements/goodpractices/index.php';
 include $template_directory . '/functions/tables/elements/performances/index.php';
 
 include $template_directory . '/functions/tables/elements/organizations/index.php';
 include $template_directory . '/functions/tables/elements/publications/index.php';
+include $template_directory . '/functions/tables/elements/goodpractices/index.php';
 include $template_directory . '/functions/tables/elements/taxonomies/index.php';
 include $template_directory . '/functions/tables/elements/terms/index.php';
 include $template_directory . '/functions/tables/elements/glossaries/index.php';
