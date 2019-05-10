@@ -408,4 +408,5 @@ div {
 
 .oak_post_search_input, .oak_post_selector {
     width: 100%;
+    box-sizing: border-box;
 }
