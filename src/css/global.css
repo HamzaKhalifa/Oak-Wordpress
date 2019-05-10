@@ -405,3 +405,7 @@ div {
 .oak_post_objects_selector, .oak_post_good_practices_selector, .oak_post_quantis_selector {
     max-height: 300px;
 }
+
+.oak_post_search_input, .oak_post_selector {
+    width: 100%;
+}

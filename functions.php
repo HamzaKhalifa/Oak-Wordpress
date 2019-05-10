@@ -698,8 +698,8 @@ class Oak {
         $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
         ?>
         <div>
-            <input type="text" placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_post_objects_selector_search_input">
-            <select multiple name="objects_selector[]" class="oak_post_objects_selector" size="<?php echo( count( Oak::$all_objects_without_redundancy ) ); ?>">
+            <input type="text" placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_post_search_input oak_post_objects_selector_search_input">
+            <select multiple name="objects_selector[]" class="oak_post_selector oak_post_objects_selector" size="<?php echo( count( Oak::$all_objects_without_redundancy ) ); ?>">
                 <?php
                 foreach( Oak::$all_objects_without_redundancy as $object ) :
                     $selected = '';

@@ -29,10 +29,10 @@ class Good_Practices {
     public static function add_good_practice_meta_box_view( $post, $args ) {
         $selected_goodpractices = get_post_meta( get_the_ID(), 'good_practices_selector' ) ? get_post_meta( get_the_ID(), 'good_practices_selector' ) [0] : [];
         ?>
-        <input type="text" placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_post_goodpractices_selector_search_input">
+        <input type="text" placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_post_search_input oak_post_goodpractices_selector_search_input">
         <br>
         <div>
-            <select multiple name="good_practices_selector[]" class="oak_post_good_practices_selector" size="<?php echo( count( Oak::$goodpractices_without_redundancy ) ); ?>">
+            <select multiple name="good_practices_selector[]" class="oak_post_selector oak_post_good_practices_selector" size="<?php echo( count( Oak::$goodpractices_without_redundancy ) ); ?>">
                 <?php
                 foreach( Oak::$goodpractices_without_redundancy as $goodpractice ) :
                     $selected = '';

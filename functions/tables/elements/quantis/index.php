@@ -30,9 +30,9 @@ class Quantis {
         $selected_quantis = get_post_meta( get_the_ID(), 'quantis_selector' ) ? get_post_meta( get_the_ID(), 'quantis_selector' ) [0] : [];
         ?>
         <div>
-            <input type="text" placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_post_quantis_selector_search_input">
+            <input type="text" placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_post_search_input oak_post_quantis_selector_search_input">
             <br>
-            <select multiple name="quantis_selector[]" class="oak_post_quantis_selector" size="<?php echo( count( Oak::$quantis_without_redundancy ) ); ?>">
+            <select multiple name="quantis_selector[]" class="oak_post_selector oak_post_quantis_selector" size="<?php echo( count( Oak::$quantis_without_redundancy ) ); ?>">
                 <?php
                 foreach( Oak::$quantis_without_redundancy as $quanti ) :
                     $selected = '';
