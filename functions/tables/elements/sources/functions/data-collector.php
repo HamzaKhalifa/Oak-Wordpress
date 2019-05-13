@@ -8,15 +8,15 @@ Oak::$sources = $wpdb->get_results ( "
 " );
 $reversed_sources = array_reverse( Oak::$sources );
 $sources_without_redundancy = [];
-foreach( $reversed_sources as $goodpractice ) :
+foreach( $reversed_sources as $source ) :
     $added = false;
-    foreach( $sources_without_redundancy as $goodpractice_without_redundancy ) :
-        if ( $goodpractice_without_redundancy->goodpractice_identifier == $goodpractice->goodpractice_identifier) :
+    foreach( $sources_without_redundancy as $source_without_redundancy ) :
+        if ( $source_without_redundancy->source_identifier == $source->source_identifier) :
             $added = true;
         endif;
     endforeach;
     if ( !$added ) :
-        $sources_without_redundancy[] = $goodpractice;
+        $sources_without_redundancy[] = $source;
     endif;
 endforeach;
 Oak::$sources_without_redundancy = $sources_without_redundancy;

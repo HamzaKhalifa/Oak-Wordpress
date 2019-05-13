@@ -5,8 +5,10 @@ function handleSearchInputs() {
     var goodPracticeInput = document.querySelector('.oak_post_goodpractices_selector_search_input');
 
     var objectsInput = document.querySelector('.oak_post_objects_selector_search_input');
+
+    var sourcesInput = document.querySelector('.oak_post_objects_selector_search_input');
     
-    var searchElements = [quantisSearchInput, goodPracticeInput, objectsInput];
+    var searchElements = [quantisSearchInput, goodPracticeInput, objectsInput, sourcesInput];
     for (var i = 0; i < searchElements.length; i++) {
         searchElements[i].oninput = function() {
             search(this);
