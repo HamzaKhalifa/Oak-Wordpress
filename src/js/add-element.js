@@ -503,6 +503,8 @@ function createElementData(state) {
     // For the language: 
     elementData[DATA.table + '_content_language'] = document.querySelector('.oak_system_bar__languages_select').value;
 
+    console.log(elementData);
+
     return elementData;
 }
 
@@ -1302,6 +1304,7 @@ function handleModalButtons() {
                     },
                     success: function(data) {
                         doneLoading();
+                        console.log(data);
                         window.location.reload();
                     },
                     error: function(error) {

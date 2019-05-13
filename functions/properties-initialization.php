@@ -326,5 +326,6 @@ Qualis::properties_initialization();
 Quantis::properties_initialization();
 Good_Practices::properties_initialization();
 Performances::properties_initialization();
+Sources::properties_initialization();
 Terms::properties_initialization();
 Glossaries::properties_initialization();

@@ -19,6 +19,7 @@ class Oak {
     public static $forms_and_fields_table_name;
     public static $models_and_forms_table_name;
     public static $graphs_table_name;
+    public static $sources_table_name;
 
     public static $revisions;
 
@@ -109,6 +110,10 @@ class Oak {
     public static $goodpractice_first_property;
     public static $goodpractice_second_property;
     public static $goodpractice_third_property;
+
+    public static $sources;
+    public static $sources_without_redundancy;
+    public static $source_properties;
 
     public static $performances;
     public static $performances_without_redundancy;
@@ -512,12 +517,20 @@ class Oak {
                 $properties = array_merge( $properties, Good_Practices::$properties );
                 $filters = Good_Practices::$filters;
             endif;
+            
             if ( $_GET['elements'] == 'performances' ) :
                 $table = 'performance';
                 $table_in_plural = 'performances';
                 $elements = Oak::$performances;
                 $properties = array_merge( $properties, Performances::$properties );
                 $filters = Performances::$filters;
+            endif;
+            if ( $_GET['elements'] == 'sources' ) :
+                $table = 'source';
+                $table_in_plural = 'sources';
+                $elements = Oak::$sources;
+                $properties = array_merge( $properties, Sources::$properties );
+                $filters = Sources::$filters;
             endif;
             if ( $_GET['elements'] == 'objects' ) :
                 $table = 'object';
@@ -1453,6 +1466,12 @@ class Oak {
                 $title = __( 'Ajouter une Donnée de performance', Oak::$text_domain );
                 $elements = Oak::$performances_without_redundancy;
             break;
+            case 'sources':
+                $properties = Sources::$properties;
+                $table = 'source';
+                $title = __( 'Ajouter une Source', Oak::$text_domain );
+                $elements = Oak::$sources_without_redundancy;
+            break;
             case 'glossaries':
                 $properties = Glossaries::$properties;
                 $table = 'glossary';
@@ -1572,6 +1591,13 @@ class Oak {
                 $elements_with_redundancy = Oak::$performances;
                 $table = 'performance';
                 $filters = Performances::$filters;
+            break;
+            case 'sources' :
+                $title = __( 'Sources', Oak::$text_domain );
+                $elements = Oak::$sources_without_redundancy;
+                $elements_with_redundancy = Oak::$sources;
+                $table = 'source';
+                $filters = Sources::$filters;
             break;
             case 'objects' :
                 $title = __( 'Objets', Oak::$text_domain );
