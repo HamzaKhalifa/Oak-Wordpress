@@ -525,7 +525,8 @@ function createChart(chartCanvas, graph, title, actualLabels, actualData, datase
     }
 
     var chartCreator = chartCanvas.getContext('2d');
-    var chart = new Chart(chartCreator, {
+    
+    chartData = {
         type: graph,
         // The data for our dataset
         data: {
@@ -535,7 +536,8 @@ function createChart(chartCanvas, graph, title, actualLabels, actualData, datase
         options: {
             responsive: true,
         }
-    });
+    };
+    var chart = new Chart(chartCreator, chartData);
 }
 
 var getKeys = function(obj){
@@ -601,7 +603,6 @@ function handleRefreshGraphButton() {
         var labels = graphParameters.labels;
         var data = graphParameters = graphParameters.data;
         
-        
         var selectedChartCanvas = document.querySelector('.oak_selected_graph');
         createChart(selectedChartCanvas, chosenGraphData.graph, chosenGraphData.title, labels, data, datasetProperties);
     });
@@ -649,28 +650,47 @@ handleSaveGraphButton();
 function handleSaveGraphButton() {
     var saveButton = document.querySelector('.oak_save_graph_button');
     saveButton.addEventListener('click', function() {
+
         setLoading();
+
         var graphParameters = getGraphParameters();
-        // console.log('choseGraphData graph', chosenGraphData.graph);
-        // console.log('chosenGraphData title', chosenGraphData.title);
-        // console.log('labels', graphParameters.labels);
-        // console.log('data', graphParameters.data);
-        // console.log('data set properties', graphParameters.datasetProperties);
-        var labelsString = '';
-        var dataString = '';
-        for (var i = 0; i < graphParameters.labels.length; i++) {
-            var delimiter = '|';
-            if ( i == graphParameters.labels.length - 1 )
-                delimiter = '';
-            labelsString += graphParameters.labels[i] + delimiter;
-            if ( graphParameters.data[i] )
-                dataString += graphParameters.data[i] + delimiter;
+
+        var labels = graphParameters.labels;
+        var data = graphParameters.data;
+        var datasets = [{
+            label: chosenGraphData.title,
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: data
+        }]
+        for (var i = 0; i < graphParameters.datasetProperties.length; i++) {
+            datasets[0][graphParameters.datasetProperties[i].propertyName] = graphParameters.datasetProperties[i].value;
         }
-        var graphData = {
-            graph_title: chosenGraphData.title,
+        graphData = {
+            type: chosenGraphData.graph,
+            // The data for our dataset
+            data: {
+                labels: labels,
+                datasets
+            },
+            options: {
+                responsive: true,
+            }
+        };
+        var title = '';
+        for (var i = 0; i < graphParameters.datasetProperties.length; i++) {
+            if (graphParameters.datasetProperties[i].propertyName == 'label' ) {
+                title = graphParameters.datasetProperties[i].value;
+            }
+        }
+        if (title == '') {
+            title = chosenGraphData.title;
+        }
+        
+        var graphDataInDatabase = {
+            graph_title: title,
             graph_identifier: createIdentifier(),
-            graph_labels: labelsString,
-            graph_data: dataString
+            graph_data: JSON.stringify(graphData)
         }
         
         jQuery(document).ready(function() {
@@ -679,7 +699,7 @@ function handleSaveGraphButton() {
                 type: 'POST',
                 data: {
                     'action': 'oak_save_graph',
-                    'data': JSON.stringify(graphData)
+                    'data': JSON.stringify(graphDataInDatabase)
                 },
                 success: function(data) {
                     doneLoading();

@@ -267,7 +267,6 @@ class Oak {
         wp_enqueue_media();
 
         if ( strpos( get_page_template(), "critical-analysis" ) != false ) :
-            wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
             wp_enqueue_script( 'oak_critical_analysis_front', get_template_directory_uri() . '/src/js/critical-analysis-front.js', array('jquery'), false, true);
 
             $analyzes = get_option('oak_analyzes');
@@ -284,6 +283,9 @@ class Oak {
                 'analysis' => $analysis
             ));
         endif;
+
+        wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
+        wp_enqueue_script( 'oak_front_graphs', get_template_directory_uri() . '/src/js/front/graphs.js', array('jquery'), false, true );
     }
 
     function oak_admin_enqueue_styles( $hook ) {
@@ -838,6 +840,14 @@ class Oak {
                     'icon' => 'fa fa-plug',
                 ]
             );
+
+            $elements_manager->add_category(
+                'oak_charts',
+                [
+                    'title' => __( 'OAK CHARTS', Oak::$text_domain ),
+                    'icon' => 'fa fa-plug',
+                ]
+            );
         } );
     }
 
@@ -1039,7 +1049,7 @@ class Oak {
             endif;
 
             // To create the graph widgets: 
-            Graphs::create_widgets();
+            Graphs::create_widgets( $widgets_manager );
 
         }, 14);
     }
