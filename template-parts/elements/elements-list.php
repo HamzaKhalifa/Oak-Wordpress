@@ -143,7 +143,7 @@
             endif;
         endif;
         
-        $ELEMENTS_PER_PAGE = 10;
+        $ELEMENTS_PER_PAGE = 30;
         foreach( $elements_to_show as $key => $element ) :
             // To handle pagination:
             

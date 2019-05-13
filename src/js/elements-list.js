@@ -268,7 +268,6 @@ jQuery(document).ready(function() {
     });
 
     jQuery('.oak_elements_list').on('last.infiniteScroll', function(event, response, path) {
-        console.log('last page loaded');
         document.querySelector('.oak_list_loader_and_pagination_container__load_next').classList.add('oak_hidden');
     })
 })
