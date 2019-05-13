@@ -345,6 +345,22 @@
     font-size: 20px;
 }
 
+.oak_app_bar_left_content__search_input {
+    background-color: #96CEF0;
+    border: none;
+    color: white;
+    padding: 3px;
+    transition: all .2s ease-in-out;
+    border: 1px solid #96CEF0;
+    box-sizing: border-box;
+}
+
+.oak_app_bar_left_content__search_input:hover {
+    color: #96CEF0;
+    background-color: white;
+    cursor: pointer;
+}
+
 // For the modal
 .oak_add_element_modal_container {
     position: fixed;

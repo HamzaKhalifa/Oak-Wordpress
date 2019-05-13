@@ -89,6 +89,7 @@
         $trashed_property = $table . '_trashed';
         foreach( $elements as $element ) :
             $show = true;
+            
             $which_page = $_GET['whichpage'];
             if ( isset( $_GET['trashed'] ) ) :
                 if ( $_GET['trashed'] == 'true' && $element->$trashed_property == 'false' || $_GET['trashed'] == 'false' && $element->$trashed_property == 'true' ) :
@@ -108,6 +109,13 @@
             if ( isset( $_GET['secondproperty'] ) && $_GET['secondproperty'] != 'all' ) :
                 $second_property_property_name = $filters[1]['property'];
                 if ( $element->$second_property_property_name != $_GET['secondproperty'] ) :
+                    $show = false;
+                endif;
+            endif;
+
+            if ( isset( $_GET['search_input'] ) && $_GET['search_input'] != '' ) : 
+                $designation_property = $table . '_designation';
+                if ( strpos( $element->$designation_property, $_GET['search_input'] ) === false ) :
                     $show = false;
                 endif;
             endif;
@@ -138,6 +146,7 @@
         $ELEMENTS_PER_PAGE = 10;
         foreach( $elements_to_show as $key => $element ) :
             // To handle pagination:
+            
             $show = false;
             $which_page = $_GET['whichpage'];
             if ( $key >= $which_page * $ELEMENTS_PER_PAGE && $key <= ($which_page * $ELEMENTS_PER_PAGE) + $ELEMENTS_PER_PAGE - 1 ) :
@@ -145,9 +154,9 @@
             endif;
 
             if ( $show ) :
+                $designation_property = $table . '_designation';
                 $language_property = $table . '_content_language';
                 $identifier_property = $table . '_identifier';
-                $designation_property = $table . '_designation';
                 $modification_time_property = $table . '_modification_time';
                 $the_first_property = $filters[0]['property'];
                 $the_second_property = $filters[1]['property'];

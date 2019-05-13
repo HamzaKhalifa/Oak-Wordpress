@@ -503,7 +503,7 @@ class Oak {
                 $table_in_plural = 'quantis';
                 $elements = Oak::$quantis;
                 $properties = array_merge( $properties, Quantis::$properties );
-                $filters = Fields::$filters;
+                $filters = Quantis::$filters;
             endif;
             if ( $_GET['elements'] == 'goodpractices' ) :
                 $table = 'goodpractice';

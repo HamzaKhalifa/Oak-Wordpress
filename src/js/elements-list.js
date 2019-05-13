@@ -42,6 +42,7 @@ function handleLanguagesSelectListener() {
             }
             var titleContainers = listRows[i].querySelectorAll('.oak_list_titles_container__title');
             titleContainers[0].innerHTML = element[DATA.table + '_designation'] + language;
+            console.log(titleContainers);
             for (var k = 0; k < 3; k++) {
                 titleContainers[k + 1].innerHTML = element[DATA.filters[k].property] + language;
             }
@@ -74,6 +75,7 @@ function searchButton() {
     var searchIconButton = document.querySelector('.oak_menu_search_icon');
     searchIconButton.addEventListener('click', function() {
         var searchInput = document.querySelector('.oak_element_header_right__search_input');
+        var searchInputSubmitButton = document.querySelector('.oak_app_bar_left_content__search_input');
         var oakHiddenExists = false;
         for(var i = 0; i < searchInput.classList.length; i++) {
             if (searchInput.classList[i] == 'oak_hidden')
@@ -81,9 +83,11 @@ function searchButton() {
         }
         if (oakHiddenExists) {
             searchInput.classList.remove('oak_hidden');
+            searchInputSubmitButton.classList.remove('oak_hidden');
             this.classList.add('fa-times');
         } else {
             searchInput.classList.add('oak_hidden');
+            searchInputSubmitButton.classList.add('oak_hidden');
             this.classList.remove('fa-times');
             document.querySelector('.oak_element_header_right__search_input').value = '';
             search();
@@ -826,7 +830,6 @@ function readCSV(input) {
                     rows[i] = valuesOfI;
                 }
             }
-            console.log(rows);
             var tableName = tableInPlural
             var wellDefinedTableName = false;
             if (rows[0][0].split('_')[0] != rows[0][1].split('_')[0]) {
@@ -834,7 +837,6 @@ function readCSV(input) {
                 tableName = DATA.otherElementProperties.table_name;
                 wellDefinedTableName = true;
             }
-            console.log(tableName);
             jQuery(document).ready(function() {
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
