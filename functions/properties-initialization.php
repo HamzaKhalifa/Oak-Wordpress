@@ -19,7 +19,6 @@ foreach( Oak::$publications_without_redundancy as $publication ) :
     endif;
 endforeach;
 
-
 Oak::$organizations_array = [];
 foreach( Oak::$organizations_without_redundancy as $organization ) :
     Oak::$organizations_array[] = array( 'value' => $organization->organization_identifier, 'innerHTML' => $organization->organization_designation );

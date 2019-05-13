@@ -153,6 +153,7 @@ class Oak {
     public static $quantis_array = [];
     public static $terms_array = [];
     public static $objects_array = [];
+    public static $sources_array = [];
     public static $countries = [];
     public static $countries_names = [];
     public static $languages = [];
@@ -662,6 +663,15 @@ class Oak {
             );
 
             add_meta_box(
+                'sources', // $id
+                __( 'Sources', Oak::$text_domain ), // $title
+                array( 'Sources', 'add_source_meta_box_view' ), // $callback
+                $post, // $screen
+                'normal', // $context
+                'high' // $priority
+            );
+
+            add_meta_box(
                 'quantis', // $id
                 __( 'Indicateurs Quantitatifs', Oak::$text_domain ), // $title
                 array( 'Quantis', 'add_quantis_meta_box_view' ), // $callback
@@ -735,7 +745,7 @@ class Oak {
     }
 
     function oak_save_post_meta_fields( $post_id ) {
-        if ( !isset( $_POST['objects_selector'] ) && !isset( $_POST['good_practices_selector'] ) && !isset( $_POST['quantis_selector'] ) ) :
+        if ( !isset( $_POST['objects_selector'] ) && !isset( $_POST['good_practices_selector'] ) && !isset( $_POST['quantis_selector'] ) && !isset( $_POST['sources_selector'] ) ) :
             return;
         endif;
 
@@ -779,6 +789,18 @@ class Oak {
             delete_post_meta( $post_id, 'good_practices_selector', $old_goodpractices );
         endif;
 
+        $old_goodpractices = get_post_meta( $post_id, 'sources_selector', true );
+        if ( isset( $_POST['sources_selector'] ) ) :
+            $new_goodpractices = $_POST['sources_selector'];
+
+            if ( $new_goodpractices && $new_goodpractices !== $old_goodpractices ) {
+                update_post_meta( $post_id, 'sources_selector', $new_goodpractices );
+            } elseif ( '' === $new_goodpractices && $old_goodpractices ) {
+                delete_post_meta( $post_id, 'sources_selector', $old_goodpractices );
+            };
+        else :
+            delete_post_meta( $post_id, 'sources_selector', $old_goodpractices );
+        endif;
 
         $old_quantis = get_post_meta( $post_id, 'quantis_selector', true );
         if ( isset( $_POST['quantis_selector'] ) ) :
@@ -873,6 +895,7 @@ class Oak {
 
             $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
             $selected_goodpractices = get_post_meta( get_the_ID(), 'good_practices_selector' ) ? get_post_meta( get_the_ID(), 'good_practices_selector' ) [0] : [];
+            $selected_sources = get_post_meta( get_the_ID(), 'sources_selector' ) ? get_post_meta( get_the_ID(), 'sources_selector' ) [0] : [];
             $selected_quantis = get_post_meta( get_the_ID(), 'quantis_selector' ) ? get_post_meta( get_the_ID(), 'quantis_selector' ) [0] : [];
 
             $our_objects = [];
@@ -953,6 +976,7 @@ class Oak {
 
             $post_images_to_show = array();
             update_option( 'oak_post_images_to_show', array() );
+
             // For the good practices: 
             $good_practice = __( 'Bonne Pratique', Oak::$text_domain );
             foreach( $selected_goodpractices as $good_practice_key => $goodpractice_identifier ) :
@@ -976,6 +1000,31 @@ class Oak {
                     endif;
                     $incrementer++;
                 } while( $incrementer < count( Oak::$goodpractices_without_redundancy ) && !$found_goodpractice );
+            endforeach;
+
+            // For sources
+            $source = __( 'Source', Oak::$text_domain );
+            foreach( $selected_sources as $source_key => $selected_identifier ) :
+                $incrementer = 0;
+                $found_source = false;
+                do {
+                    if ( Oak::$sources_without_redundancy[ $incrementer ]->source_identifier == $selected_identifier) :
+                        // For the designation: 
+                        $the_source = Oak::$sources_without_redundancy[ $incrementer ];
+                        update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_key . ': Designation', $the_source->source_designation );
+                        foreach( Sources::$properties as $key => $source_property ) :
+                            $property_name = $source_property['property_name'];
+                            if ( $source_property['input_type'] != 'image' && $source_property['input_type'] != 'select' ) :
+                                update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_key . ': ' . $source_property['description'], $the_source->$property_name );
+                            elseif ( $source_property['input_type'] == 'image' ):
+                                $image_id = attachment_url_to_postid( $the_source->$property_name );
+                                $post_images_to_show[] = array ( 'url' => $the_source->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $source . ' ' . $source_key . ': ' .$source_property['description'] );
+                                // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
+                            endif;
+                        endforeach;
+                    endif;
+                    $incrementer++;
+                } while( $incrementer < count( Oak::$sources_without_redundancy ) && !$found_source );
             endforeach;
 
             foreach( $selected_quantis as $quanti_identifier ) :
