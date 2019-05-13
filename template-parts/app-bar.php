@@ -16,6 +16,7 @@
                 endif;
             endforeach;
             ?>
+            <input type="hidden" value="0" name="whichpage">
         </form>
         <i class="oak_menu_icon oak_menu_search_icon fas fa-search"></i>
         <i class="oak_menu_icon oak_menu_smaller_icon fas fa-th"></i>
