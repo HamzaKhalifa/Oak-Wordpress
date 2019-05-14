@@ -16,6 +16,7 @@ var selectedData = {
     quantis: [],
     goodpractices: [],
     performances: [],
+    sources: [],
     formsAndFields: [],
     modelsAndForms: [],
 };
@@ -436,6 +437,14 @@ function addPublicationData(publicationIdentifier, termIdentifiers) {
         }
     }
 
+    // Lets get the sources: 
+    for (var i = 0; i < allData.sourcesWithoutRedundancy.length; i++) {
+        sourcePublicationIdentifier = allData.sourcesWithoutRedundancy[i].source_publication;
+        if (sourcePublicationIdentifier == publicationIdentifier) {
+            selectedData.sources = addSource(selectedData.sources, allData.sourcesWithoutRedundancy[i].source_identifier, allData.sourcesWithoutRedundancy[i] );
+        }
+    }
+
     // Lets get the glossaries: 
     for (var i = 0; i < allData.glossariesWithoutRedundancy.length; i++) {
         glossaryPublicationIdentifier = allData.glossariesWithoutRedundancy[i].glossary_publication;
@@ -635,6 +644,45 @@ function addPerformance(performances, performanceIdentifier, performance) {
         }
 
         return performances;
+    }
+}
+
+function addSource(sources, sourceIdentifier, source) {
+    var exists = false;
+    for (var i = 0; i < sources.length; i++) {
+        if (sources[i].source_identifier == sourceIdentifier) {
+            exists = true;
+            return sources;
+        }
+    }
+    if (!exists) {
+        if (!source) {
+        // Lets get the source
+            for (var i = 0; i < allData.sourcesWithoutRedundancy.length; i++) {
+                if (allData.sourcesWithoutRedundancy[i].source_identifier == sourceIdentifier) {
+                    source = allData.sourcesWithoutRedundancy[i];
+                }
+            }
+        }
+        if (source) {
+            sources = addElementAndOtherLanguagesInstancses(source.source_identifier, sources, allData.sources, 'source');
+
+            if ( source.source_object != null ) {
+                var objectsIdentifiers = source.source_object.split('|');
+                for (var j = 0; j < objectsIdentifiers.length; j++) {
+                    addObject(objectsIdentifiers[j]);
+                }
+            }
+
+            if ( source.source_link_object != null ) {
+                var objectsIdentifiers = source.source_link_object.split('|');
+                for (var j = 0; j < objectsIdentifiers.length; j++) {
+                    addObject(objectsIdentifiers[j]);
+                }
+            }
+        }
+
+        return sources;
     }
 }
 

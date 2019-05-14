@@ -2457,6 +2457,25 @@ class Oak {
             endif;
         endforeach;
 
+        $sources_table_name = $wpdb->prefix . 'oak_sources';
+        $sources = $wpdb->get_results ( "
+            SELECT *
+            FROM  $sources_table_name
+        " );
+        $reversed_sources = array_reverse( $sources );
+        $sources_without_redundancy = [];
+        foreach( $reversed_sources as $source ) :
+            $added = false;
+            foreach( $sources_without_redundancy as $source_without_redundancy ) :
+                if ( $source_without_redundancy->source_identifier == $source->source_identifier ) :
+                    $added = true;
+                endif;
+            endforeach;
+            if ( !$added ) :
+                $sources_without_redundancy[] = $source;
+            endif;
+        endforeach;
+
         $glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
         $glossaries = $wpdb->get_results ( "
             SELECT *
@@ -2507,6 +2526,8 @@ class Oak {
             'goodpracticesWithoutRedundancy' => $goodpractices_without_redundancy,
             'performances' => $performances,
             'performancesWithoutRedundancy' => $performances_without_redundancy,
+            'sources' => $sources,
+            'sourcesWithoutRedundancy' => $sources_without_redundancy,
             'glossaries' => $glossaries,
             'glossariesWithoutRedundancy' => $glossaries_without_redundancy,
             'termsAndObjects' => $terms_and_objects
@@ -2672,6 +2693,7 @@ class Oak {
         $quantis = $selected_data['quantis'];
         $goodpractices = $selected_data['goodpractices'];
         $performances = $selected_data['performances'];
+        $sources = $selected_data['sources'];
         $terms_and_objects = $selected_data['termsAndObjects'];
         $models_and_forms = $selected_data['modelsAndForms'];
         $forms_and_fields = $selected_data['formsAndFields'];
@@ -2688,6 +2710,7 @@ class Oak {
         $this->corn_save_element( $quantis, Oak::$quantis_table_name );
         $this->corn_save_element( $goodpractices, Oak::$goodpractices_table_name );
         $this->corn_save_element( $performances, Oak::$performances_table_name );
+        $this->corn_save_element( $sources, Oak::$sources_table_name );
         $this->corn_save_element( $terms_and_objects, Oak::$terms_and_objects_table_name );
 
         $this->corn_save_element( $forms_and_fields, Oak::$forms_and_fields_table_name );
