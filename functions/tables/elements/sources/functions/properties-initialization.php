@@ -39,20 +39,56 @@ Sources::$properties = array(
         'width' => '50',
         'translatable' => true
     ),
+    array(
+        'name' => 'publication', 
+        'property_name' => 'source_publication', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => Oak::$publications_array,
+        'placeholder' => __( 'Publication: ', Oak::$text_domain ),
+        'description' => __( 'Publication: ', Oak::$text_domain ),
+        'width' => '50'
+    ),
+    array ( 
+        'name' => 'object', 
+        'property_name' => 'source_object', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'true',
+        'choices' => Oak::$objects_array,
+        'placeholder' => __( 'Object', Oak::$text_domain ), 
+        'description' => __( 'Object.', Oak::$text_domain ), 
+        'width' => '50',
+    ),
     array ( 
         'name' => 'type', 
         'property_name' => 'source_type', 
-        'type' => 'text', 
+        'type' => 'text',
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
-            array ( 'value' => 'external', 'innerHTML' => 'Interne' ),
-            array ( 'value' => 'internal', 'innerHTML' => 'Externe' ),
+            array ( 'value' => 'internal', 'innerHTML' => 'Interne' ),
+            array ( 'value' => 'external', 'innerHTML' => 'Externe' ),
         ),
         'placeholder' => __( 'Type', Oak::$text_domain ), 
         'description' => __( 'Type.', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '100',
         'condition' => true
+    ),
+    array ( 
+        'name' => 'link_object', 
+        'property_name' => 'source_link_object', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'true',
+        'choices' => Oak::$objects_array,
+        'placeholder' => __( 'Object', Oak::$text_domain ), 
+        'description' => __( 'Object.', Oak::$text_domain ), 
+        'width' => '100',
+        'depends' => array(
+            array( 'name' => 'type', 'values' => array( 'internal' ) ),
+        ),
     ),
     array ( 
         'name' => 'link', 
@@ -77,20 +113,6 @@ Sources::$properties = array(
         'translatable' => true,
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'external' ) ),
-        ),
-    ),
-    array ( 
-        'name' => 'object', 
-        'property_name' => 'source_object', 
-        'type' => 'text', 
-        'input_type' => 'select',
-        'select_multiple' => 'true',
-        'choices' => Oak::$objects_array,
-        'placeholder' => __( 'Object', Oak::$text_domain ), 
-        'description' => __( 'Object.', Oak::$text_domain ), 
-        'width' => '50',
-        'depends' => array(
-            array( 'name' => 'type', 'values' => array( 'internal' ) ),
         ),
     ),
 );
