@@ -324,8 +324,8 @@ class Oak {
 
         // For the media library
         wp_enqueue_script( 'oak_media_library', get_template_directory_uri() . '/src/js/vendor/wp-media-modal.js', array('jquery'), false, true );
-
-        if ( isset( $_GET['post'] ) ) :
+        
+        if ( get_current_screen()->id == 'post' ) :
             wp_enqueue_script( 'oak_edit_post', get_template_directory_uri() . '/src/js/edit-post.js', array('jquery'), false, true );
         endif;
 
