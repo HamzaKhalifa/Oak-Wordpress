@@ -301,8 +301,7 @@ var steps = [];
 
                     // For the terms and objects (Gotta filter this some day)
                     selectedData.termsAndObjects = allData.termsAndObjects;
-
-                    // console.log('selected Data', selectedData);
+                    
                     setLoading();
                     jQuery(document).ready(function() {
                         jQuery.ajax({

@@ -2607,6 +2607,7 @@ class Oak {
         $tables = [ Oak::$fields_table_name, Oak::$forms_table_name, Oak::$models_table_name, Oak::$taxonomies_table_name
             , Oak::$organizations_table_name, Oak::$publications_table_name, Oak::$glossaries_table_name, Oak::$qualis_table_name
             , Oak::$quantis_table_name, Oak::$forms_and_fields_table_name, Oak::$models_and_forms_table_name, Oak::$terms_and_objects_table_name
+            , Oak::$sources_table_name, Oak::$performances_table_name, Oak::$goodpractices_table_name
         ];
 
         // Lets get the taxonomies (because delete_everything is called before tables.php) :
@@ -2823,11 +2824,7 @@ class Oak {
 
         $this->corn_save_element( $terms );
 
-        wp_send_json_success( array(
-            'functionReturn' => $this->corn_save_element( $fields, Oak::$fields_table_name ),
-            'return' => $this->corn_save_element( $organizations, Oak::$organizations_table_name ),
-            'objects' => $objects
-        ) );
+        wp_send_json_success();
     }
 
     function oak_wordpress_dashboard() {
