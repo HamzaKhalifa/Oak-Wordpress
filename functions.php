@@ -324,7 +324,7 @@ class Oak {
 
         // For the media library
         wp_enqueue_script( 'oak_media_library', get_template_directory_uri() . '/src/js/vendor/wp-media-modal.js', array('jquery'), false, true );
-        
+
         if ( get_current_screen()->id == 'post' ) :
             wp_enqueue_script( 'oak_edit_post', get_template_directory_uri() . '/src/js/edit-post.js', array('jquery'), false, true );
         endif;
@@ -1053,6 +1053,13 @@ class Oak {
                         $performance_text = __( 'Donnée de performance', Oak::$text_domain );
                         update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Designation', $performance->performance_designation );
                         foreach( Performances::$properties as $key => $performance_property ) :
+                            $performance_results = explode( '|', $performance->performance_results );
+                            foreach( $performance_results as $result_key => $result ) :
+                                $result_values = explode( ':', $result );
+                                $year = $result_values[0];
+                                $value = $result_values[1];
+                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Résultalt ' . $year, $value );
+                            endforeach;
                             $property_name = $performance_property['property_name'];
                             if ( $performance_property['input_type'] != 'image' ) :
                                 update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': ' . $performance_property['description'], $performance->$property_name );
