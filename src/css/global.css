@@ -402,11 +402,55 @@ div {
     z-index: 9999;
 }
 
-.oak_post_objects_selector, .oak_post_good_practices_selector, .oak_post_quantis_selector {
-    max-height: 300px;
+.oak_post_elements_selector {
+    max-height: 100px;
 }
 
-.oak_post_search_input, .oak_post_selector {
+.oak_post_search_input, .oak_post_selector, .postbox {
     width: 100%;
     box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #000c3b!important;
+}
+
+.postbox .ui-sortable-handle {
+    border-bottom: 1px solid #000c3b!important;
+}
+
+.oak_post_elements_selector__container {
+    display: flex;
+}
+
+.oak_post_elements_selector__selected_elements {
+    flex: 1;
+    border: 1px solid #000c3b;
+    margin-left: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 170px;
+    overflow: scroll;
+    padding-bottom: 20px;
+}
+
+.oak_post_elements_selector_container__select_container {
+    flex: 1;
+}
+
+.oak_post_elements_selector_selected_elements__single_element {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    border-bottom: 1px solid #000c3b;
+    margin-bottom: 10px;
+}
+
+.oak_post_elements_selector_selected_elements_single_element_element_remove_button {
+    color: #f15c3b;
+}
+
+.oak_post_elements_selector_selected_elements_single_element_element_remove_button:hover {
+    cursor: pointer;
 }

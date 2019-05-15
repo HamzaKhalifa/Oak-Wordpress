@@ -166,6 +166,11 @@ class Oak {
     function __construct() {
         global $wpdb;
 
+        // $images = $this->oak_get_all_images();
+        // echo('<pre>');
+        // var_dump( $images );
+        // echo('</pre>');
+
         Oak::$text_domain = 'oak';
         Oak::$charset_collate = $wpdb->get_charset_collate();
 
@@ -650,34 +655,38 @@ class Oak {
                 array( $this, 'oak_add_meta_box_to_posts_view' ), // $callback
                 $post, // $screen
                 'normal', // $context
-                'high' // $priority
+                'high', // $priority
+                array( 'element' => 'object', 'elements' => Oak::$all_objects_without_redundancy, 'select_name' => 'objects_selector[]' ) 
             );
 
             add_meta_box(
-                'good_practices', // $id
+                'good_practices_selector', // $id
                 __( 'Bonnes pratiques', Oak::$text_domain ), // $title
-                array( 'Good_Practices', 'add_good_practice_meta_box_view' ), // $callback
+                array( $this, 'oak_add_meta_box_to_posts_view' ),
                 $post, // $screen
                 'normal', // $context
-                'high' // $priority
+                'high', // $priority
+                array( 'element' => 'goodpractice', 'elements' => Oak::$goodpractices_without_redundancy, 'select_name' => 'good_practices_selector[]' ) 
             );
 
             add_meta_box(
-                'sources', // $id
+                'sources_selector', // $id
                 __( 'Sources', Oak::$text_domain ), // $title
-                array( 'Sources', 'add_source_meta_box_view' ), // $callback
+                array( $this, 'oak_add_meta_box_to_posts_view' ),
                 $post, // $screen
                 'normal', // $context
-                'high' // $priority
+                'high', // $priority
+                array( 'element' => 'source', 'elements' => Oak::$sources_without_redundancy, 'select_name' => 'sources_selector[]' ) 
             );
 
             add_meta_box(
-                'quantis', // $id
+                'quantis_selector', // $id
                 __( 'Indicateurs Quantitatifs', Oak::$text_domain ), // $title
-                array( 'Quantis', 'add_quantis_meta_box_view' ), // $callback
+                array( $this, 'oak_add_meta_box_to_posts_view' ),
                 $post, // $screen
                 'normal', // $context
-                'high' // $priority
+                'high', // $priority
+                array( 'element' => 'quanti', 'elements' => Oak::$quantis_without_redundancy, 'select_name' => 'quantis_selector[]' ) 
             );
         endforeach;
     }
@@ -720,25 +729,36 @@ class Oak {
     }
 
     function oak_add_meta_box_to_posts_view( $post, $args ) {
-        $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
+        $selected_elements = get_post_meta( get_the_ID(), $args['id'] ) ? get_post_meta( get_the_ID(), $args['id'] ) [0] : [];
+        $elements = $args['args']['elements'];
         ?>
-        <div>
-            <input type="text" placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_post_search_input oak_post_objects_selector_search_input">
-            <select multiple name="objects_selector[]" class="oak_post_selector oak_post_objects_selector" size="<?php echo( count( Oak::$all_objects_without_redundancy ) ); ?>">
-                <?php
-                foreach( Oak::$all_objects_without_redundancy as $object ) :
-                    $selected = '';
-                    foreach( $selected_objects as $selected_object_identifier ) :
-                        if ( $selected_object_identifier == $object->object_identifier ) :
-                            $selected = 'selected';
-                        endif;
+        <div class="oak_post_elements_selector__container">
+            <div class="oak_post_elements_selector_container__select_container">
+                <input type="text" placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_post_search_input">
+                <select multiple name="<?php echo( $args['args']['select_name'] ); ?>" class="oak_post_selector oak_post_elements_selector" size="<?php echo( count( $elements ) ); ?>">
+                    <?php
+                    $identifier_property = $args['args']['element'] . '_identifier';
+                    $designation_property = $args['args']['element'] . '_designation';
+                    foreach( $elements as $element ) :
+                        $selected = '';
+                        foreach( $selected_elements as $selected_element_identifier ) :
+                            if ( $selected_element_identifier == $element->$identifier_property ) :
+                                $selected = 'selected';
+                            endif;
+                        endforeach;
+                        ?>
+                        <option <?php echo( $selected ); ?> value="<?php echo( $element->$identifier_property ); ?>"><?php echo( $element->$designation_property ); ?></option>
+                        <?php
                     endforeach;
                     ?>
-                    <option <?php echo( $selected ); ?> value="<?php echo( $object->object_identifier ); ?>"><?php echo( $object->object_designation ); ?></option>
-                    <?php
-                endforeach;
-                ?>
-            </select>
+                </select>
+            </div>
+            <div class="oak_post_elements_selector__selected_elements">
+                <div class="oak_post_elements_selector_selected_elements__single_element">
+                    <h3 class="oak_post_elements_selector_selected_elements_single_element__element_name">Element Name</h3>
+                    <i class="fas fa-times oak_post_elements_selector_selected_elements_single_element_element_remove_button"></i>
+                </div>
+            </div>
         </div>
 
         <?php
@@ -1114,6 +1134,19 @@ class Oak {
             Graphs::create_widgets( $widgets_manager );
 
         }, 14);
+    }
+
+    function oak_get_all_images() {
+        $query_images_args = array(
+            'post_type'      => 'attachment',
+            'post_mime_type' => 'image',
+            'post_status'    => 'inherit',
+            'posts_per_page' => - 1,
+        );
+
+        $query_images = new WP_Query( $query_images_args );
+
+        return $query_images;
     }
 
     function oak_admin_notice_missing_elementor_plugin() {
