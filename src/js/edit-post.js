@@ -44,6 +44,9 @@ function handleSelectedElementsContainers() {
         selectedElementsContainer.innerHTML = '';
 
         var selectedValues = jQuery('#' + select.id).val();
+        if (!selectedValues)
+            return;
+            
         for (var i = 0; i < selectedValues.length; i++) {
             var foundOption = false;
             var incrementer = 0;

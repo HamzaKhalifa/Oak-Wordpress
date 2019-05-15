@@ -413,6 +413,10 @@ div {
     border: 1px solid #000c3b!important;
 }
 
+.postbox {
+    margin-bottom: 10px;
+}
+
 .postbox .ui-sortable-handle {
     border-bottom: 1px solid #000c3b!important;
 }
