@@ -18,10 +18,10 @@ foreach( $reversed_performances as $performance ) :
     if ( !$added ) :
         $performances_without_redundancy[] = $performance;
 
-        $performance_objects = explode( '|', $performance->performance_objects );
-        if ( count( $performance_objects ) > 0 && $performance->performance_publication === '0' ) :
-            // Oak::oak_automatic_element_publication_association( $performance, $performance_objects, 'performance_publication', Oak::$performances_table_name );
-        endif;
+        // $performance_objects = explode( '|', $performance->performance_objects );
+        // if ( count( $performance_objects ) > 0 && $performance->performance_publication === '0' ) :
+        //     Oak::oak_automatic_element_publication_association( $performance, $performance_objects, 'performance_publication', Oak::$performances_table_name );
+        // endif;
     endif;
 endforeach;
 Oak::$performances_without_redundancy = $performances_without_redundancy;

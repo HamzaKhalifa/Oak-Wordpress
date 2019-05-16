@@ -18,10 +18,10 @@ foreach( $reversed_sources as $source ) :
     if ( !$added ) :
         $sources_without_redundancy[] = $source;
 
-        $source_objects = explode( '|', $source->source_object );
-        if ( count( $source_objects ) > 0 && $source->source_publication === '0' ) :
-            Oak::oak_automatic_element_publication_association( $source, $source_objects, 'source_publication', Oak::$sources_table_name );
-        endif;
+        // $source_objects = explode( '|', $source->source_object );
+        // if ( count( $source_objects ) > 0 && $source->source_publication === '0' ) :
+        //     Oak::oak_automatic_element_publication_association( $source, $source_objects, 'source_publication', Oak::$sources_table_name );
+        // endif;
     endif;
 endforeach;
 Oak::$sources_without_redundancy = $sources_without_redundancy;
