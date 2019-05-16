@@ -161,14 +161,10 @@ class Oak {
     public static $business_line = [];
     public static $custom_perimeter = [];
     public static $regions = [];
+    public static $all_images = [];
 
     function __construct() {
         global $wpdb;
-
-        // $images = $this->oak_get_all_images();
-        // echo('<pre>');
-        // var_dump( $images );
-        // echo('</pre>');
 
         Oak::$text_domain = 'oak';
         Oak::$charset_collate = $wpdb->get_charset_collate();
@@ -324,7 +320,7 @@ class Oak {
         // For the media library
         wp_enqueue_script( 'oak_media_library', get_template_directory_uri() . '/src/js/vendor/wp-media-modal.js', array('jquery'), false, true );
 
-        if ( get_current_screen()->id == 'post' ) :
+        if ( get_current_screen()->id == 'post' || get_current_screen()->id == 'page' ) :
             wp_enqueue_script( 'oak_edit_post', get_template_directory_uri() . '/src/js/edit-post.js', array('jquery'), false, true );
         endif;
 
@@ -2672,9 +2668,26 @@ class Oak {
             if ( strpos( $value, 'ttps://' ) != false || strpos( $value, 'ttp://' ) != false ) :
                 if (  wp_http_validate_url( $value ) ) :
                     if ( @getimagesize( $value ) ) :
-                        $download_remote_image = new KM_Download_Remote_Image( $value, array() );
-                        $id = $download_remote_image->download();
-                        $the_value = get_post( $id )->guid;
+                        $value_exploded = explode( '/', $value );
+                        $image_name = $value_exploded[ count( $value_exploded ) - 1 ];
+
+                        $image_incrementer = 0;
+                        $found_image = false;
+                        do {
+                            $oak_image_exploded = explode( '/', Oak::$all_images[ $image_incrementer ]->guid );
+                            $oak_image_name = $oak_image_exploded[ count( $oak_image_exploded ) - 1 ];
+                            if ( $image_name == $oak_image_name ) :
+                                $found_image = true;
+                            endif;
+
+                            $image_incrementer++;
+                        } while( !$found_image && $image_incrementer < count( Oak::$all_images ) );
+                        
+                        if ( !$found_image ) :
+                            $download_remote_image = new KM_Download_Remote_Image( $value, array() );
+                            $id = $download_remote_image->download();
+                            $the_value = get_post( $id )->guid;
+                        endif;
                     endif;
                 endif;
             endif;
@@ -2802,6 +2815,8 @@ class Oak {
         // wp_send_json_success(  );
 
         global $wpdb;
+
+        Oak::$all_images = $this->oak_get_all_images()->posts;
 
         $this->delete_everything();
 
@@ -2972,25 +2987,27 @@ class Oak {
                     $found_term = false; 
                     $terms_incrementer = 0;
                     do {
-                        if ( Oak::$all_terms_without_redundancy[ $terms_incrementer ]->term_identifier == $term_and_object->term_identifier ) :
-                            $found_term = true;
-                            $term_without_redundancy = Oak::$all_terms_without_redundancy[$terms_incrementer];
+                        if ( count( Oak::$all_terms_without_redundancy ) > $terms_incrementer ) :
+                            if ( Oak::$all_terms_without_redundancy[ $terms_incrementer ]->term_identifier == $term_and_object->term_identifier ) :
+                                $found_term = true;
+                                $term_without_redundancy = Oak::$all_terms_without_redundancy[$terms_incrementer];
 
-                            $taxonomy_identifier = $term_without_redundancy->term_taxonomy_identifier;
-                            
-                            $found_taxonomy = false;
-                            $taxonomy_incrementer = 0;
-                            do {
-                                if ( Oak::$taxonomies_without_redundancy[ $taxonomy_incrementer ]->taxonomy_identifier == $taxonomy_identifier ) :
-                                    $found_taxonomy = true;
-                                    $taxonomy = Oak::$taxonomies_without_redundancy[ $taxonomy_incrementer ];
-                                    $publication_identifier = $taxonomy->taxonomy_publication;
-                                    $element->$publication_property = $publication_identifier;
-                                    
-                                    Oak::oak_simple_register_element( $element, $table_name );
-                                endif;
-                                $taxonomy_incrementer++;
-                            } while( !$found_taxonomy && $taxonomy_incrementer < count( Oak::$taxonomies_without_redundancy ) );
+                                $taxonomy_identifier = $term_without_redundancy->term_taxonomy_identifier;
+                                
+                                $found_taxonomy = false;
+                                $taxonomy_incrementer = 0;
+                                do {
+                                    if ( Oak::$taxonomies_without_redundancy[ $taxonomy_incrementer ]->taxonomy_identifier == $taxonomy_identifier ) :
+                                        $found_taxonomy = true;
+                                        $taxonomy = Oak::$taxonomies_without_redundancy[ $taxonomy_incrementer ];
+                                        $publication_identifier = $taxonomy->taxonomy_publication;
+                                        $element->$publication_property = $publication_identifier;
+                                        
+                                        Oak::oak_simple_register_element( $element, $table_name );
+                                    endif;
+                                    $taxonomy_incrementer++;
+                                } while( !$found_taxonomy && $taxonomy_incrementer < count( Oak::$taxonomies_without_redundancy ) );
+                            endif;
                         endif;
                         $terms_incrementer++;
                     } while( $terms_incrementer < count( Oak::$all_terms_without_redundancy ) && !$found_term );
