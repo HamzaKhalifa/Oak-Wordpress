@@ -688,6 +688,16 @@ class Oak {
                 'high', // $priority
                 array( 'element' => 'quanti', 'elements' => Oak::$quantis_without_redundancy, 'select_name' => 'quantis_selector[]' ) 
             );
+
+            add_meta_box(
+                'qualis_selector', // $id
+                __( 'Indicateurs Qualitatifs', Oak::$text_domain ), // $title
+                array( $this, 'oak_add_meta_box_to_posts_view' ),
+                $post, // $screen
+                'normal', // $context
+                'high', // $priority
+                array( 'element' => 'quali', 'elements' => Oak::$qualis_without_redundancy, 'select_name' => 'qualis_selector[]' ) 
+            );
         endforeach;
     }
 
@@ -765,7 +775,11 @@ class Oak {
     }
 
     function oak_save_post_meta_fields( $post_id ) {
-        if ( !isset( $_POST['objects_selector'] ) && !isset( $_POST['good_practices_selector'] ) && !isset( $_POST['quantis_selector'] ) && !isset( $_POST['sources_selector'] ) ) :
+        if ( !isset( $_POST['objects_selector'] ) 
+            && !isset( $_POST['good_practices_selector'] ) 
+            && !isset( $_POST['quantis_selector'] ) 
+            && !isset( $_POST['sources_selector'] ) 
+            && !isset( $_POST['qualis_selector'] )) :
             return;
         endif;
 
@@ -833,6 +847,19 @@ class Oak {
             };
         else :
             delete_post_meta( $post_id, 'quantis_selector', $old_quantis );
+        endif;
+
+        $old_qualis = get_post_meta( $post_id, 'qualis_selector', true );
+        if ( isset( $_POST['qualis_selector'] ) ) :
+            $new_qualis = $_POST['qualis_selector'];
+
+            if ( $new_qualis && $new_qualis !== $old_qualis ) {
+                update_post_meta( $post_id, 'qualis_selector', $new_qualis );
+            } elseif ( '' === $new_qualis && $old_qualis ) {
+                delete_post_meta( $post_id, 'qualis_selector', $old_qualis );
+            };
+        else :
+            delete_post_meta( $post_id, 'qualis_selector', $old_qualis );
         endif;
     }
 
@@ -917,6 +944,7 @@ class Oak {
             $selected_goodpractices = get_post_meta( get_the_ID(), 'good_practices_selector' ) ? get_post_meta( get_the_ID(), 'good_practices_selector' ) [0] : [];
             $selected_sources = get_post_meta( get_the_ID(), 'sources_selector' ) ? get_post_meta( get_the_ID(), 'sources_selector' ) [0] : [];
             $selected_quantis = get_post_meta( get_the_ID(), 'quantis_selector' ) ? get_post_meta( get_the_ID(), 'quantis_selector' ) [0] : [];
+            $selected_qualis = get_post_meta( get_the_ID(), 'qualis_selector' ) ? get_post_meta( get_the_ID(), 'qualis_selector' ) [0] : [];
 
             $our_objects = [];
             $the_returned_fields = [];
@@ -1071,6 +1099,30 @@ class Oak {
                         endforeach;
                     endif;
                 endforeach;
+            endforeach;
+
+            $quali = __( 'Indicateur Qualitatif', Oak::$text_domain );
+            foreach( $selected_qualis as $quali_key => $selected_identifier ) :
+                $incrementer = 0;
+                $found_quali = false;
+                do {
+                    if ( Oak::$qualis_without_redundancy[ $incrementer ]->quali_identifier == $selected_identifier) :
+                        // For the designation: 
+                        $the_quali = Oak::$qualis_without_redundancy[ $incrementer ];
+                        update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_key . ': Designation', $the_quali->quali_designation );
+                        foreach( Qualis::$properties as $key => $quali_property ) :
+                            $property_name = $quali_property['property_name'];
+                            if ( $quali_property['input_type'] != 'image' && $quali_property['input_type'] != 'select' ) :
+                                update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_key . ': ' . $quali_property['description'], $the_quali->$property_name );
+                            elseif ( $quali_property['input_type'] == 'image' ):
+                                $image_id = attachment_url_to_postid( $the_quali->$property_name );
+                                $post_images_to_show[] = array ( 'url' => $the_quali->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $quali . ' ' . $quali_key . ': ' .$quali_property['description'] );
+                                // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
+                            endif;
+                        endforeach;
+                    endif;
+                    $incrementer++;
+                } while( $incrementer < count( Oak::$qualis_without_redundancy ) && !$found_quali );
             endforeach;
 
             // var_dump($post_images_to_show);
