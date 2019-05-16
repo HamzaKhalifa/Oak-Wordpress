@@ -19,9 +19,9 @@ include $template_directory . '/functions/tables/elements/quantis/index.php';
 
 include $template_directory . '/functions/tables/elements/terms-and-objects/index.php';
 
+include $template_directory . '/functions/tables/elements/objects/index.php';
 include $template_directory . '/functions/tables/elements/performances/index.php';
 include $template_directory . '/functions/tables/elements/goodpractices/index.php';
-include $template_directory . '/functions/tables/elements/objects/index.php';
 include $template_directory . '/functions/tables/elements/sources/index.php';
 
 include $template_directory . '/functions/tables/elements/graphs/index.php';

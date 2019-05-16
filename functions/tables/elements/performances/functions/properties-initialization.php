@@ -418,7 +418,7 @@ Performances::$properties = array(
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
-            array( 'value' => '0', 'innerHTML' => __( 'Pas de sélection', Oak::$text_domain ) ),
+            array( 'value' => '0', 'innerHTML' => __( 'Brut', Oak::$text_domain ) ),
         ),
         'placeholder' => __( 'Brut', Oak::$text_domain ), 
         'description' => __( 'Brut.', Oak::$text_domain ), 

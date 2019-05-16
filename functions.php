@@ -139,7 +139,6 @@ class Oak {
     public static $secondary_text_color = '#bcc7d9';
     public static $selected_color = '#7b7b7b';
 
-    
     public static $site_language;
 
     // Properties initialization
@@ -865,6 +864,7 @@ class Oak {
 
 
     function oak_add_theme_support() {
+        add_theme_support( 'post-thumbnails' ); 
         add_theme_support('menus');
         add_theme_support( 'custom-logo', array(
             'height'      => 100,
@@ -1080,6 +1080,10 @@ class Oak {
                     if ( $performance->performance_quantis == $quanti_identifier ) :
                         $performance_text = __( 'Donnée de performance', Oak::$text_domain );
                         update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Designation', $performance->performance_designation );
+
+                        $unity_type_text = __( 'Type de l’unité', Oak::$text_domain );
+                        update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': ' . $unity_type_text, $performance->performance_type );
+
                         foreach( Performances::$properties as $key => $performance_property ) :
                             $performance_results = explode( '|', $performance->performance_results );
                             foreach( $performance_results as $result_key => $result ) :
@@ -1089,12 +1093,26 @@ class Oak {
                                 update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Résultalt ' . $year, $value );
                             endforeach;
                             $property_name = $performance_property['property_name'];
-                            if ( $performance_property['input_type'] != 'image' ) :
+                            if ( $performance_property['input_type'] != 'image' && $performance_property['input_type'] != 'select' ) :
                                 update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': ' . $performance_property['description'], $performance->$property_name );
                             elseif ( $performance_property['input_type'] == 'image' ):
                                 $image_id = attachment_url_to_postid( $performance->$property_name );
                                 $post_images_to_show[] = array ( 'url' => $performance->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $performance . ' ' . $performance_key . ': ' .$performance_property['description'] );
                                 // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
+                            elseif( $performance_property['input_type'] == 'select' ) :
+                                if ( isset( $performance_property['depends'] ) ) :
+                                    if( $performance_property['depends'][0]['name'] = 'type' ) :
+                                        if ( $performance_property['depends'][0]['values'][0] == $performance->performance_type ) :
+                                            $value = '';
+                                            foreach( $performance_property['choices'] as $choice ) :
+                                                if ( $choice['value'] == $performance->$property_name ) :
+                                                    $value = $choice['innerHTML'];
+                                                endif;
+                                            endforeach;
+                                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': ' . $performance_property['description'], $value );
+                                        endif;
+                                    endif;
+                                endif;
                             endif;
                         endforeach;
                     endif;
@@ -2927,6 +2945,38 @@ class Oak {
 
     function oak_save_graph() {
         Graphs::save_graph();
+    }
+
+    static function oak_automatic_element_publication_association( $element, $objects_identifiers, $publication_property ) {
+        foreach( $objects_identifiers as $object_identifier ) :
+            foreach( Oak::$terms_and_objects as $term_and_object ) :
+                if ( $term_and_object->object_identifier == $object_identifier ) :
+                    $found_term = false; 
+                    $terms_incrementer = 0;
+                    do {
+                        if ( Oak::$all_terms_without_redundancy[ $terms_incrementer ]->term_identifier == $term_and_object->term_identifier ) :
+                            $found_term = true;
+                            $term_without_redundancy = Oak::$all_terms_without_redundancy[$terms_incrementer];
+
+                            $taxonomy_identifier = $term_without_redundancy->term_taxonomy_identifier;
+                            
+                            $found_taxonomy = false;
+                            $taxonomy_incrementer = 0;
+                            do {
+                                if ( Oak::$taxonomies_without_redundancy[ $taxonomy_incrementer ]->taxonomy_identifier == $taxonomy_identifier ) :
+                                    $found_taxonomy = true;
+                                    $taxonomy = Oak::$taxonomies_without_redundancy[ $taxonomy_incrementer ];
+                                    $publication_identifier = $taxonomy->taxonomy_publication;
+                                    $element->publication_property = $publication_identifier;
+                                endif;
+                                $taxonomy_incrementer++;
+                            } while( !$found_taxonomy && $taxonomy_incrementer < count( Oak::$taxonomies_without_redundancy ) );
+                        endif;
+                        $terms_incrementer++;
+                    } while( $terms_incrementer < count( Oak::$all_terms_without_redundancy ) && !$found_term );
+                endif;
+            endforeach;
+        endforeach;
     }
 }
 
