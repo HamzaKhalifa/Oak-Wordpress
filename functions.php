@@ -1091,6 +1091,7 @@ class Oak {
                                 $year = $result_values[0];
                                 $value = $result_values[1];
                                 update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Résultalt ' . $year, $value );
+                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Année ' . $result_key, $year );
                             endforeach;
                             $property_name = $performance_property['property_name'];
                             if ( $performance_property['input_type'] != 'image' && $performance_property['input_type'] != 'select' ) :
