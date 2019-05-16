@@ -17,6 +17,11 @@ foreach( $reversed_goodpractices as $goodpractice ) :
     endforeach;
     if ( !$added ) :
         $goodpractices_without_redundancy[] = $goodpractice;
+
+        $goodpractice_objects = explode( '|', $goodpractice->goodpractice_objects );
+        if ( count( $goodpractice_objects > 0 ) && $goodpractice->goodpractice_publication == 0 ) :
+            Oak::oak_automatic_element_publication_association( $goodpractice, $goodpractice_objects, 'goodpractice_publication', Oak::$goodpractices_table_name );
+        endif;
     endif;
 endforeach;
 Oak::$goodpractices_without_redundancy = $goodpractices_without_redundancy;

@@ -1090,8 +1090,8 @@ class Oak {
                                 $result_values = explode( ':', $result );
                                 $year = $result_values[0];
                                 $value = $result_values[1];
-                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Résultalt ' . $year, $value );
                                 update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Année ' . $result_key, $year );
+                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Résultalt ' . $year, $value );
                             endforeach;
                             $property_name = $performance_property['property_name'];
                             if ( $performance_property['input_type'] != 'image' && $performance_property['input_type'] != 'select' ) :
@@ -2645,6 +2645,23 @@ class Oak {
         ) );
     }
 
+    static function oak_simple_register_element( $element, $table_name ) {
+        require_once get_template_directory() . '/functions/class-download-remote-image.php';
+
+        global $wpdb;
+
+        $element_array = (array) $element;
+        foreach( $element_array as $key => $value ) :
+            $element_array[ $key ] = stripslashes_deep( $value );
+        endforeach;
+        unset( $element_array['id'] );
+
+        $result = $wpdb->insert(
+            $table_name,
+            $element_array
+        );
+    }
+
     function corn_simple_register_element( $element, $table_name ) {
         require_once get_template_directory() . '/functions/class-download-remote-image.php';
 
@@ -2948,7 +2965,7 @@ class Oak {
         Graphs::save_graph();
     }
 
-    static function oak_automatic_element_publication_association( $element, $objects_identifiers, $publication_property ) {
+    static function oak_automatic_element_publication_association( $element, $objects_identifiers, $publication_property, $table_name ) {
         foreach( $objects_identifiers as $object_identifier ) :
             foreach( Oak::$terms_and_objects as $term_and_object ) :
                 if ( $term_and_object->object_identifier == $object_identifier ) :
@@ -2968,7 +2985,9 @@ class Oak {
                                     $found_taxonomy = true;
                                     $taxonomy = Oak::$taxonomies_without_redundancy[ $taxonomy_incrementer ];
                                     $publication_identifier = $taxonomy->taxonomy_publication;
-                                    $element->publication_property = $publication_identifier;
+                                    $element->$publication_property = $publication_identifier;
+                                    
+                                    Oak::oak_simple_register_element( $element, $table_name );
                                 endif;
                                 $taxonomy_incrementer++;
                             } while( !$found_taxonomy && $taxonomy_incrementer < count( Oak::$taxonomies_without_redundancy ) );

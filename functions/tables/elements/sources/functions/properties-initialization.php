@@ -62,7 +62,7 @@ Sources::$properties = array(
         'width' => '50',
     ),
     array ( 
-        'name' => 'type', 
+        'name' => 'type',
         'property_name' => 'source_type', 
         'type' => 'text',
         'input_type' => 'select',
