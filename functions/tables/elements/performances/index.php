@@ -10,7 +10,7 @@ class Performances {
         Performances::$filters = array(
             array ( 'title' => __( 'Nom', Oak::$text_domain ), 'property' => 'performance_designation' ),
             array ( 'title' => __( 'Type', Oak::$text_domain ), 'property' => 'performance_type' ),
-            array ( 'title' => __( 'Objectif', Oak::$text_domain ), 'property' => 'performance_goal' )
+            array ( 'title' => __( 'Type', Oak::$text_domain ), 'property' => 'performance_type' )
         );
     }
 

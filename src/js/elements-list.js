@@ -716,7 +716,6 @@ handleModalButtons();
 function handleModalButtons() {
     var confirmButton = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
     confirmButton.addEventListener('click', function() {
-        console.log('kdfjdkfkd');
         if (importing) {
             var input = document.querySelector('.oak_csv_file_input');
             readCSV(input);
@@ -815,8 +814,8 @@ function readCSV(input) {
         var reader = new FileReader();
         reader.onload = function (e) {
             var rows = e.target.result.split('\n');
-            console.log('rows as they are' + rows);
             for (var i = 0; i < rows.length; i++ ) {
+                console.log(rows[i]);
                 var valuesOfI = CSVtoArray(rows[i]);
                 for (var j = 0; j < valuesOfI.length; j++) {
                     valuesOfI[j] = valuesOfI[j].replace(/\\"/g, '"')
