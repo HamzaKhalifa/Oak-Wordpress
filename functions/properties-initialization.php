@@ -51,21 +51,26 @@ foreach( Oak::$all_terms_without_redundancy as $term ) :
     Oak::$terms_array[] = array( 'value' => $term->term_identifier, 'innerHTML' => $term->term_designation );
 endforeach;
 
-Oak::$countries = array();
+include get_template_directory() . '/functions/tables/constants/countries.php';
+
 Oak::$languages = array();
 Oak::$languages_names = Oak::oak_get_languages();
 
 if ( isset( $_GET['elements'] ) && ( $_GET['elements'] == 'publications' || $_GET['elements'] == 'organizations' || $_GET['elements'] == 'performances' ) ) :
     Oak::$countries_names = Oak::oak_get_countries_names();
     
-    foreach( Oak::$countries_names as $country_name ) :
-        Oak::$countries[] = array( 'value' => $country_name, 'innerHTML' => $country_name );
-    endforeach;
+    // foreach( Oak::$countries_names as $country_name ) :
+    //     Oak::$countries[] = array( 'value' => $country_name, 'innerHTML' => $country_name );
+    // endforeach;
 
     foreach( Oak::$languages_names as $langauge_name ) :
         Oak::$languages[] = array( 'value' => $langauge_name, 'innerHTML' => $langauge_name );
     endforeach;
 endif;
+
+// echo('<pre>');
+// var_dump( Oak::$countries );
+// echo('</pre>');
 
 // $objects_array = Oak::$all_objects_without_redundancy;
 Oak::$objects_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun objet sélectionné', Oak::$text_domain ) ) ];

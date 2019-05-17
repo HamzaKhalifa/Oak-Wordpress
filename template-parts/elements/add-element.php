@@ -533,6 +533,13 @@ $modification_time_property = $table . '_modification_time';
                     <div class="additional_container">
                         <select <?php if( $property['select_multiple'] == 'true' ) : echo('multiple'); endif; ?> type="text" class="oak_add_element_container__input <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
                             <?php 
+                            $is_country_select = false;
+                            $type = '';
+                            if ( strpos( $property['name'], 'ountry' ) != false ) : 
+                                $is_country_select = true;
+                            ?>
+                            <?php
+                            endif;
                             $selected = array();
                             foreach( $property['choices'] as $key => $choice ) :
                                 array_push( $selected, 'notselected' );
@@ -544,10 +551,26 @@ $modification_time_property = $table . '_modification_time';
                                         endif;
                                     endforeach;
                                 endif;
+                                if ( $is_country_select ) :
+                                    if ( $choice['type'] != $type ) :
+                                        if ( $type != '' ) : ?>
+                                        </optgroup>
+                                        <?php
+                                        endif;
+                                        $type = $choice['type']; 
+                                        ?>
+                                        <optgroup label="<?php _e( 'Pays', Oak::$text_domain ); ?>">
+                                        <?php
+                                    endif;
+                                endif;
                                 ?>
                                 <option <?php echo( esc_attr( $selected[ $key ] ) ); ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
                                 <?php
                             endforeach;
+                            if ( $is_country_select ) : ?>
+                            </optgroup>
+                            <?php
+                            endif;
                             ?>
                         </select>
                     </div>

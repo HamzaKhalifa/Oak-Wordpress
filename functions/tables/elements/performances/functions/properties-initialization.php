@@ -448,8 +448,8 @@ Performances::$properties = array(
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => Oak::$countries,
-        'placeholder' => __( 'Pays', Oak::$text_domain ), 
-        'description' => __( 'Pays.', Oak::$text_domain ), 
+        'placeholder' => __( 'Pays/Région', Oak::$text_domain ), 
+        'description' => __( 'Pays/Région.', Oak::$text_domain ), 
         'width' => '25',
         'hidden' => get_option('oak_which_perimeter') == false || get_option('oak_which_perimeter') == 0 ? 'false' : 'true',
         'line' => 'dont_return'

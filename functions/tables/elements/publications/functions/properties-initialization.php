@@ -82,8 +82,8 @@ Publications::$properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => Oak::$countries,
-        'placeholder' => __( 'Pays', Oak::$text_domain ), 
-        'description' => __( 'Pays', Oak::$text_domain ), 
+        'placeholder' => __( 'Pays/Région', Oak::$text_domain ), 
+        'description' => __( 'Pays/Région', Oak::$text_domain ), 
         'width' => '50',
         'depends' => array(
             array( 'name' => 'local', 'values' => array( 'true' ) )

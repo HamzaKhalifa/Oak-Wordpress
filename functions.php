@@ -988,13 +988,15 @@ class Oak {
                     'field_type' => 'text',
                 );
 
-                update_post_meta( get_the_ID(), 'Oak: Designation Objet ' . $index, $object->object_designation );
+                $object_number = $index + 1;
+                update_post_meta( get_the_ID(), 'Oak: Designation Objet ' . $object_number, $object->object_designation );
                 $generic_widget = new Generic_Widget();
                 $generic_widget->set_widgets_options( $widget_options );
                 $widgets_manager->register_widget_type( $generic_widget );
 
                 $object_model_field_names_array = explode( '|', $object->object_model_fields_names );
                 foreach( $object->object_model_fields as $key => $object_model_field ) :
+                    $field_number = $key + 1;
                     $column_name = 'object_' . $key . '_' . $object_model_field->field_identifier;
                     $value = $object->$column_name;
                     $widget_options = array (
@@ -1023,6 +1025,7 @@ class Oak {
 
             // For the good practices: 
             $good_practice = __( 'Bonne Pratique', Oak::$text_domain );
+            $good_practice_number = 1;
             foreach( $selected_goodpractices as $good_practice_key => $goodpractice_identifier ) :
                 $incrementer = 0;
                 $found_goodpractice = false;
@@ -1030,23 +1033,25 @@ class Oak {
                     if ( Oak::$goodpractices_without_redundancy[ $incrementer ]->goodpractice_identifier == $goodpractice_identifier) :
                         // For the designation: 
                         $the_goodpractice = Oak::$goodpractices_without_redundancy[ $incrementer ];
-                        update_post_meta( get_the_ID(), 'Oak: ' . $good_practice . ' ' . $good_practice_key . ': Designation', $the_goodpractice->goodpractice_designation );
+                        update_post_meta( get_the_ID(), 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': Designation', $the_goodpractice->goodpractice_designation );
                         foreach( Good_Practices::$properties as $key => $goodpractice_property ) :
                             $property_name = $goodpractice_property['property_name'];
                             if ( $goodpractice_property['input_type'] != 'image' && $goodpractice_property['input_type'] != 'select' ) :
-                                update_post_meta( get_the_ID(), 'Oak: ' . $good_practice . ' ' . $good_practice_key . ': ' . $goodpractice_property['description'], $the_goodpractice->$property_name );
+                                update_post_meta( get_the_ID(), 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': ' . $goodpractice_property['description'], $the_goodpractice->$property_name );
                             elseif ( $goodpractice_property['input_type'] == 'image' ):
                                 $image_id = attachment_url_to_postid( $the_goodpractice->$property_name );
-                                $post_images_to_show[] = array ( 'url' => $the_goodpractice->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $good_practice . ' ' . $good_practice_key . ': ' .$goodpractice_property['description'] );
+                                $post_images_to_show[] = array ( 'url' => $the_goodpractice->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': ' .$goodpractice_property['description'] );
                                 // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
                             endif;
                         endforeach;
+                        $good_practice_number++;
                     endif;
                     $incrementer++;
                 } while( $incrementer < count( Oak::$goodpractices_without_redundancy ) && !$found_goodpractice );
             endforeach;
 
             // For sources
+            $source_number = 1;
             $source = __( 'Source', Oak::$text_domain );
             foreach( $selected_sources as $source_key => $selected_identifier ) :
                 $incrementer = 0;
@@ -1055,46 +1060,51 @@ class Oak {
                     if ( Oak::$sources_without_redundancy[ $incrementer ]->source_identifier == $selected_identifier) :
                         // For the designation: 
                         $the_source = Oak::$sources_without_redundancy[ $incrementer ];
-                        update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_key . ': Designation', $the_source->source_designation );
+                        update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_number . ': Designation', $the_source->source_designation );
                         foreach( Sources::$properties as $key => $source_property ) :
                             $property_name = $source_property['property_name'];
                             if ( $source_property['input_type'] != 'image' && $source_property['input_type'] != 'select' ) :
-                                update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_key . ': ' . $source_property['description'], $the_source->$property_name );
+                                update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_number . ': ' . $source_property['description'], $the_source->$property_name );
                             elseif ( $source_property['input_type'] == 'image' ):
                                 $image_id = attachment_url_to_postid( $the_source->$property_name );
-                                $post_images_to_show[] = array ( 'url' => $the_source->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $source . ' ' . $source_key . ': ' .$source_property['description'] );
+                                $post_images_to_show[] = array ( 'url' => $the_source->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $source . ' ' . $source_number . ': ' .$source_property['description'] );
                                 // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
                             endif;
                         endforeach;
+                        $source_number++;
                     endif;
                     $incrementer++;
                 } while( $incrementer < count( Oak::$sources_without_redundancy ) && !$found_source );
             endforeach;
 
+            $performance_number = 1;
             foreach( $selected_quantis as $quanti_identifier ) :
                 foreach( Oak::$performances_without_redundancy as $performance_key => $performance ) :
                     if ( $performance->performance_quantis == $quanti_identifier ) :
                         $performance_text = __( 'Donnée de performance', Oak::$text_domain );
-                        update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Designation', $performance->performance_designation );
+                        update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Designation', $performance->performance_designation );
 
                         $unity_type_text = __( 'Type de l’unité', Oak::$text_domain );
-                        update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': ' . $unity_type_text, $performance->performance_type );
+                        update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $unity_type_text, $performance->performance_type );
 
                         foreach( Performances::$properties as $key => $performance_property ) :
                             $performance_results = explode( '|', $performance->performance_results );
                             foreach( $performance_results as $result_key => $result ) :
-                                $result_values = explode( ':', $result );
-                                $year = $result_values[0];
-                                $value = $result_values[1];
-                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Année ' . $result_key, $year );
-                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': Résultalt ' . $year, $value );
+                                if ( $result != '' ) :
+                                    $result_values = explode( ':', $result );
+                                    $year = $result_values[0];
+                                    $value = $result_values[1];
+
+                                    update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Année ' . $result_key, $year );
+                                    update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Résultalt ' . $year, $value );
+                                endif;
                             endforeach;
                             $property_name = $performance_property['property_name'];
                             if ( $performance_property['input_type'] != 'image' && $performance_property['input_type'] != 'select' ) :
-                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': ' . $performance_property['description'], $performance->$property_name );
+                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
                             elseif ( $performance_property['input_type'] == 'image' ):
                                 $image_id = attachment_url_to_postid( $performance->$property_name );
-                                $post_images_to_show[] = array ( 'url' => $performance->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $performance . ' ' . $performance_key . ': ' .$performance_property['description'] );
+                                $post_images_to_show[] = array ( 'url' => $performance->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $performance . ' ' . $performance_number . ': ' .$performance_property['description'] );
                                 // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
                             elseif( $performance_property['input_type'] == 'select' ) :
                                 if ( isset( $performance_property['depends'] ) ) :
@@ -1106,16 +1116,18 @@ class Oak {
                                                     $value = $choice['innerHTML'];
                                                 endif;
                                             endforeach;
-                                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_key . ': ' . $performance_property['description'], $value );
+                                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $value );
                                         endif;
                                     endif;
                                 endif;
                             endif;
                         endforeach;
+                        $performance_number++;
                     endif;
                 endforeach;
             endforeach;
 
+            $quali_number = 1;
             $quali = __( 'Indicateur Qualitatif', Oak::$text_domain );
             foreach( $selected_qualis as $quali_key => $selected_identifier ) :
                 $incrementer = 0;
@@ -1124,17 +1136,18 @@ class Oak {
                     if ( Oak::$qualis_without_redundancy[ $incrementer ]->quali_identifier == $selected_identifier) :
                         // For the designation: 
                         $the_quali = Oak::$qualis_without_redundancy[ $incrementer ];
-                        update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_key . ': Designation', $the_quali->quali_designation );
+                        update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': Designation', $the_quali->quali_designation );
                         foreach( Qualis::$properties as $key => $quali_property ) :
                             $property_name = $quali_property['property_name'];
                             if ( $quali_property['input_type'] != 'image' && $quali_property['input_type'] != 'select' ) :
-                                update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_key . ': ' . $quali_property['description'], $the_quali->$property_name );
+                                update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': ' . $quali_property['description'], $the_quali->$property_name );
                             elseif ( $quali_property['input_type'] == 'image' ):
                                 $image_id = attachment_url_to_postid( $the_quali->$property_name );
-                                $post_images_to_show[] = array ( 'url' => $the_quali->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $quali . ' ' . $quali_key . ': ' .$quali_property['description'] );
+                                $post_images_to_show[] = array ( 'url' => $the_quali->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $quali . ' ' . $quali_number . ': ' .$quali_property['description'] );
                                 // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
                             endif;
                         endforeach;
+                        $quali_number++;
                     endif;
                     $incrementer++;
                 } while( $incrementer < count( Oak::$qualis_without_redundancy ) && !$found_quali );
