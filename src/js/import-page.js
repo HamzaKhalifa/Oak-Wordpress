@@ -314,7 +314,7 @@ var steps = [];
                             success: function(data) {
                                 console.log(data);
                                 doneLoading();
-                                window.location.reload();
+                                openModal('L\'import a été effectué avec succès');
                             },
                             error: function(error) {
                                 console.log(error);
@@ -802,6 +802,14 @@ function openModal(title, twoButtons) {
         cancelButtonContainer.style.display = 'none';
         okButtonContainer.style.display = 'flex';
     }
+}
+
+handleModalOkButton();
+function handleModalOkButton() {
+    var okButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__ok_button_container');
+    okButtonContainer.addEventListener('click', function() {
+        closeModals();
+    });
 }
 
 function closeModals() {

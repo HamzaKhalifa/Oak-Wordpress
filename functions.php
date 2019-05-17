@@ -2678,11 +2678,14 @@ class Oak {
                             $oak_image_name = $oak_image_exploded[ count( $oak_image_exploded ) - 1 ];
                             if ( $image_name == $oak_image_name ) :
                                 $found_image = true;
+
+                                $found_images = get_option('oak_corn_found_images') ? get_option('oak_corn_found_images') : [];
+                                $found_images[] = Oak::$all_images[ $image_incrementer ]->ID;
+                                update_option( 'oak_corn_found_images', $found_images );
                             endif;
 
                             $image_incrementer++;
                         } while( !$found_image && $image_incrementer < count( Oak::$all_images ) );
-                        
                         if ( !$found_image ) :
                             $download_remote_image = new KM_Download_Remote_Image( $value, array() );
                             $id = $download_remote_image->download();
@@ -2967,7 +2970,24 @@ class Oak {
 
         $this->corn_save_element( $terms );
 
+        $this->oak_delete_images_that_are_not_needed();
+
         wp_send_json_success();
+    }
+
+    function oak_delete_images_that_are_not_needed() {
+        $found_images = get_option( 'oak_corn_found_images' ) ? get_option( 'oak_corn_found_images' ) : [];
+        foreach( Oak::$all_images as $image ) :
+            $is_in_found_images = false;
+            foreach( $found_images as $found_image ) :
+                if ( $found_image == $image->ID ) :
+                    $is_in_found_images = true;
+                endif;
+            endforeach;
+            if ( !$is_in_found_images ) :
+                wp_delete_attachment( $image->ID, true );
+            endif;
+        endforeach;
     }
 
     function oak_wordpress_dashboard() {

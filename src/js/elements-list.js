@@ -817,6 +817,7 @@ function readCSV(input) {
             for (var i = 0; i < rows.length; i++ ) {
                 console.log(rows[i]);
                 var valuesOfI = CSVtoArray(rows[i]);
+                console.log('valuesOf', valuesOfI);
                 for (var j = 0; j < valuesOfI.length; j++) {
                     valuesOfI[j] = valuesOfI[j].replace(/\\"/g, '"')
                         .replace(/\\'/g, '\'')
