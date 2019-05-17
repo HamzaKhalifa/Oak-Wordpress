@@ -2691,7 +2691,8 @@ class Oak {
                             $oak_image_name = $oak_image_exploded[ count( $oak_image_exploded ) - 1 ];
                             if ( $image_name == $oak_image_name ) :
                                 $found_image = true;
-
+                                $the_value = Oak::$all_images[ $image_incrementer ]->guid;
+                                
                                 $found_images = get_option('oak_corn_found_images') ? get_option('oak_corn_found_images') : [];
                                 $found_images[] = Oak::$all_images[ $image_incrementer ]->ID;
                                 update_option( 'oak_corn_found_images', $found_images );
