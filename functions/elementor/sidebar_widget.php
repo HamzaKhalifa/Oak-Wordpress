@@ -17,14 +17,8 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
         
         if ( $sidebar == 'csr_sidebar' ) :
             $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
-            // $selected_goodpractices = get_post_meta( get_the_ID(), 'good_practices_selector' ) ? get_post_meta( get_the_ID(), 'good_practices_selector' ) [0] : [];
-            // $selected_sources = get_post_meta( get_the_ID(), 'sources_selector' ) ? get_post_meta( get_the_ID(), 'sources_selector' ) [0] : [];
-            // $selected_quantis = get_post_meta( get_the_ID(), 'quantis_selector' ) ? get_post_meta( get_the_ID(), 'quantis_selector' ) [0] : [];
-            // $selected_qualis = get_post_meta( get_the_ID(), 'qualis_selector' ) ? get_post_meta( get_the_ID(), 'qualis_selector' ) [0] : [];
+            $publications_and_frame_objects = [];
 
-            echo('<pre>');
-            // var_dump( Sidebar_Widget::$post_selected_objects[0] );
-            $frame_objects = [];
             foreach( Sidebar_Widget::$post_selected_objects[0] as $object ) :
                 $frame_objects_data_within_object = [];
                 
@@ -49,8 +43,14 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
                             'field_content' => $field_content,
                             'the_frame_object' => $field_frame_object,
                         );
+
+                        $publication_identifier = Sidebar_Widget::to_which_publication_frame_object_belongs( $field_frame_object->object_identifier );
+                        $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $field_frame_object );
+
+                        
                     endif;
                 endforeach;
+
                 // for object forms selectors
                 $form_selectors_array = explode( '|', $object->object_form_selectors );
                 foreach( $form_selectors_array as $form_selector_data ) :
@@ -65,19 +65,25 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
                             'frame_object_identifier' => $frame_object_identifier,
                             'the_frame_object' => $form_frame_object,
                         );
+
+                        $publication_identifier = Sidebar_Widget::to_which_publication_frame_object_belongs( $form_frame_object->object_identifier );
+                        $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $form_frame_object );
                     endif;
                 endforeach;
                 // for object model selector
                 if ( $object->object_model_selector != null && $object->object_model_selector != '' ) :
-                    Sidebar_Widget::find_frame_object( $object->object_model_selector );
+                    $model_frame_object = Sidebar_Widget::find_frame_object( $object->object_model_selector );
                     $frame_objects_data_within_object[] = array(
-                        'the_frame_object' => $form_frame_object,
+                        'the_frame_object' => $model_frame_object,
                     );
+
+                    $publication_identifier = Sidebar_Widget::to_which_publication_frame_object_belongs( $model_frame_object->object_identifier );
+                    $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $model_frame_object );
                 endif;
 
-                $frame_objects[] = array(
+                $frame_objects[] = array (
                     'object' => $object,
-                    'frame_objects_data_within_object' =>  $frame_objects_data_within_object
+                    'frame_objects_data_within_object' => $frame_objects_data_within_object
                 );
 
                 ?>
@@ -102,10 +108,6 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
                 </div>
                 <?php
             endforeach;
-            // var_dump( $frame_objects );
-            echo('</pre>');
-            
-
         else :
             if ( empty( $sidebar ) ) {
                 return;
@@ -128,5 +130,45 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
         } while( $incrementer < count( Oak::$all_frame_objects_without_redundancy ) && !$found_frame_object );
 
         return $frame_object;
+    }
+
+    public static function to_which_publication_frame_object_belongs( $frame_object_identifier ) {
+        foreach( Oak::$terms_and_objects as $term_and_object ) :
+            if ( $term_and_object->object_identifier == $frame_object_identifier ) :
+                foreach( Oak::$all_terms_without_redundancy as $term ) :
+                    if ( $term->term_identifier == $term_and_object->term_identifier ) :
+                        foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
+                            if ( $taxonomy->taxonomy_identifier == $term->term_taxonomy_identifier ) :
+                                return $taxonomy->taxonomy_publication;
+                            endif;
+                        endforeach;
+                    endif;
+                endforeach;
+            endif;
+        endforeach;
+
+        return '';
+    }
+
+    public static function add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $the_frame_object ) {
+        foreach( $publications_and_frame_objects as $publication_and_frame_objects ) :
+            if ( $publication_and_frame_objects['publication']->publication_identifier == $publication_identifier ) :
+                $publication_and_frame_objects['frame_objects'][] = $the_frame_object;
+                return $publications_and_frame_objects;
+            endif;
+        endforeach;
+
+        // This is if publication doesn't already exist in our array
+        $the_publication;
+        foreach( Oak::$publications_without_redundancy as $publication ) :
+            if ( $publication->publication_identifier == $publication_identifier ) :
+                $the_publication = $publication;
+            endif;
+        endforeach;
+
+        $publications_and_frame_objects[] = array(
+            'publication' => $the_publication,
+            'frame_objects' => $the_frame_object
+        );
     }
 }
