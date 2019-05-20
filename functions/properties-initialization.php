@@ -59,18 +59,10 @@ Oak::$languages_names = Oak::oak_get_languages();
 if ( isset( $_GET['elements'] ) && ( $_GET['elements'] == 'publications' || $_GET['elements'] == 'organizations' || $_GET['elements'] == 'performances' ) ) :
     Oak::$countries_names = Oak::oak_get_countries_names();
     
-    // foreach( Oak::$countries_names as $country_name ) :
-    //     Oak::$countries[] = array( 'value' => $country_name, 'innerHTML' => $country_name );
-    // endforeach;
-
     foreach( Oak::$languages_names as $langauge_name ) :
         Oak::$languages[] = array( 'value' => $langauge_name, 'innerHTML' => $langauge_name );
     endforeach;
 endif;
-
-// echo('<pre>');
-// var_dump( Oak::$countries );
-// echo('</pre>');
 
 // $objects_array = Oak::$all_objects_without_redundancy;
 Oak::$objects_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun objet sélectionné', Oak::$text_domain ) ) ];

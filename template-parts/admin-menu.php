@@ -480,6 +480,12 @@
                 'submenu' => true
             ),
             array(
+                'title' => __( 'Thèmes', Oak::$text_domain ),
+                'url' => 'widgets.php',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            ),
+            array(
                 'title' => __( 'Customizer', Oak::$text_domain ),
                 'url' => 'customize.php?return=%2Fboilerplate%2Fwp-admin%2F',
                 'icon' => 'fas fa-th-large',

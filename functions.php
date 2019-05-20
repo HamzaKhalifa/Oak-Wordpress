@@ -187,6 +187,10 @@ class Oak {
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
 
+        add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
+        add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
+        
+
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_styles' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_scripts' ) );
 
@@ -196,6 +200,8 @@ class Oak {
 
         add_action( 'after_setup_theme', array( $this, 'oak_add_theme_support' ) );
         add_action( 'after_setup_theme', array( $this, 'oak_translation_setup' ) );
+
+        add_action( 'widgets_init', array( $this, 'oak_widgets_init' ) );        
 
         add_action( 'admin_head', array ( $this, 'oak_wordpress_dashboard' ) );
 
@@ -208,6 +214,8 @@ class Oak {
         $this->oak_ajax_calls();
 
         $this->oak_contact_form();
+
+        // $this->get_page_content();
     }
 
     function oak_ajax_calls() {
@@ -266,6 +274,7 @@ class Oak {
     function oak_enqueue_styles() {
         wp_enqueue_style( 'the_style', get_stylesheet_directory_uri() . '/style.css' );
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
+        wp_enqueue_style( 'oak_front_global', get_template_directory_uri() . '/src/css/front/global.css' );
     }
 
     function oak_enqueue_scripts() {
@@ -292,6 +301,8 @@ class Oak {
 
         wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
         wp_enqueue_script( 'oak_front_graphs', get_template_directory_uri() . '/src/js/front/graphs.js', array('jquery'), false, true );
+        wp_enqueue_script( 'oak_front_sidebar', get_template_directory_uri() . '/src/js/front/sidebar.js', array('jquery'), false, true );
+
     }
 
     function oak_admin_enqueue_styles( $hook ) {
@@ -575,6 +586,7 @@ class Oak {
                 $elements = Oak::$terms;
 
                 $properties = array_merge( $properties, Terms::$properties );
+                $filters = Terms::$filters;
             endif;
 
             if ( $_GET['elements'] == 'term_objects' ) :
@@ -637,6 +649,21 @@ class Oak {
                 wp_localize_script( 'corn_elements_list', 'DATA', $final_data_to_pass );
             endif;
         endif;
+    }
+
+    function oak_widgets_init() {
+        $side_bars = array ( 
+            array ( 'name' => __( 'Sidebar CSR', Oak::$text_domain ), 'id' => 'csr_sidebar' ),
+            array ( 'name' => __( 'Sidebar 1', Oak::$text_domain ), 'id' => 'sidebar_1' ),
+            array ( 'name' => __( 'Sidebar 2', Oak::$text_domain ), 'id' => 'sidebar_2' ),
+            array ( 'name' => __( 'Sidebar 3', Oak::$text_domain ), 'id' => 'sidebar_3' ),
+            array ( 'name' => __( 'Sidebar 4', Oak::$text_domain ), 'id' => 'sidebar_4' ),
+            array ( 'name' => __( 'Sidebar 5', Oak::$text_domain ), 'id' => 'sidebar_5' ),
+        );
+
+        foreach( $side_bars as $side_bar ) :
+            register_sidebar( $side_bar );
+        endforeach;
     }
 
     function oak_add_meta_box_to_posts() {
@@ -901,7 +928,7 @@ class Oak {
             \Elementor\Plugin::$instance->dynamic_tags->register_group( 'oak', [
                 'title' => __( 'Oak', Oak::$text_domain )
             ] );
-
+            
             include_once get_template_directory() . '/functions/elementor/dynamic_tag.php';
 
             $tag = new Dynamic_Tag();
@@ -933,6 +960,8 @@ class Oak {
         add_action('elementor/widgets/widgets_registered', function( $widgets_manager ) {
 
             include_once get_template_directory() . '/functions/elementor/generic_widget.php';
+
+            $this->oak_add_side_bar_widgets( $widgets_manager );
 
             global $wpdb;
 
@@ -970,6 +999,8 @@ class Oak {
                     endif;
                 endforeach;
             endforeach;
+
+            Sidebar_Widget::$post_selected_objects[] = $our_objects;
 
             $metas = get_post_meta( get_the_ID() );
             foreach( $metas as $key => $meta ) :
@@ -1221,6 +1252,13 @@ class Oak {
             Graphs::create_widgets( $widgets_manager );
 
         }, 14);
+    }
+
+    function oak_add_side_bar_widgets( $widgets_manager ) {
+        include_once get_template_directory() . '/functions/elementor/sidebar_widget.php';
+
+        $sidebar_widget = new Sidebar_Widget();
+        $widgets_manager->register_widget_type( $sidebar_widget );
     }
 
     function oak_get_all_images() {
@@ -1597,7 +1635,7 @@ class Oak {
                 $properties = Taxonomies::$properties;
                 $table = 'taxonomy';
                 $title = __( 'Ajouter une taxonomie', Oak::$text_domain );
-                $elements = Oak::$models_without_redundancy;
+                $elements = Oak::$taxonomies_without_redundancy;
             break;
             case 'publications':
                 $properties = Publications::$properties;
@@ -2692,7 +2730,7 @@ class Oak {
                             if ( $image_name == $oak_image_name ) :
                                 $found_image = true;
                                 $the_value = Oak::$all_images[ $image_incrementer ]->guid;
-                                
+
                                 $found_images = get_option('oak_corn_found_images') ? get_option('oak_corn_found_images') : [];
                                 $found_images[] = Oak::$all_images[ $image_incrementer ]->ID;
                                 update_option( 'oak_corn_found_images', $found_images );
@@ -3048,6 +3086,15 @@ class Oak {
                 endif;
             endforeach;
         endforeach;
+    }
+
+    function get_page_content() {
+        $post = get_posts()[0];
+        $post_url = $post->guid;
+        if ( is_admin() ) :
+            $post_content = file_get_contents( 'http://localhost:8888/test/post-a/' );
+            var_dump( $post_content );
+        endif;
     }
 }
 

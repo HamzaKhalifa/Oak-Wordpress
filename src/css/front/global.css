@@ -1,0 +1,33 @@
+.oak_sidebar_frame_objects_container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.oak_sidebar_frame_objects_container__single_frame {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.oak_sidebar_frame_objects_container_single_frame__scroll_to_content_button {
+    transition: all .2s ease-in-out;
+}
+
+.oak_sidebar_frame_objects_container_single_frame__scroll_to_content_button:hover {
+    cursor: pointer;
+}
+
+.oak_sidebar_element_highlighted {
+    background-color: red;
+    /* transition: all 1s ease-in-out; */
+    animation-name: backtocolor;
+    animation-fill-mode: forwards;
+    animation-duration: 1s;
+}
+
+@keyframes backtocolor {
+    from { background-color: red }
+    to { background-color: transparent };
+}

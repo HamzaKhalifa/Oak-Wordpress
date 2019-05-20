@@ -361,6 +361,4 @@ class Generic_Widget extends \Elementor\Widget_Base {
 
 		echo( $value );
 	}
-
-
 }

@@ -1,0 +1,132 @@
+<?php
+use Elementor\Controls_Manager;
+
+class Sidebar_Widget extends \Elementor\Widget_Sidebar {
+    public static $post_selected_objects = [];
+
+    public function get_name() {
+		return 'oak_sidebar';
+    }
+
+    public function get_title() {
+		return __( 'Oak Sidebar', 'elementor' );
+	}
+    
+    protected function render() {
+        $sidebar = $this->get_settings_for_display( 'sidebar' );
+        
+        if ( $sidebar == 'csr_sidebar' ) :
+            $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
+            // $selected_goodpractices = get_post_meta( get_the_ID(), 'good_practices_selector' ) ? get_post_meta( get_the_ID(), 'good_practices_selector' ) [0] : [];
+            // $selected_sources = get_post_meta( get_the_ID(), 'sources_selector' ) ? get_post_meta( get_the_ID(), 'sources_selector' ) [0] : [];
+            // $selected_quantis = get_post_meta( get_the_ID(), 'quantis_selector' ) ? get_post_meta( get_the_ID(), 'quantis_selector' ) [0] : [];
+            // $selected_qualis = get_post_meta( get_the_ID(), 'qualis_selector' ) ? get_post_meta( get_the_ID(), 'qualis_selector' ) [0] : [];
+
+            echo('<pre>');
+            // var_dump( Sidebar_Widget::$post_selected_objects[0] );
+            $frame_objects = [];
+            foreach( Sidebar_Widget::$post_selected_objects[0] as $object ) :
+                $frame_objects_data_within_object = [];
+                
+                // for object fields selectors
+                $object_selectors_array = explode( '|', $object->object_selectors );
+                foreach( $object_selectors_array as $object_selector_data ) :
+                    if ( $object_selector_data != '' ) :
+                        $field_index = explode( '_', $object_selector_data )[0];
+                        $field_identifier = explode( '_', explode( ':', $object_selector_data )[0] )[1];
+                        $frame_object_identifier = explode( ':', $object_selector_data )[1];
+                        $field_content_property = 'object_' . $field_index . '_' . $field_identifier;
+                        $field_content = $object->$field_content_property;
+                        
+                        // Lets get the frame object now: 
+                        $field_frame_object = Sidebar_Widget::find_frame_object( $frame_object_identifier );
+
+                        $frame_objects_data_within_object[] = array(
+                            'field_index' => $field_index,
+                            'field_identifier' => $field_identifier,
+                            'frame_object_identifier' => $frame_object_identifier,
+                            'field_content_property' => $field_content_property,
+                            'field_content' => $field_content,
+                            'the_frame_object' => $field_frame_object,
+                        );
+                    endif;
+                endforeach;
+                // for object forms selectors
+                $form_selectors_array = explode( '|', $object->object_form_selectors );
+                foreach( $form_selectors_array as $form_selector_data ) :
+                    if ( $form_selector_data != '' ) :
+                        $form_identifier = explode( '_', $form_selector_data )[1];
+                        $frame_object_identifier = explode( '_', $form_selector_data )[3];
+                        $form_frame_object = Sidebar_Widget::find_frame_object( $frame_object_identifier );
+                        // Lets get the frame object now: 
+
+                        $frame_objects_data_within_object[] = array(
+                            'form_identifier' => $form_identifier,
+                            'frame_object_identifier' => $frame_object_identifier,
+                            'the_frame_object' => $form_frame_object,
+                        );
+                    endif;
+                endforeach;
+                // for object model selector
+                if ( $object->object_model_selector != null && $object->object_model_selector != '' ) :
+                    Sidebar_Widget::find_frame_object( $object->object_model_selector );
+                    $frame_objects_data_within_object[] = array(
+                        'the_frame_object' => $form_frame_object,
+                    );
+                endif;
+
+                $frame_objects[] = array(
+                    'object' => $object,
+                    'frame_objects_data_within_object' =>  $frame_objects_data_within_object
+                );
+
+                ?>
+                <div class="oak_sidebar_object_container">
+                    <h2 class="oak_sidebar_object_container__object_title"><?php echo( $object->object_designation ); ?></h2>
+                    <div class="oak_sidebar_frame_objects_container">
+                        <?php  
+                        foreach( $frame_objects_data_within_object as $frame_object_data ) : ?>
+                            <div frame-object-identifier="<?php echo( $frame_object_data['the_frame_object']->object_identifier ); ?>" class="oak_sidebar_frame_objects_container__single_frame">
+                                <h3><?php echo( $frame_object_data['the_frame_object']->object_designation ); ?></h3>
+                                <?php
+                                if( isset( $frame_object_data['field_identifier'] ) ) : ?>
+                                    <span class="oak_sidebar_frame_objects_container_single_frame__scroll_to_content_button" value="<?php echo( $frame_object_data['field_content'] ); ?>"><?php _e( 'Aller', Oak::$text_domain ); ?></span>
+                                <?php
+                                endif;
+                                ?>
+                            </div>
+                        <?php
+                        endforeach;
+                        ?>
+                    </div>
+                </div>
+                <?php
+            endforeach;
+            // var_dump( $frame_objects );
+            echo('</pre>');
+            
+
+        else :
+            if ( empty( $sidebar ) ) {
+                return;
+            }
+
+            dynamic_sidebar( $sidebar );
+        endif;
+    }
+
+    public static function find_frame_object( $frame_object_identifier ) {
+        $incrementer = 0;
+        $found_frame_object = false;
+        $frame_object;
+        do {
+            if ( Oak::$all_frame_objects_without_redundancy[$incrementer]->object_identifier == $frame_object_identifier ) :
+                $found_frame_object = true;
+                $frame_object = Oak::$all_frame_objects_without_redundancy[$incrementer];
+            endif;
+            $incrementer++;
+        } while( $incrementer < count( Oak::$all_frame_objects_without_redundancy ) && !$found_frame_object );
+
+        return $frame_object;
+    }
+}

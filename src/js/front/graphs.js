@@ -10,4 +10,5 @@ function handleGraphsInitialization() {
 
         var chart = new Chart(chartCreator, data);
     }
+    
 }
