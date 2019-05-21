@@ -5,10 +5,18 @@ function handleFrameObjectsButtons() {
         var identifier = createIdentifier();
         frameObjectsButtons[i].setAttribute('id', identifier);
 
+        // Remove it in case it is not shown/used in the page: 
+        var value = frameObjectsButtons[i].getAttribute('value');
+        var allElementsThatContainValue = jQuery('*:contains("' + value + '")'); 
+        if (allElementsThatContainValue.length == 0) {
+            frameObjectsButtons[i].parentNode.classList.add('oak_hidden');
+        }
+
         jQuery('#' + identifier).click(function() {
             var value = this.getAttribute('value');
             
             var allElementsThatContainValue = jQuery('*:contains("' + value + '")'); 
+            console.log(allElementsThatContainValue.length);
             var theElement = allElementsThatContainValue[allElementsThatContainValue.length - 2];
             
             theElement.scrollIntoView();

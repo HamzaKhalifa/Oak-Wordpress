@@ -446,8 +446,3 @@ div {
 .oak_post_elements_selector_selected_elements_single_element_element_remove_button:hover {
     cursor: pointer;
 }
-
-.dialog-message {
-    height: 300px!important;
-    overflow: scroll!important;
-}
