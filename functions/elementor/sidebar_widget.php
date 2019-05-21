@@ -1,7 +1,7 @@
 <?php
 use Elementor\Controls_Manager;
 
-class Sidebar_Widget extends \Elementor\Widget_Sidebar {
+class Sidebar_Widget extends \Elementor\Widget_Base {
     public static $post_selected_objects = [];
 
     public function get_name() {
@@ -9,8 +9,55 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
     }
 
     public function get_title() {
-		return __( 'Oak Sidebar', 'elementor' );
-	}
+		return __( 'Oak Sidebar', Oak::$text_domain );
+    }
+
+	public function get_icon() {
+		return 'eicon-sidebar';
+    }
+    
+	public function get_keywords() {
+		return [ 'sidebar', 'widget' ];
+    }
+    
+	protected function _register_controls() {
+		global $wp_registered_sidebars;
+
+		$options = [];
+
+		if ( ! $wp_registered_sidebars ) {
+			$options[''] = __( 'Pas de Sidebars trouvés', Oak::$text_domain );
+		} else {
+			$options[''] = __( 'Choisir une Sidebar', Oak::$text_domain );
+
+			foreach ( $wp_registered_sidebars as $sidebar_id => $sidebar ) {
+				$options[ $sidebar_id ] = $sidebar['name'];
+			}
+		}
+
+		$default_key = array_keys( $options );
+		$default_key = array_shift( $default_key );
+
+		$this->start_controls_section(
+			'section_sidebar',
+			[
+				'label' => __( 'Sidebar', Oak::$text_domain ),
+			]
+		);
+
+		$this->add_control( 'sidebar', [
+			'label' => __( 'Choisir une Sidebar', Oak::$text_domain ),
+			'type' => Controls_Manager::SELECT,
+			'default' => $default_key,
+			'options' => $options,
+		] );
+
+		$this->end_controls_section();
+    }
+
+    protected function _content_template() {}
+        
+    public function render_plain_content() {}
     
     protected function render() {
         $sidebar = $this->get_settings_for_display( 'sidebar' );
