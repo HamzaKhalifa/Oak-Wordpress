@@ -15,6 +15,10 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
 	public function get_icon() {
 		return 'eicon-sidebar';
     }
+
+    public function get_categories() {
+		return [ 'oak' ];
+	}
     
 	public function get_keywords() {
 		return [ 'sidebar', 'widget' ];

@@ -1,0 +1,9 @@
+
+.edit-post-header {
+    top: 70px; 
+}
+
+.dialog-message {
+    overflow: scroll!important;
+    height: 600px!important;
+}
