@@ -20,8 +20,6 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
             $publications_and_frame_objects = [];
 
             foreach( Sidebar_Widget::$post_selected_objects[0] as $object ) :
-                $frame_objects_data_within_object = [];
-                
                 // for object fields selectors
                 $object_selectors_array = explode( '|', $object->object_selectors );
                 foreach( $object_selectors_array as $object_selector_data ) :
@@ -35,7 +33,7 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
                         // Lets get the frame object now: 
                         $field_frame_object = Sidebar_Widget::find_frame_object( $frame_object_identifier );
 
-                        $frame_objects_data_within_object[] = array(
+                        $frame_object_data_within_object = array(
                             'field_index' => $field_index,
                             'field_identifier' => $field_identifier,
                             'frame_object_identifier' => $frame_object_identifier,
@@ -45,7 +43,7 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
                         );
 
                         $publication_identifier = Sidebar_Widget::to_which_publication_frame_object_belongs( $field_frame_object->object_identifier );
-                        $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $field_frame_object );
+                        $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object );
 
                         
                     endif;
@@ -60,38 +58,35 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
                         $form_frame_object = Sidebar_Widget::find_frame_object( $frame_object_identifier );
                         // Lets get the frame object now: 
 
-                        $frame_objects_data_within_object[] = array(
+                        $frame_object_data_within_object = array (
                             'form_identifier' => $form_identifier,
                             'frame_object_identifier' => $frame_object_identifier,
                             'the_frame_object' => $form_frame_object,
                         );
 
                         $publication_identifier = Sidebar_Widget::to_which_publication_frame_object_belongs( $form_frame_object->object_identifier );
-                        $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $form_frame_object );
+                        $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object );
                     endif;
                 endforeach;
                 // for object model selector
                 if ( $object->object_model_selector != null && $object->object_model_selector != '' ) :
                     $model_frame_object = Sidebar_Widget::find_frame_object( $object->object_model_selector );
-                    $frame_objects_data_within_object[] = array(
+                    $frame_object_data_within_object[] = array(
                         'the_frame_object' => $model_frame_object,
                     );
 
                     $publication_identifier = Sidebar_Widget::to_which_publication_frame_object_belongs( $model_frame_object->object_identifier );
-                    $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $model_frame_object );
+                    $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object );
                 endif;
+            endforeach;
 
-                $frame_objects[] = array (
-                    'object' => $object,
-                    'frame_objects_data_within_object' => $frame_objects_data_within_object
-                );
-
+            foreach( $publications_and_frame_objects as $publication_and_frame_object ) :
                 ?>
-                <div class="oak_sidebar_object_container">
-                    <h2 class="oak_sidebar_object_container__object_title"><?php echo( $object->object_designation ); ?></h2>
+                <div class="oak_sidebar_publication_container">
+                    <h2 class="oak_sidebar_object_container__publication_designation_title"><?php echo( $publication_and_frame_object['publication']->publication_designation ); ?></h2>
                     <div class="oak_sidebar_frame_objects_container">
                         <?php  
-                        foreach( $frame_objects_data_within_object as $frame_object_data ) : ?>
+                        foreach( $publication_and_frame_object['frame_objects'] as $frame_object_data ) : ?>
                             <div frame-object-identifier="<?php echo( $frame_object_data['the_frame_object']->object_identifier ); ?>" class="oak_sidebar_frame_objects_container__single_frame">
                                 <h3><?php echo( $frame_object_data['the_frame_object']->object_designation ); ?></h3>
                                 <?php
@@ -108,6 +103,7 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
                 </div>
                 <?php
             endforeach;
+
         else :
             if ( empty( $sidebar ) ) {
                 return;
@@ -151,13 +147,24 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
     }
 
     public static function add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $the_frame_object ) {
-        foreach( $publications_and_frame_objects as $publication_and_frame_objects ) :
+        foreach( $publications_and_frame_objects as $key => $publication_and_frame_objects ) :
             if ( $publication_and_frame_objects['publication']->publication_identifier == $publication_identifier ) :
-                $publication_and_frame_objects['frame_objects'][] = $the_frame_object;
+                // Check if object already exists
+                $object_already_exists = false;
+                foreach( $publication_and_frame_objects['frame_objects'] as $object_data_within_object ) :
+                    if( $object_data_within_object['the_frame_object']->object_identifier == $the_frame_object['the_frame_object']->object_identifier ) :
+                        $object_already_exists = true;
+                    endif;
+                endforeach;
+
+                if( !$object_already_exists ) :
+                    $publication_and_frame_objects['frame_objects'][] = $the_frame_object;
+                    $publications_and_frame_objects[ $key ] = $publication_and_frame_objects;
+                endif;
+                
                 return $publications_and_frame_objects;
             endif;
         endforeach;
-
         // This is if publication doesn't already exist in our array
         $the_publication;
         foreach( Oak::$publications_without_redundancy as $publication ) :
@@ -168,7 +175,9 @@ class Sidebar_Widget extends \Elementor\Widget_Sidebar {
 
         $publications_and_frame_objects[] = array(
             'publication' => $the_publication,
-            'frame_objects' => $the_frame_object
+            'frame_objects' => [ $the_frame_object ]
         );
+
+        return $publications_and_frame_objects;
     }
 }
