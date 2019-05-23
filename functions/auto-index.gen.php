@@ -3,9 +3,6 @@
     $indexes = [];
 
     $posts = get_posts();
-    wp_send_json_success(
-        array( 'wtf' => 'dkfskdfjskdfjksdf', 'posts' => $posts )
-    );
     $pages = get_pages();
 
     wp_send_json_success(
