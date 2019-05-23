@@ -1,4 +1,8 @@
 <?php
+if( !is_admin() ) :
+    return;
+endif;
+
 // if ( get_option( 'central' ) === false ) :
     $indexes = [];
 
@@ -26,7 +30,11 @@
 
     $all_posts_and_pages = array_merge( $posts, $pages );
 
-    foreach( $posts as $post ) :
+    wp_send_json_success( array(
+        'posts_and_pages' => $all_posts_and_pages
+    ) );
+
+    foreach( $all_posts_and_pages as $post ) :
         $post_selected_objects = get_post_meta( $post->ID, 'objects_selector' ) ? get_post_meta( $post->ID, 'objects_selector' ) [0] : [];
 
         global $wpdb;
