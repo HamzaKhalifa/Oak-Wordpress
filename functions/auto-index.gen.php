@@ -6,11 +6,13 @@
     $pages = get_pages();
     var_dump( $posts );
     var_dump( $pages );
-    $all_posts_and_pages = array_merge( $posts, $pages );
 
     wp_send_json_success(
-        array( 'wtf' => 'dkfskdfjskdfjksdf', 'posts' => $all_posts_and_pages )
+        array( 'wtf' => 'dkfskdfjskdfjksdf', 'pages' => $pages )
     );
+
+    $all_posts_and_pages = array_merge( $posts, $pages );
+
     foreach( $posts as $post ) :
         $post_selected_objects = get_post_meta( $post->ID, 'objects_selector' ) ? get_post_meta( $post->ID, 'objects_selector' ) [0] : [];
 
