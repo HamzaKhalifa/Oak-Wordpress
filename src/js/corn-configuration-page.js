@@ -411,6 +411,31 @@ function handleGeneralSettingsSaveButton() {
     });
 }
 
+// To regenerate indexes: 
+handleRegenerateIndexesButton();
+function handleRegenerateIndexesButton() {
+    var regenerateIndexesButton = document.querySelector('#oak_regenerate_indexes_button');
+    regenerateIndexesButton.addEventListener('click', function() {
+        setLoading();
+        jQuery.ajax({
+            url: DATA.ajaxUrl,
+            type: 'POST', 
+            data: {
+                'action': 'oak_regenerate_indexes',
+                'data': {}
+            },
+            success: function(data) {
+                console.log(data);
+                doneLoading();
+            },
+            error: function(error) {
+                console.log(error);
+                doneLoading();
+            }
+        });
+    });
+}
+
 
 handleSystemBarSettingsSaveButton();
 function handleSystemBarSettingsSaveButton() {

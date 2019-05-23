@@ -215,7 +215,7 @@ class Oak {
 
         $this->oak_contact_form();
 
-        // $this->get_page_content();
+        add_action('wp_dashboard_setup', array( $this, 'oak_dashboard' ) );
     }
 
     function oak_ajax_calls() {
@@ -269,6 +269,9 @@ class Oak {
 
         add_action('wp_ajax_oak_save_graph', array( $this, 'oak_save_graph') );
         add_action('wp_ajax_nopriv_oak_save_graph', array( $this, 'oak_save_graph') );
+
+        add_action('wp_ajax_oak_regenerate_indexes', array( $this, 'oak_regenerate_indexes') );
+        add_action('wp_ajax_nopriv_oak_regenerate_indexes', array( $this, 'oak_regenerate_indexes') );
     }
 
     function oak_enqueue_styles() {
@@ -902,6 +905,7 @@ class Oak {
 
         include get_template_directory() . '/functions/tables.php';
         include get_template_directory() . '/functions/properties-initialization.php';
+        // include get_template_directory() . '/functions/auto-index.gen.php';
     }
 
     function oak_translation_setup() {
@@ -931,11 +935,19 @@ class Oak {
             \Elementor\Plugin::$instance->dynamic_tags->register_group( 'oak', [
                 'title' => __( 'Oak', Oak::$text_domain )
             ] );
+
+            \Elementor\Plugin::$instance->dynamic_tags->register_group( 'oak_indexes', [
+                'title' => __( 'Oak Indexes', Oak::$text_domain )
+            ] );
             
             include_once get_template_directory() . '/functions/elementor/dynamic_tag.php';
+            include_once get_template_directory() . '/functions/elementor/dynamic_index_tag.php';
 
             $tag = new Dynamic_Tag();
             $dynamic_tags->register_tag( 'Dynamic_Tag' );
+
+            $indexes_tag = new Dynamic_Index_Tag();
+            $dynamic_tags->register_tag( 'Dynamic_Index_Tag' );
         } );
     }
 
@@ -974,34 +986,8 @@ class Oak {
             $selected_quantis = get_post_meta( get_the_ID(), 'quantis_selector' ) ? get_post_meta( get_the_ID(), 'quantis_selector' ) [0] : [];
             $selected_qualis = get_post_meta( get_the_ID(), 'qualis_selector' ) ? get_post_meta( get_the_ID(), 'qualis_selector' ) [0] : [];
 
-            $our_objects = [];
+            $our_objects = Oak::oak_get_selected_objects_data( $selected_objects, true );
             $the_returned_fields = [];
-
-            foreach( Oak::$models_without_redundancy as $model ) :
-                $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
-                $objects = $wpdb->get_results ( "
-                    SELECT *
-                    FROM  $table_name
-                " );
-                $objects = array_reverse( $objects );
-                foreach( $objects as $object ) :
-                    if ( in_array( $object->object_identifier, $selected_objects ) ) :
-                        $exists = false;
-                        foreach( $our_objects as $already_added_object ) :
-                            if ( $already_added_object->object_identifier == $object->object_identifier ) :
-                                $exists = true;
-                            endif;
-                        endforeach;
-                        if ( !$exists ) :
-                            $model_fields = Models::get_model_fields( $model );
-                            $object->object_model_fields = $model_fields;
-
-                            $object->object_model_fields_names = $model->model_fields_names;
-                            $our_objects[] = $object;
-                        endif;
-                    endif;
-                endforeach;
-            endforeach;
 
             Sidebar_Widget::$post_selected_objects[] = $our_objects;
 
@@ -1255,6 +1241,40 @@ class Oak {
             Graphs::create_widgets( $widgets_manager );
 
         }, 14);
+    }
+    
+    static function oak_get_selected_objects_data( $selected_objects, $modify_current_model_fields ) {
+        global $wpdb;
+        
+        $our_objects = [];
+
+        foreach( Oak::$models_without_redundancy as $model ) :
+            $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
+            $objects = $wpdb->get_results ( "
+                SELECT *
+                FROM  $table_name
+            " );
+            $objects = array_reverse( $objects );
+            foreach( $objects as $object ) :
+                if ( in_array( $object->object_identifier, $selected_objects ) ) :
+                    $exists = false;
+                    foreach( $our_objects as $already_added_object ) :
+                        if ( $already_added_object->object_identifier == $object->object_identifier ) :
+                            $exists = true;
+                        endif;
+                    endforeach;
+                    if ( !$exists ) :
+                        $model_fields = Models::get_model_fields( $model, $modify_current_model_fields );
+                        $object->object_model_fields = $model_fields;
+
+                        $object->object_model_fields_names = $model->model_fields_names;
+                        $our_objects[] = $object;
+                    endif;
+                endif;
+            endforeach;
+        endforeach;
+
+        return $our_objects;
     }
 
     function oak_add_side_bar_widgets( $widgets_manager ) {
@@ -3091,13 +3111,18 @@ class Oak {
         endforeach;
     }
 
-    function get_page_content() {
-        $post = get_posts()[0];
-        $post_url = $post->guid;
-        if ( is_admin() ) :
-            $post_content = file_get_contents( 'http://localhost:8888/test/post-a/' );
-            var_dump( $post_content );
-        endif;
+    function oak_dashboard() {
+        include get_template_directory() . '/functions/dashboard/index.php';
+    }
+
+    static function var_dump( $text ) {
+        echo('<pre>');
+        var_dump( $text );
+        echo('</pre>');
+    }
+
+    function oak_regenerate_indexes() {
+        include get_template_directory() . '/functions/auto-index.gen.php';
     }
 }
 

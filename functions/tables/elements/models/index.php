@@ -27,7 +27,7 @@ class Models {
         include get_template_directory() . '/functions/tables/elements/models/functions/data-collector.php';
     }
 
-    static function get_model_fields( $model ) {
+    static function get_model_fields( $model, $modify_current_model_fields ) {
         $model_fields = [];
         $model_fields_names = explode( '|', $model->model_fields_names );
         foreach( Oak::$all_models_and_forms as $model_and_form_instance ) :
@@ -46,7 +46,7 @@ class Models {
                                         $field_copy = clone $field;
                                         $field_copy->field_name_in_model = $model_fields_names[ count( $model_fields ) ];
                                         if ( isset( $_GET['model_identifier'] ) ) :
-                                            if ( $model->model_identifier == $_GET['model_identifier'] ) :
+                                            if ( $model->model_identifier == $_GET['model_identifier'] && $modify_current_model_fields === true ) :
                                                 array_push( Oak::$current_model_fields, $field_copy );
                                             endif;
                                         endif;

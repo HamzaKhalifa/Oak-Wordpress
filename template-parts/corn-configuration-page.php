@@ -77,6 +77,15 @@
             </div>
         </div>
 
+        <div class="oak_configuration_page__single_parameter">
+            <h2><?php _e( 'Régénérer les indexes', Oak::$text_domain ); ?></h2>
+            <?php 
+            ?>
+            <div class="oak_configuration_page_single_parameter__input_container">
+                <span id="oak_regenerate_indexes_button" class="oak_button oak_configuration_button"><?php _e( 'Régénérer les indexes', Oak::$text_domain ); ?></span>
+            </div>
+        </div>
+
         <span class="oak_button oak_configuration_page__save_general_settings_button"><?php _e( 'Sauvegarder', Oak::$text_domain ); ?></span>
     </div>
 
