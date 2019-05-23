@@ -80,7 +80,7 @@ initializeSiteLanguage();
 function initializeSiteLanguage() {
     var languagesOptions = document.querySelectorAll('.oak_stystem_bar_language_option');
     for (var i = 0; i < languagesOptions.length; i++) {
-        if (languagesOptions[i].value == DATA.siteLanguage) {
+        if (languagesOptions[i].value == ADMIN_MENU_DATA.siteLanguage) {
             languagesOptions[i].selected = true;
         }
     }
@@ -121,6 +121,7 @@ function handleStickyMenu() {
 
 // For the content type filter button
 handleContentTypeFilterButton();
+console.log(ADMIN_MENU_DATA.currentUser);
 function handleContentTypeFilterButton() {
     var contentFilterButton = document.querySelector('.oak_content_type_filter_button');
     contentFilterButton.addEventListener('click', function() {
@@ -131,11 +132,12 @@ function handleContentTypeFilterButton() {
             setLoading();
             jQuery.ajax({
                 type: 'POST', 
-                url: DATA.ajaxUrl,
+                url: ADMIN_MENU_DATA.ajaxUrl,
                 data: {
                     'action': 'oak_register_fitler_content_variables',
                     'selected_steps': selectedSteps,
-                    'selected_publications': selectedPublicationsIdentifiers 
+                    'selected_publications': selectedPublicationsIdentifiers,
+                    'currentUser': ADMIN_MENU_DATA.currentUser
                 },
                 success: function(data) {
                     console.log(data);

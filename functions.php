@@ -185,10 +185,16 @@ class Oak {
 
         Oak::$site_language = substr( get_locale(), 0, 2 );
 
-        Oak::$content_filters = get_option( 'oak_fitler_content_variables' ) ? get_option( 'oak_fitler_content_variables' ) : array(
-            'selected_steps' => array('0'),
-            'selected_publications' => array('0')
-        );
+        Oak::$content_filters = get_option( 'oak_fitler_content_variables' ) ? 
+            isset( get_option( 'oak_fitler_content_variables' )[ wp_get_current_user()->ID ] ) ? 
+                get_option( 'oak_fitler_content_variables' )[ wp_get_current_user()->ID ]
+                : array (
+                    'selected_steps' => array('0'),
+                    'selected_publications' => array('0')
+                ) : array (
+                    'selected_steps' => array('0'),
+                    'selected_publications' => array('0')
+                );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
@@ -352,9 +358,11 @@ class Oak {
 
         // Admin menu
         wp_enqueue_script( 'admin_menu_script', get_template_directory_uri() . '/src/js/admin-menu.js', array('jquery'), false, true );
-        wp_localize_script( 'admin_menu_script', 'DATA', array(
+        wp_localize_script( 'admin_menu_script', 'ADMIN_MENU_DATA', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'siteLanguage' => Oak::$site_language
+            'siteLanguage' => Oak::$site_language,
+            'currentUser' => wp_get_current_user()->ID,
+            'oak_fitler_content_variables' => get_option('oak_fitler_content_variables') ? get_option('oak_fitler_content_variables') : []
         ) );
 
         // Auto complete
@@ -3135,11 +3143,11 @@ class Oak {
     }
 
     function oak_register_fitler_content_variables() {
-        update_option( 'oak_fitler_content_variables', array(
+        Oak::$content_filters[ $_POST['currentUser'] ] = array(
             'selected_steps' => $_POST['selected_steps'],
             'selected_publications' => $_POST['selected_publications'],
-
-        ) );
+        );
+        update_option( 'oak_fitler_content_variables', Oak::$content_filters );
         wp_send_json_success();
     }
 }
