@@ -4,6 +4,41 @@
         if ( isset( $_GET['elements'] ) && isset( $_GET['listorformula'] ) ) : 
             $languages_codes = Oak::get_languages_codes();
             ?>
+
+            <div class="oak_content_filters_container">
+                <div class="oak_select_container">
+                    <span class="text_field_description"><?php _e( 'Etapes', Oak::$text_domain ); ?></span>
+                    <div class="additional_container">
+                        <select multiple class="oak_system_bar__steps_select">
+                            <option <?php if ( in_array( '0', Oak::$content_filters['selected_steps'] ) ) : echo('selected'); endif; ?> class="oak_select_container__multiple_select_option" value="0"><?php _e( 'Tout', Oak::$text_domain ); ?></option>
+                            <option <?php if ( in_array( 'content_library', Oak::$content_filters['selected_steps'] ) ) : echo('selected'); endif; ?> class="oak_select_container__multiple_select_option" value="content_library"><?php _e( 'Librarie de contenu', Oak::$text_domain ); ?></option>
+                            <option <?php if ( in_array( 'editing', Oak::$content_filters['selected_steps'] ) ) : echo('selected'); endif; ?> class="oak_select_container__multiple_select_option" value="editing"><?php _e( 'Editing', Oak::$text_domain ); ?></option>
+                            <option <?php if ( in_array( 'publishing', Oak::$content_filters['selected_steps'] ) ) : echo('selected'); endif; ?> class="oak_select_container__multiple_select_option" value="publishing"><?php _e( 'Publishing', Oak::$text_domain ); ?></option>
+                        </select>
+                    </div>
+                    <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+                </div>
+
+                <div class="oak_select_container">
+                    <span class="text_field_description"><?php _e( 'Publications', Oak::$text_domain ); ?></span>
+                    <div class="additional_container">
+                        <select multiple class="oak_system_bar__publications_select">
+                            <option <?php if ( in_array( '0', Oak::$content_filters['selected_publications'] ) ) : echo('selected'); endif; ?> class="oak_select_container__multiple_select_option" value="0"><?php _e( 'Toutes les publications', Oak::$text_domain ); ?></option>
+                            <?php 
+                            foreach( Oak::$publications_without_redundancy as $publication ) : ?>
+                                <option <?php if ( in_array( $publication->publication_identifier, Oak::$content_filters['selected_publications'] ) ) : echo('selected'); endif; ?> class="oak_select_container__multiple_select_option" value="<?php echo( $publication->publication_identifier ); ?>"><?php echo( $publication->publication_designation ); ?></option>
+                            <?php
+                            endforeach;
+                            ?>
+                        </select>
+                    </div>
+                    <i class="oak_select_container__bottom_arrow fas fa-caret-down"></i>
+                </div>
+
+                <span class="oak_content_type_filter_button"><?php _e( 'Filtrer', Oak::$text_domain ); ?></span>
+            </div>
+
+
             <div class="oak_select_container">
                 <span class="text_field_description"><?php _e( 'Langue', Oak::$text_domain ); ?></span>
                 <div class="additional_container">

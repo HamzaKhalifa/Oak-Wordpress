@@ -162,6 +162,7 @@ class Oak {
     public static $custom_perimeter = [];
     public static $regions = [];
     public static $all_images = [];
+    public static $content_filters = [];
 
     function __construct() {
         global $wpdb;
@@ -183,6 +184,11 @@ class Oak {
         // $this->delete_everything();
 
         Oak::$site_language = substr( get_locale(), 0, 2 );
+
+        Oak::$content_filters = get_option( 'oak_fitler_content_variables' ) ? get_option( 'oak_fitler_content_variables' ) : array(
+            'selected_steps' => array('0'),
+            'selected_publications' => array('0')
+        );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
@@ -272,6 +278,9 @@ class Oak {
 
         add_action('wp_ajax_oak_regenerate_indexes', array( $this, 'oak_regenerate_indexes') );
         add_action('wp_ajax_nopriv_oak_regenerate_indexes', array( $this, 'oak_regenerate_indexes') );
+
+        add_action('wp_ajax_oak_register_fitler_content_variables', array( $this, 'oak_register_fitler_content_variables') );
+        add_action('wp_ajax_nopriv_oak_register_fitler_content_variables', array( $this, 'oak_register_fitler_content_variables') );
     }
 
     function oak_enqueue_styles() {
@@ -3123,6 +3132,15 @@ class Oak {
 
     function oak_regenerate_indexes() {
         include get_template_directory() . '/functions/auto-index.gen.php';
+    }
+
+    function oak_register_fitler_content_variables() {
+        update_option( 'oak_fitler_content_variables', array(
+            'selected_steps' => $_POST['selected_steps'],
+            'selected_publications' => $_POST['selected_publications'],
+
+        ) );
+        wp_send_json_success();
     }
 }
 

@@ -369,6 +369,39 @@ div {
     border-radius: 5px;
 }
 
+.oak_system_bar__steps_select, .oak_system_bar__publications_select {
+    width: 200px!important;
+}
+
+.oak_content_filters_container {
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+    border-right: 1px solid #96CEF0;
+    padding-right: 10px;
+    padding-left: 10px;
+    border-left: 1px solid #96CEF0;
+}
+
+.oak_content_type_filter_button {
+    background-color: #96CEF0;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.oak_content_type_filter_button:hover {
+    cursor: pointer;
+}
+
+.oak_select_container__multiple_select_option {
+    margin-top: 4px;
+}
+
+.oak_select_container__multiple_select_option:checked {
+    background: #000c3b linear-gradient(0deg, #000c3b 0%, #000c3b 100%);
+    background: #1c6bb5 linear-gradient(0deg, #1c6bb5 0%, #1c6bb5 100%);
+}
+
 .oak_system_bar .oak_select_container__bottom_arrow {
     top: 15px;
 }

@@ -15,6 +15,13 @@ foreach( $reversed_qualis as $quali ) :
             $added = true;
         endif;
     endforeach;
+
+    if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
+        if ( !in_array( $quali->quali_publication, Oak::$content_filters['selected_publications'] ) ) :
+            $added = true;
+        endif;
+    endif;
+
     if ( !$added ) :
         $qualis_without_redundancy[] = $quali;
     endif;

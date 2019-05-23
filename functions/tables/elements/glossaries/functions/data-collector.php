@@ -15,6 +15,13 @@ foreach( $reversed_glossaries as $glossary ) :
             $added = true;
         endif;
     endforeach;
+
+    if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
+        if ( !in_array( $glossary->glossary_publication, Oak::$content_filters['selected_publications'] ) ) :
+            $added = true;
+        endif;
+    endif;
+
     if ( !$added ) :
         $glossaries_without_redundancy[] = $glossary;
     endif;

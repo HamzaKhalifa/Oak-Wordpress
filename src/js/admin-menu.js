@@ -118,3 +118,36 @@ function handleStickyMenu() {
         }
     }
 }
+
+// For the content type filter button
+handleContentTypeFilterButton();
+function handleContentTypeFilterButton() {
+    var contentFilterButton = document.querySelector('.oak_content_type_filter_button');
+    contentFilterButton.addEventListener('click', function() {
+        jQuery(document).ready(function() {
+            var selectedPublicationsIdentifiers = jQuery('.oak_system_bar__publications_select').val();
+            var selectedSteps = jQuery('.oak_system_bar__steps_select').val();
+
+            setLoading();
+            jQuery.ajax({
+                type: 'POST', 
+                url: DATA.ajaxUrl,
+                data: {
+                    'action': 'oak_register_fitler_content_variables',
+                    'selected_steps': selectedSteps,
+                    'selected_publications': selectedPublicationsIdentifiers 
+                },
+                success: function(data) {
+                    console.log(data);
+                    doneLoading();
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    doneLoading();
+                }
+            });
+        });
+    });
+}
+

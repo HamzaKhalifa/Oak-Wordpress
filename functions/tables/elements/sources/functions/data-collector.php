@@ -15,13 +15,15 @@ foreach( $reversed_sources as $source ) :
             $added = true;
         endif;
     endforeach;
+
+    if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
+        if ( !in_array( $source->source_publication, Oak::$content_filters['selected_publications'] ) ) :
+            $added = true;
+        endif;
+    endif;
+
     if ( !$added ) :
         $sources_without_redundancy[] = $source;
-
-        // $source_objects = explode( '|', $source->source_object );
-        // if ( count( $source_objects ) > 0 && $source->source_publication === '0' ) :
-        //     Oak::oak_automatic_element_publication_association( $source, $source_objects, 'source_publication', Oak::$sources_table_name );
-        // endif;
     endif;
 endforeach;
 Oak::$sources_without_redundancy = $sources_without_redundancy;

@@ -15,13 +15,15 @@ foreach( $reversed_goodpractices as $goodpractice ) :
             $added = true;
         endif;
     endforeach;
+
+    if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
+        if ( !in_array( $goodpractice->goodpractice_publication, Oak::$content_filters['selected_publications'] ) ) :
+            $added = true;
+        endif;
+    endif;
+
     if ( !$added ) :
         $goodpractices_without_redundancy[] = $goodpractice;
-
-        // $goodpractice_objects = explode( '|', $goodpractice->goodpractice_objects );
-        // if ( count( $goodpractice_objects ) > 0 && $goodpractice->goodpractice_publication === '0' ) :
-        //     Oak::oak_automatic_element_publication_association( $goodpractice, $goodpractice_objects, 'goodpractice_publication', Oak::$goodpractices_table_name );
-        // endif;
     endif;
 endforeach;
 Oak::$goodpractices_without_redundancy = $goodpractices_without_redundancy;

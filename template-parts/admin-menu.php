@@ -52,7 +52,8 @@
             $menu_elements = array_merge( $menu_elements, $organizations_and_publications );
         endif;
 
-        if ( get_option('oak_corn') == 'true' ) :
+        // If publishing
+        if ( get_option('oak_corn') == 'true' && ( in_array( '0', Oak::$content_filters['selected_steps'] ) || in_array( 'publishing', Oak::$content_filters['selected_steps'] ) ) ) :
             $menu_elements[] = array(
                 'title' => __( 'Publishing', Oak::$text_domain ),
                 'url' => '',
@@ -168,12 +169,6 @@
 
             $menu_elements = array_merge( $menu_elements, $elementor );
         endif;
-
-        $menu_elements[] = array(
-            'title' => __( 'Editing', Oak::$text_domain ),
-            'url' => '',
-            'icon' => 'fas fa-th-large'
-        );
 
         if ( get_option('oak_corn') == 'true' ) :
             foreach( Oak::$publications_without_redundancy as $publication ) :
@@ -324,85 +319,97 @@
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
             ),
-            array(
-                'title' => __( 'Content Library', Oak::$text_domain ),
-                'url' => '',
-                'icon' => 'fas fa-th-large',
-            ),
-            array(
-                'title' => __( 'Objets Spécifiques', Oak::$text_domain ),
-                'url' => '',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Bonne Pratique', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=goodpractices&listorformula=list&whichpage=0',
-                'icon' => 'fas fa-th-large',
-                'submenuelement' => true
-            ),
-            array(
-                'title' => __( 'Sources', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=sources&listorformula=list&whichpage=0',
-                'icon' => 'fas fa-th-large',
-                'submenuelement' => true
-            ),
-            array(
-                'title' => __( 'Données de Performance', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=performances&listorformula=list&whichpage=0',
-                'icon' => 'fas fa-th-large',
-                'submenuelement' => true
-            ),
-            array(
-                'title' => __( 'Modèles', Oak::$text_domain ),
-                'url' => '',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Modèles', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=models&listorformula=list&whichpage=0',
-                'icon' => 'fas fa-th-large',
-                'submenuelement' => true
-            ),
+            
         );
 
         $menu_elements = array_merge( $menu_elements, $menu_elements_after_taxo );
 
-        // Lets make the pages associated to each model: 
-        foreach( Oak::$models_without_redundancy as $model ) :
-            if ( $model->model_trashed != 'true' ) :
-                $model_page_properties = array (
-                    'title' => $model->model_designation,
-                    'url' => '?page=oak_elements_list&elements=objects&listorformula=list&model_identifier=' . $model->model_identifier . '&whichpage=0',
+        // If editing
+        if ( ( in_array( '0', Oak::$content_filters['selected_steps'] ) || in_array( 'editing', Oak::$content_filters['selected_steps'] ) ) ) :
+            $menu_elements[] = array(
+                'title' => __( 'Editing', Oak::$text_domain ),
+                'url' => '',
+                'icon' => 'fas fa-th-large'
+            );
+
+            $specific_objects = array(
+                array(
+                    'title' => __( 'Objets Spécifiques', Oak::$text_domain ),
+                    'url' => '',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                ),
+                array(
+                    'title' => __( 'Bonne Pratique', Oak::$text_domain ),
+                    'url' => '?page=oak_elements_list&elements=goodpractices&listorformula=list&whichpage=0',
                     'icon' => 'fas fa-th-large',
                     'submenuelement' => true
-                );
-                $menu_elements[] = $model_page_properties;
-            endif;
-        endforeach;
+                ),
+                array(
+                    'title' => __( 'Sources', Oak::$text_domain ),
+                    'url' => '?page=oak_elements_list&elements=sources&listorformula=list&whichpage=0',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                ),
+                array(
+                    'title' => __( 'Données de Performance', Oak::$text_domain ),
+                    'url' => '?page=oak_elements_list&elements=performances&listorformula=list&whichpage=0',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                ),
+            );
 
-        $menu_elements_after_model = array(
-            array(
-                'title' => __( 'Formes', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=forms&listorformula=list&whichpage=0',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Champs', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=fields&listorformula=list&whichpage=0',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Vizual Library', Oak::$text_domain ),
-                'url' => '',
-                'icon' => 'fas fa-th-large',
-            ),
-        );
+            $menu_elements = array_merge( $menu_elements, $specific_objects );
 
-        $menu_elements = array_merge( $menu_elements, $menu_elements_after_model );
+            foreach( Oak::$models_without_redundancy as $model ) :
+                if ( $model->model_trashed != 'true' ) :
+                    $model_page_properties = array (
+                        'title' => $model->model_designation,
+                        'url' => '?page=oak_elements_list&elements=objects&listorformula=list&model_identifier=' . $model->model_identifier . '&whichpage=0',
+                        'icon' => 'fas fa-th-large',
+                        'submenu' => true
+                    );
+                    $menu_elements[] = $model_page_properties;
+                endif;
+            endforeach;
+        endif;
+
+        if ( ( in_array( '0', Oak::$content_filters['selected_steps'] ) || in_array( 'content_library', Oak::$content_filters['selected_steps'] ) ) ) :
+            $content_library_beginning = array(
+                array(
+                    'title' => __( 'Content Library', Oak::$text_domain ),
+                    'url' => '',
+                    'icon' => 'fas fa-th-large',
+                ),
+                array(
+                    'title' => __( 'Modèles', Oak::$text_domain ),
+                    'url' => '?page=oak_elements_list&elements=models&listorformula=list&whichpage=0',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                )
+            );
+
+            $menu_elements = array_merge( $menu_elements, $content_library_beginning );
+
+
+            $menu_elements_after_model = array(
+                array(
+                    'title' => __( 'Formulaires', Oak::$text_domain ),
+                    'url' => '?page=oak_elements_list&elements=forms&listorformula=list&whichpage=0',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                ),
+                array(
+                    'title' => __( 'Champs', Oak::$text_domain ),
+                    'url' => '?page=oak_elements_list&elements=fields&listorformula=list&whichpage=0',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                ),
+            );
+
+            $menu_elements = array_merge( $menu_elements, $menu_elements_after_model );
+
+        endif;
 
         $central = get_option( 'oak_corn' );
         if ( $central == 'true' ) :
