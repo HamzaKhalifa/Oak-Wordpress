@@ -164,6 +164,7 @@ class Oak {
     public static $all_images = [];
 
     function __construct() {
+        update_option('oak_indexes', [] );
         global $wpdb;
 
         Oak::$text_domain = 'oak';

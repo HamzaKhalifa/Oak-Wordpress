@@ -1,9 +1,5 @@
 <?php
-if ( !is_admin() ) :
-    return;
-endif;
-
-if ( get_option( 'central' ) === false ) :
+// if ( get_option( 'central' ) === false ) :
     $indexes = [];
 
     $posts = get_posts();
@@ -85,7 +81,7 @@ if ( get_option( 'central' ) === false ) :
             $indexes[] = $object_data;
         endforeach;
     endforeach;
-endif;
+// endif;
 
 update_option( 'oak_indexes', $indexes );
 wp_send_json_success();
