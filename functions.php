@@ -166,8 +166,6 @@ class Oak {
     function __construct() {
         global $wpdb;
 
-        var_dump( get_option('oak_indexes') );
-
         Oak::$text_domain = 'oak';
         Oak::$charset_collate = $wpdb->get_charset_collate();
 
