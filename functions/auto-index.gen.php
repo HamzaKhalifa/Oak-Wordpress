@@ -4,6 +4,8 @@
 
     $posts = get_posts();
     $pages = get_pages();
+    var_dump( $posts );
+    var_dump( $pages );
     $all_posts_and_pages = array_merge( $posts, $pages );
     foreach( $posts as $post ) :
         $post_selected_objects = get_post_meta( $post->ID, 'objects_selector' ) ? get_post_meta( $post->ID, 'objects_selector' ) [0] : [];
