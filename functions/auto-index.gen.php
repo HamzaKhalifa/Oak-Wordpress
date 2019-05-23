@@ -2,12 +2,13 @@
 // if ( get_option( 'central' ) === false ) :
     $indexes = [];
 
-    $posts = get_posts();
+    $posts = get_posts( array(
+        'numberposts' => -1,
+    ) );
+    wp_send_json_success( array(
+        'posts' => $posts
+    ) );
     $pages = get_pages();
-
-    wp_send_json_success(
-        array( 'wtf' => 'dkfskdfjskdfjksdf', 'pages' => $pages )
-    );
 
     $all_posts_and_pages = array_merge( $posts, $pages );
 
