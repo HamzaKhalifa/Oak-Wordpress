@@ -3123,9 +3123,6 @@ class Oak {
     }
 
     function oak_regenerate_indexes() {
-        wp_send_json_success(
-            array( 'wtf' => 'dkfskdfjskdfjksdf' )
-        );
         include get_template_directory() . '/functions/auto-index.gen.php';
     }
 }

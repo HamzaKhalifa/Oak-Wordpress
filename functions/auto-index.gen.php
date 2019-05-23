@@ -1,5 +1,9 @@
 <?php
 // if ( get_option( 'central' ) === false ) :
+    wp_send_json_success(
+        array( 'wtf' => 'dkfskdfjskdfjksdf' )
+    );
+    
     $indexes = [];
 
     $posts = get_posts();
