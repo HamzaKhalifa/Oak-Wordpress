@@ -24,11 +24,6 @@
         'post_status' => 'publish'
     ) );
 
-
-    wp_send_json_success( array(
-        'pages' => $pages
-    ) );
-
     $all_posts_and_pages = array_merge( $posts, $pages );
 
     foreach( $posts as $post ) :
