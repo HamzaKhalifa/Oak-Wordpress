@@ -1,6 +1,6 @@
 <?php
 if( !is_admin() ) :
-    return;
+    wp_send_json_error();
 endif;
 
 // if ( get_option( 'central' ) === false ) :
@@ -109,4 +109,6 @@ endif;
 // endif;
 
 update_option( 'oak_indexes', $indexes );
-wp_send_json_success();
+wp_send_json_success( array(
+    'indexes' => $indexes
+) );
