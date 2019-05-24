@@ -270,36 +270,6 @@
             $menu_elements = array_merge( $menu_elements, $organizations_and_publications_submenu );
         endif;
 
-        $after_terms = array(
-            array(
-                'title' => __( 'Taxonomies', Oak::$text_domain ),
-                'url' => '',
-                'icon' => 'fas fa-th-large',
-                'submenu' => true
-            ),
-            array(
-                'title' => __( 'Taxonomies', Oak::$text_domain ),
-                'url' => '?page=oak_elements_list&elements=taxonomies&listorformula=list&whichpage=0',
-                'icon' => 'fas fa-th-large',
-                'submenuelement' => true
-            )
-        );
-
-        $menu_elements = array_merge( $menu_elements, $after_terms );
-
-        // Lets make the pages associated to each taxonomy:
-        foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
-            if ( $taxonomy->taxonomy_trashed != 'true' ) :
-                $taxonomy_page_properties = array (
-                    'title' => $taxonomy->taxonomy_designation,
-                    'url' => '?page=oak_elements_list&elements=terms&listorformula=list&taxonomy_identifier=' . $taxonomy->taxonomy_identifier . '&whichpage=0',
-                    'icon' => 'fas fa-th-large',
-                    'submenuelement' => true
-                );
-                $menu_elements[] = $taxonomy_page_properties;
-            endif;
-        endforeach;
-
         $menu_elements_after_taxo = array(
             array(
                 'title' => __( 'Indicateurs Quantitatifs', Oak::$text_domain ),
@@ -331,6 +301,36 @@
                 'url' => '',
                 'icon' => 'fas fa-th-large'
             );
+
+            $taxonmies = array(
+                array(
+                    'title' => __( 'Taxonomies', Oak::$text_domain ),
+                    'url' => '',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                ),
+                array(
+                    'title' => __( 'Taxonomies', Oak::$text_domain ),
+                    'url' => '?page=oak_elements_list&elements=taxonomies&listorformula=list&whichpage=0',
+                    'icon' => 'fas fa-th-large',
+                    'submenuelement' => true
+                )
+            );
+    
+            $menu_elements = array_merge( $menu_elements, $taxonmies );
+    
+            // Lets make the pages associated to each taxonomy:
+            foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
+                if ( $taxonomy->taxonomy_trashed != 'true' ) :
+                    $taxonomy_page_properties = array (
+                        'title' => $taxonomy->taxonomy_designation,
+                        'url' => '?page=oak_elements_list&elements=terms&listorformula=list&taxonomy_identifier=' . $taxonomy->taxonomy_identifier . '&whichpage=0',
+                        'icon' => 'fas fa-th-large',
+                        'submenuelement' => true
+                    );
+                    $menu_elements[] = $taxonomy_page_properties;
+                endif;
+            endforeach;
 
             $specific_objects = array(
                 array(
