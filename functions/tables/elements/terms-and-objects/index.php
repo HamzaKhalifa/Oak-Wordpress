@@ -12,6 +12,10 @@ class Terms_And_Objects {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/terms-and-objects/functions/data-collector.php';
     }
+
+    public static function get_terms_and_objects_for_sync() {
+        include get_template_directory() . '/functions/tables/elements/terms-and-objects/functions/data-collector.php';
+    }
 }
 
 $terms_and_objects = new Terms_And_Objects();

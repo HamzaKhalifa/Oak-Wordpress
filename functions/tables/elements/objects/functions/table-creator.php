@@ -54,6 +54,7 @@ foreach( Oak::$models_without_redundancy as $key => $model ) :
         object_selectors varchar(999),
         object_form_selectors varchar(999),
         object_model_selector TEXT,
+        object_synchronized TEXT,
         PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

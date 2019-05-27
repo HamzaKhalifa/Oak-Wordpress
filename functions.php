@@ -20,40 +20,29 @@ class Oak {
     public static $models_and_forms_table_name;
     public static $graphs_table_name;
     public static $sources_table_name;
+    public static $publishers_table_name;
 
     public static $revisions;
 
     public static $fields;
     public static $fields_without_redundancy;
     public static $field_properties;
-    public static $field_first_property;
-    public static $field_second_property;
-    public static $field_third_property;
 
     public static $forms;
     public static $forms_without_redundancy;
     public static $forms_attributes;
     public static $form_properties;
     public static $all_forms_and_fields = [];
-    public static $form_first_property;
-    public static $form_second_property;
-    public static $form_third_property;
 
     public static $objects;
     public static $objects_without_redundancy = [];
     public static $all_objects;
     public static $all_objects_without_redundancy = [];
-    public static $object_first_property;
-    public static $object_second_property;
-    public static $object_third_property;
 
     public static $terms;
     public static $terms_without_redundancy = [];
     public static $all_terms;
     public static $all_terms_without_redundancy = [];
-    public static $term_first_property;
-    public static $term_second_property;
-    public static $term_third_property;
 
     public static $terms_and_objects = [];
 
@@ -65,51 +54,30 @@ class Oak {
     public static $current_model_fields = [];
     public static $object_properties = [];
     public static $term_properties = [];
-    public static $model_first_property;
-    public static $model_second_property;
-    public static $model_third_property;
 
     public static $organizations;
     public static $organizations_without_redundancy;
     public static $organization_properties;
-    public static $organization_first_property;
-    public static $organization_second_property;
-    public static $organization_third_property;
 
     public static $publications;
     public static $publications_without_redundancy;
     public static $publication_properties;
-    public static $publication_first_property;
-    public static $publication_second_property;
-    public static $publication_third_property;
 
     public static $glossaries;
     public static $glossaries_without_redundancy;
     public static $glossary_properties;
-    public static $glossary_first_property;
-    public static $glossary_second_property;
-    public static $glossary_third_property;
 
     public static $qualis;
     public static $qualis_without_redundancy;
     public static $quali_properties;
-    public static $quali_first_property;
-    public static $quali_second_property;
-    public static $quali_third_property;
 
     public static $quantis;
     public static $quantis_without_redundancy;
     public static $quanti_properties;
-    public static $quanti_first_property;
-    public static $quanti_second_property;
-    public static $quanti_third_property;
 
     public static $goodpractices;
     public static $goodpractices_without_redundancy;
     public static $goodpractice_properties;
-    public static $goodpractice_first_property;
-    public static $goodpractice_second_property;
-    public static $goodpractice_third_property;
 
     public static $sources;
     public static $sources_without_redundancy;
@@ -118,16 +86,14 @@ class Oak {
     public static $performances;
     public static $performances_without_redundancy;
     public static $performance_properties;
-    public static $performance_first_property;
-    public static $performance_second_property;
-    public static $performance_third_property;
 
     public static $taxonomies;
     public static $taxonomies_without_redundancy = [];
     public static $taxonomy_properties;
-    public static $taxonomy_first_property;
-    public static $taxonomy_second_property;
-    public static $taxonomy_third_property;
+
+    public static $publishers;
+    public static $publishers_without_redundancy;
+    public static $publisher_properties;
 
     public static $frame_publications_identifiers = [];
     public static $frame_terms_identifiers = [];
@@ -169,8 +135,6 @@ class Oak {
 
         Oak::$text_domain = 'oak';
         Oak::$charset_collate = $wpdb->get_charset_collate();
-
-        include( get_template_directory() . '/functions/elements_to_show_properties.php' );
 
         Oak::$revisions = [];
 
@@ -287,6 +251,17 @@ class Oak {
 
         add_action('wp_ajax_oak_register_fitler_content_variables', array( $this, 'oak_register_fitler_content_variables') );
         add_action('wp_ajax_nopriv_oak_register_fitler_content_variables', array( $this, 'oak_register_fitler_content_variables') );
+
+        add_action('wp_ajax_send_sync_data', array( 'Publishers', 'send_sync_data') );
+        add_action('wp_ajax_nopriv_send_sync_data', array( 'Publishers', 'send_sync_data') );
+
+        add_action('wp_ajax_save_sync_data', array( 'Publishers', 'save_sync_data') );
+        add_action('wp_ajax_nopriv_save_sync_data', array( 'Publishers', 'save_sync_data') );
+
+        add_action('wp_ajax_all_objects_synchronized', array( 'Publishers', 'all_objects_synchronized') );
+        add_action('wp_ajax_nopriv_all_objects_synchronized', array( 'Publishers', 'all_objects_synchronized') );
+
+        
     }
 
     function oak_enqueue_styles() {
@@ -566,6 +541,20 @@ class Oak {
                 $elements = Oak::$sources;
                 $properties = array_merge( $properties, Sources::$properties );
                 $filters = Sources::$filters;
+            endif;
+            if ( $_GET['elements'] == 'publishers' ) :
+                $table = 'publisher';
+                $table_in_plural = 'publishers';
+                $elements = Oak::$publishers;
+                $properties = array_merge( $properties, Publishers::$properties );
+                $filters = Publishers::$filters;
+                if ( isset( $_GET['publisher_identifier'] ) ) :
+                    wp_enqueue_script( 'oak_publisher_synchronize', get_template_directory_uri() . '/functions/tables/elements/publishers/src/synchronize-elements.js', array('jquery'), false, true );
+                    wp_localize_script( 'oak_publisher_synchronize', 'SYNCHRONIZE_DATA', array(
+                        'publishers' => Oak::$publishers,
+                        'allObjects' => Oak::$all_objects_without_redundancy
+                    ) ); 
+                endif;
             endif;
             if ( $_GET['elements'] == 'objects' ) :
                 $table = 'object';
@@ -1725,6 +1714,12 @@ class Oak {
                 $title = __( 'Ajouter une términologie', Oak::$text_domain );
                 $elements = Oak::$glossaries_without_redundancy;
             break;
+            case 'publishers':
+                $properties = Publishers::$properties;
+                $table = 'publisher';
+                $title = __( 'Ajouter un IVWP', Oak::$text_domain );
+                $elements = Oak::$publishers_without_redundancy;
+            break;
             case 'objects' :
                 $properties = Oak::$object_properties;
                 $table = 'object';
@@ -1867,6 +1862,13 @@ class Oak {
                 $table = 'object';
                 $filters = Objects::$filters;
             break;
+            case 'publishers' :
+                $title = __( 'IVWPs', Oak::$text_domain );
+                $elements = Oak::$publishers_without_redundancy;
+                $elements_with_redundancy = Oak::$publishers;
+                $table = 'publisher';
+                $filters = Publishers::$filters;
+            break;
         endswitch;
         include get_template_directory() . '/template-parts/elements/elements-list.php';
     }
@@ -1907,6 +1909,8 @@ class Oak {
         endforeach;
 
         $table = $_POST['table'];
+
+        $element[ $table . '_synchronized' ] = 'false';
 
         // Handling the copying of terms to the new copy of the object
         if ( $table == 'object' && isset( $_POST['copy'] ) ) :
@@ -3003,6 +3007,7 @@ class Oak {
                 object_selectors varchar(999),
                 object_form_selectors varchar(999),
                 object_model_selector TEXT,
+                object_synchronized TEXT,
                 PRIMARY KEY (id)
             ) $charset_collate;";
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -3149,6 +3154,25 @@ class Oak {
         );
         update_option( 'oak_fitler_content_variables', Oak::$content_filters );
         wp_send_json_success();
+    }
+
+    public static function oak_unset_properties_by_checking_table( $element, $table_name ) {
+        $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
+        $columns_names = [];
+        foreach( $element as $property_name => $value ) :
+            $property_exists = false;
+            
+            foreach( $columns as $column ) :
+                if ( $column->COLUMN_NAME == $property_name )
+                    $exists = true;
+            endforeach;
+
+            if ( !$exists ) :
+                unset( $element[ $property_name ] );
+            endif;
+        endforeach;
+
+        return $element;
     }
 }
 

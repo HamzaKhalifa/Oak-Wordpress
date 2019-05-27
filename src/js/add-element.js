@@ -1201,7 +1201,11 @@ function handleSelectOtherElement() {
 }
 
 // Everything related to our modal:
-function openModal(title, twoButtons) {
+var theCallback = '';
+function openModal(title, twoButtons, callback) {
+    if (callback) {
+        theCallback = callback;
+    }
     var confirmButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_add_button_container__text');
     var cancelButtonSpan = document.querySelector('.oak_add_element_modal_container_modal_buttons_container_cancel_button_container__text');
     var confirmButtonContainer = document.querySelector('.oak_add_element_modal_container_modal_buttons_container__add_button_container');
@@ -1312,9 +1316,11 @@ function handleModalButtons() {
                     }
                 });
             });
+            return;
         }
         if (canceling) {
             window.location.replace(DATA.adminUrl + 'admin.php?page=oak_fields_list');
+            return;
         }
         if (browsingRevisions) {
             var revisionWithoutId = {}; 
@@ -1345,7 +1351,11 @@ function handleModalButtons() {
                         doneLoading();
                     }
                 });
-            })
+            });
+            return;
+        }
+        if (theCallback != '') {
+            theCallback();
         }
     });
 

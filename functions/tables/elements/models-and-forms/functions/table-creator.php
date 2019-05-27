@@ -10,6 +10,7 @@ $models_and_forms_sql= "CREATE TABLE $models_and_forms_table_name (
     form_required varchar(555),
     form_index varchar(555),
     model_revision_number varchar(555),
+    model_and_form_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

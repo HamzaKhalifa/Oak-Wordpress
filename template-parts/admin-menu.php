@@ -511,10 +511,30 @@
                 'submenu' => true
             ),
             array(
-                'title' => __( 'Configuration de Oak', Oak::$text_domain ),
-                'url' => '?page=oak_materiality_reporting',
+                'title' => __( 'Configuration ISIVALUE', Oak::$text_domain ),
+                'url' => '',
                 'icon' => 'fas fa-th-large'
             ),
+            array(
+                'title' => __( 'Générale', Oak::$text_domain ),
+                'url' => '?page=oak_materiality_reporting',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            )
+        );
+
+        $menu_elements = array_merge( $menu_elements, $other_menu_elements );
+
+        if ( get_option('oak_corn') == 'false' ) :
+            $menu_elements[] = array(
+                'title' => __( 'IVWPs', Oak::$text_domain ),
+                'url' => '?page=oak_elements_list&elements=publishers&listorformula=list&whichpage=0',
+                'icon' => 'fas fa-th-large',
+                'submenu' => true
+            );
+        endif;
+
+        $after_web_publishers_list = array(
             array(
                 'title' => __( 'Réglages', Oak::$text_domain ),
                 'url' => 'options-general.php',
@@ -561,7 +581,7 @@
             ),
         );
 
-        $menu_elements = array_merge( $menu_elements, $other_menu_elements );
+        $menu_elements = array_merge( $menu_elements, $after_web_publishers_list );
     ?>
 
     <?php 

@@ -11,6 +11,7 @@ $forms_and_fields_sql= "CREATE TABLE $forms_and_fields_table_name (
     field_required varchar(555),
     field_index varchar(555),
     form_revision_number varchar(555),
+    form_and_fiel_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

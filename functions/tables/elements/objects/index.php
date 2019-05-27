@@ -25,6 +25,11 @@ class Objects {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/objects/functions/data-collector.php';
     }
+
+    public static function get_all_objects_for_sync() {
+        include get_template_directory() . '/functions/tables/elements/objects/functions/all-objects.php';
+        include get_template_directory() . '/functions/tables/elements/objects/functions/all-objects-without-redundancy.php';
+    } 
 }
 
 $objects = new Objects();

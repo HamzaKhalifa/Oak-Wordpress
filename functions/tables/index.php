@@ -26,3 +26,5 @@ include $template_directory . '/functions/tables/elements/sources/index.php';
 
 include $template_directory . '/functions/tables/elements/graphs/index.php';
 
+include $template_directory . '/functions/tables/elements/publishers/index.php';
+

@@ -19,6 +19,7 @@ $glossaries_sql = "CREATE TABLE $glossaries_table_name (
     glossary_definition LONGTEXT,
     glossary_close varchar(555),
     glossary_close_indicators varchar(555),
+    glossary_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

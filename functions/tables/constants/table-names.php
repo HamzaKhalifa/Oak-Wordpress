@@ -15,4 +15,5 @@ Oak::$forms_and_fields_table_name = $wpdb->prefix . 'oak_forms_and_fields';
 Oak::$models_and_forms_table_name = $wpdb->prefix . 'oak_models_and_forms';
 Oak::$sources_table_name = $wpdb->prefix . 'oak_sources';
 Oak::$graphs_table_name = $wpdb->prefix . 'oak_graphs';
+Oak::$publishers_table_name = $wpdb->prefix . 'oak_publishers';
 

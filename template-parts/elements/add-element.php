@@ -897,6 +897,13 @@ $modification_time_property = $table . '_modification_time';
 
         ?>
 
+        <!-- This is for web publishers -->
+        <?php 
+        if ( isset( $_GET['publisher_identifier'] ) && $_GET['elements'] == 'publishers' ) :
+            Publishers::synchronize_view();
+        endif;
+        ?>
+
         <!-- // This is for objects (We are gonna associate them to the terms) -->
         <?php 
         if ( $_GET['elements'] == 'objects' ) : ?>

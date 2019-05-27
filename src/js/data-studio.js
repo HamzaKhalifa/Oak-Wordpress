@@ -523,7 +523,7 @@ function createChart(chartCanvas, graph, title, actualLabels, actualData, datase
     for (var i = 0; i < datasetProperties.length; i++) {
         datasets[0][datasetProperties[i].propertyName] = datasetProperties[i].value;
     }
-
+    
     var chartCreator = chartCanvas.getContext('2d');
     
     chartData = {

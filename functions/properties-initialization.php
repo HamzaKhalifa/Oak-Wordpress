@@ -325,3 +325,7 @@ Performances::properties_initialization();
 Sources::properties_initialization();
 Terms::properties_initialization();
 Glossaries::properties_initialization();
+
+if ( get_option( 'oak_corn' ) == 'false' ) :
+    Publishers::properties_initialization();
+endif;

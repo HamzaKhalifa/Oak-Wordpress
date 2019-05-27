@@ -7,6 +7,7 @@ $graphs_sql = "CREATE TABLE $graphs_table_name (
     graph_title varchar(555) DEFAULT '' NOT NULL,
     graph_identifier varchar(555) DEFAULT '' NOT NULL,
     graph_data LONGTEXT,
+    graph_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
