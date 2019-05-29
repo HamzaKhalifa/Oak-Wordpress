@@ -161,6 +161,8 @@ class Oak {
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_styles' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_scripts' ) );
 
+        add_action('get_header', array( $this, 'oak_remove_admin_login_header' ) );
+
         // Initialize table names
         include_once get_template_directory() . '/functions/tables/constants/table-names.php';
 
@@ -1427,6 +1429,10 @@ class Oak {
         endforeach;
 
         return $element;
+    }
+
+    function oak_remove_admin_login_header() {
+        remove_action('wp_head', '_admin_bar_bump_cb');
     }
 }
 
