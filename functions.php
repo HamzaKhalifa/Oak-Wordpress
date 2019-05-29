@@ -139,7 +139,7 @@ class Oak {
         global $wpdb;
 
         Oak::$elements_script_properties_functions = [];
-        
+
         Oak::$text_domain = 'oak';
         Oak::$site_language = substr( get_locale(), 0, 2 );
         Oak::$content_filters = get_option( 'oak_fitler_content_variables' ) ? 
@@ -276,7 +276,8 @@ class Oak {
                 array( 'name' => 'trashed', 'type' => 'text', 'input_type' => 'checkbox' ),
                 array( 'name' => 'state', 'type' => 'text', 'input_type' => 'checkbox' ),
             );
-
+            
+            Oak::var_dump( Oak::$elements_script_properties_functions[ $_GET['elements'] ] );
             Oak::$elements_script_properties_functions[ $_GET['elements'] ]();
 
             $basic_data_to_pass = array(
