@@ -195,7 +195,6 @@ Class Dynamic_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
                     endif;
                 break;
                 case '3' :
-                    Oak::var_dump( $the_field_data );
                     if ( count ( $the_field_data['used_in_posts'] ) > 0 ) :
                         echo( $the_field_data['used_in_posts'][0]['post_url'] );
                     else: 

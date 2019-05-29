@@ -149,6 +149,8 @@ class Oak_Elementor {
 
             $post_images_to_show = $this->add_performances_post_meta( $post_images_to_show );
 
+            $post_images_to_show = $this->add_sources_post_meta( $post_images_to_show );
+
             $post_images_to_show = $this->add_qualis_post_meta( $post_images_to_show );
 
             update_option( 'oak_post_images_to_show', $post_images_to_show );
