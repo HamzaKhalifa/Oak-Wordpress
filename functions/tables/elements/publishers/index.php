@@ -21,7 +21,7 @@ class Publishers {
         $this->handle_ajax_calls();
     }
 
-    function properties_to_enqueue_for_script() {
+    public static function properties_to_enqueue_for_script() {
         $table = 'publisher';
         $elements = Oak::$publishers;
         Oak::$revisions = Oak::oak_get_revisions( $table, $elements );

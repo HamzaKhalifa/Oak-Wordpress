@@ -39,7 +39,7 @@ class Fields {
         );
     }
 
-    function properties_to_enqueue_for_script() {
+    public static function properties_to_enqueue_for_script() {
         $table = 'field';
         $elements = Oak::$fields;
         Oak::$revisions = Oak::oak_get_revisions( $table, $elements );

@@ -18,7 +18,7 @@ class Objects {
         );
     }
 
-    function properties_to_enqueue_for_script() {
+    public static function properties_to_enqueue_for_script() {
         foreach( Oak::$objects as $object ) :
             $object->object_model_identifier = $_GET['model_identifier'];
         endforeach;

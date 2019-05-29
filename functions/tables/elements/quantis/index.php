@@ -18,7 +18,7 @@ class Quantis {
         );
     }
 
-    function properties_to_enqueue_for_script() {
+    public static function properties_to_enqueue_for_script() {
         $table = 'quanti';
         $elements = Oak::$quantis;
         Oak::$revisions = Oak::oak_get_revisions( $table, $elements );

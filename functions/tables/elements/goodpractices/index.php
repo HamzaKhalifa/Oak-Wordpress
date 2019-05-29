@@ -18,7 +18,7 @@ class Good_Practices {
         );
     }
 
-    function properties_to_enqueue_for_script() {
+    public static function properties_to_enqueue_for_script() {
         $table = 'goodpractice';
         $elements = Oak::$goodpractices;
         Oak::$revisions = Oak::oak_get_revisions( $table, $elements );

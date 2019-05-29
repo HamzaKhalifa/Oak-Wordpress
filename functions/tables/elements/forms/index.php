@@ -29,7 +29,7 @@ class Forms {
         );
     }
 
-    function properties_to_enqueue_for_script() {
+    public static function properties_to_enqueue_for_script() {
         $table = 'form';
         $elements = Oak::$forms;
         Oak::$revisions = Oak::oak_get_revisions( $table, $elements );

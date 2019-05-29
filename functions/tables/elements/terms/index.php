@@ -22,7 +22,7 @@ class Terms {
         );
     }
 
-    function properties_to_enqueue_for_script() {
+    public static function properties_to_enqueue_for_script() {
         $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
         Oak::$terms = $wpdb->get_results ( "
             SELECT *
@@ -43,7 +43,7 @@ class Terms {
         );
     }
 
-    function properties_to_enqueue_for_script_if_term_objects() {
+    public static function properties_to_enqueue_for_script_if_term_objects() {
         $term_identifier = $_GET['term_identifier'];
         foreach( Oak::$terms_and_objects as $term_and_object ) :
             if ( $term_and_object->term_identifier == $term_identifier ) :

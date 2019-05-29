@@ -277,8 +277,58 @@ class Oak {
                 array( 'name' => 'state', 'type' => 'text', 'input_type' => 'checkbox' ),
             );
             
-            var_dump( Oak::$elements_script_properties_functions );
+            // var_dump( Oak::$elements_script_properties_functions );
             Oak::$elements_script_properties_functions[ $_GET['elements'] ]();
+            switch ( $_GET['elements'] ) :
+                case 'fields':
+                    Fields::properties_to_enqueue_for_script();
+                break;
+                case 'forms' :
+                    Fields::properties_to_enqueue_for_script();
+                break;
+                case 'models' :
+                    Models::properties_to_enqueue_for_script();
+                break;
+                case 'organizations' :
+                    Organizations::properties_to_enqueue_for_script();
+                break;
+                case 'publications' :
+                    Publications::properties_to_enqueue_for_script();
+                break;
+                case 'taxonomies' :
+                    Taxonomies::properties_to_enqueue_for_script();
+                break;
+                case 'terms' :
+                    Terms::properties_to_enqueue_for_script();
+                break;
+                case 'term_objects' :
+                    Terms::properties_to_enqueue_for_script_if_term_objects();
+                break;
+                case 'glossaries' :
+                    Glossaries::properties_to_enqueue_for_script();
+                break;
+                case 'qualis' :
+                    Qualis::properties_to_enqueue_for_script();
+                break;
+                case 'quantis' :
+                    Quantis::properties_to_enqueue_for_script();
+                break;
+                case 'objects' :
+                    Objects::properties_to_enqueue_for_script();
+                break;
+                case 'performances' :
+                    Performances::properties_to_enqueue_for_script();
+                break;
+                case 'goodpractices' :
+                    Goodpractices::properties_to_enqueue_for_script();
+                break;
+                case 'sources' :
+                    Sources::properties_to_enqueue_for_script();
+                break;
+                case 'publishers' :
+                    Publishers::properties_to_enqueue_for_script();
+                break;
+            endswitch;
 
             $basic_data_to_pass = array(
                 'ajaxUrl' => admin_url ('admin-ajax.php'),

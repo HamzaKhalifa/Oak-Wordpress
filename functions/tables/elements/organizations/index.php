@@ -18,7 +18,7 @@ class Organizations {
         );
     }
 
-    function properties_to_enqueue_for_script() {
+    public static function properties_to_enqueue_for_script() {
         $table = 'organization';
         $elements = Oak::$organizations;
         Oak::$revisions = Oak::oak_get_revisions( $table, $elements );

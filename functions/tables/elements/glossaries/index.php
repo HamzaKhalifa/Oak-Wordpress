@@ -18,7 +18,7 @@ class Glossaries {
         );
     }
 
-    function properties_to_enqueue_for_script() {
+    public function properties_to_enqueue_for_script() {
         $table = 'glossary';
         $elements = Oak::$glossaries;
         Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
