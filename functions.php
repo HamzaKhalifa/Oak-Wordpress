@@ -138,6 +138,8 @@ class Oak {
     function __construct() {
         global $wpdb;
 
+        Oak::$elements_script_properties_functions = [];
+        
         Oak::$text_domain = 'oak';
         Oak::$site_language = substr( get_locale(), 0, 2 );
         Oak::$content_filters = get_option( 'oak_fitler_content_variables' ) ? 

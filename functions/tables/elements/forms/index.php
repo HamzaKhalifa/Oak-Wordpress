@@ -37,18 +37,21 @@ class Forms {
         $properties = array_merge( Oak::$shared_properties, Forms::$properties );
         $properties[] = array( 'name' => 'revision_number', 'type' => 'text', 'input_type' => 'checkbox' );
 
+        $additional_data_to_pass = array(
+            'otherElementProperties' => Forms::$other_elements,
+            'attributes' => Oak::$forms_attributes
+        );
+        
         Oak::$current_element_script_properties = array (
             'table' => 'form',
             'table_in_plural' => 'forms',
             'elements' => Oak::$forms,
-            'additional_data_to_pass' => array (
-                'otherElementProperties' => Forms::$other_elements,
-                'attributes' => Oak::$forms_attributes
-            ),
             'properties' => $properties,
-            'filters' => $this->$filters,
+            'filters' => Forms::$filters,
             'revisions' => Oak::$revisions
         );
+
+        Oak::$current_element_script_properties = array_merge( Oak::$current_element_script_properties, $additional_data_to_pass );
     }
 
     static function properties_initialization() {
