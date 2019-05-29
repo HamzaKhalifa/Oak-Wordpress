@@ -36,7 +36,7 @@ endif;
         global $wpdb;
 
         $objects = Oak::oak_get_selected_objects_data( $post_selected_objects, false );
-        
+
         foreach( $objects as $object ) : 
             // For the model selector 
             $model_linked_objects_identifiers = [];
@@ -65,7 +65,8 @@ endif;
                 ),
                 'forms_frame_linked_objects' => $form_linked_objects_identifiers,
                 'model_frame_linked_objects' => $model_linked_objects_identifiers,
-                'post_url' => $post->guid
+                'post_url' => $post->guid,
+                'post_title' => $post->post_title
             );
             $object_selectors = explode( '|', $object->object_selectors );
             foreach( $object->object_model_fields as $model_field_key => $model_field ) :
@@ -88,7 +89,9 @@ endif;
                         if ( strpos( $post_content, $value ) !== false ) :
                             $used_in_posts[] = array ( 
                                 'id' => $post_or_page_to_check->ID,
-                                'guid' => $post_or_page_to_check->guid
+                                'post_url' => $post_or_page_to_check->guid,
+                                'post_title' => $post_or_page_to_check->post_title,
+                                'object_designation' => $object->object_designation
                             );
                         endif;
                     endforeach;

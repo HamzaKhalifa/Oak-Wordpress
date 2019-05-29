@@ -73,13 +73,13 @@ class Post_meta_boxes {
     }
 
     function oak_save_post_meta_fields( $post_id ) {
-        // if ( !isset( $_POST['objects_selector'] ) 
-        //     && !isset( $_POST['good_practices_selector'] ) 
-        //     && !isset( $_POST['quantis_selector'] ) 
-        //     && !isset( $_POST['sources_selector'] ) 
-        //     && !isset( $_POST['qualis_selector'] )) :
-        //     return;
-        // endif;
+        if ( !isset( $_POST['objects_selector'] ) 
+            && !isset( $_POST['good_practices_selector'] ) 
+            && !isset( $_POST['quantis_selector'] ) 
+            && !isset( $_POST['sources_selector'] ) 
+            && !isset( $_POST['qualis_selector'] )) :
+            return;
+        endif;
 
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return $post_id;

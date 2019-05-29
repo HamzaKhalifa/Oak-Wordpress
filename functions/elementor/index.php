@@ -149,6 +149,8 @@ class Oak_Elementor {
 
             $post_images_to_show = $this->add_performances_post_meta( $post_images_to_show );
 
+            $post_images_to_show = $this->add_sources_post_meta( $post_images_to_show );
+
             $post_images_to_show = $this->add_qualis_post_meta( $post_images_to_show );
 
             update_option( 'oak_post_images_to_show', $post_images_to_show );
@@ -313,8 +315,8 @@ class Oak_Elementor {
                         endforeach;
                         $property_name = $performance_property['property_name'];
 
-                        if ( $performance_property['name'] == 'region' || $performance_property['name'] == 'custom_perimeter' ) :
-                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], Oak::$countries_names[ $performance->$property_name ] );
+                        if ( $performance_property['name'] == 'country' ) :
+                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
                         elseif ( $performance_property['name'] == 'custom_perimeter' ) :
                             update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
                         elseif ( $performance_property['input_type'] != 'image' && $performance_property['input_type'] != 'select' ) :
