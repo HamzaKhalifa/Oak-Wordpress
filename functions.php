@@ -277,7 +277,6 @@ class Oak {
                 array( 'name' => 'state', 'type' => 'text', 'input_type' => 'checkbox' ),
             );
             
-            Oak::var_dump( Oak::$elements_script_properties_functions[ $_GET['elements'] ] );
             Oak::$elements_script_properties_functions[ $_GET['elements'] ]();
 
             $basic_data_to_pass = array(
