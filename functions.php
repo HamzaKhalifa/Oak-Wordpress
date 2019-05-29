@@ -278,7 +278,7 @@ class Oak {
             );
             
             // var_dump( Oak::$elements_script_properties_functions );
-            Oak::$elements_script_properties_functions[ $_GET['elements'] ]();
+            // Oak::$elements_script_properties_functions[ $_GET['elements'] ]();
             switch ( $_GET['elements'] ) :
                 case 'fields':
                     Fields::properties_to_enqueue_for_script();
