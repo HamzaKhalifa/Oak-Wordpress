@@ -7,10 +7,29 @@ class Publications {
         $this->table_creator();
         $this->data_collector();
 
+        Oak::$elements_script_properties_functions['publications'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
+        
         Publications::$filters = array(
             array ( 'title' => __( 'Année', Oak::$text_domain ), 'property' => 'publication_year' ),
             array ( 'title' => __( 'Format', Oak::$text_domain ), 'property' => 'publication_format' ),
             array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'publication_format' )
+        );
+    }
+    
+    function properties_to_enqueue_for_script() {
+        $table = 'publication';
+        $elements = Oak::$publications;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        Oak::$current_element_script_properties = array (
+            'table' => 'publication',
+            'table_in_plural' => 'publications',
+            'elements' => Oak::$publications,
+            'properties' => array_merge( Oak::$shared_properties, Publications::$properties ),
+            'filters' => Publications::$filters,
+            'revisions' => Oak::$revisions
         );
     }
 

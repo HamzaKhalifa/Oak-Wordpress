@@ -1020,9 +1020,9 @@ function headerCancelButton() {
         if (numberOfChecked == 0) {
             additionalData = '';
             if (DATA.elementsType == 'objects') 
-                additionalData = '&model_identifier=' + DATA.tableInPlural;
+                additionalData = '&model_identifier=' + DATA.table_in_plural;
             else if ( DATA.elementsType == 'terms' )
-                additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
+                additionalData = '&taxonomy_identifier=' + DATA.table_in_plural;
 
             window.location.replace(DATA.adminUrl + '?page=oak_elements_list&elements=' + DATA.elementsType + '&listorformula=list' + additionalData + '&whichpage=0');
         } else {
@@ -1188,13 +1188,13 @@ function handleSelectOtherElement() {
         var identifier = this.value;
         var additionalData = ''
         if (DATA.elementsType == 'objects') 
-            additionalData = '&model_identifier=' + DATA.tableInPlural;
+            additionalData = '&model_identifier=' + DATA.table_in_plural;
         else if (DATA.elementsType == 'term_objects') {
             additionalData = '&model_identifier=' + checkboxes[i].parentNode.parentNode.getAttribute('model-identifier');
             elementsTypeToPutInUrl = 'objects';
         }
         else if ( DATA.elementsType == 'terms' )
-            additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
+            additionalData = '&taxonomy_identifier=' + DATA.table_in_plural;
 
         window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula' + additionalData);
     });
@@ -1302,7 +1302,7 @@ function handleModalButtons() {
                         'action': 'oak_register_element',
                         'element': JSON.stringify(elementData),
                         'table': table,
-                        'tableInPlural': DATA.tableInPlural,
+                        'tableInPlural': DATA.table_in_plural,
                         'fromRevision': false,
                         'properties': DATA.properties
                     },
@@ -1340,7 +1340,7 @@ function handleModalButtons() {
                         'action': 'oak_register_element',
                         'element': JSON.stringify(revisionWithoutId),
                         'table': table,
-                        'tableInPlural': DATA.tableInPlural,
+                        'tableInPlural': DATA.table_in_plural,
                         'fromRevision': true
                     },
                     success: function(data) {

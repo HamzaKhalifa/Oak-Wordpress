@@ -6,11 +6,30 @@ class Performances {
     function __construct() {
         $this->table_creator();
         $this->data_collector();
+        
+        Oak::$elements_script_properties_functions['performances'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
 
         Performances::$filters = array(
             array ( 'title' => __( 'Nom', Oak::$text_domain ), 'property' => 'performance_designation' ),
             array ( 'title' => __( 'Type', Oak::$text_domain ), 'property' => 'performance_type' ),
             array ( 'title' => __( 'Type', Oak::$text_domain ), 'property' => 'performance_type' )
+        );
+    }
+
+    function properties_to_enqueue_for_script() {
+        $table = 'performance';
+        $elements = Oak::$performances;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        Oak::$current_element_script_properties = array (
+            'table' => 'performance',
+            'table_in_plural' => 'performances',
+            'elements' => Oak::$performances,
+            'properties' => array_merge( Oak::$shared_properties, Performances::$properties ),
+            'filters' => Performances::$filters,
+            'revisions' => Oak::$revisions
         );
     }
 

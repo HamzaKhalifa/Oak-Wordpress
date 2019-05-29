@@ -5,7 +5,7 @@ var importing = false;
 var restoring = false;
 var choosingModel = false;
 var table = DATA.table;
-var tableInPlural = DATA.tableInPlural;
+var tableInPlural = DATA.table_in_plural;
 
 // For the languages select
 handleLanguagesSelectListener();
@@ -207,7 +207,7 @@ function copy() {
                             'action': 'oak_register_element',
                             'element': JSON.stringify(copies[whichCall]),
                             'table': DATA.table,
-                            'tableInPlural': DATA.tableInPlural,
+                            'tableInPlural': DATA.table_in_plural,
                             'fromRevision': false,
                             'properties': DATA.properties,
                             'copy': true,
@@ -397,13 +397,13 @@ function edit() {
                 var identifier = checkboxes[i].parentNode.parentNode.getAttribute('identifier');
                 var additionalData = ''
                 if (DATA.elementsType == 'objects') 
-                    additionalData = '&model_identifier=' + DATA.tableInPlural;
+                    additionalData = '&model_identifier=' + DATA.table_in_plural;
                 else if (DATA.elementsType == 'term_objects') {
                     additionalData = '&model_identifier=' + checkboxes[i].parentNode.parentNode.getAttribute('model-identifier');
                     elementsTypeToPutInUrl = 'objects';
                 }
                 else if ( DATA.elementsType == 'terms' )
-                    additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
+                    additionalData = '&taxonomy_identifier=' + DATA.table_in_plural;
 
                 window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula' + additionalData);
             }
@@ -427,14 +427,15 @@ function add() {
     addButton.addEventListener('click', function() {
         additionalData = '';
         if (DATA.elementsType == 'objects') 
-            additionalData = '&model_identifier=' + DATA.tableInPlural;
+            additionalData = '&model_identifier=' + DATA.table_in_plural;
         else if ( DATA.elementsType == 'terms' )
-            additionalData = '&taxonomy_identifier=' + DATA.tableInPlural;
+            additionalData = '&taxonomy_identifier=' + DATA.table_in_plural;
         else if ( DATA.elementsType == 'term_objects' ) {
             choosingModel = true;
             openModal(DATA.choosingModelMessage);
             return;
         }
+
         window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&elements=' + DATA.elementsType + '&listorformula=formula' + additionalData);
     });
 }
@@ -730,7 +731,7 @@ function handleModalButtons() {
             }
             setLoading();
             var functionName = deleting ? 'oak_send_to_trash' : 'oak_delete_definitely';
-            var tableInPlural = DATA.tableInPlural;
+            var tableInPlural = DATA.table_in_plural;
 
             jQuery(document).ready(function() {
                 jQuery.ajax({
@@ -774,7 +775,7 @@ function handleModalButtons() {
                     data: {
                         'data': {
                             'table': DATA.table,
-                            'tableInPlural': DATA.tableInPlural,
+                            'tableInPlural': DATA.table_in_plural,
                             'identifiers': identifiersToRestore
                         },
                         'action': 'oak_restore_from_trash'

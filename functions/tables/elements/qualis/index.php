@@ -7,10 +7,29 @@ class Qualis {
         $this->table_creator();
         $this->data_collector();
 
+        Oak::$elements_script_properties_functions['qualis'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
+
         Qualis::$filters = array(
             array ( 'title' => __( 'Publication', Oak::$text_domain ), 'property' => 'quali_publication' ),
             array ( 'title' => __( 'Parent', Oak::$text_domain ), 'property' => 'quali_parent' ),
             array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'quali_parent' )
+        );
+    }
+
+    function properties_to_enqueue_for_script() {
+        $table = 'quali';
+        $elements = Oak::$qualis;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        Oak::$current_element_script_properties = array (
+            'table' => 'quali',
+            'table_in_plural' => 'qualis',
+            'elements' => Oak::$qualis,
+            'properties' => array_merge( Oak::$shared_properties, Qualis::$properties ),
+            'filters' => Qualis::$filters,
+            'revisions' => Oak::$revisions
         );
     }
 

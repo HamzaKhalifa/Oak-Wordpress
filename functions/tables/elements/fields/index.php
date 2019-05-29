@@ -10,6 +10,10 @@ class Fields {
         $this->table_creator();
         $this->data_collector();
 
+        Oak::$elements_script_properties_functions['fields'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
+
         Fields::$field_types = array (
             array ( 'value' => 'text', 'innerHTML' => __( 'Texte', Oak::$text_domain ) ),
             array ( 'value' => 'textarea', 'innerHTML' => __( 'Zone de Texte', Oak::$text_domain ) ),
@@ -32,6 +36,21 @@ class Fields {
             array ( 'title' => __( 'Nature', Oak::$text_domain ), 'property' => 'field_type', 'choices' => Fields::$field_types ),
             array ( 'title' => __( 'Fonction', Oak::$text_domain ), 'property' => 'field_function', 'choices' => Fields::$field_functions ),
             array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'field_function' )
+        );
+    }
+
+    function properties_to_enqueue_for_script() {
+        $table = 'field';
+        $elements = Oak::$fields;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        Oak::$current_element_script_properties = array (
+            'table' => $table,
+            'table_in_plural' => 'fields',
+            'elements' => $elements,
+            'properties' => array_merge( Oak::$shared_properties, Fields::$properties ),
+            'filters' => Fields::$filters,
+            'revisions' => Oak::$revisions
         );
     }
 

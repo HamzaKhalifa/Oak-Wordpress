@@ -7,10 +7,51 @@ class Objects {
         $this->table_creator();
         $this->data_collector();
 
+        Oak::$elements_script_properties_functions['objects'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
+
         Objects::$filters = array(
             array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' ),
             array ( 'title' => __( 'Sélecteur de cadres RSE', Oak::$text_domain ), 'property' => 'object_selector' ),
             array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'object_identifier' )
+        );
+    }
+
+    function properties_to_enqueue_for_script() {
+        foreach( Oak::$objects as $object ) :
+            $object->object_model_identifier = $_GET['model_identifier'];
+        endforeach;
+
+        foreach( Oak::$current_model_fields as $key => $field ) :
+            $input_type = $field->field_type;
+            
+            Oak::$object_properties[] = array (
+                'name' => $key . '_' . $field->field_identifier,
+                'property_name' => 'object_' . $key . '_' . $field->field_identifier,
+                'type' => 'text',
+                'input_type' => $input_type,
+                'placeholder' => $field->form_and_field_properties->field_designation != '' ? $field->form_and_field_properties->field_designation : $field->field_designation,
+                'description' => $field->form_and_field_properties->field_designation != '' ? $field->form_and_field_properties->field_designation : $field->field_designation,
+                'selector' => $field->field_selector,
+                'width' => '50',
+                'model_and_form_instance' => $field->model_and_form_instance,
+                'form' => $field->form,
+                'translatable' => true
+            );
+        endforeach;
+
+        $table = 'object';
+        $elements = Oak::$objects;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        Oak::$current_element_script_properties = array (
+            'table' => 'object',
+            'table_in_plural' => $_GET['model_identifier'],
+            'elements' => Oak::$objects,
+            'properties' => array_merge( Oak::$shared_properties, Oak::$object_properties ),
+            'filters' => Objects::$filters,
+            'revisions' => Oak::$revisions
         );
     }
 

@@ -6,6 +6,7 @@ $terms_and_objects_sql= "CREATE TABLE $terms_and_objects_table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     term_identifier varchar(555) DEFAULT '' NOT NULL,
     object_identifier varchar(555) DEFAULT '' NOT NULL,
+    term_and_object_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

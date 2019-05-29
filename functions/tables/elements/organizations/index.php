@@ -7,10 +7,29 @@ class Organizations {
         $this->table_creator();
         $this->data_collector();
 
+        Oak::$elements_script_properties_functions['organizations'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
+
         Organizations::$filters = array(
             array ( 'title' => __( 'Acronyme', Oak::$text_domain ), 'property' => 'organization_acronym' ),
             array ( 'title' => __( 'Description', Oak::$text_domain ), 'property' => 'organization_description' ),
             array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'organization_description' )
+        );
+    }
+
+    function properties_to_enqueue_for_script() {
+        $table = 'organization';
+        $elements = Oak::$organizations;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        Oak::$current_element_script_properties = array (
+            'table' => 'organization',
+            'table_in_plural' => 'organizations',
+            'elements' => Oak::$organizations,
+            'properties' => array_merge( Oak::$shared_properties, Organizations::$properties ),
+            'filters' => Organizations::$filters,
+            'revisions' => Oak::$revisions
         );
     }
 

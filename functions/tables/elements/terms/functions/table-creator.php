@@ -21,6 +21,7 @@ foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
         term_logo varchar(555),
         term_order varchar(555),
         term_parent varchar(555),
+        term_synchronized TEXT,
         PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

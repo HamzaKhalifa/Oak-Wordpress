@@ -1,4 +1,8 @@
 <?php 
+global $wpdb;
+
+Oak::$charset_collate = $wpdb->get_charset_collate();
+
 Oak::$fields_table_name = $wpdb->prefix . 'oak_fields';
 Oak::$forms_table_name = $wpdb->prefix . 'oak_forms';
 Oak::$models_table_name = $wpdb->prefix . 'oak_models';

@@ -8,10 +8,37 @@ class Models {
         $this->table_creator();
         $this->data_collector();
 
+        Oak::$elements_script_properties_functions['models'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
+        
         Models::$filters = array (
             array ( 'title' => __( 'Types', Oak::$text_domain ), 'property' => 'model_types' ),
             array ( 'title' => __( 'Catégories de publications', Oak::$text_domain ), 'property' => 'model_publications_categories' ),
             array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'model_publications_categories' )
+        );
+    }
+
+    function properties_to_enqueue_for_script() {
+        $table = 'model';
+        $elements = Oak::$models;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        $properties = array_merge( Oak::$shared_properties, Models::$properties );
+        $properties[] = array( 'name' => 'revision_number', 'type' => 'text', 'input_type' => 'checkbox' );
+        Oak::$current_element_script_properties = array (
+            'table' => 'model',
+            'table_in_plural' => 'models',
+            'elements' => Oak::$models,
+            'additional_data_to_pass' => array(
+                'fields' => Oak::$fields,
+                'formsAndFields' => Oak::$all_forms_and_fields,
+                'otherElementProperties' => Models::$other_elements,
+                'attributes' => Forms::$attributes
+            ),
+            'properties' => $properties,
+            'filters' => Models::$filters,
+            'revisions' => Oak::$revisions
         );
     }
 

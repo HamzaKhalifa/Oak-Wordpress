@@ -1,12 +1,8 @@
-console.log('Im here!');
-
 handleGraphsInitialization();
 function handleGraphsInitialization() {
     var allGraphContainers = document.querySelectorAll('.oak_front_graph_container');
-    console.log(allGraphContainers);
 
     for (var i = 0; i < allGraphContainers.length; i++) {
-        console.log(allGraphContainers[i]);
         var canvas = document.createElement('canvas');
         allGraphContainers[i].append(canvas);
         var chartCreator = canvas.getContext('2d');
@@ -14,5 +10,4 @@ function handleGraphsInitialization() {
 
         var chart = new Chart(chartCreator, data);
     }
-    
 }

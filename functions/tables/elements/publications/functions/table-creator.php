@@ -28,6 +28,7 @@ $publications_sql = "CREATE TABLE $publications_table_name (
     publication_language varchar(555),
     publication_gri_type varchar(555),
     publication_sectorial_supplement varchar(555),
+    publication_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

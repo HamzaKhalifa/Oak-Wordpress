@@ -22,6 +22,7 @@ $organizations_sql = "CREATE TABLE $organizations_table_name (
     organization_type varchar(555),
     organization_side varchar(555),
     organization_sectors varchar(555),
+    organization_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

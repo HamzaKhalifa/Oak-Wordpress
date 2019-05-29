@@ -6,11 +6,44 @@ class Publishers {
         $this->table_creator();
         $this->data_collector();
 
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+
+        Oak::$elements_script_properties_functions['publishers'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
+        
         Publishers::$filters = array(
             array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'publisher_identifier' ),
             array ( 'title' => __( 'Url', Oak::$text_domain ), 'property' => 'publisher_url' ),
             array ( 'title' => __( 'Sélecteur', Oak::$text_domain ), 'property' => 'publisher_selector' )
         );
+
+        $this->handle_ajax_calls();
+    }
+
+    function properties_to_enqueue_for_script() {
+        $table = 'publisher';
+        $elements = Oak::$publishers;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        Oak::$current_element_script_properties = array (
+            'table' => 'publisher',
+            'table_in_plural' => 'publishers',
+            'elements' => Oak::$publishers,
+            'properties' => array_merge( Oak::$shared_properties, Publishers::$properties ),
+            'filters' => Publishers::$filters,
+            'revisions' => Oak::$revisions
+        );
+    }
+
+    function admin_enqueue_scripts() {
+        if ( isset( $_GET['publisher_identifier'] ) ) :
+            wp_enqueue_script( 'oak_publisher_synchronize', get_template_directory_uri() . '/functions/tables/elements/publishers/src/synchronize-elements.js', array('jquery'), false, true );
+            wp_localize_script( 'oak_publisher_synchronize', 'SYNCHRONIZE_DATA', array(
+                'publishers' => Oak::$publishers,
+                'allObjects' => Oak::$all_objects_without_redundancy
+            ) ); 
+        endif;
     }
 
     function table_creator() {
@@ -23,6 +56,17 @@ class Publishers {
  
     public static function properties_initialization() {
         include get_template_directory() . '/functions/tables/elements/publishers/functions/properties-initialization.php';
+    }
+
+    function handle_ajax_calls() {
+        add_action('wp_ajax_send_sync_data', array( $this, 'send_sync_data') );
+        add_action('wp_ajax_nopriv_send_sync_data', array( $this, 'send_sync_data') );
+
+        add_action('wp_ajax_save_sync_data', array( $this, 'save_sync_data') );
+        add_action('wp_ajax_nopriv_save_sync_data', array( $this, 'save_sync_data') );
+
+        add_action('wp_ajax_all_objects_synchronized', array( $this, 'all_objects_synchronized') );
+        add_action('wp_ajax_nopriv_all_objects_synchronized', array( $this, 'all_objects_synchronized') );
     }
 
     public function send_sync_data() {
@@ -113,7 +157,6 @@ class Publishers {
         
         wp_send_json_success();
     }
-
 
     public function all_objects_synchronized() {
         global $wpdb; 

@@ -14,6 +14,10 @@ class Forms {
         $this->table_creator();
         $this->data_collector();
 
+        Oak::$elements_script_properties_functions['forms'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
+
         Forms::$filters = array(
             array ( 'title' => __( 'Structure', Oak::$text_domain ), 'property' => 'form_structure' ),
             array ( 'title' => __( 'Attributs', Oak::$text_domain ), 'property' => 'form_attributes' ),
@@ -22,6 +26,28 @@ class Forms {
         
         Forms::$form_structures = array (
             array ( 'value' => '0', 'innerHTML' => 'Fixe' ),
+        );
+    }
+
+    function properties_to_enqueue_for_script() {
+        $table = 'form';
+        $elements = Oak::$forms;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        $properties = array_merge( Oak::$shared_properties, Forms::$properties );
+        $properties[] = array( 'name' => 'revision_number', 'type' => 'text', 'input_type' => 'checkbox' );
+
+        Oak::$current_element_script_properties = array (
+            'table' => 'form',
+            'table_in_plural' => 'forms',
+            'elements' => Oak::$forms,
+            'additional_data_to_pass' => array (
+                'otherElementProperties' => Forms::$other_elements,
+                'attributes' => Oak::$forms_attributes
+            ),
+            'properties' => $properties,
+            'filters' => $this->$filters,
+            'revisions' => Oak::$revisions
         );
     }
 

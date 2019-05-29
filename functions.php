@@ -22,7 +22,12 @@ class Oak {
     public static $sources_table_name;
     public static $publishers_table_name;
 
-    public static $revisions;
+    public static $shared_properties;
+
+    public static $elements_script_properties_functions = [];
+    public static $current_element_script_properties = [];
+
+    public static $revisions = [];
 
     public static $fields;
     public static $fields_without_redundancy;
@@ -30,18 +35,18 @@ class Oak {
 
     public static $forms;
     public static $forms_without_redundancy;
-    public static $forms_attributes;
+    public static $forms_attributes = [];
     public static $form_properties;
     public static $all_forms_and_fields = [];
 
     public static $objects;
     public static $objects_without_redundancy = [];
-    public static $all_objects;
+    public static $all_objects = [];
     public static $all_objects_without_redundancy = [];
 
     public static $terms;
     public static $terms_without_redundancy = [];
-    public static $all_terms;
+    public static $all_terms = [];
     public static $all_terms_without_redundancy = [];
 
     public static $terms_and_objects = [];
@@ -134,21 +139,7 @@ class Oak {
         global $wpdb;
 
         Oak::$text_domain = 'oak';
-        Oak::$charset_collate = $wpdb->get_charset_collate();
-
-        Oak::$revisions = [];
-
-        include get_template_directory() . '/functions/tables/constants/table-names.php';
-
-        Oak::$forms_attributes = [];
-        Oak::$all_objects = [];
-        Oak::$all_terms = [];
-        Oak::$all_terms_without_redundancy = [];
-
-        // $this->delete_everything();
-
         Oak::$site_language = substr( get_locale(), 0, 2 );
-
         Oak::$content_filters = get_option( 'oak_fitler_content_variables' ) ? 
             isset( get_option( 'oak_fitler_content_variables' )[ wp_get_current_user()->ID ] ) ? 
                 get_option( 'oak_fitler_content_variables' )[ wp_get_current_user()->ID ]
@@ -160,68 +151,64 @@ class Oak {
                     'selected_publications' => array('0')
                 );
 
+        // Front end styles and scripts
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'oak_enqueue_scripts' ) );
-
-        add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'oak_enqueue_styles' ) );
-        add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'oak_elementor_editor_enqueue_scripts' ) );
         
-
+        // Back end styles and scripts
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_styles' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'oak_admin_enqueue_scripts' ) );
 
-        add_action( 'add_meta_boxes', array ( $this, 'oak_add_meta_box_to_posts' ) );
+        // Initialize table names
+        include_once get_template_directory() . '/functions/tables/constants/table-names.php';
 
+        // Dashboard
+        include_once get_template_directory() . '/functions/dashboard/index.php';
+
+        // Configuration
+        include_once get_template_directory() . '/functions/configuration/index.php';
+
+        // Creating our tables
+        include_once get_template_directory() . '/functions/tables/index.php';
+
+        // Initializing all the tables properties
+        include_once get_template_directory() . '/functions/properties-initialization.php';
+
+        // Create post and page meta boxes
+        include_once get_template_directory() . '/functions/post_meta_boxes/index.php';
+
+        // Handle Elementor functionalities
+        include_once get_template_directory() . '/functions/elementor/index.php';
+
+        // Corn configuration
+        include_once get_template_directory() . '/functions/corn/corn-configuration/index.php';
+
+        // Corn (Web publisher)
+        include_once get_template_directory() . '/functions/corn/corn-import/index.php';
+
+        // Data studio
+        include_once get_template_directory() . '/functions/data-studio/index.php';
+
+        // To permit cross origin communication 
         add_action( 'init', array( $this, 'add_cors_http_header' ) );
 
+        // Theme support
         add_action( 'after_setup_theme', array( $this, 'oak_add_theme_support' ) );
+
+        // To load languages files
         add_action( 'after_setup_theme', array( $this, 'oak_translation_setup' ) );
 
-        add_action( 'widgets_init', array( $this, 'oak_widgets_init' ) );        
+        // To register the sidebars
+        add_action( 'widgets_init', array( $this, 'oak_register_sidebars' ) );
 
-        add_action( 'admin_head', array ( $this, 'oak_wordpress_dashboard' ) );
-
-        $this->oak_elementor_initialization();
-
+        // Too add new pages
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
 
-        add_action( 'save_post', array ( $this, 'oak_save_post_meta_fields' ) );
-
+        // Handle all ajax calls
         $this->oak_ajax_calls();
-
-        $this->oak_contact_form();
-
-        add_action('wp_dashboard_setup', array( $this, 'oak_dashboard' ) );
     }
 
     function oak_ajax_calls() {
-        add_action('wp_ajax_oak_save_configuration', array( $this, 'oak_save_configuration') );
-        add_action('wp_ajax_nopriv_oak_save_configuration', array( $this, 'oak_save_configuration') );
-
-        add_action('wp_ajax_oak_corn_save_general_configuration', array( $this, 'oak_corn_save_general_configuration') );
-        add_action('wp_ajax_nopriv_oak_corn_save_general_configuration', array( $this, 'oak_corn_save_general_configuration') );
-
-        add_action('wp_ajax_oak_corn_save_social_media_configuration', array( $this, 'oak_corn_save_social_media_configuration') );
-        add_action('wp_ajax_nopriv_oak_corn_save_social_media_configuration', array( $this, 'oak_corn_save_social_media_configuration') );
-
-        add_action('wp_ajax_oak_corn_save_app_bar_settings', array( $this, 'oak_corn_save_app_bar_settings') );
-        add_action('wp_ajax_nopriv_oak_corn_save_app_bar_settings', array( $this, 'oak_corn_save_app_bar_settings') );
-
-        add_action('wp_ajax_oak_corn_save_styles_settings', array( $this, 'oak_corn_save_styles_settings') );
-        add_action('wp_ajax_nopriv_oak_corn_save_styles_settings', array( $this, 'oak_corn_save_styles_settings') );
-
-        add_action('wp_ajax_oak_corn_save_nav_bar_settings', array( $this, 'oak_corn_save_nav_bar_settings') );
-        add_action('wp_ajax_nopriv_oak_corn_save_nav_bar_settings', array( $this, 'oak_corn_save_nav_bar_settings') );
-
-        add_action('wp_ajax_oak_save_analysis_model', array( $this, 'oak_save_analysis_model') );
-        add_action('wp_ajax_nopriv_oak_save_analysis_model', array( $this, 'oak_save_analysis_model') );
-
-        add_action( 'wp_ajax_oak_save_analyzes', array( $this, 'oak_save_analyzes') );
-        add_action( 'wp_ajax_nopriv_oak_save_analyzes', array( $this, 'oak_save_analyzes') );
-
-        add_action( 'wp_ajax_oak_get_organizations', array( $this, 'oak_get_organizations') );
-        add_action( 'wp_ajax_nopriv_oak_get_organizations', array( $this, 'oak_get_organizations') );
-
         add_action( 'wp_ajax_oak_register_element', array( $this, 'oak_register_element') );
         add_action( 'wp_ajax_nopriv_oak_register_element', array( $this, 'oak_register_element') );
 
@@ -236,35 +223,9 @@ class Oak {
 
         add_action( 'wp_ajax_oak_import_csv', array( $this, 'oak_import_csv') );
         add_action( 'wp_ajax_nopriv_oak_import_csv', array( $this, 'oak_import_csv') );
-
-        add_action('wp_ajax_oak_get_all_data_for_corn', array( $this, 'oak_get_all_data_for_corn') );
-        add_action('wp_ajax_nopriv_oak_get_all_data_for_corn', array( $this, 'oak_get_all_data_for_corn') );
-
-        add_action('wp_ajax_corn_save_data', array( $this, 'corn_save_data') );
-        add_action('wp_ajax_nopriv_corn_save_data', array( $this, 'corn_save_data') );
-
-        add_action('wp_ajax_oak_save_graph', array( $this, 'oak_save_graph') );
-        add_action('wp_ajax_nopriv_oak_save_graph', array( $this, 'oak_save_graph') );
-
-        add_action('wp_ajax_oak_regenerate_indexes', array( $this, 'oak_regenerate_indexes') );
-        add_action('wp_ajax_nopriv_oak_regenerate_indexes', array( $this, 'oak_regenerate_indexes') );
-
-        add_action('wp_ajax_oak_register_fitler_content_variables', array( $this, 'oak_register_fitler_content_variables') );
-        add_action('wp_ajax_nopriv_oak_register_fitler_content_variables', array( $this, 'oak_register_fitler_content_variables') );
-
-        add_action('wp_ajax_send_sync_data', array( 'Publishers', 'send_sync_data') );
-        add_action('wp_ajax_nopriv_send_sync_data', array( 'Publishers', 'send_sync_data') );
-
-        add_action('wp_ajax_save_sync_data', array( 'Publishers', 'save_sync_data') );
-        add_action('wp_ajax_nopriv_save_sync_data', array( 'Publishers', 'save_sync_data') );
-
-        add_action('wp_ajax_all_objects_synchronized', array( 'Publishers', 'all_objects_synchronized') );
-        add_action('wp_ajax_nopriv_all_objects_synchronized', array( 'Publishers', 'all_objects_synchronized') );
-
-        
     }
 
-    function oak_enqueue_styles() {
+    public static function oak_enqueue_styles() {
         wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
         wp_enqueue_style( 'oak_global', get_template_directory_uri() . '/src/css/global.css' );
         wp_enqueue_style( 'oak_front_global', get_template_directory_uri() . '/src/css/front/global.css' );
@@ -273,32 +234,7 @@ class Oak {
 
     function oak_enqueue_scripts() {
         wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
-        $this->oak_elementor_editor_enqueue_scripts();
-    }
-
-    function oak_elementor_editor_enqueue_scripts() {
-        wp_enqueue_media();
-
-        if ( strpos( get_page_template(), "critical-analysis" ) != false ) :
-            wp_enqueue_script( 'oak_critical_analysis_front', get_template_directory_uri() . '/src/js/critical-analysis-front.js', array('jquery'), false, true);
-
-            $analyzes = get_option('oak_analyzes');
-            $analyzes_field = get_field_object('analyzes');
-            $selected_analyze = $analyzes_field['choices'][ get_field('analyzes') ];
-            $analyzes = get_option('oak_analyzes');
-            $analysis;
-            for ( $i = 0; $i < sizeof( $analyzes ); $i++ ) :
-                if ( $analyzes[$i]['title'] == $selected_analyze ) :
-                    $analysis = $analyzes[$i];
-                endif;
-            endfor;
-            wp_localize_script('oak_critical_analysis_front', 'DATA', array(
-                'analysis' => $analysis
-            ));
-        endif;
-
-        wp_enqueue_script( 'oak_front_graphs', get_template_directory_uri() . '/src/js/front/graphs.js', array('jquery'), false, true );
-        wp_enqueue_script( 'oak_front_sidebar', get_template_directory_uri() . '/src/js/front/sidebar.js', array('jquery'), false, true );
+        Oak_Elementor::oak_elementor_editor_enqueue_scripts();
     }
 
     function oak_admin_enqueue_styles( $hook ) {
@@ -309,16 +245,13 @@ class Oak {
         // Add the color picker css file
         wp_enqueue_style( 'wp-color-picker' );
 
-        // if ( isset( $_GET['elements'] ) ) :
-            wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
-            // wp_enqueue_style( 'oak_font_awesome', get_template_directory_uri() . '/src/css/vendor/font-awesome.min.css' );
-            // wp_enqueue_style( 'oak_googleapifont_roboto', get_template_directory_uri() . '/src/css/vendor/googleapi-font-roboto.css' );
-            ?>
-            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+        wp_enqueue_style( 'oak_the_style', get_stylesheet_directory_uri() . '/style.css' );
+            
+        ?>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 
-            <?php
-        // endif;
+        <?php
     }
 
     function oak_admin_enqueue_scripts( $hook ) {
@@ -327,115 +260,13 @@ class Oak {
         // For the media library
         wp_enqueue_script( 'oak_media_library', get_template_directory_uri() . '/src/js/vendor/wp-media-modal.js', array('jquery'), false, true );
 
-        if ( get_current_screen()->id == 'post' || get_current_screen()->id == 'page' ) :
-            wp_enqueue_script( 'oak_edit_post', get_template_directory_uri() . '/src/js/edit-post.js', array('jquery'), false, true );
-        endif;
-
-        // Admin menu
-        wp_enqueue_script( 'admin_menu_script', get_template_directory_uri() . '/src/js/admin-menu.js', array('jquery'), false, true );
-        wp_localize_script( 'admin_menu_script', 'ADMIN_MENU_DATA', array(
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'siteLanguage' => Oak::$site_language,
-            'currentUser' => wp_get_current_user()->ID,
-            'oak_fitler_content_variables' => get_option('oak_fitler_content_variables') ? get_option('oak_fitler_content_variables') : []
-        ) );
-
         // Auto complete
         wp_enqueue_script( 'auto_complete', get_template_directory_uri() . '/src/js/autocomplete.js', array('jquery'), false, true );
 
-        // Configuration page
-        if ( get_current_screen()->id == 'toplevel_page_oak_materiality_reporting' ) :
-            wp_enqueue_script( 'oak_configuration_script', get_template_directory_uri() . '/src/js/configuration-page.js', array('jquery'), false, true );
-            wp_localize_script( 'oak_configuration_script', 'DATA', array(
-                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-                'oakWhichPerimeter' => get_option('oak_which_perimeter') != false ? get_option('oak_which_perimeter') : 0
-            ) );
-        endif;
-
-        // Corn import page
-        $corn = get_option( 'oak_corn' ) != false ? get_option('oak_corn') : true;
-        $central_url = get_option( 'oak_central_url' ) != false ? get_option('oak_central_url') : true;
-        if ( get_current_screen()->id == 'toplevel_page_oak_import_page' ) :
-            wp_enqueue_script( 'oak_import_script', get_template_directory_uri() . '/src/js/import-page.js', array('jquery'), false, true );
-            wp_localize_script( 'oak_import_script', 'DATA', array(
-                'corn' => get_option('oak_corn'),
-                'centralUrl' => $central_url,
-                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-            ) );
-        endif;
-
-        // data studio
-        if ( get_current_screen()->id == 'toplevel_page_oak_data_studio' ) :
-            wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
-            wp_enqueue_script( 'oak_data_studio', get_template_directory_uri() . '/src/js/data-studio.js', array('jquery'), false, true );
-            wp_localize_script( 'oak_data_studio', 'DATA', array(
-                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-                'allData' => array(
-                    'organizations' => array(
-                        'organizations' => Oak::$organizations,
-                        'organizationsWithoutRedundancy' => Oak::$organizations_without_redundancy,
-                    ),
-                    'publications' => array(
-                        'publications' => Oak::$publications,
-                        'publicationsWithoutRedundancy' => Oak::$publications_without_redundancy,
-                    ),
-                    'quantis' => array(
-                        'quantis' => Oak::$quantis,
-                        'quantisWithoutRedundancy' => Oak::$quantis_without_redundancy,
-                    ),
-                    'performances' => array(
-                        'performances' => Oak::$performances,
-                        'performancesWithoutRedundancy' => Oak::$performances_without_redundancy,
-                    )
-                )
-            ) );
-        endif;
-
-        // For the corn configuration page
-        if ( get_current_screen()->id == 'toplevel_page_oak_corn_configuration_page' ) :
-            wp_enqueue_script( 'oak_corn_configuration_page', get_template_directory_uri() . '/src/js/corn-configuration-page.js', array( 'jquery', 'wp-color-picker' ), false, true);
-            wp_localize_script( 'oak_corn_configuration_page', 'DATA', array(
-                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-                'socialMedias' => Oak::$social_medias,
-                'oakColors' => get_option( 'oak_colors' ) != false ? get_option( 'oak_colors' ) : [],
-                'oakNavBarData' => get_option( 'oak_nav_bar_data' ) != false ? get_option( 'oak_nav_bar_data' ) : [],
-            ) );
-        endif;
-
-        // Critical analysis configuration
-        if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_critical_analysis_configuration' ) :
-            wp_enqueue_script( 'oak_critical_analysis_configuration', get_template_directory_uri() . '/src/js/critical-analysis-configuration.js', array('jquery'), false, true);
-
-            $data = wp_remote_get( 'http://demo1291769.mockable.io/base_data' );
-            $base_data = json_decode( $data['body'], true );
-
-            wp_localize_script( 'oak_critical_analysis_configuration', 'DATA', array (
-                'ajaxUrl' => admin_url('admin-ajax.php'),
-                'adminUrl' => admin_url(),
-                'templateDirectoryUri' => get_template_directory_uri(),
-                'principles' => get_option('oak_principles') ? get_option('oak_principles') : [],
-                'baseData' => $base_data
-            ));
-        endif;
-
-        // Critical analysis creation
-        if ( get_current_screen()->id == 'oak-materiality-reporting_page_oak_critical_analysis' ) :
-            wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
-            wp_enqueue_script( 'oak_critical_analysis', get_template_directory_uri() . '/src/js/critical-analysis.js', array('jquery'), false, true);
-            wp_localize_script( 'oak_critical_analysis', 'DATA', array (
-                'ajaxUrl' => admin_url('admin-ajax.php'),
-                'adminUrl' => admin_url(),
-                'principles' => get_option('oak_principles') ? get_option('oak_principles') : [],
-                'analyzes' => get_option('oak_analyzes') ? get_option('oak_analyzes') : []
-            ));
-        endif;
-
         // For elements
         if ( isset( $_GET['elements'] ) ) :
-            $table = '';
-            $table_in_plural = '';
-            $elements = [];
-            $properties = array(
+            
+            Oak::$shared_properties = array (
                 array( 'name' => 'designation', 'type' => 'text', 'input_type' => 'text' ),
                 array( 'name' => 'identifier', 'type' => 'text', 'input_type' => 'text' ),
                 array( 'name' => 'selector', 'type' => 'text', 'input_type' => 'checkbox' ),
@@ -443,197 +274,16 @@ class Oak {
                 array( 'name' => 'trashed', 'type' => 'text', 'input_type' => 'checkbox' ),
                 array( 'name' => 'state', 'type' => 'text', 'input_type' => 'checkbox' ),
             );
-            $additional_data_to_pass = array();
 
-            if ( $_GET['elements'] == 'fields' ) :
-                $table = 'field';
-                $table_in_plural = 'fields';
-                $elements = Oak::$fields;
-                $properties = array_merge( $properties, Fields::$properties );
-                $filters = Fields::$filters;
-            endif;
-            if ( $_GET['elements'] == 'forms' ) :
-                $table = 'form';
-                $table_in_plural = 'forms';
-                $elements = Oak::$forms;
-                $additional_data_to_pass = array(
-                    'otherElementProperties' => Forms::$other_elements,
-                    'attributes' => Oak::$forms_attributes
-                );
-                $properties = array_merge( $properties, Forms::$properties );
-                $properties[] = array( 'name' => 'revision_number', 'type' => 'text', 'input_type' => 'checkbox' );
-                $filters = Forms::$filters;
-            endif;
-            if ( $_GET['elements'] == 'models' ) :
-                $table = 'model';
-                $table_in_plural = 'models';
-                $elements = Oak::$models;
-                $additional_data_to_pass = array(
-                    'fields' => Oak::$fields,
-                    'formsAndFields' => Oak::$all_forms_and_fields,
-                    'otherElementProperties' => Models::$other_elements,
-                    'attributes' => Forms::$attributes
-                );
-                $properties = array_merge( $properties, Models::$properties );
-                $properties[] = array( 'name' => 'revision_number', 'type' => 'text', 'input_type' => 'checkbox' );
-                $filters = Models::$filters;
-            endif;
-            if ( $_GET['elements'] == 'taxonomies' ) :
-                $table = 'taxonomy';
-                $table_in_plural = 'taxonomies';
-                $elements = Oak::$taxonomies;
-                $properties = array_merge( $properties, Taxonomies::$properties );
-                $filters = Taxonomies::$filters;
-            endif;
-            if ( $_GET['elements'] == 'organizations' ) :
-                $table = 'organization';
-                $table_in_plural = 'organizations';
-                $elements = Oak::$organizations;
-                $properties = array_merge( $properties, Organizations::$properties );
-                $filters = Organizations::$filters;
-            endif;
-            if ( $_GET['elements'] == 'publications' ) :
-                $table = 'publication';
-                $table_in_plural = 'publications';
-                $elements = Oak::$publications;
-                $properties = array_merge( $properties, Publications::$properties );
-                $filters = Publications::$filters;
-            endif;
-            if ( $_GET['elements'] == 'glossaries' ) :
-                $table = 'glossary';
-                $table_in_plural = 'glossaries';
-                $elements = Oak::$glossaries;
-                $properties = array_merge( $properties, Glossaries::$properties );
-                $filters = Glossaries::$filters;
-            endif;
-            if ( $_GET['elements'] == 'qualis' ) :
-                $table = 'quali';
-                $table_in_plural = 'qualis';
-                $elements = Oak::$qualis;
-                $properties = array_merge( $properties, Qualis::$properties );
-                $filters = Qualis::$filters;
-            endif;
-            if ( $_GET['elements'] == 'quantis' ) :
-                $table = 'quanti';
-                $table_in_plural = 'quantis';
-                $elements = Oak::$quantis;
-                $properties = array_merge( $properties, Quantis::$properties );
-                $filters = Quantis::$filters;
-            endif;
-            if ( $_GET['elements'] == 'goodpractices' ) :
-                $table = 'goodpractice';
-                $table_in_plural = 'goodpractices';
-                $elements = Oak::$goodpractices;
-                $properties = array_merge( $properties, Good_Practices::$properties );
-                $filters = Good_Practices::$filters;
-            endif;
-            
-            if ( $_GET['elements'] == 'performances' ) :
-                $table = 'performance';
-                $table_in_plural = 'performances';
-                $elements = Oak::$performances;
-                $properties = array_merge( $properties, Performances::$properties );
-                $filters = Performances::$filters;
-            endif;
-            if ( $_GET['elements'] == 'sources' ) :
-                $table = 'source';
-                $table_in_plural = 'sources';
-                $elements = Oak::$sources;
-                $properties = array_merge( $properties, Sources::$properties );
-                $filters = Sources::$filters;
-            endif;
-            if ( $_GET['elements'] == 'publishers' ) :
-                $table = 'publisher';
-                $table_in_plural = 'publishers';
-                $elements = Oak::$publishers;
-                $properties = array_merge( $properties, Publishers::$properties );
-                $filters = Publishers::$filters;
-                if ( isset( $_GET['publisher_identifier'] ) ) :
-                    wp_enqueue_script( 'oak_publisher_synchronize', get_template_directory_uri() . '/functions/tables/elements/publishers/src/synchronize-elements.js', array('jquery'), false, true );
-                    wp_localize_script( 'oak_publisher_synchronize', 'SYNCHRONIZE_DATA', array(
-                        'publishers' => Oak::$publishers,
-                        'allObjects' => Oak::$all_objects_without_redundancy
-                    ) ); 
-                endif;
-            endif;
-            if ( $_GET['elements'] == 'objects' ) :
-                $table = 'object';
-                $table_in_plural = $_GET['model_identifier'];
-
-                $elements = Oak::$objects;
-                foreach( $elements as $object ) :
-                    $object->object_model_identifier = $_GET['model_identifier'];
-                endforeach;
-
-                foreach( Oak::$current_model_fields as $key => $field ) :
-                    $input_type = $field->field_type;
-
-                    Oak::$object_properties[] = array (
-                        'name' => $key . '_' . $field->field_identifier,
-                        'property_name' => 'object_' . $key . '_' . $field->field_identifier,
-                        'type' => 'text',
-                        'input_type' => $input_type,
-                        'placeholder' => $field->form_and_field_properties->field_designation != '' ? $field->form_and_field_properties->field_designation : $field->field_designation,
-                        'description' => $field->form_and_field_properties->field_designation != '' ? $field->form_and_field_properties->field_designation : $field->field_designation,
-                        'selector' => $field->field_selector,
-                        'width' => '50',
-                        'model_and_form_instance' => $field->model_and_form_instance,
-                        'form' => $field->form,
-                        'translatable' => true
-                    );
-                endforeach;
-
-                $properties = array_merge( $properties, Oak::$object_properties );
-                $filters = Objects::$filters;
-            endif;
-
-            if ( $_GET['elements'] == 'terms' ) :
-                $table = 'term';
-                $table_in_plural = $_GET['taxonomy_identifier'];
-                $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
-                Oak::$terms = $wpdb->get_results ( "
-                    SELECT *
-                    FROM $term_table_name
-                " );
-                $elements = Oak::$terms;
-
-                $properties = array_merge( $properties, Terms::$properties );
-                $filters = Terms::$filters;
-            endif;
-
-            if ( $_GET['elements'] == 'term_objects' ) :
-                $title = __( 'Objets', Oak::$text_domain );
-                $term_identifier = $_GET['term_identifier'];
-                foreach( Oak::$terms_and_objects as $term_and_object ) :
-                    if ( $term_and_object->term_identifier == $term_identifier ) :
-                        foreach( Oak::$all_objects_without_redundancy as $object ) :
-                            if ( $object->object_identifier == $term_and_object->object_identifier ) :
-                                Oak::$term_objects_without_redundancy[] = $object;
-                            endif;
-                        endforeach;
-                    endif;
-                endforeach;
-
-                $table = 'object';
-                $table_in_plural = 'objects';
-                $elements = Oak::$term_objects_without_redundancy;
-            endif;
-
-            Oak::$revisions = $this->oak_get_revisions( $table, $elements );
+            Oak::$elements_script_properties_functions[ $_GET['elements'] ]();
 
             $basic_data_to_pass = array(
                 'ajaxUrl' => admin_url ('admin-ajax.php'),
-                'table' => $table,
-                'tableInPlural' => $table_in_plural,
-                'revisions' => Oak::$revisions,
-                'properties' => $properties,
                 'adminUrl' => admin_url(),
-                'elements' => $elements,
                 'elementsType' => $_GET['elements'],
                 'templateDirectoryUri' => get_template_directory_uri(),
                 'termIdentifier' => isset ( $_GET['term_identifier'] ) ? $_GET['term_identifier'] : '',
                 'siteLanguage' => Oak::$site_language,
-                'filters' => $filters,
                 'termsAndObjects' => Oak::$terms_and_objects,
                 
                 'addingElementMessage' => __( 'Êtes vous sur de vouloir ajouter cet element?', Oak::$text_domain ),
@@ -648,7 +298,7 @@ class Oak {
                 'choosingModelMessage' => __( 'Veuillez choisir le modèle ?', Oak::$text_domain ),
             );
 
-            $final_data_to_pass = array_merge( $basic_data_to_pass, $additional_data_to_pass );
+            $final_data_to_pass = array_merge( $basic_data_to_pass, Oak::$current_element_script_properties );
 
             if ( $_GET['listorformula'] == 'formula' ) :
                 wp_enqueue_script( 'corn_add_element', get_template_directory_uri() . '/src/js/add-element.js', array( 'jquery', 'wp-color-picker' ), false, true );
@@ -663,7 +313,7 @@ class Oak {
         endif;
     }
 
-    function oak_widgets_init() {
+    function oak_register_sidebars() {
         $side_bars = array ( 
             array ( 'name' => __( 'Sidebar CSR', Oak::$text_domain ), 'id' => 'csr_sidebar' ),
             array ( 'name' => __( 'Sidebar 1', Oak::$text_domain ), 'id' => 'sidebar_1' ),
@@ -678,226 +328,6 @@ class Oak {
         endforeach;
     }
 
-    function oak_add_meta_box_to_posts() {
-        // $this->oak_add_meta_data();
-
-        $posts = [ 'post', 'page' ];
-        foreach( $posts as $post ) :
-            add_meta_box(
-                'objects_selector', // $id
-                __( 'Objets', Oak::$text_domain ), // $title
-                array( $this, 'oak_add_meta_box_to_posts_view' ), // $callback
-                $post, // $screen
-                'normal', // $context
-                'high', // $priority
-                array( 'element' => 'object', 'elements' => Oak::$all_objects_without_redundancy, 'select_name' => 'objects_selector[]' ) 
-            );
-
-            add_meta_box(
-                'good_practices_selector', // $id
-                __( 'Bonnes pratiques', Oak::$text_domain ), // $title
-                array( $this, 'oak_add_meta_box_to_posts_view' ),
-                $post, // $screen
-                'normal', // $context
-                'high', // $priority
-                array( 'element' => 'goodpractice', 'elements' => Oak::$goodpractices_without_redundancy, 'select_name' => 'good_practices_selector[]' ) 
-            );
-
-            add_meta_box(
-                'sources_selector', // $id
-                __( 'Sources', Oak::$text_domain ), // $title
-                array( $this, 'oak_add_meta_box_to_posts_view' ),
-                $post, // $screen
-                'normal', // $context
-                'high', // $priority
-                array( 'element' => 'source', 'elements' => Oak::$sources_without_redundancy, 'select_name' => 'sources_selector[]' ) 
-            );
-
-            add_meta_box(
-                'quantis_selector', // $id
-                __( 'Indicateurs Quantitatifs', Oak::$text_domain ), // $title
-                array( $this, 'oak_add_meta_box_to_posts_view' ),
-                $post, // $screen
-                'normal', // $context
-                'high', // $priority
-                array( 'element' => 'quanti', 'elements' => Oak::$quantis_without_redundancy, 'select_name' => 'quantis_selector[]' ) 
-            );
-
-            add_meta_box(
-                'qualis_selector', // $id
-                __( 'Indicateurs Qualitatifs', Oak::$text_domain ), // $title
-                array( $this, 'oak_add_meta_box_to_posts_view' ),
-                $post, // $screen
-                'normal', // $context
-                'high', // $priority
-                array( 'element' => 'quali', 'elements' => Oak::$qualis_without_redundancy, 'select_name' => 'qualis_selector[]' ) 
-            );
-        endforeach;
-    }
-
-    static function oak_add_meta_data() {
-        $the_returned_fields = [];
-
-        global $wpdb;
-
-        $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
-
-        $our_objects = [];
-
-        foreach( Oak::$models_without_redundancy as $model ) :
-            $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
-            // Lets get the model fields
-
-            $objects = $wpdb->get_results ( "
-                SELECT *
-                FROM  $table_name
-            " );
-            $objects = array_reverse( $objects );
-            foreach( $objects as $object ) :
-                if ( in_array( $object->object_identifier, $selected_objects ) ) :
-                    $exists = false;
-                    foreach( $our_objects as $already_added_object ) :
-                        if ( $already_added_object->object_identifier == $object->object_identifier ) :
-                            $exists = true;
-                        endif;
-                    endforeach;
-                    if ( !$exists ) :
-                        $object->object_model = $model;
-                        $our_objects[] = $object;
-                    endif;
-                endif;
-            endforeach;
-        endforeach;
-
-        return $the_returned_fields;
-    }
-
-    function oak_add_meta_box_to_posts_view( $post, $args ) {
-        $selected_elements = get_post_meta( get_the_ID(), $args['id'] ) ? get_post_meta( get_the_ID(), $args['id'] ) [0] : [];
-        $elements = $args['args']['elements'];
-        ?>
-        <div class="oak_post_elements_selector__container">
-            <div class="oak_post_elements_selector_container__select_container">
-                <input type="text" placeholder="<?php _e( 'Rechercher', Oak::$text_domain ); ?>" class="oak_post_search_input">
-                <select multiple name="<?php echo( $args['args']['select_name'] ); ?>" class="oak_post_selector oak_post_elements_selector" size="<?php echo( count( $elements ) ); ?>">
-                    <?php
-                    $identifier_property = $args['args']['element'] . '_identifier';
-                    $designation_property = $args['args']['element'] . '_designation';
-                    foreach( $elements as $element ) :
-                        $selected = '';
-                        foreach( $selected_elements as $selected_element_identifier ) :
-                            if ( $selected_element_identifier == $element->$identifier_property ) :
-                                $selected = 'selected';
-                            endif;
-                        endforeach;
-                        ?>
-                        <option <?php echo( $selected ); ?> value="<?php echo( $element->$identifier_property ); ?>"><?php echo( $element->$designation_property ); ?></option>
-                        <?php
-                    endforeach;
-                    ?>
-                </select>
-            </div>
-            <div class="oak_post_elements_selector__selected_elements">
-                <div class="oak_post_elements_selector_selected_elements__single_element">
-                    <h3 class="oak_post_elements_selector_selected_elements_single_element__element_name">Element Name</h3>
-                    <i class="fas fa-times oak_post_elements_selector_selected_elements_single_element_element_remove_button"></i>
-                </div>
-            </div>
-        </div>
-
-        <?php
-    }
-
-    function oak_save_post_meta_fields( $post_id ) {
-        if ( !isset( $_POST['objects_selector'] ) 
-            && !isset( $_POST['good_practices_selector'] ) 
-            && !isset( $_POST['quantis_selector'] ) 
-            && !isset( $_POST['sources_selector'] ) 
-            && !isset( $_POST['qualis_selector'] )) :
-            return;
-        endif;
-
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-            return $post_id;
-        }
-
-        // check permissions
-        if ( 'page' === $_POST['post_type'] ) {
-            if ( !current_user_can( 'edit_page', $post_id ) ) {
-                return $post_id;
-            } elseif ( !current_user_can( 'edit_post', $post_id ) ) {
-                return $post_id;
-            }
-        }
-
-        $old = get_post_meta( $post_id, 'objects_selector', true );
-        if ( isset( $_POST['objects_selector'] ) ) :
-
-            $new = $_POST['objects_selector'];
-
-            if ( $new && $new !== $old ) {
-                update_post_meta( $post_id, 'objects_selector', $new );
-            } elseif ( '' === $new && $old ) {
-                delete_post_meta( $post_id, 'objects_selector', $old );
-            };
-        else : 
-            delete_post_meta( $post_id, 'objects_selector', $old );
-        endif;
-
-        $old_goodpractices = get_post_meta( $post_id, 'good_practices_selector', true );
-        if ( isset( $_POST['good_practices_selector'] ) ) :
-            $new_goodpractices = $_POST['good_practices_selector'];
-
-            if ( $new_goodpractices && $new_goodpractices !== $old_goodpractices ) {
-                update_post_meta( $post_id, 'good_practices_selector', $new_goodpractices );
-            } elseif ( '' === $new_goodpractices && $old_goodpractices ) {
-                delete_post_meta( $post_id, 'good_practices_selector', $old_goodpractices );
-            };
-        else :
-            delete_post_meta( $post_id, 'good_practices_selector', $old_goodpractices );
-        endif;
-
-        $old_goodpractices = get_post_meta( $post_id, 'sources_selector', true );
-        if ( isset( $_POST['sources_selector'] ) ) :
-            $new_goodpractices = $_POST['sources_selector'];
-
-            if ( $new_goodpractices && $new_goodpractices !== $old_goodpractices ) {
-                update_post_meta( $post_id, 'sources_selector', $new_goodpractices );
-            } elseif ( '' === $new_goodpractices && $old_goodpractices ) {
-                delete_post_meta( $post_id, 'sources_selector', $old_goodpractices );
-            };
-        else :
-            delete_post_meta( $post_id, 'sources_selector', $old_goodpractices );
-        endif;
-
-        $old_quantis = get_post_meta( $post_id, 'quantis_selector', true );
-        if ( isset( $_POST['quantis_selector'] ) ) :
-            $new_quantis = $_POST['quantis_selector'];
-
-            if ( $new_quantis && $new_quantis !== $old_quantis ) {
-                update_post_meta( $post_id, 'quantis_selector', $new_quantis );
-            } elseif ( '' === $new_quantis && $old_quantis ) {
-                delete_post_meta( $post_id, 'quantis_selector', $old_quantis );
-            };
-        else :
-            delete_post_meta( $post_id, 'quantis_selector', $old_quantis );
-        endif;
-
-        $old_qualis = get_post_meta( $post_id, 'qualis_selector', true );
-        if ( isset( $_POST['qualis_selector'] ) ) :
-            $new_qualis = $_POST['qualis_selector'];
-
-            if ( $new_qualis && $new_qualis !== $old_qualis ) {
-                update_post_meta( $post_id, 'qualis_selector', $new_qualis );
-            } elseif ( '' === $new_qualis && $old_qualis ) {
-                delete_post_meta( $post_id, 'qualis_selector', $old_qualis );
-            };
-        else :
-            delete_post_meta( $post_id, 'qualis_selector', $old_qualis );
-        endif;
-    }
-
-
     function oak_add_theme_support() {
         add_theme_support( 'post-thumbnails' ); 
         add_theme_support('menus');
@@ -908,10 +338,6 @@ class Oak {
             'flex-width'  => true,
             'header-text' => array( 'site-title', 'site-description' ),
         ) );
-
-        include get_template_directory() . '/functions/tables.php';
-        include get_template_directory() . '/functions/properties-initialization.php';
-        // include get_template_directory() . '/functions/auto-index.gen.php';
     }
 
     function oak_translation_setup() {
@@ -921,332 +347,6 @@ class Oak {
     function add_cors_http_header() {
         header('Access-Control-Allow-Origin: *');
         // header('Access-Control-Allow-Origin: http://localhost:8888/test/wp-admin/admin-ajax.php');
-    }
-
-    function oak_elementor_initialization() {
-        if ( get_option('oak_corn') == 'true' ) :
-            if ( !did_action( 'elementor/loaded' ) == 1 ) :
-                add_action( 'admin_notices', array( $this, 'oak_admin_notice_missing_elementor_plugin' ) );
-            else :
-                // This is corn, and elementor is installed. So we do everything related to elementor :)
-                $this->oak_add_tags();
-                $this->oak_add_widget_categories();
-                $this->oak_add_widgets();
-            endif;
-        endif;
-    }
-
-    function oak_add_tags() {
-        add_action( 'elementor/dynamic_tags/register_tags', function( $dynamic_tags ) {
-            \Elementor\Plugin::$instance->dynamic_tags->register_group( 'oak', [
-                'title' => __( 'Oak', Oak::$text_domain )
-            ] );
-
-            \Elementor\Plugin::$instance->dynamic_tags->register_group( 'oak_indexes', [
-                'title' => __( 'Oak Indexes', Oak::$text_domain )
-            ] );
-            
-            include_once get_template_directory() . '/functions/elementor/dynamic_tag.php';
-            include_once get_template_directory() . '/functions/elementor/dynamic_index_tag.php';
-
-            $tag = new Dynamic_Tag();
-            $dynamic_tags->register_tag( 'Dynamic_Tag' );
-
-            $indexes_tag = new Dynamic_Index_Tag();
-            $dynamic_tags->register_tag( 'Dynamic_Index_Tag' );
-        } );
-    }
-
-    function oak_add_widget_categories() {
-        add_action( 'elementor/elements/categories_registered', function( $elements_manager ) {
-            $elements_manager->add_category(
-                'oak',
-                [
-                    'title' => __( 'OAK', Oak::$text_domain ),
-                    'icon' => 'fa fa-plug',
-                ]
-            );
-
-            $elements_manager->add_category(
-                'oak_charts',
-                [
-                    'title' => __( 'OAK CHARTS', Oak::$text_domain ),
-                    'icon' => 'fa fa-plug',
-                ]
-            );
-        } );
-    }
-
-    function oak_add_widgets() {
-        add_action('elementor/widgets/widgets_registered', function( $widgets_manager ) {
-
-            include_once get_template_directory() . '/functions/elementor/generic_widget.php';
-
-            $this->oak_add_side_bar_widgets( $widgets_manager );
-
-            global $wpdb;
-
-            $selected_objects = get_post_meta( get_the_ID(), 'objects_selector' ) ? get_post_meta( get_the_ID(), 'objects_selector' ) [0] : [];
-            $selected_goodpractices = get_post_meta( get_the_ID(), 'good_practices_selector' ) ? get_post_meta( get_the_ID(), 'good_practices_selector' ) [0] : [];
-            $selected_sources = get_post_meta( get_the_ID(), 'sources_selector' ) ? get_post_meta( get_the_ID(), 'sources_selector' ) [0] : [];
-            $selected_quantis = get_post_meta( get_the_ID(), 'quantis_selector' ) ? get_post_meta( get_the_ID(), 'quantis_selector' ) [0] : [];
-            $selected_qualis = get_post_meta( get_the_ID(), 'qualis_selector' ) ? get_post_meta( get_the_ID(), 'qualis_selector' ) [0] : [];
-
-            $our_objects = Oak::oak_get_selected_objects_data( $selected_objects, true );
-            $the_returned_fields = [];
-
-            Sidebar_Widget::$post_selected_objects[] = $our_objects;
-
-            $metas = get_post_meta( get_the_ID() );
-            foreach( $metas as $key => $meta ) :
-                if ( strpos( $key, 'Oak:' ) !== false ) :
-                    delete_post_meta( get_the_ID(), $key );
-                endif;
-            endforeach;
-            
-            foreach( $our_objects as $index => $object ) :
-                $widget_options = array(
-                    'name' => 'object_' . $index . '_designation',
-                    'title' => __( 'Designation Objet ' . $index . ' ', Oak::$text_domain ),
-                    'icon' => 'eicon-type-tool',
-                    'categories' => [ 'oak' ],
-                    'value' => $object->object_designation,
-                    'field_type' => 'text',
-                );
-
-                $object_number = $index + 1;
-                update_post_meta( get_the_ID(), 'Oak: Designation Objet ' . $object_number, $object->object_designation );
-                $generic_widget = new Generic_Widget();
-                $generic_widget->set_widgets_options( $widget_options );
-                $widgets_manager->register_widget_type( $generic_widget );
-
-                $object_model_field_names_array = explode( '|', $object->object_model_fields_names );
-                foreach( $object->object_model_fields as $key => $object_model_field ) :
-                    $field_number = $key + 1;
-                    $column_name = 'object_' . $key . '_' . $object_model_field->field_identifier;
-                    $value = $object->$column_name;
-                    $widget_options = array (
-                        'name' => preg_replace( '/\s+/', '', count( $the_returned_fields ) . $object_model_field_names_array[ $key ] ),
-                        'title' => $object_model_field_names_array[ $key ],
-                        'icon' => $object_model_field->field_type == 'Image' ? 'eicon-image' : 'eicon-type-tool',
-                        'categories' => [ 'oak' ],
-                        'value' => $value,
-                        'field_type' => $object_model_field->field_type,
-                    );
-                    $the_returned_fields [] = array(
-                        'field_designation' => count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ],
-                        'value' => $value,
-                        'field_type' => $object_model_field->field_type
-                    );
-
-                    update_post_meta( get_the_ID(), 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ], $value );
-                    $generic_widget = new Generic_Widget();
-                    $generic_widget->set_widgets_options( $widget_options );
-                    $widgets_manager->register_widget_type( $generic_widget );
-                endforeach;
-            endforeach;
-
-            $post_images_to_show = array();
-            update_option( 'oak_post_images_to_show', array() );
-
-            // For the good practices: 
-            $good_practice = __( 'Bonne Pratique', Oak::$text_domain );
-            $good_practice_number = 1;
-            foreach( $selected_goodpractices as $good_practice_key => $goodpractice_identifier ) :
-                $incrementer = 0;
-                $found_goodpractice = false;
-                do {
-                    if ( Oak::$goodpractices_without_redundancy[ $incrementer ]->goodpractice_identifier == $goodpractice_identifier) :
-                        // For the designation: 
-                        $the_goodpractice = Oak::$goodpractices_without_redundancy[ $incrementer ];
-                        update_post_meta( get_the_ID(), 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': Designation', $the_goodpractice->goodpractice_designation );
-                        foreach( Good_Practices::$properties as $key => $goodpractice_property ) :
-                            $property_name = $goodpractice_property['property_name'];
-                            if ( $goodpractice_property['input_type'] != 'image' && $goodpractice_property['input_type'] != 'select' ) :
-                                update_post_meta( get_the_ID(), 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': ' . $goodpractice_property['description'], $the_goodpractice->$property_name );
-                            elseif ( $goodpractice_property['input_type'] == 'image' ):
-                                $image_id = attachment_url_to_postid( $the_goodpractice->$property_name );
-                                $post_images_to_show[] = array ( 'url' => $the_goodpractice->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': ' .$goodpractice_property['description'] );
-                                // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
-                            endif;
-                        endforeach;
-                        $good_practice_number++;
-                    endif;
-                    $incrementer++;
-                } while( $incrementer < count( Oak::$goodpractices_without_redundancy ) && !$found_goodpractice );
-            endforeach;
-
-            // For sources
-            $source_number = 1;
-            $source = __( 'Source', Oak::$text_domain );
-            foreach( $selected_sources as $source_key => $selected_identifier ) :
-                $incrementer = 0;
-                $found_source = false;
-                do {
-                    if ( Oak::$sources_without_redundancy[ $incrementer ]->source_identifier == $selected_identifier) :
-                        // For the designation: 
-                        $the_source = Oak::$sources_without_redundancy[ $incrementer ];
-                        update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_number . ': Designation', $the_source->source_designation );
-                        foreach( Sources::$properties as $key => $source_property ) :
-                            $property_name = $source_property['property_name'];
-                            if ( $source_property['input_type'] != 'image' && $source_property['input_type'] != 'select' ) :
-                                update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_number . ': ' . $source_property['description'], $the_source->$property_name );
-                            elseif ( $source_property['input_type'] == 'image' ):
-                                $image_id = attachment_url_to_postid( $the_source->$property_name );
-                                $post_images_to_show[] = array ( 'url' => $the_source->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $source . ' ' . $source_number . ': ' .$source_property['description'] );
-                                // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
-                            endif;
-                        endforeach;
-                        $source_number++;
-                    endif;
-                    $incrementer++;
-                } while( $incrementer < count( Oak::$sources_without_redundancy ) && !$found_source );
-            endforeach;
-
-            $performance_number = 1;
-            foreach( $selected_quantis as $quanti_identifier ) :
-                foreach( Oak::$performances_without_redundancy as $performance_key => $performance ) :
-                    if ( $performance->performance_quantis == $quanti_identifier ) :
-                        $performance_text = __( 'Donnée de performance', Oak::$text_domain );
-                        update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Designation', $performance->performance_designation );
-
-                        $unity_type_text = __( 'Type de l’unité', Oak::$text_domain );
-                        update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $unity_type_text, $performance->performance_type );
-
-                        foreach( Performances::$properties as $key => $performance_property ) :
-                            $performance_results = explode( '|', $performance->performance_results );
-                            foreach( $performance_results as $result_key => $result ) :
-                                if ( $result != '' ) :
-                                    $result_values = explode( ':', $result );
-                                    $year = $result_values[0];
-                                    $value = $result_values[1];
-
-                                    update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Année ' . $result_key, $year );
-                                    update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Résultalt ' . $year, $value );
-                                endif;
-                            endforeach;
-                            $property_name = $performance_property['property_name'];
-                            if ( $performance_property['input_type'] != 'image' && $performance_property['input_type'] != 'select' ) :
-                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
-                            elseif ( $performance_property['input_type'] == 'image' ):
-                                $image_id = attachment_url_to_postid( $performance->$property_name );
-                                $post_images_to_show[] = array ( 'url' => $performance->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $performance . ' ' . $performance_number . ': ' .$performance_property['description'] );
-                                // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
-                            elseif( $performance_property['input_type'] == 'select' ) :
-                                if ( isset( $performance_property['depends'] ) ) :
-                                    if( $performance_property['depends'][0]['name'] = 'type' ) :
-                                        if ( $performance_property['depends'][0]['values'][0] == $performance->performance_type ) :
-                                            $value = '';
-                                            foreach( $performance_property['choices'] as $choice ) :
-                                                if ( $choice['value'] == $performance->$property_name ) :
-                                                    $value = $choice['innerHTML'];
-                                                endif;
-                                            endforeach;
-                                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $value );
-                                        endif;
-                                    endif;
-                                endif;
-                            endif;
-                        endforeach;
-                        $performance_number++;
-                    endif;
-                endforeach;
-            endforeach;
-
-            $quali_number = 1;
-            $quali = __( 'Indicateur Qualitatif', Oak::$text_domain );
-            foreach( $selected_qualis as $quali_key => $selected_identifier ) :
-                $incrementer = 0;
-                $found_quali = false;
-                do {
-                    if ( Oak::$qualis_without_redundancy[ $incrementer ]->quali_identifier == $selected_identifier) :
-                        // For the designation: 
-                        $the_quali = Oak::$qualis_without_redundancy[ $incrementer ];
-                        update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': Designation', $the_quali->quali_designation );
-                        foreach( Qualis::$properties as $key => $quali_property ) :
-                            $property_name = $quali_property['property_name'];
-                            if ( $quali_property['input_type'] != 'image' && $quali_property['input_type'] != 'select' ) :
-                                update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': ' . $quali_property['description'], $the_quali->$property_name );
-                            elseif ( $quali_property['input_type'] == 'image' ):
-                                $image_id = attachment_url_to_postid( $the_quali->$property_name );
-                                $post_images_to_show[] = array ( 'url' => $the_quali->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $quali . ' ' . $quali_number . ': ' .$quali_property['description'] );
-                                // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
-                            endif;
-                        endforeach;
-                        $quali_number++;
-                    endif;
-                    $incrementer++;
-                } while( $incrementer < count( Oak::$qualis_without_redundancy ) && !$found_quali );
-            endforeach;
-
-            // var_dump($post_images_to_show);
-            update_option( 'oak_post_images_to_show', $post_images_to_show );
-
-            // For the images
-            $images = array();
-            $query_images_args = array(
-                'post_type'      => 'attachment',
-                'post_mime_type' => 'image',
-                'post_status'    => 'inherit',
-                'posts_per_page' => - 1,
-            );
-    
-            $query_images = new WP_Query( $query_images_args );
-            foreach ( $query_images->posts as $image ) {
-                $images[] = array ( 'url' => wp_get_attachment_url( $image->ID ), 'id' => $image->ID );
-            }
-            // I pass the data to dynamic tags via the table options (Because there is an error of denied access if I happen to do this in the register controls function)
-            update_option( 'oak_post_elementor_fields', $the_returned_fields );
-            update_option( 'oak_all_images', $images );
-
-            // For site parameters
-            $social_media_data = get_option( 'oak_social_media_data' );
-            if ( $social_media_data != false && is_array( $social_media_data ) ) :
-                foreach( $social_media_data as $key => $social_media ) :
-                    if ( $social_media['checked'] == 'true' ) :
-                        $widget_options = array(
-                            'name' => preg_replace( '/\s+/', '', Oak::$social_medias[ $key ]['name'] ),
-                            'title' => Oak::$social_medias[ $key ]['title'],
-                            'icon' => 'eicon-type-tool',
-                            'categories' => [ 'theme-elements' ],
-                            'value' => $social_media['value'],
-                            'field_type' => 'social_media',
-                        );
-                        $generic_widget = new Generic_Widget();
-                        $generic_widget->set_widgets_options( $widget_options );
-                        $widgets_manager->register_widget_type( $generic_widget );
-                    endif;
-                endforeach;
-            endif;
-
-            // For the organization name:
-            if ( get_option( 'oak_show_organization_name' ) == 'true' ) :
-                $widget_options = array (
-                    'name' => __( 'organization_name', Oak::$text_domain ),
-                    'title' => __( 'Nom de l\'organisation', Oak::$text_domain ),
-                    'icon' => 'eicon-type-tool',
-                    'categories' => [ 'theme-elements' ],
-                    'value' => get_option( 'oak_organization_name' ),
-                    'field_type' => 'organization_name',
-                );
-                $generic_widget = new Generic_Widget();
-                $generic_widget->set_widgets_options( $widget_options );
-                $widgets_manager->register_widget_type( $generic_widget );
-            endif;
-
-            // To unregister the logo and site title widgets:
-            if ( get_option( 'oak_show_logo' ) != 'true' ) :
-                $widgets_manager->unregister_widget_type( 'theme-site-logo' );
-            endif;
-
-            if ( get_option( 'oak_show_site_title' ) != 'true' ) :
-                $widgets_manager->unregister_widget_type( 'theme-site-title' );
-            endif;
-
-            // To create the graph widgets: 
-            Graphs::create_widgets( $widgets_manager );
-
-        }, 14);
     }
     
     static function oak_get_selected_objects_data( $selected_objects, $modify_current_model_fields ) {
@@ -1283,50 +383,7 @@ class Oak {
         return $our_objects;
     }
 
-    function oak_add_side_bar_widgets( $widgets_manager ) {
-        include_once get_template_directory() . '/functions/elementor/sidebar_widget.php';
-
-        $sidebar_widget = new Sidebar_Widget();
-        $widgets_manager->register_widget_type( $sidebar_widget );
-    }
-
-    function oak_get_all_images() {
-        $query_images_args = array(
-            'post_type'      => 'attachment',
-            'post_mime_type' => 'image',
-            'post_status'    => 'inherit',
-            'posts_per_page' => - 1,
-        );
-
-        $query_images = new WP_Query( $query_images_args );
-
-        return $query_images;
-    }
-
-    function oak_admin_notice_missing_elementor_plugin() {
-
-		$message = sprintf(
-			esc_html__( 'Pour assurer un bon fonctionnement du "%1$s" , vous devriez avoir "%2$s" installé dans votre environnement.', Oak::$text_domain ),
-			'<strong>' . esc_html__( 'Web Publisher', Oak::$text_domain ) . '</strong>',
-			'<strong>' . esc_html__( 'Elementor', Oak::$text_domain ) . '</strong>'
-        );
-
-        printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', $message );
-	}
-
     function oak_handle_admin_menu() {
-        // add_menu_page( 'Admin Menu', 'Admin Menu', 'manage_options', 'admin_menu', , $icon_url, $position)
-        add_menu_page( 'OAK (Materiality Reporting)', 'OAK (Materiality Reporting)', 'manage_options', 'oak_materiality_reporting', array( $this, 'oak_materility_reporting' ), 'dashicons-chart-pie', 99 );
-
-        add_menu_page( 'Importation des données', 'Importation des données', 'manage_options', 'oak_import_page', array( $this, 'oak_import_page' ), 'dashicons-chart-pie', 100 );
-
-        add_menu_page( 'Data Studio', 'Data Studio', 'manage_options', 'oak_data_studio', array( $this, 'oak_data_studio' ), 'dashicons-chart-pie', 100 );
-
-        add_menu_page( 'Paramètres', 'Paramètres', 'manage_options', 'oak_corn_configuration_page', array( $this, 'oak_corn_configuration_page' ), 'dashicons-chart-pie', 100 );
-
-        add_submenu_page( 'oak_materiality_reporting', __('Analyse Critique', Oak::$text_domain), __('Analyse Critique', Oak::$text_domain), 'manage_options', 'oak_critical_analysis', array( $this, 'oak_critical_analysis') );
-        add_submenu_page( 'oak_materiality_reporting', 'Modèle d\'analyse', 'Cofiguration', 'manage_options', 'oak_critical_analysis_configuration', array( $this, 'oak_critical_analysis_configuration') );
-
         add_menu_page( __( 'Elements', Oak::$text_domain ), 'Elements', 'manage_options', 'oak_elements_list', array ( $this, 'oak_elements_list'), 'dashicons-index-card', 100 );
         add_submenu_page( 'oak_elements_list', 'Ajouter un Element', __( 'Ajouter un Element', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
 
@@ -1352,42 +409,7 @@ class Oak {
         ksort ( $menu );
     }
 
-    function oak_materility_reporting() {
-        include get_template_directory() . '/template-parts/configuration-page.php';
-    }
-
-    function oak_import_page() {
-        include get_template_directory() . '/template-parts/import-page.php';
-    }
-
-    function oak_data_studio() {
-        include get_template_directory() . '/template-parts/data-studio.php';
-    }
-
-    function oak_corn_configuration_page() {
-        include get_template_directory() . '/template-parts/corn-configuration-page.php';
-    }
-
-    function oak_critical_analysis() {
-        include get_template_directory() . '/template-parts/critical-analysis.php';
-    }
-
-    function oak_critical_analysis_configuration() {
-        include get_template_directory() . '/template-parts/critical-analysis-configuration.php';
-    }
-
-    function oak_set_analyzes( $field ) {
-        $choices = $field['choices'];
-        $analyzes = get_option( 'oak_analyzes' ) ? get_option( 'oak_analyzes') : [];
-        for ( $i = 0; $i < sizeof( $analyzes ); $i++) {
-            $choices[] = $analyzes[$i]['title'];
-        }
-        $field['choices'] = $choices;
-        return $field;
-    }
-
     static function oak_get_countries_names() {
-
         if ( get_option('oak_countries_names') ) :
             return get_option('oak_countries_names');
         endif;
@@ -1453,190 +475,8 @@ class Oak {
         return $languages;
     }
 
-    function generateRandomString( $length = 20 ) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
-
-    function oak_contact_form() {
-        if ( ( !isset( $_GET['email'] ) ) || ( !isset( $_GET['subject'] ) ) || ( !isset( $_GET['content'] ) || ( !is_email( $_GET['email'] ) ) || ( trim( $_GET['content'] ) == '' ) ))
-            return;
-        if ( wp_mail( $_GET['email'], $_GET['subject'], $_GET['content']) ) {
-            var_dump('Success');
-        } else {
-            var_dump('Error');
-        }
-    }
-
-    function oak_save_analysis_model() {
-        $principles = $_POST['data'];
-        $image_url = '';
-
-        foreach( $principles as $key => $single_principle) :
-            if ( !filter_var( $single_principle['image'], FILTER_VALIDATE_URL ) ) :
-                // Uploading the image
-                $upload_dir  = wp_upload_dir();
-                $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
-
-                $img             = str_replace( 'data:image/png;base64,', '', $single_principle['image'] );
-                $img             = str_replace( ' ', '+', $img );
-                $decoded         = base64_decode( $img );
-                $filename        = $single_principle['principle'] . '.jpeg';
-                $file_type       = 'image/jpeg';
-                $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
-                $upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
-                $attachment = array(
-                    'post_mime_type' => $file_type,
-                    'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $hashed_filename ) ),
-                    'post_content'   => '',
-                    'post_status'    => 'inherit',
-                    'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
-                );
-
-                $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
-                $url = wp_get_attachment_image_url( $attach_id );
-                $single_principle['image'] = $url;
-                $image_url = $single_principle['image'];
-                $principles[ $key ] = $single_principle;
-                // Done uploading the image
-            endif;
-        endforeach;
-
-
-        update_option( 'oak_principles', $principles, false );
-        wp_send_json_success( array(
-            'image' => $principles['0']['image'],
-        ) );
-    }
-
     public static function oak_get_all_wordpress_menus(){
         return get_terms( 'nav_menu', array( 'hide_empty' => true ) );
-    }
-
-    function oak_save_analyzes() {
-        $analyzes = $_POST['analyzes'];
-        update_option( 'oak_analyzes', $analyzes );
-        wp_send_json_success();
-    }
-
-    function oak_save_configuration() {
-        $data = $_POST['data'];
-        $default_menu = $data['defaultMenu'];
-        $central = $data['central'];
-        $central_url = $data['centralUrl'];
-        $business_line = $data['businessLine'];
-        $which_perimeter = $data['whichPerimeter'];
-        $regions = $data['regions'];
-        $custom_perimeter = $data['customPerimeter'];
-
-        update_option( 'oak_default_menu', $default_menu );
-        update_option( 'oak_corn', $central );
-        update_option( 'oak_central_url', $central_url );
-        update_option( 'oak_business_line', $business_line );
-        update_option( 'oak_which_perimeter', $which_perimeter );
-        update_option( 'oak_regions', $regions );
-        update_option( 'oak_custom_perimeter', $custom_perimeter );
-
-        wp_send_json_success( array(
-            'central' => $central,
-            'centralUrl' => $central_url
-        ) );
-    }
-
-    function oak_corn_save_general_configuration() {
-        global $wpdb;
-
-        $general_settings = json_decode( stripslashes( $_POST['generalSettings'] ), true );
-
-        $site_logo = $general_settings['siteLogo'];
-        $blog_description = $general_settings['tagline'];
-        $blog_name = $general_settings['siteTitle'];
-        $organization_name = $general_settings['organizationName'];
-        $site_icon = $general_settings['siteIcon'];
-
-        $custom_logo_id = get_theme_mod( 'custom_logo' );
-
-        $site_logo_upload_string_position = strpos( $site_logo, 'uploads/' );
-        $site_logo_to_store = substr( $site_logo, $site_logo_upload_string_position + 8, strlen( $site_logo ) - $site_logo_upload_string_position );
-
-        $result = $wpdb->update(
-            $wpdb->prefix . 'postmeta',
-            array (
-                'meta_value' => $site_logo_to_store
-            ),
-            array(
-                'post_id' => $custom_logo_id,
-                'meta_key' => '_wp_attached_file'
-            )
-        );
-
-        $custom_site_icon_id = get_option('site_icon');
-
-        $site_icon_upload_string_position = strpos( $site_icon, 'uploads/' );
-        $site_icon_to_store = substr( $site_icon, $site_icon_upload_string_position + 8, strlen( $site_icon ) - $site_icon_upload_string_position );
-
-        $result = $wpdb->update(
-            $wpdb->prefix . 'postmeta',
-            array (
-                'meta_value' => $site_icon_to_store
-            ),
-            array(
-                'post_id' => $custom_site_icon_id,
-                'meta_key' => '_wp_attached_file'
-            )
-        );
-
-        $table_name = $wpdb->prefix . 'postmeta';
-
-        update_option( 'blogdescription', $blog_description );
-        update_option( 'blogname', $blog_name );
-        update_option( 'oak_organization_name', $organization_name );
-
-        wp_send_json_success( array(
-            'generalSettings' => $general_settings,
-            'result' => $result,
-            'site_icon' => $site_icon,
-            'site_logo_id' => $custom_logo_id
-        ) );
-    }
-
-    function oak_corn_save_social_media_configuration() {
-        $social_media_data = $_POST['socialMediaData'];
-
-        update_option( 'oak_social_media_data', $social_media_data );
-        update_option( 'oak_social_system_bar_background_color', $_POST['socialMediaBackgroundColor'] );
-
-        wp_send_json_success();
-    }
-
-    function oak_corn_save_app_bar_settings() {
-        $app_bar_settings = $_POST['appBarSettings'];
-        foreach( $app_bar_settings as $single_setting ) :
-            update_option( $single_setting['name'], $single_setting['value'] );
-        endforeach;
-
-        update_option( 'oak_app_bar_background_color', $_POST['appBarBackgroundColor'] );
-
-        wp_send_json_success();
-    }
-
-    function oak_corn_save_nav_bar_settings() {
-        $nav_bar_data = json_decode( stripslashes( $_POST['navBarData'] ) );
-        update_option( 'oak_nav_bar_data', $nav_bar_data );
-
-        wp_send_json_success();
-    }
-
-    function oak_corn_save_styles_settings() {
-        $colors = json_decode( stripslashes( $_POST['colors'] ) );
-        update_option( 'oak_colors', $colors );
-
-        wp_send_json_success();
     }
 
     function oak_add_element() {
@@ -1873,7 +713,7 @@ class Oak {
         include get_template_directory() . '/template-parts/elements/elements-list.php';
     }
 
-    function oak_get_revisions( $table, $elements ) {
+    public static function oak_get_revisions( $table, $elements ) {
         $revisions = [];
         $identifier_property = $table . '_identifier';
         if ( isset( $_GET[ $table . '_identifier'] ) ) :
@@ -1894,7 +734,7 @@ class Oak {
         include get_template_directory() . '/template-parts/term-objects/add-term-object.php';
     }
 
-    function oak_filter_word( $value ) {
+    public static function oak_filter_word( $value ) {
         return stripslashes_deep( $value );
     }
 
@@ -2206,16 +1046,6 @@ class Oak {
             $file_type       = 'application/' . $file_type;
             $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
             $upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
-            // $attachment = array(
-            //     'post_mime_type' => $file_type,
-            //     'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $hashed_filename ) ),
-            //     'post_content'   => '',
-            //     'post_status'    => 'inherit',
-            //     'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
-            // );
-
-            // $attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
-            // $file_url = wp_get_attachment_image_url( $attach_id );
         endif;
 
         return $hashed_filename;
@@ -2398,451 +1228,7 @@ class Oak {
         wp_send_json_success();
     }
 
-    function oak_get_all_data_for_corn() {
-        global $wpdb;
-
-        $table_name = $wpdb->prefix . 'oak_organizations';
-        $organizations = $wpdb->get_results ( "
-            SELECT *
-            FROM $table_name
-        " );
-        $organizations_without_redundancy = [];
-        $reversed_organizations = array_reverse( $organizations );
-        foreach ( $reversed_organizations as $organization ) :
-            $exists = false;
-            foreach( $organizations_without_redundancy as $organization_without_redundancy ) :
-                if ( $organization_without_redundancy->organization_identifier == $organization->organization_identifier ) :
-                    $exists = true;
-                endif;
-            endforeach;
-            if ( !$exists ) :
-                $organizations_without_redundancy[] = $organization;
-            endif;
-        endforeach;
-
-        $table_name = $wpdb->prefix . 'oak_publications';
-        $publications = $wpdb->get_results ( "
-            SELECT *
-            FROM $table_name
-        " );
-        $publications_without_redundancy = [];
-        $reversed_publications = array_reverse( $publications );
-        foreach ( $reversed_publications as $publication ) :
-            $exists = false;
-            foreach( $publications_without_redundancy as $publication_without_redundancy ) :
-                if ( $publication_without_redundancy->publication_identifier == $publication->publication_identifier ) :
-                    $exists = true;
-                endif;
-            endforeach;
-            if ( !$exists ) :
-                $publications_without_redundancy[] = $publication;
-            endif;
-        endforeach;
-
-        $fields_table_name = $wpdb->prefix . 'oak_fields';
-        $fields = $wpdb->get_results ( "
-            SELECT *
-            FROM  $fields_table_name
-        " );
-        $fields_without_redundancy = [];
-        $reversed_fields = array_reverse( $fields );
-        foreach( $reversed_fields as $field ) :
-            $added = false;
-            foreach( $fields_without_redundancy as $field_without_redundancy ) :
-                if ( $field_without_redundancy->field_identifier == $field->field_identifier ) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $fields_without_redundancy[] = $field;
-            endif;
-        endforeach;
-
-        $forms_table_name = $wpdb->prefix . 'oak_forms';
-        $forms = $wpdb->get_results ( "
-            SELECT *
-            FROM  $forms_table_name
-        " );
-        $forms_without_redundancy = [];
-        $reversed_forms = array_reverse( $forms );
-        foreach( $reversed_forms as $form ) :
-            $added = false;
-            foreach( $forms_without_redundancy as $form_without_redundancy ) :
-                if ( $form_without_redundancy->form_identifier == $form->form_identifier) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $forms_without_redundancy[] = $form;
-            endif;
-        endforeach;
-
-        $forms_and_fields_table_name = $wpdb->prefix . 'oak_forms_and_fields';
-        $forms_and_fields = $wpdb->get_results ( "
-            SELECT *
-            FROM  $forms_and_fields_table_name
-        " );
-
-        $models_table_name = $wpdb->prefix . 'oak_models';
-        $models = $wpdb->get_results ( "
-            SELECT *
-            FROM  $models_table_name
-        " );
-        $reversed_models = array_reverse( $models );
-        $models_without_redundancy = [];
-        foreach( $reversed_models as $model ) :
-            $added = false;
-            foreach( $models_without_redundancy as $model_without_redundancy ) :
-                if ( $model_without_redundancy->model_identifier == $model->model_identifier ) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $models_without_redundancy[] = $model;
-            endif;
-        endforeach;
-
-        $models_and_forms_table_name = $wpdb->prefix . 'oak_models_and_forms';
-        $models_and_forms = $wpdb->get_results ( "
-            SELECT *
-            FROM  $models_and_forms_table_name
-        " );
-
-        $all_objects = [];
-        foreach( $models_without_redundancy as $model ) :
-            $model_table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
-            $objects = $wpdb->get_results ( "
-                SELECT *
-                FROM  $model_table_name
-            " );
-            $reversed_objects = array_reverse( $objects );
-            $objects_without_redundancy = [];
-            foreach( $reversed_objects as $object ) :
-                $added = false;
-                foreach( $objects_without_redundancy as $object_without_redundancy ) :
-                    if ( $object_without_redundancy->object_identifier == $object->object_identifier) :
-                        $added = true;
-                    endif;
-                endforeach;
-                if ( !$added ) :
-                    $objects_without_redundancy[] = $object;
-                endif;
-            endforeach;
-
-            $all_objects[] = array(
-                'model_identifier' => $model->model_identifier,
-                'objects' => $objects,
-                'objectsWithoutRedundancy' => $objects_without_redundancy
-            );
-        endforeach;
-
-        $taxonomies_table_name = $wpdb->prefix . 'oak_taxonomies';
-        $taxonomies = $wpdb->get_results ( "
-            SELECT *
-            FROM  $taxonomies_table_name
-        " );
-        $reversed_taxonomies = array_reverse( Oak::$taxonomies );
-        $taxonomies_without_redundancy = [];
-        foreach( $reversed_taxonomies as $taxonomy ) :
-            $added = false;
-            foreach( $taxonomies_without_redundancy as $taxonomy_without_redundancy ) :
-                if ( $taxonomy_without_redundancy->taxonomy_identifier == $taxonomy->taxonomy_identifier) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $taxonomies_without_redundancy[] = $taxonomy;
-            endif;
-        endforeach;
-
-        $all_terms = [];
-        foreach( $taxonomies_without_redundancy as $taxonomy ) :
-            $taxonomy_table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy->taxonomy_identifier;
-            $terms = $wpdb->get_results ( "
-                SELECT *
-                FROM  $taxonomy_table_name
-            " );
-            $reversed_terms = array_reverse( $terms );
-            $terms_without_redundancy = [];
-            foreach( $reversed_terms as $term ) :
-                $added = false;
-                foreach( $terms_without_redundancy as $term_without_redundancy ) :
-                    if ( $term_without_redundancy->term_identifier == $term->term_identifier) :
-                        $added = true;
-                    endif;
-                endforeach;
-                if ( !$added ) :
-                    $terms_without_redundancy[] = $term;
-                endif;
-            endforeach;
-
-            $all_terms[] = array(
-                'taxonomy_identifier' => $taxonomy->taxonomy_identifier,
-                'terms' => $terms,
-                'termsWithoutRedundancy' => $terms_without_redundancy
-            );
-        endforeach;
-
-        $qualis_table_name = $wpdb->prefix . 'oak_qualis';
-        $qualis = $wpdb->get_results ( "
-            SELECT *
-            FROM  $qualis_table_name
-        " );
-        $reversed_quali = array_reverse( $qualis );
-        $qualis_without_redundancy = [];
-        foreach( $reversed_quali as $quali ) :
-            $added = false;
-            foreach( $qualis_without_redundancy as $quali_without_redundancy ) :
-                if ( $quali_without_redundancy->quali_identifier == $quali->quali_identifier ) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $qualis_without_redundancy[] = $quali;
-            endif;
-        endforeach;
-
-        $quantis_table_name = $wpdb->prefix . 'oak_quantis';
-        $quantis = $wpdb->get_results ( "
-            SELECT *
-            FROM  $quantis_table_name
-        " );
-        $reversed_quanti = array_reverse( $quantis );
-        $quantis_without_redundancy = [];
-        foreach( $reversed_quanti as $quanti ) :
-            $added = false;
-            foreach( $quantis_without_redundancy as $quanti_without_redundancy ) :
-                if ( $quanti_without_redundancy->quanti_identifier == $quanti->quanti_identifier ) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $quantis_without_redundancy[] = $quanti;
-            endif;
-        endforeach;
-
-        $goodpractices_table_name = $wpdb->prefix . 'oak_goodpractices';
-        $goodpractices = $wpdb->get_results ( "
-            SELECT *
-            FROM  $goodpractices_table_name
-        " );
-        $reversed_goodpractices = array_reverse( $goodpractices );
-        $goodpractices_without_redundancy = [];
-        foreach( $reversed_goodpractices as $goodpractice ) :
-            $added = false;
-            foreach( $goodpractices_without_redundancy as $goodpractice_without_redundancy ) :
-                if ( $goodpractice_without_redundancy->goodpractice_identifier == $goodpractice->goodpractice_identifier ) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $goodpractices_without_redundancy[] = $goodpractice;
-            endif;
-        endforeach;
-
-        $performances_table_name = $wpdb->prefix . 'oak_performances';
-        $performances = $wpdb->get_results ( "
-            SELECT *
-            FROM  $performances_table_name
-        " );
-        $reversed_performances = array_reverse( $performances );
-        $performances_without_redundancy = [];
-        foreach( $reversed_performances as $performance ) :
-            $added = false;
-            foreach( $performances_without_redundancy as $performance_without_redundancy ) :
-                if ( $performance_without_redundancy->performance_identifier == $performance->performance_identifier ) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $performances_without_redundancy[] = $performance;
-            endif;
-        endforeach;
-
-        $sources_table_name = $wpdb->prefix . 'oak_sources';
-        $sources = $wpdb->get_results ( "
-            SELECT *
-            FROM  $sources_table_name
-        " );
-        $reversed_sources = array_reverse( $sources );
-        $sources_without_redundancy = [];
-        foreach( $reversed_sources as $source ) :
-            $added = false;
-            foreach( $sources_without_redundancy as $source_without_redundancy ) :
-                if ( $source_without_redundancy->source_identifier == $source->source_identifier ) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $sources_without_redundancy[] = $source;
-            endif;
-        endforeach;
-
-        $glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
-        $glossaries = $wpdb->get_results ( "
-            SELECT *
-            FROM  $glossaries_table_name
-        " );
-        $reversed_glossary = array_reverse( $glossaries );
-        $glossaries_without_redundancy = [];
-        foreach( $reversed_glossary as $glossary ) :
-            $added = false;
-            foreach( $glossaries_without_redundancy as $glossary_without_redundancy ) :
-                if ( $glossary_without_redundancy->glossary_identifier == $glossary->glossary_identifier ) :
-                    $added = true;
-                endif;
-            endforeach;
-            if ( !$added ) :
-                $glossaries_without_redundancy[] = $glossary;
-            endif;
-        endforeach;
-
-        $terms_and_objects_table_name = Oak::$terms_and_objects_table_name;
-        $terms_and_objects = $wpdb->get_results ( "
-            SELECT *
-            FROM $terms_and_objects_table_name
-        " );
-
-        wp_send_json_success( array(
-            'fields' => $fields,
-            'fieldsWithoutRedundancy' => $fields_without_redundancy,
-            'forms' => $forms,
-            'formsWithoutRedundancy' => $forms_without_redundancy,
-            'formsAndFields' => $forms_and_fields,
-            'models' => $models,
-            'modelsWihoutRedundancy' => $models_without_redundancy,
-            'modelsAndForms' => $models_and_forms,
-            'taxonomies' => $taxonomies,
-            'taxonomiesWithoutRedundancy' => $taxonomies_without_redundancy,
-            'publications' => $publications,
-            'publicationsWithoutRedundancy' => $publications_without_redundancy,
-            'organizations' => $organizations,
-            'organizationsWithoutRedundancy' => $organizations_without_redundancy,
-            'allTerms' => $all_terms,
-            'allObjects' => $all_objects,
-            'qualis' => $qualis,
-            'qualisWithoutRedundancy' => $qualis_without_redundancy,
-            'quantis' => $quantis,
-            'quantisWithoutRedundancy' => $quantis_without_redundancy,
-            'goodpractices' => $goodpractices,
-            'goodpracticesWithoutRedundancy' => $goodpractices_without_redundancy,
-            'performances' => $performances,
-            'performancesWithoutRedundancy' => $performances_without_redundancy,
-            'sources' => $sources,
-            'sourcesWithoutRedundancy' => $sources_without_redundancy,
-            'glossaries' => $glossaries,
-            'glossariesWithoutRedundancy' => $glossaries_without_redundancy,
-            'termsAndObjects' => $terms_and_objects
-        ) );
-    }
-
-    static function oak_simple_register_element( $element, $table_name ) {
-        require_once get_template_directory() . '/functions/class-download-remote-image.php';
-
-        global $wpdb;
-
-        $element_array = (array) $element;
-        foreach( $element_array as $key => $value ) :
-            $element_array[ $key ] = stripslashes_deep( $value );
-        endforeach;
-        unset( $element_array['id'] );
-
-        $result = $wpdb->insert(
-            $table_name,
-            $element_array
-        );
-    }
-
-    function corn_simple_register_element( $element, $table_name ) {
-        require_once get_template_directory() . '/functions/class-download-remote-image.php';
-
-        global $wpdb;
-
-        foreach( $element as $key => $value ) :
-            $the_value = $value;
-            if ( strpos( $value, 'ttps://' ) != false || strpos( $value, 'ttp://' ) != false ) :
-                if (  wp_http_validate_url( $value ) ) :
-                    if ( @getimagesize( $value ) ) :
-                        $value_exploded = explode( '/', $value );
-                        $image_name = $value_exploded[ count( $value_exploded ) - 1 ];
-
-                        $image_incrementer = 0;
-                        $found_image = false;
-                        do {
-                            $oak_image_exploded = explode( '/', Oak::$all_images[ $image_incrementer ]->guid );
-                            $oak_image_name = $oak_image_exploded[ count( $oak_image_exploded ) - 1 ];
-                            if ( $image_name == $oak_image_name ) :
-                                $found_image = true;
-                                $the_value = Oak::$all_images[ $image_incrementer ]->guid;
-
-                                $found_images = get_option('oak_corn_found_images') ? get_option('oak_corn_found_images') : [];
-                                $found_images[] = Oak::$all_images[ $image_incrementer ]->ID;
-                                update_option( 'oak_corn_found_images', $found_images );
-                            endif;
-
-                            $image_incrementer++;
-                        } while( !$found_image && $image_incrementer < count( Oak::$all_images ) );
-                        if ( !$found_image ) :
-                            $download_remote_image = new KM_Download_Remote_Image( $value, array() );
-                            $id = $download_remote_image->download();
-                            $the_value = get_post( $id )->guid;
-                        endif;
-                    endif;
-                endif;
-            endif;
-
-            $element[ $key ] = $this->oak_filter_word( $the_value );
-        endforeach;
-
-        $result = $wpdb->insert(
-            $table_name,
-            $element
-        );
-    }
-
-    function corn_save_element( $elements, $table_name ) {
-        global $wpdb;
-
-        if ( isset( $table_name ) ) :
-            $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
-            $columns_names = [];
-            foreach( $columns as $column ) :
-                if ( $column->COLUMN_NAME != 'id' )
-                    $columns_names[] = $column->COLUMN_NAME;
-            endforeach;
-        endif;
-
-        foreach ( $elements as $element ) :
-            $new_table_name = '';
-            if ( !isset( $table_name ) ) :
-                if ( isset( $element['term_taxonomy_identifier'] ) ) :
-                    $new_table_name = $wpdb->prefix . 'oak_taxonomy_' . $element['term_taxonomy_identifier'];
-                elseif ( isset( $element['model'] ) ) :
-                    $new_table_name = $wpdb->prefix . 'oak_model_' . $element['model'];
-                endif;
-
-                $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$new_table_name'" );
-                $columns_names = [];
-                foreach( $columns as $column ) :
-                    if ( $column->COLUMN_NAME != 'id' )
-                        $columns_names[] = $column->COLUMN_NAME;
-                endforeach;
-            else :
-                $new_table_name = $table_name;
-            endif;
-
-            foreach( $element as $key => $value ) :
-                // check if the key is included in the model:
-                if ( !in_array( $key, $columns_names ) ) :
-                    unset( $element[ $key ] );
-                endif;
-            endforeach;
-
-            $this->corn_simple_register_element( $element, $new_table_name );
-        endforeach;
-    }
-
-    function delete_everything() {
+    public static function delete_everything() {
         global $wpdb;
         $tables = [ Oak::$fields_table_name, Oak::$forms_table_name, Oak::$models_table_name, Oak::$taxonomies_table_name
             , Oak::$organizations_table_name, Oak::$publications_table_name, Oak::$glossaries_table_name, Oak::$qualis_table_name
@@ -2910,193 +1296,6 @@ class Oak {
         endforeach;
     }
 
-    function corn_save_data() {
-        // wp_send_json_success(  );
-
-        global $wpdb;
-
-        Oak::$all_images = $this->oak_get_all_images()->posts;
-
-        $this->delete_everything();
-
-        $selected_data = json_decode( stripslashes( $_POST['selectedData'] ), true );
-
-        $organizations = [];
-        $organizations[] = $selected_data['organization'];
-        $publications = $selected_data['publications'];
-        $frame_publications = $selected_data['framePublications'];
-        $fields = $selected_data['fields'];
-        $forms = $selected_data['forms'];
-        $models = $selected_data['models'];
-        $taxonomies = $selected_data['taxonomies'];
-        $objects = $selected_data['objects'];
-        $terms = $selected_data['terms'];
-        $glossaries = $selected_data['glossaries'];
-        $qualis = $selected_data['qualis'];
-        $quantis = $selected_data['quantis'];
-        $goodpractices = $selected_data['goodpractices'];
-        $performances = $selected_data['performances'];
-        $sources = $selected_data['sources'];
-        $terms_and_objects = $selected_data['termsAndObjects'];
-        $models_and_forms = $selected_data['modelsAndForms'];
-        $forms_and_fields = $selected_data['formsAndFields'];
-
-        $this->corn_save_element( $organizations, Oak::$organizations_table_name );
-        $this->corn_save_element( $publications, Oak::$publications_table_name );
-        $this->corn_save_element( $frame_publications, Oak::$publications_table_name );
-        $this->corn_save_element( $fields, Oak::$fields_table_name );
-        $this->corn_save_element( $forms, Oak::$forms_table_name );
-        $this->corn_save_element( $models, Oak::$models_table_name );
-        $this->corn_save_element( $taxonomies, Oak::$taxonomies_table_name );
-        $this->corn_save_element( $glossaries, Oak::$glossaries_table_name );
-        $this->corn_save_element( $qualis, Oak::$qualis_table_name );
-        $this->corn_save_element( $quantis, Oak::$quantis_table_name );
-        $this->corn_save_element( $goodpractices, Oak::$goodpractices_table_name );
-        $this->corn_save_element( $performances, Oak::$performances_table_name );
-        $this->corn_save_element( $sources, Oak::$sources_table_name );
-        $this->corn_save_element( $terms_and_objects, Oak::$terms_and_objects_table_name );
-
-        $this->corn_save_element( $forms_and_fields, Oak::$forms_and_fields_table_name );
-        $this->corn_save_element( $models_and_forms, Oak::$models_and_forms_table_name );
-
-        // Creating the tables for models
-        foreach( $models as $model ) :
-            // Lets look for the model fields: 
-            $model_fields = [];
-            $found_object = false;
-            $counter = 0;
-            do {
-                if ( $objects[ $counter ]['model'] == $model['model_identifier'] ) :
-                    $found_object = true;
-                    $the_object = $objects[ $counter ];
-                    $properties_to_neglect = array('id', 'model', 'object_designation', 'object_identifier', 'object_modification_time', 'object_content_language', 'object_model_selector', 'object_selector',
-                        'object_locked', 'object_state', 'object_trashed', 'object_selectors', 'object_form_selectors', 'object_model_selector');
-                    foreach( $the_object as $key => $value ) :
-                        if ( !in_array( $key, $properties_to_neglect ) ) :
-                            $model_properties_array = explode( '_', $key );
-                            $field_identifier = '';
-                            if ( count( $model_properties_array == 3 ) ) :
-                                $field_identifier = $model_properties_array[2];
-                            endif;
-
-                            foreach( $fields as $field ) :
-                                if ( $field['field_identifier'] == $field_identifier ) :
-                                    $field_copy = $field;
-                                    $field_copy['form_and_field_properties'] = $form_and_field_instance;
-                                    $field_copy['field_key'] = $key;
-                                    array_push( $model_fields, $field_copy );
-                                endif;
-                            endforeach;
-                        endif;
-                    endforeach;
-                endif;
-                $counter++;
-            } while( $counter < count( $objects ) - 1 && !$found_object );
-
-            $table_name = $wpdb->prefix . 'oak_model_' . $model['model_identifier'];
-            $models_sql = "CREATE TABLE $table_name (
-                id mediumint(9) NOT NULL AUTO_INCREMENT,
-                object_designation varchar(555) DEFAULT '' NOT NULL,
-                object_identifier varchar(555) DEFAULT '' NOT NULL,
-                object_selector varchar(555),
-                object_locked varchar(555),
-                object_trashed varchar(555),
-                object_state varchar(555),
-                object_modification_time datetime,
-                object_content_language varchar(10) DEFAULT 'fr',
-                object_selectors varchar(999),
-                object_form_selectors varchar(999),
-                object_model_selector TEXT,
-                object_synchronized TEXT,
-                PRIMARY KEY (id)
-            ) $charset_collate;";
-            require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-            dbDelta( $models_sql );
-
-            foreach( $model_fields as $key => $field ) :
-                // $column_name = 'object_' . $key . '_' . $field['field_identifier'];
-                $column_name = $field['field_key'];
-                $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
-                $exists = false;
-                foreach( $columns as $column ) :
-                    if ( $column->COLUMN_NAME == $column_name ) :
-                        $exists = true;
-                    endif;
-                endforeach;
-
-                if ( !$exists ) {
-                    if ( $field->field_type == 'textarea' ) :
-                        $wpdb->query("ALTER TABLE $table_name ADD $column_name LONGTEXT");
-                    else :
-                        $wpdb->query("ALTER TABLE $table_name ADD $column_name TEXT");
-                    endif;
-                    // $wpdb->query("ALTER TABLE $table_name ADD $column_name varchar(555)");
-                }
-            endforeach;
-        endforeach;
-
-        // Lets now add the objects
-
-        $this->corn_save_element( $objects );
-
-        // // Creating the tables for taxonomies
-        foreach( $taxonomies as $taxonomy ) :
-            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy['taxonomy_identifier'];
-            $terms_sql = "CREATE TABLE $table_name (
-                id mediumint(9) NOT NULL AUTO_INCREMENT,
-                term_designation varchar(555) DEFAULT '' NOT NULL,
-                term_identifier varchar(555) DEFAULT '' NOT NULL,
-                term_selector varchar(555),
-                term_locked varchar(555),
-                term_trashed varchar(555),
-                term_state varchar(555),
-                term_modification_time datetime,
-                term_content_language varchar(10) DEFAULT 'fr',
-                term_numerotation varchar(555),
-                term_title varchar(555),
-                term_description varchar(555),
-                term_color varchar(555),
-                term_logo varchar(555),
-                term_order varchar(555),
-                term_parent varchar(555),
-                PRIMARY KEY (id)
-            ) $charset_collate;";
-            require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-            dbDelta( $terms_sql );
-        endforeach;
-
-        $this->corn_save_element( $terms );
-
-        $this->oak_delete_images_that_are_not_needed();
-
-        wp_send_json_success();
-    }
-
-    function oak_delete_images_that_are_not_needed() {
-        $found_images = get_option( 'oak_corn_found_images' ) ? get_option( 'oak_corn_found_images' ) : [];
-        foreach( Oak::$all_images as $image ) :
-            $is_in_found_images = false;
-            foreach( $found_images as $found_image ) :
-                if ( $found_image == $image->ID ) :
-                    $is_in_found_images = true;
-                endif;
-            endforeach;
-            if ( !$is_in_found_images ) :
-                wp_delete_attachment( $image->ID, true );
-            endif;
-        endforeach;
-    }
-
-    function oak_wordpress_dashboard() {
-        include get_template_directory() . '/template-parts/admin-menu.php';
-        include get_template_directory() . '/template-parts/system-bar.php';
-        include get_template_directory() . '/template-parts/app-bar.php';
-    }
-
-    function oak_save_graph() {
-        Graphs::save_graph();
-    }
-
     static function oak_automatic_element_publication_association( $element, $objects_identifiers, $publication_property, $table_name ) {
         foreach( $objects_identifiers as $object_identifier ) :
             foreach( Oak::$terms_and_objects as $term_and_object ) :
@@ -3133,27 +1332,27 @@ class Oak {
         endforeach;
     }
 
-    function oak_dashboard() {
-        include get_template_directory() . '/functions/dashboard/index.php';
+    static function oak_simple_register_element( $element, $table_name ) {
+        require_once get_template_directory() . '/functions/class-download-remote-image.php';
+
+        global $wpdb;
+
+        $element_array = (array) $element;
+        foreach( $element_array as $key => $value ) :
+            $element_array[ $key ] = stripslashes_deep( $value );
+        endforeach;
+        unset( $element_array['id'] );
+
+        $result = $wpdb->insert(
+            $table_name,
+            $element_array
+        );
     }
 
     static function var_dump( $text ) {
         echo('<pre>');
         var_dump( $text );
         echo('</pre>');
-    }
-
-    function oak_regenerate_indexes() {
-        include get_template_directory() . '/functions/auto-index.gen.php';
-    }
-
-    function oak_register_fitler_content_variables() {
-        Oak::$content_filters[ $_POST['currentUser'] ] = array(
-            'selected_steps' => $_POST['selected_steps'],
-            'selected_publications' => $_POST['selected_publications'],
-        );
-        update_option( 'oak_fitler_content_variables', Oak::$content_filters );
-        wp_send_json_success();
     }
 
     public static function oak_unset_properties_by_checking_table( $element, $table_name ) {
