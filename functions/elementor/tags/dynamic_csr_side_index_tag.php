@@ -21,12 +21,14 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 
 	protected function _register_controls() {
         $indexes_data = get_option('oak_indexes') == false ? [] : get_option('oak_indexes');
-        $frame_objects_designations = [];
+		$frame_objects_designations = [];
+		$frame_objects_data = [];
 		foreach( Oak::$all_frame_objects_without_redundancy as $key => $frame_object ) :
 			$field_names = [];
 			foreach( Oak::$models_without_redundancy as $model ) :
 				if ( $model->model_identifier == $frame_object->object_model_identifier ) :
 					$model_fields = Models::get_model_fields( $model, false );
+					$frame_object->model_fields = $model_fields;
 
 					$model_fields_names = explode( '|', $model->model_fields_names );
 					foreach( $model_fields as $model_field_key => $model_field ) :
@@ -49,8 +51,10 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 						'options' => $field_names,
 				]
 			);
-        endforeach;
 
+			$frame_objects_data[] = $frame_object;
+		endforeach;
+		
 		$this->add_control(
 			'frame_object',
 			[
@@ -65,12 +69,31 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 			[
 				'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
 				'type' => \Elementor\Controls_Manager::HIDDEN,
-				'default' => Oak::$all_frame_objects_without_redundancy,
+				'default' => $frame_objects_data,
 			]
 		);
     }
     
     public function render() {
-        $settings = $this->get_settings();
+		$settings = $this->get_settings();
+
+		if ( $settings['frame_object'] == '' ) :
+			_e( 'Veuillez avant sélectionnez l\'objet cadres RSE', Oak::$text_domain );
+			return;
+		endif;
+		
+		$selected_frame_object_data = $settings['frame_objects_data'][ $settings['frame_object'] ];
+
+		$selected_frame_object_identifier = $settings['frame_objects_data'][ $settings['frame_object'] ]['object_identifier'];
+		$field_index = $settings[ $selected_frame_object_identifier ];
+		if ( $field_index == '' ) :
+			_e( 'Veuillez avant sélectionnez la propriété de l\'objet cadres RSE', Oak::$text_domain );
+			return;
+		endif;
+
+		$selected_field_data = $selected_frame_object_data['model_fields'][ $field_index ];
+		$field_property_name = 'object_' . $field_index . '_' . $selected_field_data['field_identifier'];
+		
+		echo( $selected_frame_object_data[ $field_property_name ] );
     }
 }
