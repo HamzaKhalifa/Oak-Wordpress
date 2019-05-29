@@ -320,7 +320,7 @@ class Oak {
                     Performances::properties_to_enqueue_for_script();
                 break;
                 case 'goodpractices' :
-                    Goodpractices::properties_to_enqueue_for_script();
+                    Good_Practices::properties_to_enqueue_for_script();
                 break;
                 case 'sources' :
                     Sources::properties_to_enqueue_for_script();

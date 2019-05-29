@@ -68,12 +68,16 @@ class Oak_Elementor {
             
             include_once get_template_directory() . '/functions/elementor/tags/dynamic_tag.php';
             include_once get_template_directory() . '/functions/elementor/tags/dynamic_index_tag.php';
+            include_once get_template_directory() . '/functions/elementor/tags/dynamic_csr_side_index_tag.php';
 
             $tag = new Dynamic_Tag();
             $dynamic_tags->register_tag( 'Dynamic_Tag' );
 
             $indexes_tag = new Dynamic_Index_Tag();
             $dynamic_tags->register_tag( 'Dynamic_Index_Tag' );
+
+            $csr_side_indexes_tag = new Dynamic_Csr_Side_Index_Tag();
+            $dynamic_tags->register_tag( 'Dynamic_Csr_Side_Index_Tag' );
         } );
     }
 
@@ -157,7 +161,7 @@ class Oak_Elementor {
 
             // For the images
             $images = array();
-            $query_images_args = array(
+            $query_images_args = array (
                 'post_type'      => 'attachment',
                 'post_mime_type' => 'image',
                 'post_status'    => 'inherit',
