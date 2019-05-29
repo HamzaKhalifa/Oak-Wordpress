@@ -73,13 +73,13 @@ class Post_meta_boxes {
     }
 
     function oak_save_post_meta_fields( $post_id ) {
-        if ( !isset( $_POST['objects_selector'] ) 
-            && !isset( $_POST['good_practices_selector'] ) 
-            && !isset( $_POST['quantis_selector'] ) 
-            && !isset( $_POST['sources_selector'] ) 
-            && !isset( $_POST['qualis_selector'] )) :
-            return;
-        endif;
+        // if ( !isset( $_POST['objects_selector'] ) 
+        //     && !isset( $_POST['good_practices_selector'] ) 
+        //     && !isset( $_POST['quantis_selector'] ) 
+        //     && !isset( $_POST['sources_selector'] ) 
+        //     && !isset( $_POST['qualis_selector'] )) :
+        //     return;
+        // endif;
 
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return $post_id;
@@ -121,17 +121,17 @@ class Post_meta_boxes {
             delete_post_meta( $post_id, 'good_practices_selector', $old_goodpractices );
         endif;
 
-        $old_goodpractices = get_post_meta( $post_id, 'sources_selector', true );
+        $old_sources = get_post_meta( $post_id, 'sources_selector', true );
         if ( isset( $_POST['sources_selector'] ) ) :
-            $new_goodpractices = $_POST['sources_selector'];
+            $new_sources = $_POST['sources_selector'];
 
-            if ( $new_goodpractices && $new_goodpractices !== $old_goodpractices ) {
-                update_post_meta( $post_id, 'sources_selector', $new_goodpractices );
-            } elseif ( '' === $new_goodpractices && $old_goodpractices ) {
-                delete_post_meta( $post_id, 'sources_selector', $old_goodpractices );
+            if ( $new_sources && $new_sources !== $old_sources ) {
+                update_post_meta( $post_id, 'sources_selector', $new_sources );
+            } elseif ( '' === $new_sources && $old_sources ) {
+                delete_post_meta( $post_id, 'sources_selector', $old_sources );
             };
         else :
-            delete_post_meta( $post_id, 'sources_selector', $old_goodpractices );
+            delete_post_meta( $post_id, 'sources_selector', $old_sources );
         endif;
 
         $old_quantis = get_post_meta( $post_id, 'quantis_selector', true );

@@ -1184,6 +1184,8 @@ class Oak {
         endif;
 
         foreach( $identifiers as $identifier ) :
+            var_dump( $table_name );
+            die;
 
             $wpdb->delete(
                 $table_name,

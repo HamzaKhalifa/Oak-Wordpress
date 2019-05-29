@@ -36,6 +36,7 @@ endif;
         global $wpdb;
 
         $objects = Oak::oak_get_selected_objects_data( $post_selected_objects, false );
+        
         foreach( $objects as $object ) : 
             // For the model selector 
             $model_linked_objects_identifiers = [];

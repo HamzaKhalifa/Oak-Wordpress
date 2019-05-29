@@ -734,6 +734,7 @@ function handleModalButtons() {
             var tableInPlural = DATA.table_in_plural;
 
             jQuery(document).ready(function() {
+                console.log(tableInPlural);
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
                     type: 'POST',
@@ -754,7 +755,7 @@ function handleModalButtons() {
                     error: function(error) {
                         console.log(error);
                         doneLoading();
-                        window.localStorage.reload();
+                        // window.location.reload();
                     }
                 });
             });

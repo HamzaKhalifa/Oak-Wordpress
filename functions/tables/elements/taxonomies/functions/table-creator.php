@@ -20,6 +20,7 @@ $taxonomies_sql = "CREATE TABLE $taxonomies_table_name (
     taxonomy_color varchar(555),
     taxonomy_brand varchar(555),
     taxonomy_publication varchar(555),
+    taxonomy_synchronized varchar(555),
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

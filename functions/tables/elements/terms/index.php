@@ -23,6 +23,8 @@ class Terms {
     }
 
     public static function properties_to_enqueue_for_script() {
+        global $wpdb; 
+        
         $term_table_name = $wpdb->prefix . 'oak_taxonomy_' . $_GET['taxonomy_identifier'];
         Oak::$terms = $wpdb->get_results ( "
             SELECT *

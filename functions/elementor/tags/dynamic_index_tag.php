@@ -60,10 +60,10 @@ Class Dynamic_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
                 endforeach;
             endforeach;
 
-            if ( $has_been_used_in_at_least_one_post ) :
+            // if ( $has_been_used_in_at_least_one_post ) :
                 $frame_objects_designations[] = $frame_object->object_designation;
                 $frame_objects_data[] = $single_frame_object_data;
-            endif;
+            // endif;
         endforeach;
 
 		$this->add_control(
