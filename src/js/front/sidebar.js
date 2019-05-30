@@ -1,6 +1,7 @@
 handleFrameObjectsButtons();
 function handleFrameObjectsButtons() {
     var frameObjectsButtons = document.querySelectorAll('.oak_sidebar_frame_objects_container_single_frame__scroll_to_content_button');
+    var allImages = document.querySelectorAll('img');
     for (var i = 0; i < frameObjectsButtons.length; i++) {
         var identifier = createIdentifier();
         frameObjectsButtons[i].setAttribute('id', identifier);
@@ -9,7 +10,14 @@ function handleFrameObjectsButtons() {
         var value = frameObjectsButtons[i].getAttribute('value');
         var allElementsThatContainValue = jQuery('*:contains("' + value + '")'); 
         if (allElementsThatContainValue.length == 0) {
-            frameObjectsButtons[i].classList.add('oak_hidden');
+            // Now search for images before hiding: 
+            var imageExists = false;
+            for(var j = 0; j < allImages.length; j++) {
+                if (allImages[j].getAttribute('src') == value) 
+                    imageExists = true;
+            }
+            if (!imageExists)
+                frameObjectsButtons[i].classList.add('oak_hidden');
         }
 
         jQuery('#' + identifier).click(function() {
@@ -17,7 +25,13 @@ function handleFrameObjectsButtons() {
             
             var allElementsThatContainValue = jQuery('*:contains("' + value + '")'); 
             console.log(allElementsThatContainValue.length);
-            var theElement = allElementsThatContainValue[allElementsThatContainValue.length - 2];
+            if (allElementsThatContainValue.length == 0) {
+                for(var j = 0; j < allImages.length; j++) {
+                    if (allImages[j].getAttribute('src') == value) 
+                        theElement = allImages[j];
+                }
+            } else 
+                var theElement = allElementsThatContainValue[allElementsThatContainValue.length - 2];
             
             theElement.scrollIntoView();
             theElement.classList.add('oak_sidebar_element_highlighted');
