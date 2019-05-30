@@ -9,7 +9,7 @@ function handleFrameObjectsButtons() {
         var value = frameObjectsButtons[i].getAttribute('value');
         var allElementsThatContainValue = jQuery('*:contains("' + value + '")'); 
         if (allElementsThatContainValue.length == 0) {
-            frameObjectsButtons[i].parentNode.classList.add('oak_hidden');
+            frameObjectsButtons[i].classList.add('oak_hidden');
         }
 
         jQuery('#' + identifier).click(function() {
