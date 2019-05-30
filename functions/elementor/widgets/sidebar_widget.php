@@ -122,7 +122,7 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
                 // for object model selector
                 if ( $object->object_model_selector != null && $object->object_model_selector != '' ) :
                     $model_frame_object = Sidebar_Widget::find_frame_object( $object->object_model_selector );
-                    $frame_object_data_within_object[] = array(
+                    $frame_object_data_within_object = array(
                         'the_frame_object' => $model_frame_object,
                     );
 
@@ -130,7 +130,7 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
                     $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object );
                 endif;
             endforeach;
-
+            
             foreach( $publications_and_frame_objects as $publication_and_frame_object ) :
                 ?>
                 <div class="oak_sidebar_publication_container">
