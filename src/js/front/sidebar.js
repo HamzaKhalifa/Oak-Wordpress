@@ -8,23 +8,28 @@ function handleFrameObjectsButtons() {
 
         // Remove it in case it is not shown/used in the page: 
         var value = frameObjectsButtons[i].getAttribute('value');
-        var allElementsThatContainValue = jQuery('*:contains("' + value + '")'); 
-        if (allElementsThatContainValue.length == 0) {
-            // Now search for images before hiding: 
-            var imageExists = false;
-            for(var j = 0; j < allImages.length; j++) {
-                if (allImages[j].getAttribute('src') == value) 
-                    imageExists = true;
+        console.log(value);
+        console.log(value == '');
+        if (value == '' || value == 'true' || value == 'false') {
+            frameObjectsButtons[i].classList.add('oak_hidden');
+        } else {
+            var allElementsThatContainValue = jQuery('*:contains("' + value + '")'); 
+            if (allElementsThatContainValue.length == 0) {
+                // Now search for images before hiding: 
+                var imageExists = false;
+                for(var j = 0; j < allImages.length; j++) {
+                    if (allImages[j].getAttribute('src') == value) 
+                        imageExists = true;
+                }
+                if (!imageExists)
+                    frameObjectsButtons[i].classList.add('oak_hidden');
             }
-            if (!imageExists)
-                frameObjectsButtons[i].classList.add('oak_hidden');
         }
 
         jQuery('#' + identifier).click(function() {
             var value = this.getAttribute('value');
             
             var allElementsThatContainValue = jQuery('*:contains("' + value + '")'); 
-            console.log(allElementsThatContainValue.length);
             if (allElementsThatContainValue.length == 0) {
                 for(var j = 0; j < allImages.length; j++) {
                     if (allImages[j].getAttribute('src') == value) 

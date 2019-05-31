@@ -241,10 +241,13 @@ class Oak_Elementor {
                 if ( Oak::$qualis_without_redundancy[ $incrementer ]->quali_identifier == $selected_identifier) :
                     // For the designation: 
                     $the_quali = Oak::$qualis_without_redundancy[ $incrementer ];
+                    $the_quali->quali_data = [];
+                    $the_quali->quali_data[] = $the_quali->quali_designation;
                     update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': Designation', $the_quali->quali_designation );
                     foreach( Qualis::$properties as $key => $quali_property ) :
                         $property_name = $quali_property['property_name'];
                         if ( $quali_property['input_type'] != 'image' && $quali_property['input_type'] != 'select' ) :
+                            $the_quali->quali_data[] = $the_quali->$property_name;
                             update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': ' . $quali_property['description'], $the_quali->$property_name );
                         elseif ( $quali_property['input_type'] == 'image' ):
                             $image_id = attachment_url_to_postid( $the_quali->$property_name );
@@ -253,6 +256,8 @@ class Oak_Elementor {
                         endif;
                     endforeach;
                     $quali_number++;
+
+                    Sidebar_Widget::$post_selected_qualis[] = $the_quali;
                 endif;
                 $incrementer++;
             } while( $incrementer < count( Oak::$qualis_without_redundancy ) && !$found_quali );
@@ -297,36 +302,55 @@ class Oak_Elementor {
         $selected_quantis = get_post_meta( get_the_ID(), 'quantis_selector' ) ? get_post_meta( get_the_ID(), 'quantis_selector' ) [0] : [];
         $performance_number = 1;
         foreach( $selected_quantis as $quanti_identifier ) :
-            foreach( Oak::$performances_without_redundancy as $performance_key => $performance ) :
+            $performance_selectors = '';
+            $found_quanti = false;
+            $counter = 0;
+            do {
+                if ( Oak::$quantis_without_redundancy[ $counter ]->quanti_identifier == $quanti_identifier ) :
+                    $found_quanti = true;
+                    $performance_selectors = Oak::$quantis_without_redundancy[ $counter ]->quanti_frame_objects;
+                endif;
+                $counter++;
+            } while( !$found_quanti && $counter < count( Oak::$quantis_without_redundancy ) );
 
+            foreach( Oak::$performances_without_redundancy as $performance_key => $performance ) :
                 if ( $performance->performance_quantis == $quanti_identifier ) :
                     $performance_text = __( 'Donnée de performance', Oak::$text_domain );
+                    $performance->performance_data = [];
+
+                    $performance->performance_data[] = $performance->performance_designation;
                     update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Designation', $performance->performance_designation );
 
                     $unity_type_text = __( 'Type de l’unité', Oak::$text_domain );
+                    $performance->performance_data[] = $performance->performance_type;
                     update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $unity_type_text, $performance->performance_type );
 
-                    foreach( Performances::$properties as $key => $performance_property ) :
-                        $performance_results = explode( '|', $performance->performance_results );
-                        foreach( $performance_results as $result_key => $result ) :
-                            if ( $result != '' ) :
-                                $result_values = explode( ':', $result );
-                                $year = $result_values[0];
-                                $value = $result_values[1];
+                    $performance_results = explode( '|', $performance->performance_results );
+                    foreach( $performance_results as $result_key => $result ) :
+                        if ( $result != '' ) :
+                            $result_values = explode( ':', $result );
+                            $year = $result_values[0];
+                            $value = $result_values[1];
 
-                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Année ' . $result_key, $year );
-                                update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Résultalt ' . $year, $value );
-                            endif;
-                        endforeach;
+                            $performance->performance_data[] = $year;
+                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Année ' . $result_key, $year );
+                            $performance->performance_data[] = $value;
+                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Résultalt ' . $year, $value );
+                        endif;
+                    endforeach;
+
+                    foreach( Performances::$properties as $key => $performance_property ) :
                         $property_name = $performance_property['property_name'];
 
                         if ( $performance_property['name'] == 'country' ) :
+                            $performance->performance_data[] = $performance->$property_name;
                             update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
                         elseif ( $performance_property['name'] == 'custom_perimeter' ) :
                             update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
                         elseif ( $performance_property['input_type'] != 'image' && $performance_property['input_type'] != 'select' ) :
                             update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
                         elseif ( $performance_property['input_type'] == 'image' ):
+                            $performance->performance_data[] = $performance->$property_name;
                             $image_id = attachment_url_to_postid( $performance->$property_name );
                             $post_images_to_show[] = array ( 'url' => $performance->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $performance . ' ' . $performance_number . ': ' .$performance_property['description'] );
                             // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
@@ -348,9 +372,12 @@ class Oak_Elementor {
                     endforeach;
                     $performance_number++;
 
+                    $performance->performance_selectors = $performance_selectors;
                     Sidebar_Widget::$post_selected_performances[] = $performance;
                 endif;
             endforeach;
+
+            
         endforeach;
 
         return $post_images_to_show;

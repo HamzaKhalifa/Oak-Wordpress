@@ -240,6 +240,11 @@ class Oak {
     function oak_enqueue_scripts() {
         wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true);
         Oak_Elementor::oak_elementor_editor_enqueue_scripts();
+
+        ?>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+        <?php
     }
 
     function oak_admin_enqueue_styles( $hook ) {
@@ -1187,9 +1192,6 @@ class Oak {
         endif;
 
         foreach( $identifiers as $identifier ) :
-            var_dump( $table_name );
-            die;
-
             $wpdb->delete(
                 $table_name,
                 array( $table . '_identifier' => $identifier )

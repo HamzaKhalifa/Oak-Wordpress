@@ -13,6 +13,7 @@
 
 .oak_sidebar_frame_objects_container_single_frame__scroll_to_content_button {
     transition: all .2s ease-in-out;
+    margin-left: 10px;
 }
 
 .oak_sidebar_frame_objects_container_single_frame__scroll_to_content_button:hover {
@@ -25,6 +26,26 @@
     animation-name: backtocolor;
     animation-fill-mode: forwards;
     animation-duration: 1s;
+}
+
+.sidebar_element_info {
+    flex: 1;
+}
+
+.data_go_butons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sidebar_thumbtack {
+    color: #003366;
+    border-left: 1px solid #003366;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.oak_sidebar_frame_objects_container__single_frame i:first-of-type {
+    border-left: none;
 }
 
 @keyframes backtocolor {

@@ -507,17 +507,6 @@ $performance_other_properties = array(
         'description' => __( 'Objects liés.', Oak::$text_domain ), 
         'width' => '50' 
     ),
-    array ( 
-        'name' => 'selectors', 
-        'property_name' => 'performance_selectors', 
-        'type' => 'text', 
-        'input_type' => 'select',
-        'select_multiple' => 'true',
-        'choices' => Oak::$frame_objects_array,
-        'placeholder' => __( 'Objets RSE', Oak::$text_domain ), 
-        'description' => __( 'Objets RSE.', Oak::$text_domain ), 
-        'width' => '100',
-    ),
 );
 
 Performances::$properties = array_merge( Performances::$properties, $performance_other_properties );

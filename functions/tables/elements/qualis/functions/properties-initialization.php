@@ -120,7 +120,7 @@ Qualis::$properties = array (
         'name' => 'description', 
         'property_name' => 'quali_description', 
         'type' => 'text',
-        'input_type' => 'text',
+        'input_type' => 'textarea',
         'placeholder' => __( 'Description', Oak::$text_domain ), 
         'description' => __( 'Description', Oak::$text_domain ), 
         'width' => '50'
@@ -204,6 +204,23 @@ Qualis::$properties = array (
 
         'placeholder' => __( 'Objets proches', Oak::$text_domain ), 
         'description' => __( 'Objets proches', Oak::$text_domain ), 
+        'width' => '100',
+        'depends' => array (
+            array( 'name' => 'close', 'values' => array( 'true' ) )
+        )
+    ),
+    array (
+        'name' => 'frame_objects', 
+        'property_name' => 'quali_frame_objects', 
+        'type' => 'text',
+        'input_type' => 'select_with_filters',
+        'can_add_more' => 'true',
+        'select_multiple' => 'true',
+        'choices' => Oak::$frame_objects_array,
+        'filters' => [
+        ],
+        'placeholder' => __( 'Objets Cadres RSE', Oak::$text_domain ), 
+        'description' => __( 'Objets Cadres RSE', Oak::$text_domain ), 
         'width' => '100',
         'depends' => array (
             array( 'name' => 'close', 'values' => array( 'true' ) )

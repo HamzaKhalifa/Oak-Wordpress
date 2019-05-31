@@ -24,6 +24,7 @@ $quantis_sql = "CREATE TABLE $quantis_table_name (
     quanti_close_indicators varchar(555),
     quanti_close_objects varchar(555),
     quanti_synchronized TEXT,
+    quanti_frame_objects TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

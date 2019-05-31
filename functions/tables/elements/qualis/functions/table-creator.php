@@ -24,6 +24,7 @@ $qualis_sql = "CREATE TABLE $qualis_table_name (
     quali_close_indicators varchar(555),
     quali_close_objects TEXT,
     quali_synchronized TEXT,
+    quali_frame_objects TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

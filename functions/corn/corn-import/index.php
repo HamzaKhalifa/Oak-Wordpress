@@ -390,6 +390,8 @@ class Corn_Import {
     }
 
     function corn_save_data() {
+        update_option( 'oak_corn_found_images', [] );
+        
         global $wpdb;
 
         Oak::$all_images = $this->get_all_images()->posts;
@@ -652,6 +654,7 @@ class Corn_Import {
                 wp_delete_attachment( $image->ID, true );
             endif;
         endforeach;
+        update_option( 'oak_corn_found_images', [] );
     }
 }
 
