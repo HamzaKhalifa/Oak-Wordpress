@@ -56,10 +56,14 @@ Oak::$languages_names = Oak::oak_get_languages();
     endforeach;
 // endif;
 
-// $objects_array = Oak::$all_objects_without_redundancy;
 Oak::$objects_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun objet sélectionné', Oak::$text_domain ) ) ];
 foreach( Oak::$all_objects_without_redundancy as $object ) :
     Oak::$objects_array[] = array( 'value' => $object->object_identifier, 'innerHTML' => $object->object_designation );
+endforeach;
+
+Oak::$frame_objects_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun objet sélectionné', Oak::$text_domain ) ) ];
+foreach( Oak::$all_frame_objects_without_redundancy as $object ) :
+    Oak::$frame_objects_array[] = array( 'value' => $object->object_identifier, 'innerHTML' => $object->object_designation );
 endforeach;
 
 include_once get_template_directory() . '/functions/tables/constants/years.php';

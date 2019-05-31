@@ -298,6 +298,7 @@ class Oak_Elementor {
         $performance_number = 1;
         foreach( $selected_quantis as $quanti_identifier ) :
             foreach( Oak::$performances_without_redundancy as $performance_key => $performance ) :
+
                 if ( $performance->performance_quantis == $quanti_identifier ) :
                     $performance_text = __( 'Donnée de performance', Oak::$text_domain );
                     update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Designation', $performance->performance_designation );
@@ -346,6 +347,8 @@ class Oak_Elementor {
                         endif;
                     endforeach;
                     $performance_number++;
+
+                    Sidebar_Widget::$post_selected_performances[] = $performance;
                 endif;
             endforeach;
         endforeach;

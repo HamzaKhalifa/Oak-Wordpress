@@ -123,6 +123,7 @@ class Oak {
     public static $quantis_array = [];
     public static $terms_array = [];
     public static $objects_array = [];
+    public static $frame_objects_array = [];
     public static $sources_array = [];
     public static $countries = [];
     public static $countries_names = [];
@@ -286,7 +287,7 @@ class Oak {
                     Fields::properties_to_enqueue_for_script();
                 break;
                 case 'forms' :
-                    Fields::properties_to_enqueue_for_script();
+                    Forms::properties_to_enqueue_for_script();
                 break;
                 case 'models' :
                     Models::properties_to_enqueue_for_script();
