@@ -71,6 +71,20 @@ class Objects {
         include get_template_directory() . '/functions/tables/elements/objects/functions/all-objects.php';
         include get_template_directory() . '/functions/tables/elements/objects/functions/all-objects-without-redundancy.php';
     } 
+
+    public static function get_object_of_corresponding_language( $object ) {
+        $found_frame_object_for_corresponding_language = false; 
+
+        $counter = count( Oak::$all_objects ) - 1;
+        do {
+            if ( Oak::$all_objects[ $counter ]->object_content_language == Oak::$site_language && Oak::$all_objects[ $counter ]->object_identifier == $object->object_identifier ) :
+                return Oak::$all_objects[ $counter ];
+            endif;
+            $counter--;
+        } while ( $counter >= 0 && !$found_frame_object_for_corresponding_language );
+
+        return $object;
+    }
 }
 
 $objects = new Objects();

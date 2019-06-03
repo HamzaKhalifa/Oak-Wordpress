@@ -432,6 +432,7 @@ class Oak {
                     endforeach;
                     if ( !$exists ) :
                         $model_fields = Models::get_model_fields( $model, $modify_current_model_fields );
+                        $object = Objects::get_object_of_corresponding_language( $object );
                         $object->object_model_fields = $model_fields;
 
                         $object->object_model_fields_names = $model->model_fields_names;

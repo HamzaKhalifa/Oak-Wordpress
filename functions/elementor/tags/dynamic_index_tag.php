@@ -21,71 +21,99 @@ Class Dynamic_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 
 	protected function _register_controls() {
         $indexes_data = get_option('oak_indexes') == false ? [] : get_option('oak_indexes');
+
         $frame_objects_designations = [];
         $frame_objects_data = [];
-        foreach( Oak::$all_frame_objects_without_redundancy as $frame_object ) :
-            $has_been_used_in_at_least_one_post = false;
 
+        // Oak::var_dump( $indexes_data );
+        foreach( Oak::$all_frame_objects_without_redundancy as $frame_object ) :
             $single_frame_object_data = array (
                 'frame_object' => $frame_object,
-                'source_object' => array(
-                    'object_designation' => '',
-                    'object_identifier' => '',
-                ),
-                'fields' => array(),
-                'form_posts' => array(),
-                'model_posts' => array(),
-                'options' => array()
+                'used_in' => [],
             );
 
             foreach( $indexes_data as $index_data ) :
-                $single_frame_object_data['source_object']['object_designation'] = $index_data['object']['designation'];
-                $single_frame_object_data['source_object']['object_identifier'] = $index_data['object']['identifier'];
-                $post_title = '';
-
+                // For fields
                 foreach( $index_data['fields_data'] as $field_data ) :
-                    foreach( $field_data['frame_linked_objects'] as $linked_frame_object ) :
-                        if ( $linked_frame_object == $frame_object->object_identifier ) :
-                            $has_been_used_in_at_least_one_post = true;
-                            $single_frame_object_data['fields'][] = $field_data;
-                        endif;
-                    endforeach;
-                endforeach;
-                foreach( $index_data['forms_frame_linked_objects'] as $forms_frame_objects ) :
-                    if ( $forms_frame_objects == $frame_object->object_identifier ) :
-                        $has_been_used_in_at_least_one_post = true;
-                        $single_frame_object_data['form_posts'][] = array ( 
-                            'used_in_posts' => array(
-                                array(
-                                    'post_url' => $index_data['post_url'],
-                                    'post_title' => $index_data['post_title'],
-                                    'object_designation' => $index_data['object']['designation']
-                                )
-                            )
-                        );
+                    if ( in_array( $frame_object->object_identifier, $field_data['frame_linked_objects'] ) ) :
+                        foreach( $field_data['used_in_posts'] as $posts_in_which_it_is_used ) :
+                            if ( $posts_in_which_it_is_used['post_url'] == $index_data['post_url'] ) :
+                                $single_frame_object_data['used_in'][] = array(
+                                    'field_name' => $field_data['field_name'],
+                                    'field_value' => $field_data['value'],
+                                    'source_object_designation' => $index_data['object']['designation'],
+                                    'url' => $index_data['post_url'],
+                                    'post_title' => $posts_in_which_it_is_used['post_title'],
+                                    'field' => true,
+                                );
+                            endif;
+                        endforeach;
                     endif;
-                endforeach;
-                foreach( $index_data['model_frame_linked_objects'] as $model_frame_objects ) :
-                    if ( $model_frame_objects == $frame_object->object_identifier ) :
-                        $has_been_used_in_at_least_one_post = true;
-                        $single_frame_object_data['model_posts'][] = array (
-                            'used_in_posts' => array (
-                                array(
-                                    'post_url' => $index_data['post_url'],
-                                    'post_title' => $index_data['post_title'],
-                                    'object_designation' => $index_data['object']['designation']
-                                )
-                            )
-                        );
-                    endif;
-                endforeach;
+                endforeach; 
+                
+                // For forms
+                if ( in_array( $frame_object->object_identifier, $index_data['forms_frame_linked_objects'] ) ) :
+                    $single_frame_object_data['used_in'][] = array(
+                        'source_object_designation' => $index_data['object']['designation'],
+                        'url' => $index_data['post_url'],
+                        'post_title' => $index_data['post_title'],
+                        'form' => true,
+                    );
+                endif;
+
+                // For models
+                if ( in_array( $frame_object->object_identifier, $index_data['model_frame_linked_objects'] ) ) :
+                    $single_frame_object_data['used_in'][] = array(
+                        'source_object_designation' => $index_data['object']['designation'],
+                        'url' => $index_data['post_url'],
+                        'post_title' => $index_data['post_title'],
+                        'model' => true,
+                    );
+                endif;
             endforeach;
 
-            // if ( $has_been_used_in_at_least_one_post ) :
-                $frame_objects_designations[] = $frame_object->object_designation;
+            // foreach( $indexes_data as $index_data ) :
+            //     $single_frame_object_data['source_object']['object_designation'] = $index_data['object']['designation'];
+            //     $single_frame_object_data['source_object']['object_identifier'] = $index_data['object']['identifier'];
+            //     $post_title = '';
 
-                $frame_objects_data[] = $single_frame_object_data;
-            // endif;
+            //     foreach( $index_data['fields_data'] as $field_data ) :
+            //         foreach( $field_data['frame_linked_objects'] as $linked_frame_object ) :
+            //             if ( $linked_frame_object == $frame_object->object_identifier ) :
+            //                 $single_frame_object_data['fields'][] = $field_data;
+            //             endif;
+            //         endforeach;
+            //     endforeach;
+            //     foreach( $index_data['forms_frame_linked_objects'] as $forms_frame_objects ) :
+            //         if ( $forms_frame_objects == $frame_object->object_identifier ) :
+            //             $single_frame_object_data['form_posts'][] = array ( 
+            //                 'used_in_posts' => array(
+            //                     array(
+            //                         'post_url' => $index_data['post_url'],
+            //                         'post_title' => $index_data['post_title'],
+            //                         'object_designation' => $index_data['object']['designation']
+            //                     )
+            //                 )
+            //             );
+            //         endif;
+            //     endforeach;
+            //     foreach( $index_data['model_frame_linked_objects'] as $model_frame_objects ) :
+            //         if ( $model_frame_objects == $frame_object->object_identifier ) :
+            //             $single_frame_object_data['model_posts'][] = array (
+            //                 'used_in_posts' => array (
+            //                     array(
+            //                         'post_url' => $index_data['post_url'],
+            //                         'post_title' => $index_data['post_title'],
+            //                         'object_designation' => $index_data['object']['designation']
+            //                     )
+            //                 )
+            //             );
+            //         endif;
+            //     endforeach;
+            // endforeach;
+
+            $frame_objects_designations[] = $frame_object->object_designation;
+            $frame_objects_data[] = $single_frame_object_data;
         endforeach;
 
 		$this->add_control(
@@ -100,7 +128,7 @@ Class Dynamic_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
         $this->add_control(
             'frame_object_type_of_data_to_show',
             [
-                'label'   => __( 'Type de- données à afficher', Oak::$text_domain ),
+                'label'   => __( 'Type de données à afficher', Oak::$text_domain ),
                     'type' => \Elementor\Controls_Manager::SELECT,
                     'options' => [ __( 'Désignation de l\'object', Oak::$text_domain), __('Nom du champ', Oak::$text_domain ), __( 'Valeur du champ', Oak::$text_domain ), __( 'URL', Oak::$text_domain ), __( 'Nom du post', Oak::$text_domain ) ],
             ]
@@ -109,22 +137,39 @@ Class Dynamic_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
         foreach( $frame_objects_data as $key => $single_frame_object_data ) :
             $options = [];
 
-            foreach( $single_frame_object_data['fields'] as $field_key => $field_data ) :
-                $options[] = __( 'Champ: ' . $field_data['field_name'] );
+            foreach( $single_frame_object_data['used_in'] as $used_in ) : 
+                if ( isset( $used_in['field'] ) ) :
+                    $options[] = __( 'Champ: ' . $used_in['field_name'] . ', Post: ' . $used_in['post_title'] );
+                endif;
+
+                if ( isset( $used_in['form'] ) ) :
+                    $options[] = __( 'Url Formulair Objet: ' . $used_in['source_object_designation'] . ', Post: ' . $used_in['post_title'] );
+                endif;
+
+                if ( isset( $used_in['model'] ) ) :
+                    $options[] = __( 'Url Objet: ' . $used_in['source_object_designation'] . ', Post: ' . $used_in['post_title'] );
+                endif;
             endforeach;
 
-            if ( isset( $single_frame_object_data['form_posts'] ) ) :
-                foreach( $single_frame_object_data['form_posts'] as $form_key => $form_posts ) :
-                    $options[] = __( 'Url Formulair ' . $form_key . ', Objet: ' . $single_frame_object_data['source_object']['object_designation'], Oak::$text_domain );
-                endforeach;
-            endif;
-            
-            if ( isset( $single_frame_object_data['model_posts'] ) ) :
-                foreach( $single_frame_object_data['model_posts'] as $model_key => $form_posts ) :
-                    $options[] = __( 'Url Objet: ' . $single_frame_object_data['source_object']['object_designation'], Oak::$text_domain );
-                endforeach;
-            endif;
 
+            // foreach( $single_frame_object_data['fields'] as $field_key => $field_data ) :
+            //     $options[] = __( 'Champ: ' . $field_data['field_name'] . ', Post: ' . $field_data['used_in_posts'][ $field_key ]['post_title'] );
+            // endforeach;
+
+            // if ( isset( $single_frame_object_data['form_posts'] ) ) :
+            //     foreach( $single_frame_object_data['form_posts'] as $form_key => $form_posts ) :
+            //         $options[] = __( 'Url Formulair ' . $form_key . ', Objet: ' . $single_frame_object_data['source_object']['object_designation'], Oak::$text_domain . ', Post: ' . $form_posts['used_in_posts'][0]['post_title'] );
+            //     endforeach;
+            // endif;
+            
+            // if ( isset( $single_frame_object_data['model_posts'] ) ) :
+            //     foreach( $single_frame_object_data['model_posts'] as $model_key => $model_posts ) :
+            //         $options[] = __( 'Url Objet: ' . $single_frame_object_data['source_object']['object_designation'], Oak::$text_domain . ', Post: ' . $model_posts['used_in_posts'][0]['post_title'] );
+            //     endforeach;
+            // endif;
+
+
+            // Oak::var_dump( $options );
             $single_frame_object_data['options'] = $options;
             $frame_objects_data[ $key ] = $single_frame_object_data;
 
@@ -160,54 +205,34 @@ Class Dynamic_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
                 _e( 'Veuillez d\'abord sélectionner les champs à prendre en compte', Oak::$text_domain );
                 return;
             endif;
-            
-            $form_index = $which_field - count( $frame_object_data['fields'] );
-            $model_index = $which_field - count( $frame_object_data['fields'] ) - count( $frame_object_data['form_posts'] );
-            $the_field_data = array();
 
-            if ( count( $frame_object_data['fields'] ) > $which_field ) :
-                $the_field_data = $frame_object_data['fields'][ $which_field ];
-            elseif ( count( $frame_object_data['form_posts'] ) > $form_index ) :
-                $the_field_data = $frame_object_data['form_posts'][ $form_index ];
-            elseif ( count( $frame_object_data['model_posts'] ) > $model_index ) : 
-                $the_field_data = $frame_object_data['model_posts'][ $model_index ];
-            endif;
-
+            $element = $frame_object_data['used_in'][ $which_field ];
             switch ( $settings['frame_object_type_of_data_to_show'] ): 
                 case '0' :
                     // This is the frame object designation
-                    echo( $frame_object_data['source_object']['object_designation'] );
+                    echo( $element['source_object_designation'] );
                 break;
                 case '1' :
                     // This is field name
-                    if ( isset( $the_field_data['field_name'] ) ) :
-                        echo( $the_field_data['field_name'] );
-                    else :
-                        echo( $frame_object_data['frame_object']['object_designation'] );
+                    if ( isset( $element['field_name'] ) ) :
+                        echo( $element['field_name'] );
+                    else: 
+                        _e( '---------', Oak::$text_domain );
                     endif;
                 break;
                 case '2' :
                     // This is the field value
-                    if ( isset( $the_field_data['value'] ) ) :
-                        echo( $the_field_data['value'] );
-                    else :
-                        echo( $frame_object_data['frame_object']['object_designation'] );
+                    if ( isset( $element['field_value'] ) ) :
+                        echo( $element['field_value'] );
+                    else: 
+                        _e( '---------', Oak::$text_domain );
                     endif;
                 break;
                 case '3' :
-                    if ( count ( $the_field_data['used_in_posts'] ) > 0 ) :
-                        echo( $the_field_data['used_in_posts'][0]['post_url'] );
-                    else: 
-                        _e( 'Pas d\'URL à afficher', Oak::$text_domain );
-                    endif;
+                    echo( $element['url'] );
                 break;
                 case '4' :
-                    // This is the post title
-                    if ( count ( $the_field_data['used_in_posts'] ) > 0 ) :
-                        echo ( $the_field_data['used_in_posts'][0]['post_title'] );
-                    else :
-                        _e( 'Pas de Poste à afficher', Oak::$text_domain );
-                    endif;
+                    echo( $element['post_title'] );
                 break;
                 default :
                     _e( 'Veuillez sélectionner le type de données à afficher' );
@@ -217,6 +242,5 @@ Class Dynamic_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
         else : 
             _e( 'Veuillez d’abord sélectionner les données nécessaire pour l\'affichage.' );
         endif;
-        // Oak::var_dump( $settings );
     }
 }
