@@ -70,14 +70,14 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 		// 	]
     //     );
 
-  	// $this->add_control (
-		// 	'frame_objects_data',
-		// 	[
-		// 		'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
-		// 		'type' => \Elementor\Controls_Manager::HIDDEN,
-		// 		'default' => $frame_objects_data,
-		// 	]
-		// );
+  	$this->add_control (
+			'frame_objects_data',
+			[
+				'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
+				'type' => \Elementor\Controls_Manager::HIDDEN,
+				'default' => $frame_objects_data,
+			]
+		);
 	}
 
 	public function render() {
