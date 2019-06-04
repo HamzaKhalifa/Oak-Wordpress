@@ -151,24 +151,6 @@ Class Dynamic_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
                 endif;
             endforeach;
 
-
-            // foreach( $single_frame_object_data['fields'] as $field_key => $field_data ) :
-            //     $options[] = __( 'Champ: ' . $field_data['field_name'] . ', Post: ' . $field_data['used_in_posts'][ $field_key ]['post_title'] );
-            // endforeach;
-
-            // if ( isset( $single_frame_object_data['form_posts'] ) ) :
-            //     foreach( $single_frame_object_data['form_posts'] as $form_key => $form_posts ) :
-            //         $options[] = __( 'Url Formulair ' . $form_key . ', Objet: ' . $single_frame_object_data['source_object']['object_designation'], Oak::$text_domain . ', Post: ' . $form_posts['used_in_posts'][0]['post_title'] );
-            //     endforeach;
-            // endif;
-            
-            // if ( isset( $single_frame_object_data['model_posts'] ) ) :
-            //     foreach( $single_frame_object_data['model_posts'] as $model_key => $model_posts ) :
-            //         $options[] = __( 'Url Objet: ' . $single_frame_object_data['source_object']['object_designation'], Oak::$text_domain . ', Post: ' . $model_posts['used_in_posts'][0]['post_title'] );
-            //     endforeach;
-            // endif;
-
-
             // Oak::var_dump( $options );
             $single_frame_object_data['options'] = $options;
             $frame_objects_data[ $key ] = $single_frame_object_data;
@@ -180,25 +162,29 @@ Class Dynamic_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
                         'type' => \Elementor\Controls_Manager::SELECT,
                         'options' => $options,
                 ]
-            );    
+            );
         endforeach;
 
-        $this->add_control(
-			'frame_objects_data',
-			[
-				'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
-				'type' => \Elementor\Controls_Manager::HIDDEN,
-				'default' => $frame_objects_data,
-			]
-		);
+        update_option( 'oak_customer_side_frame_objects_data', $frame_objects_data );
+        // $this->add_control(
+		// 	'frame_objects_data',
+		// 	[
+		// 		'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
+		// 		'type' => \Elementor\Controls_Manager::HIDDEN,
+		// 		'default' => $frame_objects_data,
+		// 	]
+		// );
     }
     
     public function render() {
         $settings = $this->get_settings();
 
         if ( $settings['frame_object'] != '' && $settings['frame_object_type_of_data_to_show'] != '' ) :
-            $frame_object_data = $settings['frame_objects_data'][ $settings['frame_object'] ];
-            $which_field_settings_name = 'frame_object_' . $frame_object_data['frame_object']['object_identifier'] . '_data';
+            // $all_frame_objects_data = $settings['frame_objects_data'];
+            $all_frame_objects_data = get_option('oak_customer_side_frame_objects_data');
+
+            $frame_object_data = $all_frame_objects_data[ $settings['frame_object'] ];
+            $which_field_settings_name = 'frame_object_' . $frame_object_data['frame_object']->object_identifier . '_data';
             $which_field = $settings[ $which_field_settings_name ];
 
             if ( $which_field == '' ) :
