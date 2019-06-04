@@ -30,7 +30,7 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 				$actual_frame_object = Objects::get_object_of_corresponding_language( $actual_frame_object );
 			endif;
 
-			$field_names = [ __( 'Désignation', Oak::$text_domain ) ];
+			$field_names = [ '',  __( 'Désignation', Oak::$text_domain ) ];
 			foreach( Oak::$models_without_redundancy as $model ) :
 				if ( $model->model_identifier == $actual_frame_object->object_model_identifier ) :
 					$model_fields = Models::get_model_fields( $model, false );
@@ -93,18 +93,20 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 
 		$selected_frame_object_identifier = $settings['frame_objects_data'][ $settings['frame_object'] ]['object_identifier'];
 		$field_index = $settings[ $selected_frame_object_identifier ];
-		if ( $field_index == '' ) :
+		if ( $field_index == '' || $field_index == 0  ) :
 			_e( 'Veuillez avant sélectionner la propriété de l\'objet cadres RSE', Oak::$text_domain );
 			return;
 		endif;
 
-		if ( $field_index != 0 ) :
-			$actual_field_index = $field_index - 1;
+		if ( $field_index != 1 ) :
+			$actual_field_index = $field_index - 2;
 			$selected_field_data = $selected_frame_object_data['model_fields'][ $actual_field_index ];
 			$field_property_name = 'object_' . $actual_field_index . '_' . $selected_field_data['field_identifier'];
 			echo( $selected_frame_object_data[ $field_property_name ] );
-		else :
+		elseif( $field_index == 1 ) :
 			echo( $selected_frame_object_data['object_designation'] );
+		else :
+			_e( 'Veuillez avant sélectionner la propriété de l\'objet cadres RSE', Oak::$text_domain );
 		endif;
 		
 	}
