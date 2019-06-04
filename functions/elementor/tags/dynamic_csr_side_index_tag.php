@@ -21,7 +21,7 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 
 	protected function _register_controls() {
     $indexes_data = get_option('oak_indexes') == false ? [] : get_option('oak_indexes');
-		$frame_objects_designations = [];
+		$frame_objects_designations = [''];
 		$frame_objects_data = [];
 		foreach( Oak::$all_frame_objects_without_redundancy as $key => $frame_object ) :
 			$actual_frame_object = $frame_object;
@@ -88,10 +88,9 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 			return;
 		endif;
 		
-
-		$selected_frame_object_data = $settings['frame_objects_data'][ $settings['frame_object'] ];
-
-		$selected_frame_object_identifier = $settings['frame_objects_data'][ $settings['frame_object'] ]['object_identifier'];
+		$selected_frame_object_data = $settings['frame_objects_data'][ $settings['frame_object'] - 1 ];
+		$selected_frame_object_identifier = $selected_frame_object_data['object_identifier'];
+		
 		$field_index = $settings[ $selected_frame_object_identifier ];
 		if ( $field_index == '' || $field_index == 0  ) :
 			_e( 'Veuillez avant sélectionner la propriété de l\'objet cadres RSE', Oak::$text_domain );
