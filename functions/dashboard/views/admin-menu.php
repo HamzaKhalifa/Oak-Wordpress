@@ -89,7 +89,13 @@
                     'url' => 'edit.php?post_type=page',
                     'icon' => 'fas fa-th-large',
                     'submenu' => true
-                )
+                ),
+                array(
+                    'title' => __( 'Graphes', Oak::$text_domain ),
+                    'url' => '?page=oak_elements_list&elements=graphs&listorformula=list&whichpage=0',
+                    'icon' => 'fas fa-th-large',
+                    'submenu' => true
+                ),
             );
 
             $menu_elements = array_merge( $menu_elements, $posts_and_pages );

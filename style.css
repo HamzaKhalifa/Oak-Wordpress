@@ -1441,11 +1441,11 @@ body .oak_select_container_with_filters__add_button {
   margin-bottom: 5px;
 }
 
-.oak_add_element_ivwp__synchronise_button_container {
+.oak_add_element_ivwp__synchronise_button_container, .oak_add_element__add_graph_button {
   display: flex;
 }
 
-.oak_add_element_ivwp__synchronise_button {
+.oak_add_element_ivwp__synchronise_button, .oak_add_element_add_graph_button__span {
   background-color: #003366;
   color: white;
   width: 100%;
@@ -1454,7 +1454,7 @@ body .oak_select_container_with_filters__add_button {
   padding-bottom: 10px;
 }
 
-.oak_add_element_ivwp__synchronise_button:hover {
+.oak_add_element_ivwp__synchronise_button:hover, .oak_add_element_add_graph_button__span:hover {
   cursor: pointer;
 }
 

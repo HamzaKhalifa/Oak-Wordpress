@@ -688,7 +688,7 @@ function handleSaveGraphButton() {
         }
         
         var graphDataInDatabase = {
-            graph_title: title,
+            graph_designation: title,
             graph_identifier: createIdentifier(),
             graph_data: JSON.stringify(graphData)
         }

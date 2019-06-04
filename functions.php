@@ -100,6 +100,10 @@ class Oak {
     public static $publishers_without_redundancy;
     public static $publisher_properties;
 
+    public static $graphs;
+    public static $graphs_without_redundancy;
+    public static $graph_properties;
+
     public static $frame_publications_identifiers = [];
     public static $frame_terms_identifiers = [];
     public static $all_frame_objects_without_redundancy = [];
@@ -335,6 +339,9 @@ class Oak {
                 break;
                 case 'publishers' :
                     Publishers::properties_to_enqueue_for_script();
+                break;
+                case 'graphs' :
+                    Graphs::properties_to_enqueue_for_script();
                 break;
             endswitch;
 
@@ -648,6 +655,12 @@ class Oak {
                 $title = __( 'Ajouter un terme', Oak::$text_domain );
                 $elements = Oak::$terms_without_redundancy;
             break;
+            case 'graphs':
+                $properties = Graphs::$properties;
+                $table = 'graph';
+                $title = __( 'Ajouter un Graphe', Oak::$text_domain );
+                $elements = Oak::$graphs_without_redundancy;
+            break;
         endswitch;
         include get_template_directory() . '/template-parts/elements/add-element.php';
     }
@@ -770,6 +783,13 @@ class Oak {
                 $elements_with_redundancy = Oak::$publishers;
                 $table = 'publisher';
                 $filters = Publishers::$filters;
+            break;
+            case 'graphs' :
+                $title = __( 'Graphes', Oak::$text_domain );
+                $elements = Oak::$graphs_without_redundancy;
+                $elements_with_redundancy = Oak::$graphs;
+                $table = 'graph';
+                $filters = Graphs::$filters;
             break;
         endswitch;
         include get_template_directory() . '/template-parts/elements/elements-list.php';

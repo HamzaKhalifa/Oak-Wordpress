@@ -1,8 +1,21 @@
 <?php
 class Graphs {
+    public static $filters; 
+    public static $properties;
+
     function __construct() {
         $this->table_creator();
         $this->data_collector();
+
+        Oak::$elements_script_properties_functions['graphs'] = function() {
+            $this->properties_to_enqueue_for_script();
+        };
+
+        Graphs::$filters = array(
+            array ( 'title' => __( 'Etat', Oak::$text_domain ), 'property' => 'graph_state', 'choices' => array () ),
+            array ( 'title' => __( 'Identifiant', Oak::$text_domain ), 'property' => 'graph_identifier', 'choices' => array() ),
+            array ( 'title' => __( 'Donées', Oak::$text_domain ), 'property' => 'graph_data', 'choices' => array() )
+        );
     }
 
     function table_creator() {
@@ -10,7 +23,26 @@ class Graphs {
     }
 
     function data_collector() {
-        include get_template_directory() . '/functions/tables/elements/fields/functions/data-collector.php';
+        include get_template_directory() . '/functions/tables/elements/graphs/functions/data-collector.php';
+    }
+
+    static function properties_initialization() {
+        include get_template_directory() . '/functions/tables/elements/graphs/functions/properties-initialization.php';
+    }
+
+    public static function properties_to_enqueue_for_script() {
+        $table = 'graph';
+        $elements = Oak::$graphs;
+        Oak::$revisions = Oak::oak_get_revisions( $table, $elements );
+
+        Oak::$current_element_script_properties = array (
+            'table' => $table,
+            'table_in_plural' => 'graphs',
+            'elements' => $elements,
+            'properties' => array_merge( Oak::$shared_properties, Graphs::$properties ),
+            'filters' => Graphs::$filters,
+            'revisions' => Oak::$revisions
+        );
     }
 
     static function save_graph() {
@@ -22,7 +54,9 @@ class Graphs {
             $graph_data[ $key ] = stripslashes_deep( $data );
         endforeach;
 
-        $result = $wpdb->insert(
+        $graph_data = array_merge( $graph_data, array( 'graph_modification_time' => date("Y-m-d H:i:s") ) );
+
+        $result = $wpdb->insert (
             Oak::$graphs_table_name,
             $graph_data
         );
@@ -44,7 +78,7 @@ class Graphs {
         foreach( $graphs as $single_graph ) :
             $widget_options = array (
                 'name' => $single_graph->graph_identifier,
-                'title' => $single_graph->graph_title,
+                'title' => $single_graph->graph_designation,
                 'graph_data' => $single_graph->graph_data,
                 'field_type' => 'organization_name',
             );
@@ -52,6 +86,10 @@ class Graphs {
             $generic_widget->set_widgets_options( $widget_options );
             $widgets_manager->register_widget_type( $generic_widget );
         endforeach;
+    }
+
+    public static function data_studio_button() {
+        include get_template_directory() . '/functions/tables/elements/graphs/views/data_studio_button.php';
     }
 }
 

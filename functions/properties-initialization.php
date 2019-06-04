@@ -112,3 +112,9 @@ Glossaries::properties_initialization();
 if ( get_option( 'oak_corn' ) == 'false' ) :
     Publishers::properties_initialization();
 endif;
+
+if ( isset( $_GET['elements'] ) ) :
+    if ( $_GET['elements'] == 'graphs' ) :
+        Graphs::properties_initialization();
+    endif;
+endif;

@@ -904,6 +904,12 @@ $modification_time_property = $table . '_modification_time';
         endif;
         ?>
 
+        <?php 
+        if ( isset( $_GET['elements'] ) && $_GET['elements'] == 'graphs' ) :
+            Graphs::data_studio_button();
+        endif;
+        ?>
+
         <!-- // This is for objects (We are gonna associate them to the terms) -->
         <?php 
         if ( $_GET['elements'] == 'objects' ) : ?>
