@@ -49,50 +49,51 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
             
 			$frame_objects_designations[] = $actual_frame_object->object_designation;
 			
-			// $this->add_control(
-			// 	$actual_frame_object->object_identifier,
-			// 	[
-			// 		'label'   => $frame_object->object_designation,
-			// 			'type' => \Elementor\Controls_Manager::SELECT,
-			// 			'options' => $field_names,
-			// 	]
-			// );
+			$this->add_control(
+				$actual_frame_object->object_identifier,
+				[
+					'label'   => $frame_object->object_designation,
+						'type' => \Elementor\Controls_Manager::SELECT,
+						'options' => $field_names,
+				]
+			);
 
 			$frame_objects_data[] = $actual_frame_object;
 		endforeach;
 		
-		// $this->add_control(
-		// 	'frame_object',
-		// 	[
-		// 		'label'   => __( 'Choisir l\'objet cadres RSE', Oak::$text_domain ),
-		// 	        'type' => \Elementor\Controls_Manager::SELECT,
-		// 	        'options' => $frame_objects_designations,
-		// 	]
-    //     );
-
-  	$this->add_control (
-			'frame_objects_data',
+		$this->add_control(
+			'frame_object',
 			[
-				'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
-				'type' => \Elementor\Controls_Manager::HIDDEN,
-				'default' => $frame_objects_data,
+				'label'   => __( 'Choisir l\'objet cadres RSE', Oak::$text_domain ),
+			        'type' => \Elementor\Controls_Manager::SELECT,
+			        'options' => $frame_objects_designations,
 			]
-		);
+    );
+
+		update_option( 'oak_scr_side_frame_objects_data', $frame_objects_data );
+  	// $this->add_control (
+		// 	'frame_objects_data',
+		// 	[
+		// 		'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
+		// 		'type' => \Elementor\Controls_Manager::HIDDEN,
+		// 		'default' => $frame_objects_data,
+		// 	]
+		// );
 	}
 
 	public function render() {
 		$settings = $this->get_settings();
-
-		echo('wtf');
-		return;
 
 		if ( $settings['frame_object'] == '' ) :
 			_e( 'Veuillez avant sélectionner l\'objet cadres RSE', Oak::$text_domain );
 			return;
 		endif;
 		
-		$selected_frame_object_data = $settings['frame_objects_data'][ $settings['frame_object'] - 1 ];
-		$selected_frame_object_identifier = $selected_frame_object_data['object_identifier'];
+		// $frame_objects_data = $settings['frame_objects_data'];
+		$frame_objects_data = get_option('oak_scr_side_frame_objects_data');
+
+		$selected_frame_object_data = $frame_objects_data[ $settings['frame_object'] - 1 ];
+		$selected_frame_object_identifier = $selected_frame_object_data->object_identifier;
 
 		$field_index = $settings[ $selected_frame_object_identifier ];
 		if ( $field_index == '' || $field_index == 0  ) :
@@ -102,11 +103,11 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 
 		if ( $field_index != 1 ) :
 			$actual_field_index = $field_index - 2;
-			$selected_field_data = $selected_frame_object_data['model_fields'][ $actual_field_index ];
-			$field_property_name = 'object_' . $actual_field_index . '_' . $selected_field_data['field_identifier'];
-			echo( $selected_frame_object_data[ $field_property_name ] );
+			$selected_field_data = $selected_frame_object_data->model_fields[ $actual_field_index ];
+			$field_property_name = 'object_' . $actual_field_index . '_' . $selected_field_data->field_identifier;
+			echo( $selected_frame_object_data->$field_property_name );
 		elseif( $field_index == 1 ) :
-			echo( $selected_frame_object_data['object_designation'] );
+			echo( $selected_frame_object_data->object_designation );
 		else :
 			_e( 'Veuillez avant sélectionner la propriété de l\'objet cadres RSE', Oak::$text_domain );
 		endif;
