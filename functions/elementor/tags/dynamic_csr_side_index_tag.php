@@ -49,41 +49,42 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
             
 			$frame_objects_designations[] = $actual_frame_object->object_designation;
 			
-			$this->add_control(
-				$actual_frame_object->object_identifier,
-				[
-					'label'   => $frame_object->object_designation,
-						'type' => \Elementor\Controls_Manager::SELECT,
-						'options' => $field_names,
-				]
-			);
+			// $this->add_control(
+			// 	$actual_frame_object->object_identifier,
+			// 	[
+			// 		'label'   => $frame_object->object_designation,
+			// 			'type' => \Elementor\Controls_Manager::SELECT,
+			// 			'options' => $field_names,
+			// 	]
+			// );
 
 			$frame_objects_data[] = $actual_frame_object;
 		endforeach;
 		
-		$this->add_control(
-			'frame_object',
-			[
-				'label'   => __( 'Choisir l\'objet cadres RSE', Oak::$text_domain ),
-			        'type' => \Elementor\Controls_Manager::SELECT,
-			        'options' => $frame_objects_designations,
-			]
-        );
+		// $this->add_control(
+		// 	'frame_object',
+		// 	[
+		// 		'label'   => __( 'Choisir l\'objet cadres RSE', Oak::$text_domain ),
+		// 	        'type' => \Elementor\Controls_Manager::SELECT,
+		// 	        'options' => $frame_objects_designations,
+		// 	]
+    //     );
 
-  	$this->add_control (
-			'frame_objects_data',
-			[
-				'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
-				'type' => \Elementor\Controls_Manager::HIDDEN,
-				'default' => $frame_objects_data,
-			]
-		);
+  	// $this->add_control (
+		// 	'frame_objects_data',
+		// 	[
+		// 		'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
+		// 		'type' => \Elementor\Controls_Manager::HIDDEN,
+		// 		'default' => $frame_objects_data,
+		// 	]
+		// );
 	}
 
 	public function render() {
 		$settings = $this->get_settings();
 
-		Oak::var_dump( $settings );
+		echo('wtf');
+		return;
 
 		if ( $settings['frame_object'] == '' ) :
 			_e( 'Veuillez avant sélectionner l\'objet cadres RSE', Oak::$text_domain );
