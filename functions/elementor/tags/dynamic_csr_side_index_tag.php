@@ -83,6 +83,8 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 	public function render() {
 		$settings = $this->get_settings();
 
+		Oak::var_dump( $settings );
+
 		if ( $settings['frame_object'] == '' ) :
 			_e( 'Veuillez avant sélectionner l\'objet cadres RSE', Oak::$text_domain );
 			return;
@@ -90,7 +92,7 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 		
 		$selected_frame_object_data = $settings['frame_objects_data'][ $settings['frame_object'] - 1 ];
 		$selected_frame_object_identifier = $selected_frame_object_data['object_identifier'];
-		
+
 		$field_index = $settings[ $selected_frame_object_identifier ];
 		if ( $field_index == '' || $field_index == 0  ) :
 			_e( 'Veuillez avant sélectionner la propriété de l\'objet cadres RSE', Oak::$text_domain );
