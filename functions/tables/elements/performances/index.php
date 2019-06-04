@@ -44,6 +44,20 @@ class Performances {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/performances/functions/data-collector.php';
     }
+
+    public static function get_performance_of_corresponding_language( $performance ) {
+        $found_corresponding_language_performance = false; 
+
+        $counter = count( Oak::$performances ) - 1;
+        do {
+            if ( Oak::$performances[ $counter ]->performance_content_language == Oak::$site_language && Oak::$performances[ $counter ]->performance_identifier == $performance->performance_identifier ) :
+                return Oak::$performances[ $counter ];
+            endif;
+            $counter--;
+        } while ( $counter >= 0 && !$found_corresponding_language_performance );
+
+        return $performance;
+    }
 }
 
 $performances = new Performances();

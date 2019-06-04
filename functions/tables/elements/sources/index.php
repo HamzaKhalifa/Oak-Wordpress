@@ -44,6 +44,20 @@ class Sources {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/sources/functions/data-collector.php';
     }
+
+    public static function get_source_of_corresponding_language( $source ) {
+        $found_corresponding_language_source = false; 
+
+        $counter = count( Oak::$sources ) - 1;
+        do {
+            if ( Oak::$sources[ $counter ]->source_content_language == Oak::$site_language && Oak::$sources[ $counter ]->source_identifier == $source->source_identifier ) :
+                return Oak::$sources[ $counter ];
+            endif;
+            $counter--;
+        } while ( $counter >= 0 && !$found_corresponding_language_source );
+
+        return $source;
+    }
 }
 
 $sources = new Sources();

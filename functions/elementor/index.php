@@ -209,6 +209,7 @@ class Oak_Elementor {
                 if ( Oak::$sources_without_redundancy[ $incrementer ]->source_identifier == $selected_identifier) :
                     // For the designation: 
                     $the_source = Oak::$sources_without_redundancy[ $incrementer ];
+                    $the_source = Sources::get_source_of_corresponding_language( $the_source );
                     update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_number . ': Designation', $the_source->source_designation );
                     foreach( Sources::$properties as $key => $source_property ) :
                         $property_name = $source_property['property_name'];
@@ -278,6 +279,7 @@ class Oak_Elementor {
                 if ( Oak::$goodpractices_without_redundancy[ $incrementer ]->goodpractice_identifier == $goodpractice_identifier) :
                     // For the designation: 
                     $the_goodpractice = Oak::$goodpractices_without_redundancy[ $incrementer ];
+                    $the_goodpractice = Good_Practices::get_goodpractice_of_corresponding_language( $the_goodpractice );
                     update_post_meta( get_the_ID(), 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': Designation', $the_goodpractice->goodpractice_designation );
                     foreach( Good_Practices::$properties as $key => $goodpractice_property ) :
                         $property_name = $goodpractice_property['property_name'];
@@ -315,6 +317,7 @@ class Oak_Elementor {
 
             foreach( Oak::$performances_without_redundancy as $performance_key => $performance ) :
                 if ( $performance->performance_quantis == $quanti_identifier ) :
+                    $performance = Performances::get_performance_of_corresponding_language( $performance );
                     $performance_text = __( 'Donnée de performance', Oak::$text_domain );
                     $performance->performance_data = [];
 

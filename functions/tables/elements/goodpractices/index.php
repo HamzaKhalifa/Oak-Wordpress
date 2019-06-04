@@ -44,6 +44,20 @@ class Good_Practices {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/goodpractices/functions/data-collector.php';
     }
+
+    public static function get_goodpractice_of_corresponding_language( $goodpractice ) {
+        $found_corresponding_language_goodpractice = false; 
+
+        $counter = count( Oak::$goodpractices ) - 1;
+        do {
+            if ( Oak::$goodpractices[ $counter ]->goodpractice_content_language == Oak::$site_language && Oak::$goodpractices[ $counter ]->goodpractice_identifier == $goodpractice->goodpractice_identifier ) :
+                return Oak::$goodpractices[ $counter ];
+            endif;
+            $counter--;
+        } while ( $counter >= 0 && !$found_corresponding_language_goodpractice );
+
+        return $goodpractice;
+    }
 }
 
 $goodpractices = new Good_Practices();
