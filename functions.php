@@ -1460,7 +1460,7 @@ class Oak {
     }
 
     public static function oak_get_child_elements( $table, $child_elements ) {
-        if ( $table == 'object' ) :
+        if ( $table == 'object' || $child_elements['table'] == 'object' ) :
             return null;
         endif;
 

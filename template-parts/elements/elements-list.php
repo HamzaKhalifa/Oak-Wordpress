@@ -220,7 +220,7 @@
                         </div>
                     </div>
                     <div class="oak_list_row_child_elements_container oak_hidden">
-                        <?php 
+                        <?php
                         $child_elements = Oak::oak_get_child_elements( $table, null );
                         if ( $child_elements != null ) :
                             Oak::oak_handle_child_elements_display( $child_elements, $element->$identifier_property, $table );
