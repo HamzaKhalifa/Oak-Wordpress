@@ -60,7 +60,7 @@ function cancelActionButton() {
             manageMenuForNothingSelected();
             var checkers = document.querySelectorAll('.oak_list_titles_container__checkbox');
             for (var i = 0; i < checkers.length; i++) {
-                checkers[i].parentNode.parentNode.classList.remove('oak_list_row__selected');
+                checkers[i].parentNode.parentNode.parentNode.classList.remove('oak_list_row__selected');
                 checkers[i].checked = false;
             }
         } else {
@@ -108,19 +108,19 @@ function search() {
     var searchedDesignation = document.querySelector('.oak_element_header_right__search_input').value;
     var allDesignationsSpans = document.querySelectorAll('.oak_list_titles_container__the_title');
     for (var i = 0; i < allDesignationsSpans.length; i++) {
-        if (allDesignationsSpans[i].parentNode.parentNode.getAttribute('filtered') != 'true') {
+        if (allDesignationsSpans[i].parentNode.parentNode.parentNode.getAttribute('filtered') != 'true') {
             if (searchedDesignation == '') {
-                allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
-                allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_hidden');
+                allDesignationsSpans[i].parentNode.parentNode.parentNode.classList.remove('oak_list_highlighted');
+                allDesignationsSpans[i].parentNode.parentNode.parentNode.classList.remove('oak_hidden');
             } else {
                 if (allDesignationsSpans[i].innerHTML.indexOf(searchedDesignation) != -1) {
                     // if (allDesignationsSpans[i].innerHTML == searchedDesignation) {
-                    allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_list_highlighted');
-                    allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_hidden');
-                    allDesignationsSpans[i].parentNode.parentNode.scrollIntoView();
+                    allDesignationsSpans[i].parentNode.parentNode.parentNode.classList.add('oak_list_highlighted');
+                    allDesignationsSpans[i].parentNode.parentNode.parentNode.classList.remove('oak_hidden');
+                    allDesignationsSpans[i].parentNode.parentNode.parentNode.scrollIntoView();
                 } else {
-                    allDesignationsSpans[i].parentNode.parentNode.classList.remove('oak_list_highlighted');
-                    allDesignationsSpans[i].parentNode.parentNode.classList.add('oak_hidden');
+                    allDesignationsSpans[i].parentNode.parentNode.parentNode.classList.remove('oak_list_highlighted');
+                    allDesignationsSpans[i].parentNode.parentNode.parentNode.classList.add('oak_hidden');
                 }
             }
         }
@@ -164,7 +164,7 @@ function copy() {
         var selectedIdentifiers = [];
         for (var i = 1; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
-                selectedIdentifiers.push(checkboxes[i].parentNode.parentNode.getAttribute('identifier'));
+                selectedIdentifiers.push(checkboxes[i].parentNode.parentNode.parentNode.getAttribute('identifier'));
             }
         }
         var copies = [];
@@ -307,7 +307,7 @@ function checkListeners() {
         checkers[i].setAttribute('index', i);
         checkers[i].addEventListener('change', function() {
             if (this.checked) {
-                this.parentNode.parentNode.classList.add('oak_list_row__selected');
+                this.parentNode.parentNode.parentNode.classList.add('oak_list_row__selected');
                 var listHeader = document.querySelector('.oak_element_header');
                 listHeader.classList.add('oak_element_header_at_least_one_selected');
                 document.querySelector('.oak_menu_icon__cancel_icon').classList.add('fa-times');
@@ -315,7 +315,7 @@ function checkListeners() {
                 var changeToolBar = false;
                 if (this.getAttribute('index') == 0) {
                     for (var j = 1; j < checkers.length; j++) {
-                        if (!classExists(checkers[j].parentNode.parentNode, 'oak_hidden'))
+                        if (!classExists(checkers[j].parentNode.parentNode.parentNode, 'oak_hidden'))
                             changeToolBar = true;
                     }
                 }
@@ -328,7 +328,7 @@ function checkListeners() {
                 }
             }
             else {
-                this.parentNode.parentNode.classList.remove('oak_list_row__selected');
+                this.parentNode.parentNode.parentNode.classList.remove('oak_list_row__selected');
                 // Check if there is still at least one selected
                 var thereIs = false;
                 for (var j = 0; j < checkers.length; j++) {
@@ -343,9 +343,9 @@ function checkListeners() {
             if (this.getAttribute('index') == 0) {
                 for (var j = 0; j < checkers.length; j++) {
                     if (this.checked) 
-                        checkers[j].parentNode.parentNode.classList.add('oak_list_row__selected');
+                        checkers[j].parentNode.parentNode.parentNode.classList.add('oak_list_row__selected');
                     else 
-                        checkers[j].parentNode.parentNode.classList.remove('oak_list_row__selected');
+                        checkers[j].parentNode.parentNode.parentNode.classList.remove('oak_list_row__selected');
                 }
             }
     
@@ -355,9 +355,9 @@ function checkListeners() {
             for (var j = 0; j < checkers.length; j++) {
                 if (this.getAttribute('index') == 0) { 
                     if (this.checked) 
-                        checkers[j].parentNode.parentNode.classList.add('oak_list_row__selected');
+                        checkers[j].parentNode.parentNode.parentNode.classList.add('oak_list_row__selected');
                     else 
-                        checkers[j].parentNode.parentNode.classList.remove('oak_list_row__selected');
+                        checkers[j].parentNode.parentNode.parentNode.classList.remove('oak_list_row__selected');
                 }
     
                 if (checkers[j].checked && j != 0) 
@@ -376,7 +376,7 @@ function manageMenuForNothingSelected() {
     var checkers = document.querySelectorAll('.oak_list_titles_container__checkbox');
     document.querySelector('.oak_element_header').classList.remove('oak_element_header_at_least_one_selected');
     checkers[0].checked = false;
-    checkers[0].parentNode.parentNode.classList.remove('oak_list_row__selected');
+    checkers[0].parentNode.parentNode.parentNode.classList.remove('oak_list_row__selected');
     document.querySelector('.oak_element_header_right_upload_button').classList.remove('oak_hidden');
     document.querySelector('.fa-copy').classList.add('oak_hidden');
     document.querySelector('.fa-trash-alt').classList.add('oak_hidden');
@@ -392,23 +392,52 @@ function edit() {
     editButton.addEventListener('click', function() {
         var checkboxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
         for (var i = 0; i < checkboxes.length; i++) {
-            var elementsTypeToPutInUrl = DATA.elementsType;
-            if (i != 0 && checkboxes[i].checked && !classExists(checkboxes[i].parentNode.parentNode, 'oak_hidden')) {
-                var identifier = checkboxes[i].parentNode.parentNode.getAttribute('identifier');
+            // var elementsTypeToPutInUrl = DATA.elementsType;
+            if (i != 0 && checkboxes[i].checked && !classExists(checkboxes[i].parentNode.parentNode.parentNode, 'oak_hidden')) {
+                var identifier = checkboxes[i].parentNode.parentNode.parentNode.getAttribute('identifier');
+                var theTable = checkboxes[i].parentNode.parentNode.parentNode.getAttribute('table');
+                var elementsTypeToPutInUrl = checkboxes[i].parentNode.parentNode.parentNode.getAttribute('elements-name');
+                var modelIdentifier = checkboxes[i].parentNode.parentNode.parentNode.getAttribute('model-identifier');
+                var taxonomyIdentifier = checkboxes[i].parentNode.parentNode.parentNode.getAttribute('taxonomy-identifier');
+
                 var additionalData = ''
-                if (DATA.elementsType == 'objects') 
-                    additionalData = '&model_identifier=' + DATA.table_in_plural;
-                else if (DATA.elementsType == 'term_objects') {
-                    additionalData = '&model_identifier=' + checkboxes[i].parentNode.parentNode.getAttribute('model-identifier');
+                if (elementsTypeToPutInUrl == 'objects') 
+                    additionalData = '&model_identifier=' + modelIdentifier;
+                else if (elementsTypeToPutInUrl == 'term_objects') {
+                    additionalData = '&model_identifier=' + checkboxes[i].parentNode.parentNode.parentNode.getAttribute('model-identifier');
                     elementsTypeToPutInUrl = 'objects';
                 }
-                else if ( DATA.elementsType == 'terms' )
-                    additionalData = '&taxonomy_identifier=' + DATA.table_in_plural;
+                else if ( elementsTypeToPutInUrl == 'terms' )
+                    additionalData = '&taxonomy_identifier=' + taxonomyIdentifier;
+                
+                // console.log(theTable);
+                // console.log(elementsTypeToPutInUrl);
+                // console.log(modelIndentifier);
+                // console.log(taxonomyIdentifier);
+                // return;
 
-                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + table + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula' + additionalData);
+                window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + theTable + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula' + additionalData);
             }
         }
     });
+}
+
+handleShowHideChildrenButtons();
+function handleShowHideChildrenButtons() {
+    var showHideButtons = document.querySelectorAll('.oak_list_row__show_hide_children_button');
+    for (var i = 0; i < showHideButtons.length; i++) {
+        showHideButtons[i].addEventListener('click', function() {
+            var childrenContainer = this.parentNode.parentNode.parentNode.querySelector('.oak_list_row_child_elements_container');
+            console.log(childrenContainer);
+            if (classExists(childrenContainer, 'oak_hidden')) {
+                childrenContainer.classList.remove('oak_hidden');
+                this.classList.add('fa-sort-up');
+            } else {
+                childrenContainer.classList.add('oak_hidden');
+                this.classList.remove('fa-sort-up');
+            }
+        })
+    }
 }
 
 function classExists(element, className) {
@@ -482,7 +511,7 @@ function exportButton() {
         var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
         for (var i = 1; i < checkBoxes.length; i++) {
             if (checkBoxes[i].checked) {
-                identifiersToExport.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
+                identifiersToExport.push(checkBoxes[i].parentNode.parentNode.parentNode.getAttribute('identifier'));
             }
         }
         var rows = [];
@@ -626,16 +655,16 @@ function manageFilters() {
 //             hide = true;
 //         }
 
-//         if ( trashSelect.value == 'trashed' && functionsContainers[i].parentNode.parentNode.getAttribute('trashed') != 'true' || trashSelect.value != 'trashed' && functionsContainers[i].parentNode.parentNode.getAttribute('trashed') == 'true' ) {
+//         if ( trashSelect.value == 'trashed' && functionsContainers[i].parentNode.parentNode.parentNode.getAttribute('trashed') != 'true' || trashSelect.value != 'trashed' && functionsContainers[i].parentNode.parentNode.parentNode.getAttribute('trashed') == 'true' ) {
 //             hide = true;
 //         }
 
 //         if (hide) {
-//             naturesContainers[i].parentNode.parentNode.classList.add('oak_hidden');
-//             naturesContainers[i].parentNode.parentNode.setAttribute('filtered', true);
+//             naturesContainers[i].parentNode.parentNode.parentNode.classList.add('oak_hidden');
+//             naturesContainers[i].parentNode.parentNode.parentNode.setAttribute('filtered', true);
 //         } else {
-//             naturesContainers[i].parentNode.parentNode.classList.remove('oak_hidden');
-//             naturesContainers[i].parentNode.parentNode.setAttribute('filtered', false);
+//             naturesContainers[i].parentNode.parentNode.parentNode.classList.remove('oak_hidden');
+//             naturesContainers[i].parentNode.parentNode.parentNode.setAttribute('filtered', false);
 //         }
 //     }
 // }
@@ -725,8 +754,8 @@ function handleModalButtons() {
             var identifiersToDelete = [];
             var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
             for (var i = 1; i < checkBoxes.length; i++) {
-                if (checkBoxes[i].checked && !classExists(checkBoxes[i].parentNode.parentNode, 'oak_hidden')) {
-                    identifiersToDelete.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
+                if (checkBoxes[i].checked && !classExists(checkBoxes[i].parentNode.parentNode.parentNode, 'oak_hidden')) {
+                    identifiersToDelete.push(checkBoxes[i].parentNode.parentNode.parentNode.getAttribute('identifier'));
                 }
             }
             setLoading();
@@ -765,7 +794,7 @@ function handleModalButtons() {
             var checkBoxes = document.querySelectorAll('.oak_list_titles_container__checkbox');
             for (var i = 1; i < checkBoxes.length; i++) {
                 if (checkBoxes[i].checked) {
-                    identifiersToRestore.push(checkBoxes[i].parentNode.parentNode.getAttribute('identifier'));
+                    identifiersToRestore.push(checkBoxes[i].parentNode.parentNode.parentNode.getAttribute('identifier'));
                 }
             }
             setLoading();

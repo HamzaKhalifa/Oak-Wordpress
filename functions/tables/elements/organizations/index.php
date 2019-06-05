@@ -44,6 +44,75 @@ class Organizations {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/organizations/functions/data-collector.php';
     }
+
+    public static function get_child_elements() {
+        return ( 
+            array(
+                'for_table' => 'organization',
+                'table' => 'publication', 
+                'elements_name' => 'publications',
+                'get_child_elements_function' => function( $organization_identifier ) {
+                    $elements_to_return = array();
+
+                    foreach( Oak::$publications_without_redundancy as $publication ) :
+                        if ( $publication->publication_organization == $organization_identifier ) :
+                            $elements_to_return[] = $publication;
+                        endif;
+                    endforeach;
+
+                    return $elements_to_return;
+                },
+                'child_elements' => array (
+                    'for_table' => 'publication',
+                    'table' => 'taxonomy',
+                    'elements_name' => 'taxonomies',
+                    'get_child_elements_function' => function( $publication_identifier ) {
+                        $elements_to_return = array();
+                        foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
+                            if( $taxonomy->taxonomy_publication == $publication_identifier ) :
+                                $elements_to_return[] = $taxonomy;
+                            endif;
+                        endforeach;
+    
+                        return $elements_to_return;
+                    },
+                    'child_elements' => array(
+                        'for_table' => 'taxonomy',
+                        'table' => 'term',
+                        'elements_name' => 'terms',
+                        'get_child_elements_function' => function( $taxonomy_identifier ) {
+                            $elements_to_return = array();
+                            foreach( Oak::$all_terms_without_redundancy as $term ) :
+                                if ( $term->term_taxonomy_identifier == $taxonomy_identifier ) :
+                                    $elements_to_return[] = $term;
+                                endif;
+                            endforeach;
+    
+                            return $elements_to_return;
+                        },
+                        'child_elements' => array(
+                            'for_table' => 'term',
+                            'table' => 'object',
+                            'elements_name' => 'objects',
+                            'get_child_elements_function' => function ( $term_identifier ) {
+                                $elements_to_return = array();
+                                foreach( Oak::$all_objects_without_redundancy as $object ) :
+                                    foreach( Oak::$terms_and_objects as $term_and_object ) :
+                                        if ( $term_and_object->object_identifier == $object->object_identifier && $term_and_object->term_identifier == $term_identifier ) :
+                                            $elements_to_return[] = $object;
+                                        endif;
+                                    endforeach;
+                                endforeach;
+    
+                                return $elements_to_return;
+                            },
+                            'child_elements' => array()
+                        )
+                    )
+                )
+            )
+        );
+    }
 }
 
 $organizations = new Organizations();

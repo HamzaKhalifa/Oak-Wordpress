@@ -1615,6 +1615,16 @@ body .oak_select_container_with_filters__add_button {
   padding-right: 40px;
   justify-content: space-between;
   border-bottom: 1px solid #e2e4e7;
+  width: 100%;
+}
+
+.oak_single_list_row {
+  flex-direction: column;
+  display: flex;
+}
+
+.oak_list_row_child_elements_container {
+  margin-left: 35px;
 }
 
 .oak_list_row_container__title {

@@ -184,26 +184,48 @@
                     endif;
                 endif;
             ?>
-                <div <?php if( $table == 'object' ) : echo('model-identifier="' . $element->object_model_identifier . '"'); endif; ?> identifier="<?php echo( $element->$identifier_property ); ?>" trashed="<?php echo( $element->$trashed_property ); ?>" class="oak_list_row">
-                    <div class="oak_list_row__container">
-                        <input class="oak_list_titles_container__checkbox" type="checkbox">
-                        <span class="oak_list_titles_container__title oak_list_titles_container__the_title"><?php echo( esc_attr( $designation_to_show ) ); ?></span>
-                    </div>
+                <div 
+                    table="<?php echo( $table ); ?>" elements-name="<?php if( isset( $_GET['elements'] ) ) : echo( $_GET['elements'] ); else: /* this is for terms objects */ echo('objects'); endif; ?>"
+                    <?php if( $table == 'object' ) : ?>
+                    model-identifier="<?php echo( $element->object_model_identifier ); ?>"
+                    <?php endif; ?> 
+                    <?php if( $table == 'term' ) : ?>
+                    taxonomy-identifier="<?php echo( $_GET['taxonomy_identifier'] ); ?>"
+                    <?php endif; ?> 
+                    identifier="<?php echo( $element->$identifier_property ); ?>" 
+                    trashed="<?php echo( $element->$trashed_property ); ?>" 
+                    class="oak_single_list_row"
+                >
+                    <div class="oak_list_row">
+                        <div class="oak_list_row__container">
+                            <i class="fas fa-sort-down oak_list_row__show_hide_children_button"></i>
+                            <input class="oak_list_titles_container__checkbox" type="checkbox">
+                            <span class="oak_list_titles_container__title oak_list_titles_container__the_title"><?php echo( esc_attr( $designation_to_show ) ); ?></span>
+                        </div>
 
-                    <div class="oak_list_row__container">
-                        <span class="oak_list_titles_container__title oak_list_nature"><?php echo( esc_attr( $element->$the_first_property ) ); ?></span>
-                    </div>
+                        <div class="oak_list_row__container">
+                            <span class="oak_list_titles_container__title oak_list_nature"><?php echo( esc_attr( $element->$the_first_property ) ); ?></span>
+                        </div>
 
-                    <div class="oak_list_row__container">
-                        <span class="oak_list_titles_container__title oak_list_function"><?php echo( esc_attr( $element->$the_second_property ) ); ?></span>
-                    </div>
+                        <div class="oak_list_row__container">
+                            <span class="oak_list_titles_container__title oak_list_function"><?php echo( esc_attr( $element->$the_second_property ) ); ?></span>
+                        </div>
 
-                    <div class="oak_list_row__container">
-                        <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$the_third_property ) ); ?></span>
+                        <div class="oak_list_row__container">
+                            <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$the_third_property ) ); ?></span>
+                        </div>
+                        
+                        <div class="oak_list_row__container">
+                            <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$modification_time_property ) ); ?></span>
+                        </div>
                     </div>
-                    
-                    <div class="oak_list_row__container">
-                        <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$modification_time_property ) ); ?></span>
+                    <div class="oak_list_row_child_elements_container oak_hidden">
+                        <?php 
+                        $child_elements = Oak::oak_get_child_elements( $table, null );
+                        if ( $child_elements != null ) :
+                            Oak::oak_handle_child_elements_display( $child_elements, $element->$identifier_property, $table );
+                        endif;
+                        ?>
                     </div>
                 </div>
             <?php

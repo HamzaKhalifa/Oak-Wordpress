@@ -1458,6 +1458,62 @@ class Oak {
     function oak_remove_admin_login_header() {
         remove_action('wp_head', '_admin_bar_bump_cb');
     }
+
+    public static function oak_get_child_elements( $table, $child_elements ) {
+        if ( $table == 'object' ) :
+            return null;
+        endif;
+
+        if ( $child_elements == null ) :
+            $child_elements = Organizations::get_child_elements();
+        endif;
+
+        if ( $child_elements['for_table'] == $table ) :
+            return $child_elements;
+        else :
+            return ( Oak::oak_get_child_elements( $table, $child_elements['child_elements'] ) );
+        endif;
+    }
+
+    public static function oak_handle_child_elements_display( $child_elements, $element_identifier, $table ) {
+        if ( $child_elements == array() ) :
+            return;
+        endif;
+
+        $the_child_elements = $child_elements['get_child_elements_function']( $element_identifier );
+        foreach( $the_child_elements as $single_child_element ) : 
+            $child_element_designation_property = $child_elements['table'] . '_designation';
+            $child_element_identifier_property = $child_elements['table'] . '_identifier';
+            ?>
+            <div
+                table="<?php echo( $child_elements['table'] ); ?>" 
+                elements-name="<?php echo( $child_elements['elements_name'] ); ?>" 
+                identifier="<?php echo( $single_child_element->$child_element_identifier_property ); ?>" 
+                class="oak_single_list_row"
+                <?php if ( $child_elements['table'] == 'object' ) : ?>
+                model-identifier="<?php echo( $single_child_element->object_model_identifier ); ?>"
+                <?php endif; ?>
+                <?php if ( $child_elements['table'] == 'term' ) : ?>
+                taxonomy-identifier="<?php echo( $element_identifier ) ?>"
+                <?php endif; ?>
+            >
+                <div class="oak_list_row">
+                    <div class="oak_list_row__container">
+                        <i class="fas fa-sort-down oak_list_row__show_hide_children_button"></i>
+                        <input class="oak_list_titles_container__checkbox" type="checkbox">
+                        <span class="oak_list_titles_container__title"><?php echo( $single_child_element->$child_element_designation_property ); ?></span>
+                    </div>
+                </div>
+
+                <div class="oak_list_row_child_elements_container oak_hidden">
+                    <?php
+                    Oak::oak_handle_child_elements_display( $child_elements['child_elements'], $single_child_element->$child_element_identifier_property, $child_elements['table'] );
+                    ?>
+                </div>
+            </div>
+            <?php
+        endforeach;
+    }
 }
 
 $oak = new oak();
