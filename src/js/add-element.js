@@ -752,6 +752,7 @@ function addOtherElementButton() {
 }
 
 function addOtherElement(data) {
+    console.log(data);
     var otherElementsContainer = document.querySelector('.oak_other_elements_container');
     var newElement = document.createElement('div');
     newElement.className = 'oak_other_elements_single_elements_container__single_element oak_other_elements_single_elements_container__single_element_not_checked';
@@ -767,11 +768,8 @@ function addOtherElement(data) {
         elementsSelect.addEventListener('change', function() {
             var formIdentifier = this.value;
             for (var i = 0; i < DATA.otherElementProperties.associative_tab_instances.length; i++) {
-                // if (DATA.otherElementProperties.associative_tab_instances[i].form_identifier == formIdentifier 
-                    /*&& DATA.otherElementProperties.associative_tab_instances[i].model_revision_number == DATA.revisions[DATA.revisions.length - 1].model_revision_number ) { */
-                        addFieldsListToSelectedModelForm(formIdentifier, this.parentNode.parentNode.parentNode.querySelector('.oak_model_fields_renaming_container'), false);
-                        textFieldsAnimations();
-                // }
+                addFieldsListToSelectedModelForm(formIdentifier, this.parentNode.parentNode.parentNode.querySelector('.oak_model_fields_renaming_container'), false);
+                textFieldsAnimations();
             }
         });
     }
@@ -1058,15 +1056,37 @@ function otherElementsCopyButton() {
         var checkboxes = document.querySelectorAll('.oak_add_other_elements_list_single_element__chekcbox');
         for (var i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
-                var otherElementsContainer = document.querySelector('.oak_other_elements_container');
-                var newElement = document.createElement('div');
-                newElement.className = 'oak_other_elements_single_elements_container__single_element oak_other_elements_single_elements_container__single_element_not_checked';
-                newElement.innerHTML = singleElementContainer;
-                newElement.querySelector('.designation_input').value = checkboxes[i].parentNode.parentNode.querySelector('.designation_input').value;
-                newElement.querySelector('.selector_input').checked = checkboxes[i].parentNode.parentNode.querySelector('.selector_input').checked;
-                newElement.querySelector('.oak_other_elements_select').value = checkboxes[i].parentNode.parentNode.querySelector('.oak_other_elements_select').value;
+                var entireElement = checkboxes[i].parentNode.parentNode.innerHTML;
+                var selectValue = checkboxes[i].parentNode.querySelector('.oak_other_elements_select').value;
+                var designationInputValue = checkboxes[i].parentNode.querySelector('.designation_input').value;
+                console.log(designationInputValue);
 
-                otherElementsContainer.append(newElement);
+                var theCopy = document.createElement('div');
+                theCopy.className = 'oak_other_elements_single_elements_container__single_element';
+                theCopy.innerHTML = entireElement;
+                document.querySelector('.oak_other_elements_container').append(theCopy);
+
+                // Assignining values: 
+                theCopy.querySelector('.oak_add_other_elements_list_single_element__chekcbox').checked = true;
+                theCopy.querySelector('.oak_other_elements_select').value = selectValue;
+                theCopy.querySelector('.designation_input').value = designationInputValue;
+                if (table == 'model') {
+                    var newFieldNamesInputs = checkboxes[i].parentNode.parentNode.querySelectorAll('.oak_model_field_renaming_input');
+                    var copyFieldNamesInputs = theCopy.querySelectorAll('.oak_model_field_renaming_input');
+                    for(var j = 0; j < newFieldNamesInputs.length; j++) {
+                        copyFieldNamesInputs[j].value = newFieldNamesInputs[j].value;
+                    }
+
+                    // For the other elements change listener: 
+                    var elementsSelect = theCopy.querySelector('.oak_other_elements_select');
+                    elementsSelect.addEventListener('change', function() {
+                        var formIdentifier = this.value;
+                        for (var i = 0; i < DATA.otherElementProperties.associative_tab_instances.length; i++) {
+                            addFieldsListToSelectedModelForm(formIdentifier, this.parentNode.parentNode.parentNode.querySelector('.oak_model_fields_renaming_container'), false);
+                            textFieldsAnimations();
+                        }
+                    });
+                }
 
                 handleOtherElementsCheckboxes();
                 textFieldsAnimations();
