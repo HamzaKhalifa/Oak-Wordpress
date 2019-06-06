@@ -997,8 +997,15 @@ $modification_time_property = $table . '_modification_time';
                                             $designation_property = $other_properties['table'] . '_designation';
 
                                             $designation = $element->$designation_property;
+                                            
+                                            $other_element_table = '';
+                                            if ( $table == 'model' ) :
+                                                $other_element_table = 'form';
+                                            elseif( $table == 'form' ) :
+                                                $other_element_table = 'field';
+                                            endif;
 
-                                            $language_property = $table . '_content_language'; 
+                                            $language_property = $other_element_table . '_content_language'; 
                                             if ( !$element->$language_property == Oak::$site_language ) :
                                                 // Lets get the last designation for the current site language of the considered element (If we don't find it, we apply the last modification)
                                                 foreach( $other_properties['elements_with_redundancy'] as $other_occurence ) :

@@ -205,6 +205,7 @@ var steps = [];
                 break;
                 case 'publications':
                     var publicationsIdentifiers = [];
+                    selectedData.publications = [];
                     checkBoxes = document.querySelector('.import_container').querySelectorAll('.import_container__element_checkbox');
                     for (var i = 0; i < checkBoxes.length; i++) {
                         if (checkBoxes[i].checked) {
@@ -234,6 +235,7 @@ var steps = [];
                     );
                 break;
                 case 'quanti':
+                    selectedData.quantis = [];
                     checkBoxes = document.querySelector('.import_container').querySelectorAll('.import_container__element_checkbox');
                     var quantisIdentifiers = [];
                     for (var i = 0; i < checkBoxes.length; i++) {
@@ -267,6 +269,8 @@ var steps = [];
                     );
                 break;
                 case 'performance':
+                    selectedData.performances = [];
+                    console.log('performances', selectedData.performances);
                     checkBoxes = document.querySelector('.import_container').querySelectorAll('.import_container__element_checkbox');
                     for (var i = 0; i < checkBoxes.length; i++) {
                         if (checkBoxes[i].checked) {
@@ -309,9 +313,12 @@ function handleGraphConfigurationScreen() {
     document.querySelector('.oak_graphs_configuration').classList.remove('oak_hidden');
     var importContainer = document.querySelector('.import_container');
     importContainer.innerHTML = '';
-
+    
+    var chartsContainer = document.querySelector('.oak_graphs_configuration__chart_container').innerHTML= '';
+    
+    var labelsContainer = document.querySelector('.oak_graphs_configuration_configuration_element_container__labels');
+    labelsContainer.innerHTML = '';
     for (var i = 0; i < selectedData.quantis.length; i++) {
-        var labelsContainer = document.querySelector('.oak_graphs_configuration_configuration_element_container__labels');
         
         var singleLabel = document.createElement('span');
         singleLabel.className = 'oak_graphs_configuration_label oak_graphs_configuration_element_container__single_element';
@@ -326,8 +333,9 @@ function handleGraphConfigurationScreen() {
         labelsContainer.append(singleLabel);
     }
 
+    var performancesContainer = document.querySelector('.oak_graphs_configuration_configuration_element_container__performances');
+    performancesContainer.innerHTML = '';
     for (var i = 0; i < selectedData.performances.length; i++) {
-        var performancesContainer = document.querySelector('.oak_graphs_configuration_configuration_element_container__performances');
 
         var singlePerformance = document.createElement('div');
         singlePerformance.className = 'oak_graphs_configuration_configuration_element_container_performances__single_performance_container';
@@ -348,7 +356,9 @@ function handleGraphConfigurationScreen() {
         performanceTitleContainer.append(performanceTitle);
 
         singlePerformance.append(performanceTitleContainer);
-        var results = selectedData.performances[i].performance_results.split('|');
+        var results = [];
+        if (selectedData.performances[i].performance_results != null)
+            results = selectedData.performances[i].performance_results.split('|');
 
         var yearsData = [];
         for (var j = 0; j < results.length; j++) {

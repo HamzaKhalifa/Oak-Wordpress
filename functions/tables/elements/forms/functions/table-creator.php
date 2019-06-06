@@ -15,6 +15,7 @@ $forms_sql = "CREATE TABLE $forms_table_name (
     form_structure varchar(555),
     form_attributes varchar(100),
     form_separators varchar(100),
+    form_content_language varchar(100),
     form_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";

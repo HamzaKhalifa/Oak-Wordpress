@@ -28,7 +28,7 @@
 
         <div class="oak_graphs_actual_config">
             <div class="oak_graphs_configuration__configuration_element_container">
-                <h2><?php _e( 'Labels:', Oak::$text_domain ); ?></h2>
+                <h2><?php _e( 'Labels (Indicateurs de Pérformance:', Oak::$text_domain ); ?></h2>
                 <div class="oak_graphs_configuration_configuration_element_container__labels">
 
                 </div>

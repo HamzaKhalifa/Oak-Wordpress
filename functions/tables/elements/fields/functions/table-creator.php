@@ -19,6 +19,7 @@ $fields_sql = "CREATE TABLE $fields_table_name (
     field_description LONGTEXT,
     field_selector_options varchar(555),
     field_publication TEXT,
+    field_content_language TEXT,
     field_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
