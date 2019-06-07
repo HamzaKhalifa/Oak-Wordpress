@@ -416,7 +416,7 @@ class Oak {
     }
 
     function add_cors_http_header() {
-        // header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Origin: *');
         // header('Access-Control-Allow-Origin: http://localhost:8888/test/wp-admin/admin-ajax.php');
     }
     
