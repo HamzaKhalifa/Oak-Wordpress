@@ -437,6 +437,11 @@
 
         $other_menu_elements = array(
             array(
+                'title' => __( 'Reporting Safety', Oak::$text_domain ),
+                'url' => '?page=oak_reporting_safety',
+                'icon' => 'fas fa-th-large'
+            ),
+            array(
                 'title' => __( 'Utilisateurs', Oak::$text_domain ),
                 'url' => 'users.php',
                 'icon' => 'fas fa-th-large'

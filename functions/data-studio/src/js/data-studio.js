@@ -314,12 +314,14 @@ function handleGraphConfigurationScreen() {
     var importContainer = document.querySelector('.import_container');
     importContainer.innerHTML = '';
     
-    var chartsContainer = document.querySelector('.oak_graphs_configuration__chart_container').innerHTML= '';
-    
+    // Empty chart container
+    document.querySelector('.oak_graphs_configuration__chart_container').innerHTML= '';
+
+    // Empty label containers
     var labelsContainer = document.querySelector('.oak_graphs_configuration_configuration_element_container__labels');
     labelsContainer.innerHTML = '';
+
     for (var i = 0; i < selectedData.quantis.length; i++) {
-        
         var singleLabel = document.createElement('span');
         singleLabel.className = 'oak_graphs_configuration_label oak_graphs_configuration_element_container__single_element';
         singleLabel.innerHTML = selectedData.quantis[i].quanti_designation;
@@ -569,8 +571,6 @@ function handleConfigurationElementsListeners() {
             } else {
                 this.classList.add('oak_graphs_configuration_element_container_single_element__considered');
             }
-            console.log('labels', selectedData.labels);
-            console.log('Values', selectedData.values);
             generateChart({
                 graph: selectedData.graph.graph_identifier,
                 labels: selectedData.labels,
