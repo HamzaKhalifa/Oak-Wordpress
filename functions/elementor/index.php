@@ -151,12 +151,13 @@ class Oak_Elementor {
                     );
 
                     if ( $object_model_field->field_type == 'image' ) :
+                        $image_id = attachment_url_to_postid( $value );
                         foreach( $images as $image ) :
                             if ( $image['url'] == $value ) :
                                 $id = $image['id'];
                             endif;
                         endforeach;
-                        $post_images_to_show[] = array ( 'url' => $value, 'id' => $id, 'label' => 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ] . ', id: ' . $id );
+                        $post_images_to_show[] = array ( 'url' => $value, 'id' => $image_id, 'label' => 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ] );
                     endif;
 
                     $the_returned_fields [] = array (
