@@ -104,6 +104,9 @@ class Oak_Elementor {
                 endif;
             endforeach;
             
+            $post_images_to_show = array();
+            update_option( 'oak_post_images_to_show', array() );
+
             foreach( $our_objects as $index => $object ) :
                 $widget_options = array(
                     'name' => 'object_' . $index . '_designation',
@@ -133,6 +136,12 @@ class Oak_Elementor {
                         'value' => $value,
                         'field_type' => $object_model_field->field_type,
                     );
+
+                    if ( $object_model_field->field_type == 'image' ) :
+                        $image_id = attachment_url_to_postid( $value );
+                        $post_images_to_show[] = array ( 'url' => $value, 'id' => $image_id, 'label' => 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ] );
+                    endif;
+
                     $the_returned_fields [] = array(
                         'field_designation' => count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ],
                         'value' => $value,
@@ -146,8 +155,6 @@ class Oak_Elementor {
                 endforeach;
             endforeach;
 
-            $post_images_to_show = array();
-            update_option( 'oak_post_images_to_show', array() );
 
             $post_images_to_show = $this->add_goodpractices_post_meta( $post_images_to_show );
 

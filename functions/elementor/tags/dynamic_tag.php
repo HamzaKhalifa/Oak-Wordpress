@@ -42,28 +42,28 @@ Class Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
 			);
 		endforeach;
 
-		foreach( $fields as $key => $field ) :
-			if ( $field['field_type'] == 'image' ) :
-				$id = 1;
-				foreach( $images as $image ) :
-					if ( $image['url'] == $field['value'] ) :
-						$id = $image['id'];
-					endif;
-				endforeach;
+		// foreach( $fields as $key => $field ) :
+		// 	if ( $field['field_type'] == 'image' ) :
+		// 		$id = 1;
+		// 		foreach( $images as $image ) :
+		// 			if ( $image['url'] == $field['value'] ) :
+		// 				$id = $image['id'];
+		// 			endif;
+		// 		endforeach;
 
-				$this->add_control(
-					preg_replace( '/\s+/', '', $field['field_designation'] ),
-					[
-						'label' => $field['field_designation'],
-						'type' => \Elementor\Controls_Manager::MEDIA,
-						'default' => array(
-							'id' => $id,
-							'url' => $field['value']
-						)
-					]
-				);
-			endif;
-		endforeach;
+		// 		$this->add_control(
+		// 			preg_replace( '/\s+/', '', $field['field_designation'] ),
+		// 			[
+		// 				'label' => $field['field_designation'],
+		// 				'type' => \Elementor\Controls_Manager::MEDIA,
+		// 				'default' => array(
+		// 					'id' => $id,
+		// 					'url' => $field['value']
+		// 				)
+		// 			]
+		// 		);
+		// 	endif;
+		// endforeach;
 		
 	}
 	
