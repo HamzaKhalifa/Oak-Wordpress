@@ -139,10 +139,10 @@ class Oak_Elementor {
 
                     if ( $object_model_field->field_type == 'image' ) :
                         $image_id = attachment_url_to_postid( $value );
-                        $post_images_to_show[] = array ( 'url' => $value, 'id' => $image_id, 'label' => 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ] );
+                        $post_images_to_show[] = array ( 'url' => $value, 'id' => $image_id, 'label' => 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ] . ', id: ' . $image_id );
                     endif;
 
-                    $the_returned_fields [] = array(
+                    $the_returned_fields [] = array (
                         'field_designation' => count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ],
                         'value' => $value,
                         'field_type' => $object_model_field->field_type
