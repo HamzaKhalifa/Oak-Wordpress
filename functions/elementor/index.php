@@ -106,6 +106,19 @@ class Oak_Elementor {
             
             $post_images_to_show = array();
             update_option( 'oak_post_images_to_show', array() );
+            // For the images
+            $images = array();
+            $query_images_args = array (
+                'post_type'      => 'attachment',
+                'post_mime_type' => 'image',
+                'post_status'    => 'inherit',
+                'posts_per_page' => - 1,
+            );
+    
+            $query_images = new WP_Query( $query_images_args );
+            foreach ( $query_images->posts as $image ) {
+                $images[] = array ( 'url' => wp_get_attachment_url( $image->ID ), 'id' => $image->ID );
+            }
 
             foreach( $our_objects as $index => $object ) :
                 $widget_options = array(
@@ -138,8 +151,12 @@ class Oak_Elementor {
                     );
 
                     if ( $object_model_field->field_type == 'image' ) :
-                        $image_id = attachment_url_to_postid( $value );
-                        $post_images_to_show[] = array ( 'url' => $value, 'id' => $image_id, 'label' => 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ] . ', id: ' . $image_id );
+                        foreach( $images as $image ) :
+                            if ( $image['url'] == $value ) :
+                                $id = $image['id'];
+                            endif;
+                        endforeach;
+                        $post_images_to_show[] = array ( 'url' => $value, 'id' => $id, 'label' => 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ] . ', id: ' . $id );
                     endif;
 
                     $the_returned_fields [] = array (
@@ -166,19 +183,6 @@ class Oak_Elementor {
 
             update_option( 'oak_post_images_to_show', $post_images_to_show );
 
-            // For the images
-            $images = array();
-            $query_images_args = array (
-                'post_type'      => 'attachment',
-                'post_mime_type' => 'image',
-                'post_status'    => 'inherit',
-                'posts_per_page' => - 1,
-            );
-    
-            $query_images = new WP_Query( $query_images_args );
-            foreach ( $query_images->posts as $image ) {
-                $images[] = array ( 'url' => wp_get_attachment_url( $image->ID ), 'id' => $image->ID );
-            }
             // I pass the data to dynamic tags via the table options (Because there is an error of denied access if I happen to do this in the register controls function)
             update_option( 'oak_post_elementor_fields', $the_returned_fields );
             update_option( 'oak_all_images', $images );
