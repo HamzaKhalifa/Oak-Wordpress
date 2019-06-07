@@ -116,6 +116,7 @@ class Oak_Elementor {
             );
     
             $query_images = new WP_Query( $query_images_args );
+            Oak::var_dump( $query_images );
             foreach ( $query_images->posts as $image ) {
                 $images[] = array ( 'url' => wp_get_attachment_url( $image->ID ), 'id' => $image->ID );
             }
