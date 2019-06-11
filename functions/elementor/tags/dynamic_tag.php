@@ -53,10 +53,6 @@ Class Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
 		
 		$post_images_to_show = $this->get_settings()['post_images_data'];
 
-		Oak::var_dump( $post_images_to_show );
-
-		Oak::var_dump( $this->get_settings() );
-
 		foreach( $post_images_to_show as $post_image ) :
 			$single_data = $this->get_settings( preg_replace( '/\s+/', '', $post_image['label'] ) );
 			if ( $single_data['url'] != '' ) :
