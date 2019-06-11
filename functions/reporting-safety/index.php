@@ -1,12 +1,33 @@
 <?php
 class Reporting_Safety {
     function __construct() {
-        add_action( 'admin_enqueue_scripts', array( $this, 'reporting_safety' ) );
+        if ( isset( $_GET['page'] ) ) :
+            if (  $_GET['page'] == 'oak_reporting_safety' ) :
+                add_action( 'admin_enqueue_scripts', array( $this, 'reporting_safety' ) );
+            endif;
+        endif;
 
         add_action( 'admin_menu', array ( $this, 'handle_admin_menu' ) );
 
         add_action( 'wp_ajax_oak_get_everything', array( $this, 'oak_get_everything') );
         add_action( 'wp_ajax_nopriv_oak_get_everything', array( $this, 'oak_get_everything') );
+
+        return; 
+        global $wpdb;
+        $result = $wpdb->get_results('SHOW TABLES');
+
+        foreach( $result as $key => $value_array ) :
+            foreach( $value_array as $table_name_key => $table_name ) :
+                // $columns = $wpdb->get_results( "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
+                
+                // $result[ $key ] = array(
+                //     'table_name' => $table_name,
+                //     'columns' => $columns
+                // );
+            endforeach;
+            
+        endforeach;
+        Oak::var_dump( $result );
 
         // $this->create_zip();
     }
@@ -67,10 +88,12 @@ class Reporting_Safety {
 
     public function oak_get_everything() {
         wp_send_json_success();
+        $result = $wpdb->get_results('SELECT * FROM SYSOBJECTS WHERE xtype="U" GO');
         wp_send_json_success( array(
-            'hh' => 'dkf'
+            'result' => $result
         ) );
     }
 }
+
 
 $reporting_safety = new Reporting_Safety();

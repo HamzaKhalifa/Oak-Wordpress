@@ -53,6 +53,14 @@ class Oak_Elementor {
                     'icon' => 'fa fa-plug',
                 ]
             );
+
+            $elements_manager->add_category(
+                'oak_images',
+                [
+                    'title' => __( 'OAK Images', Oak::$text_domain ),
+                    'icon' => 'fa fa-plug',
+                ]
+            );
         } );
     }
 
@@ -131,6 +139,7 @@ class Oak_Elementor {
                 );
 
                 $object_number = $index + 1;
+
                 update_post_meta( get_the_ID(), 'Oak: Designation Objet ' . $object_number, $object->object_designation );
                 $generic_widget = new Generic_Widget();
                 $generic_widget->set_widgets_options( $widget_options );
@@ -152,12 +161,13 @@ class Oak_Elementor {
 
                     if ( $object_model_field->field_type == 'image' ) :
                         $image_id = attachment_url_to_postid( $value );
-                        foreach( $images as $image ) :
-                            if ( $image['url'] == $value ) :
-                                $id = $image['id'];
-                            endif;
-                        endforeach;
-                        $post_images_to_show[] = array ( 'url' => $value, 'id' => $image_id, 'label' => 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ] );
+                        // foreach( $images as $image ) :
+                        //     if ( $image['url'] == $value ) :
+                        //         $id = $image['id'];
+                        //     endif;
+                        // endforeach;
+                        $image_widget_options = array ( 'url' => $value, 'id' => $image_id, 'label' => 'Oak: ' . count( $the_returned_fields ) . ' ' . $object_model_field_names_array[ $key ] );
+                        $post_images_to_show[] = $image_widget_options;
                     endif;
 
                     $the_returned_fields [] = array (
@@ -184,6 +194,8 @@ class Oak_Elementor {
 
             update_option( 'oak_post_images_to_show', $post_images_to_show );
 
+            $this->create_image_widget( $widgets_manager );
+
             // I pass the data to dynamic tags via the table options (Because there is an error of denied access if I happen to do this in the register controls function)
             update_option( 'oak_post_elementor_fields', $the_returned_fields );
             update_option( 'oak_all_images', $images );
@@ -207,6 +219,13 @@ class Oak_Elementor {
             Graphs::create_widgets( $widgets_manager );
 
         }, 14);
+    }
+    
+    function create_image_widget( $widgets_manager ) {
+        include_once get_template_directory() . '/functions/elementor/widgets/image_widget.php';
+
+        $image_widget = new Oak_Image();
+        $widgets_manager->register_widget_type( $image_widget );
     }
 
     function add_sources_post_meta( $post_images_to_show ) {
