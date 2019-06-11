@@ -26,7 +26,7 @@ class Oak_Image extends \Elementor\Widget_Image {
         $this->start_controls_section(
 			'section_oak_image',
 			[
-				'label' => __( 'Oak Image', 'elementor' ),
+				'label' => __( 'Oak Images', 'elementor' ),
 			]
         );
         
@@ -51,16 +51,84 @@ class Oak_Image extends \Elementor\Widget_Image {
         $this->end_controls_section();
     }
 
+    private function has_caption( $settings ) {
+		return ( ! empty( $settings['caption_source'] ) && 'none' !== $settings['caption_source'] );
+    }
+    
+    private function get_link_url( $settings ) {
+		if ( 'none' === $settings['link_to'] ) {
+			return false;
+		}
+
+		if ( 'custom' === $settings['link_to'] ) {
+			if ( empty( $settings['link']['url'] ) ) {
+				return false;
+			}
+			return $settings['link'];
+		}
+
+		return [
+			'url' => $settings['image']['url'],
+		];
+	}
+
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        $post_images_to_show = get_option('oak_post_images_to_show');
-        $options = [];
-        foreach( $post_images_to_show as $image_to_show ) :
-            if ( $image_to_show['url'] != '' ) :
-                $options = array_merge( $options, array( $image_to_show['url'] => $image_to_show['label'] ) );
-			endif;
-        endforeach;
+        $has_caption =$this->has_caption( $settings );
+
+		$this->add_render_attribute( 'wrapper', 'class', 'elementor-image' );
+
+		if ( ! empty( $settings['shape'] ) ) {
+			$this->add_render_attribute( 'wrapper', 'class', 'elementor-image-shape-' . $settings['shape'] );
+		}
+
+		$link = $this->get_link_url( $settings );
+
+		if ( $link ) {
+			$this->add_render_attribute( 'link', [
+				'href' => $link['url'],
+				'data-elementor-open-lightbox' => $settings['open_lightbox'],
+			] );
+
+			if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+				$this->add_render_attribute( 'link', [
+					'class' => 'elementor-clickable',
+				] );
+			}
+
+			if ( ! empty( $link['is_external'] ) ) {
+				$this->add_render_attribute( 'link', 'target', '_blank' );
+			}
+
+			if ( ! empty( $link['nofollow'] ) ) {
+				$this->add_render_attribute( 'link', 'rel', 'nofollow' );
+			}
+        } 
+        $img_class = '';
+        if ( '' !== $settings['hover_animation'] ) {
+            $img_class = 'elementor-animation-' . $settings['hover_animation'];
+        }
+        ?>
+		<div <?php echo $this->get_render_attribute_string( 'wrapper' ); ?>>
+			<?php if ( $has_caption ) : ?>
+				<figure class="wp-caption">
+			<?php endif; ?>
+			<?php if ( $link ) : ?>
+					<a <?php echo $this->get_render_attribute_string( 'link' ); ?>>
+			<?php endif; ?>
+                <img src="<?php echo( $settings['oak_images'] ); ?>" class="<?php echo( $img_class ); ?>" />
+			<?php if ( $link ) : ?>
+					</a>
+			<?php endif; ?>
+			<?php if ( $has_caption ) : ?>
+					<figcaption class="widget-image-caption wp-caption-text"><?php echo $this->get_caption( $settings ); ?></figcaption>
+			<?php endif; ?>
+			<?php if ( $has_caption ) : ?>
+				</figure>
+			<?php endif; ?>
+		</div>
+		<?php
 	}
 
 

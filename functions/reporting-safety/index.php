@@ -3,7 +3,9 @@ class Reporting_Safety {
     function __construct() {
         if ( isset( $_GET['page'] ) ) :
             if (  $_GET['page'] == 'oak_reporting_safety' ) :
-                add_action( 'admin_enqueue_scripts', array( $this, 'reporting_safety' ) );
+                add_action( 'admin_enqueue_scripts', array( $this, 'reporting_safety_enqueue_scripts' ) );
+
+                // $this->import_database();
             endif;
         endif;
 
@@ -11,24 +13,6 @@ class Reporting_Safety {
 
         add_action( 'wp_ajax_oak_get_everything', array( $this, 'oak_get_everything') );
         add_action( 'wp_ajax_nopriv_oak_get_everything', array( $this, 'oak_get_everything') );
-
-        return; 
-        global $wpdb;
-        $result = $wpdb->get_results('SHOW TABLES');
-
-        foreach( $result as $key => $value_array ) :
-            foreach( $value_array as $table_name_key => $table_name ) :
-                // $columns = $wpdb->get_results( "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
-                
-                // $result[ $key ] = array(
-                //     'table_name' => $table_name,
-                //     'columns' => $columns
-                // );
-            endforeach;
-            
-        endforeach;
-        Oak::var_dump( $result );
-
         // $this->create_zip();
     }
 
@@ -40,11 +24,52 @@ class Reporting_Safety {
         include get_template_directory() . '/functions/reporting-safety/views/main_view.php';
     }
 
-    public function reporting_safety() {
+    public function reporting_safety_enqueue_scripts() {
         wp_enqueue_script( 'oak_reporting_safety', get_template_directory_uri() . '/functions/reporting-safety/src/js/reporting-safety.js', array('jquery'), false, true );
         wp_localize_script( 'oak_reporting_safety', 'REPORTING_SAFETY_DATA', array(
             'ajaxUrl' => admin_url( 'admin-ajax.php' ),
         ) );
+    }
+
+    public function import_database() {
+        // Name of the file
+        $filename = 'database.sql';
+        // MySQL host
+        $mysql_host = 'localhost';
+        // MySQL username
+        $mysql_username = 'root';
+        // MySQL password
+        $mysql_password = 'root';
+        // Database name
+        $mysql_database = 'test';
+
+        // Connect to MySQL server
+        mysql_connect( $mysql_host, $mysql_username, $mysql_password) or die( 'Error connecting to MySQL server: ' . mysql_error() );
+        // Select database
+        mysql_select_db( $mysql_database ) or die( 'Error selecting MySQL database: ' . mysql_error() );
+
+        // Temporary variable, used to store current query
+        $templine = '';
+        // Read in entire file
+        $lines = file( $filename );
+        // Loop through each line
+        foreach ( $lines as $line )
+        {
+            // Skip it if it's a comment
+            if (substr( $line, 0, 2 ) == '--' || $line == '')
+                continue;
+
+            // Add this line to the current segment
+            $templine .= $line;
+            // If it has a semicolon at the end, it's the end of the query
+            if (substr(trim($line), -1, 1) == ';') {
+                // Perform the query
+                mysql_query( $templine ) or print('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
+                // Reset temp variable to empty
+                $templine = '';
+            }
+        }
+        echo "Tables imported successfully";
     }
 
     public function get_archive_directory() {
