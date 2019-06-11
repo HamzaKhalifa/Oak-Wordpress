@@ -41,30 +41,6 @@ Class Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
 				]
 			);
 		endforeach;
-
-		// foreach( $fields as $key => $field ) :
-		// 	if ( $field['field_type'] == 'image' ) :
-		// 		$id = 1;
-		// 		foreach( $images as $image ) :
-		// 			if ( $image['url'] == $field['value'] ) :
-		// 				$id = $image['id'];
-		// 			endif;
-		// 		endforeach;
-
-		// 		$this->add_control(
-		// 			preg_replace( '/\s+/', '', $field['field_designation'] ),
-		// 			[
-		// 				'label' => $field['field_designation'],
-		// 				'type' => \Elementor\Controls_Manager::MEDIA,
-		// 				'default' => array(
-		// 					'id' => $id,
-		// 					'url' => $field['value']
-		// 				)
-		// 			]
-		// 		);
-		// 	endif;
-		// endforeach;
-		
 	}
 	
 	public function get_value( array $options = [] ) {		
@@ -83,14 +59,14 @@ Class Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
 			endif;
 		endforeach;
 
-		foreach( $fields as $field ) :
-			if ( $field['field_type'] == 'image' ) :
-				$single_data = $this->get_settings( preg_replace( '/\s+/', '', $field['field_designation'] ) );
-				if ( $single_data['url'] != '' ) :
-					$image_data = $single_data;
-				endif;
-			endif;
-		endforeach;
+		// foreach( $fields as $field ) :
+		// 	if ( $field['field_type'] == 'image' ) :
+		// 		$single_data = $this->get_settings( preg_replace( '/\s+/', '', $field['field_designation'] ) );
+		// 		if ( $single_data['url'] != '' ) :
+		// 			$image_data = $single_data;
+		// 		endif;
+		// 	endif;
+		// endforeach;
 		
 
 		return $image_data;
