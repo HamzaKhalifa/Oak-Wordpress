@@ -130,6 +130,7 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
                 endforeach;
                 // for object model selector
                 if ( $object->object_model_selector != null && $object->object_model_selector != '' ) :
+                    Oak::var_dump( $object->object_model_selector );
                     $model_frame_object = Sidebar_Widget::find_frame_object( $object->object_model_selector );
                     $frame_object_data_within_object = array(
                         'frame_object_identifier' => $object->object_model_selector,
@@ -253,12 +254,9 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
 
     public static function to_which_publication_frame_object_belongs( $frame_object_identifier ) {
         foreach( Oak::$terms_and_objects as $term_and_object ) :
-            Oak::var_dump( $frame_object_identifier );
-            Oak::var_dump( $term_and_object->object_identifier );
             if ( $term_and_object->object_identifier == $frame_object_identifier ) :
                 foreach( Oak::$all_terms_without_redundancy as $term ) :
                     if ( $term->term_identifier == $term_and_object->term_identifier ) :
-                        Oak::var_dump( 'term identifier' . $term->term_identifier );
                         foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
                             if ( $taxonomy->taxonomy_identifier == $term->term_taxonomy_identifier ) :
                                 return $taxonomy->taxonomy_publication;
