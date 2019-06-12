@@ -252,10 +252,11 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
     }
 
     public static function to_which_publication_frame_object_belongs( $frame_object_identifier ) {
-        Oak::var_dump( Oak::$terms_and_objects );
         foreach( Oak::$terms_and_objects as $term_and_object ) :
             if ( $term_and_object->object_identifier == $frame_object_identifier ) :
                 foreach( Oak::$all_terms_without_redundancy as $term ) :
+                    Oak::var_dump( $term->term_identifier );
+                    Oak::var_dump( $$term_and_object->term_identifier );
                     if ( $term->term_identifier == $term_and_object->term_identifier ) :
                         Oak::var_dump( 'term identifier' . $term->term_identifier );
                         foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
