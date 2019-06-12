@@ -181,6 +181,8 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
                 endforeach;
             endforeach;
 
+            Oak::var_dump( $publications_and_frame_objects );
+            
             foreach( $publications_and_frame_objects as $publication_and_frame_object ) :
                 ?>
                 <div class="oak_sidebar_publication_container">
