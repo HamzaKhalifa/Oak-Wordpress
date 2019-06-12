@@ -136,6 +136,7 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
                     );
 
                     $publication_identifier = Sidebar_Widget::to_which_publication_frame_object_belongs( $model_frame_object->object_identifier );
+                    Oak::var_dump( $publication_identifier );
                     $publications_and_frame_objects = Sidebar_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object );
                 endif;
             endforeach;
