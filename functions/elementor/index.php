@@ -80,6 +80,7 @@ class Oak_Elementor {
             include_once get_template_directory() . '/functions/elementor/tags/dynamic_tag.php';
             include_once get_template_directory() . '/functions/elementor/tags/dynamic_index_tag.php';
             include_once get_template_directory() . '/functions/elementor/tags/dynamic_csr_side_index_tag.php';
+            include_once get_template_directory() . '/functions/elementor/tags/dynamic_content_panel.php';
 
             $tag = new Dynamic_Tag();
             $dynamic_tags->register_tag( 'Dynamic_Tag' );
@@ -89,6 +90,9 @@ class Oak_Elementor {
 
             $csr_side_indexes_tag = new Dynamic_Csr_Side_Index_Tag();
             $dynamic_tags->register_tag( 'Dynamic_Csr_Side_Index_Tag' );
+
+            $content_panel_tag = new Dynamic_Content_Panel();
+            $dynamic_tags->register_tag( 'Dynamic_Content_Panel' );
         } );
     }
 
@@ -96,6 +100,7 @@ class Oak_Elementor {
         add_action('elementor/widgets/widgets_registered', function( $widgets_manager ) {
 
             include_once get_template_directory() . '/functions/elementor/widgets/generic_widget.php';
+            include_once get_template_directory() . '/functions/elementor/tags/dynamic_content_panel.php';
 
             $this->oak_add_side_bar_widgets( $widgets_manager );
 
@@ -107,6 +112,7 @@ class Oak_Elementor {
             $the_returned_fields = [];
 
             Sidebar_Widget::$post_selected_objects[] = $our_objects;
+            Dynamic_Content_Panel::$post_selected_objects[] = $our_objects;
 
             $metas = get_post_meta( get_the_ID() );
             foreach( $metas as $key => $meta ) :
@@ -293,6 +299,7 @@ class Oak_Elementor {
                     $quali_number++;
 
                     Sidebar_Widget::$post_selected_qualis[] = $the_quali;
+                    Dynamic_Content_Panel::$post_selected_qualis[] = $the_quali;
                 endif;
                 $incrementer++;
             } while( $incrementer < count( Oak::$qualis_without_redundancy ) && !$found_quali );
@@ -411,6 +418,7 @@ class Oak_Elementor {
 
                     $performance->performance_selectors = $performance_selectors;
                     Sidebar_Widget::$post_selected_performances[] = $performance;
+                    Dynamic_Content_Panel::$post_selected_performances[] = $performance;
                 endif;
             endforeach;
 
