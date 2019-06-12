@@ -1,18 +1,22 @@
 <?php
 class Reporting_Safety {
+    // Command to generate sql: 
+    // mysqldump -u wpress -pDeiddEj2 wordpress  > testdatabase.sql
     function __construct() {
         if ( isset( $_GET['page'] ) ) :
             if (  $_GET['page'] == 'oak_reporting_safety' ) :
                 add_action( 'admin_enqueue_scripts', array( $this, 'reporting_safety_enqueue_scripts' ) );
-
-                // $this->import_database();
+                add_action( 'admin_enqueue_scripts', array( $this, 'reporting_safety_enqueue_styles' ) );
             endif;
         endif;
 
         add_action( 'admin_menu', array ( $this, 'handle_admin_menu' ) );
 
-        add_action( 'wp_ajax_oak_get_everything', array( $this, 'oak_get_everything') );
-        add_action( 'wp_ajax_nopriv_oak_get_everything', array( $this, 'oak_get_everything') );
+        add_action( 'wp_ajax_oak_save_reporting_safety_configuration', array( $this, 'oak_save_reporting_safety_configuration') );
+        add_action( 'wp_ajax_nopriv_oak_save_reporting_safety_configuration', array( $this, 'oak_save_reporting_safety_configuration') );
+
+        add_action( 'wp_ajax_oak_generate_sql_file', array( $this, 'oak_generate_sql_file') );
+        add_action( 'wp_ajax_nopriv_oak_generate_sql_file', array( $this, 'oak_generate_sql_file') );
         // $this->create_zip();
     }
 
@@ -31,22 +35,39 @@ class Reporting_Safety {
         ) );
     }
 
-    public function import_database() {
-        // Name of the file
-        $filename = 'database.sql';
-        // MySQL host
-        $mysql_host = 'localhost';
-        // MySQL username
-        $mysql_username = 'root';
-        // MySQL password
-        $mysql_password = 'root';
-        // Database name
-        $mysql_database = 'test';
+    public function reporting_safety_enqueue_styles() {
+        wp_enqueue_style( 'reporting_safety_main_view', get_template_directory_uri() . '/functions/reporting-safety/src/style/main-view.css' );
+    }
 
-        // Connect to MySQL server
-        mysql_connect( $mysql_host, $mysql_username, $mysql_password) or die( 'Error connecting to MySQL server: ' . mysql_error() );
-        // Select database
-        mysql_select_db( $mysql_database ) or die( 'Error selecting MySQL database: ' . mysql_error() );
+    public function oak_save_reporting_safety_configuration() {
+        $backup_ajax_url = $_POST['backup_ajax_url'];
+        update_option( 'oak_backup_ajax_url', $backup_ajax_url );
+        wp_send_json_success();
+    }
+
+    public function oak_generate_sql_file() {
+        $command_result = shell_exec( 'mysqldump -u wpress -pDeiddEj2 wordpress  > testdatabase.sql' );
+    }
+
+    public function import_database() {
+        global $wpdb;
+
+        // Name of the file
+        $filename = get_template_directory() . '/functions/reporting-safety/database.sql';
+
+        // Replace wpdb prefix
+        $file_content = file_get_contents( $filename );
+        // $file_content = str_replace( '`wp_', '`' . $wpdb->prefix, $file_content );
+        $file_content = str_replace( 'https://joro.isivalue.com', site_url(), $file_content );
+        file_put_contents( $filename , $file_content );
+
+        // Drop all tables first: 
+        $all_tables=$wpdb->get_results("SHOW TABLES");
+        foreach( $all_tables as $table_array ) :
+            foreach( $table_array as $key => $tabl_name ) :
+                $wpdb->query( "DROP TABLE IF EXISTS $tabl_name" );
+            endforeach;
+        endforeach;
 
         // Temporary variable, used to store current query
         $templine = '';
@@ -64,7 +85,8 @@ class Reporting_Safety {
             // If it has a semicolon at the end, it's the end of the query
             if (substr(trim($line), -1, 1) == ';') {
                 // Perform the query
-                mysql_query( $templine ) or print('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
+                $result = $wpdb->get_results( $templine );
+                // Oak::var_dump( $result );
                 // Reset temp variable to empty
                 $templine = '';
             }
@@ -109,14 +131,6 @@ class Reporting_Safety {
         // $zip->close();
 
         // echo $filename;
-    }
-
-    public function oak_get_everything() {
-        wp_send_json_success();
-        $result = $wpdb->get_results('SELECT * FROM SYSOBJECTS WHERE xtype="U" GO');
-        wp_send_json_success( array(
-            'result' => $result
-        ) );
     }
 }
 

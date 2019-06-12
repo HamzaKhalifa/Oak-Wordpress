@@ -13,7 +13,6 @@ $graphs_sql = "CREATE TABLE $graphs_table_name (
     graph_modification_time datetime,
     graph_content_language varchar(10) DEFAULT 'fr',
     graph_title varchar(555) DEFAULT '' NOT NULL,
-    graph_identifier varchar(555) DEFAULT '' NOT NULL,
     graph_data LONGTEXT,
     graph_synchronized TEXT,
     PRIMARY KEY (id)

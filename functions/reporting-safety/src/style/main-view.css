@@ -1,0 +1,30 @@
+.oak_reporting_safety_view {
+    margin: 20px;
+}
+
+.oak_reporting_safety__title {
+    margin-bottom: 40px;
+}
+
+.oak_reporting_safety__configuration {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin-bottom: 100px;
+}
+
+.oak_reporting_safety__configuration_tittle, .oak_reporting_safety__backup_instance_ajax_url {
+    margin-bottom: 10px;
+}
+
+.oak_reporting_safety__backup_instance_ajax_url {
+    flex: 1;
+}
+
+.oak_reporting_safety__configuration_element {
+    display: flex;
+}
+
+.oak_reporting_safety__configuration_label {
+    width: 170px;
+}
