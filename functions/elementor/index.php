@@ -9,6 +9,9 @@ class Oak_Elementor {
     public static function oak_elementor_editor_enqueue_scripts() {
         wp_enqueue_media();
         wp_enqueue_script( 'oak_front_graphs', get_template_directory_uri() . '/src/js/front/graphs.js', array('jquery'), false, true );
+        wp_localize_script( 'oak_front_graphs', 'GRAPHS_DATA', array(
+            'graphs' => Oak::$graphs_without_redundancy
+        ) );
         wp_enqueue_script( 'oak_front_sidebar', get_template_directory_uri() . '/src/js/front/sidebar.js', array('jquery'), false, true );
     }
 

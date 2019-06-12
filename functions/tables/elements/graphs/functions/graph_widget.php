@@ -6,7 +6,7 @@ class Graph_Widget extends \Elementor\Widget_Base {
 	private $widget_options;
 
 	public function get_name() {
-		return $this->widget_options['name'];
+		return $this->widget_options['graph_identifier'];
 	}
 
 	public function get_title() {
@@ -38,15 +38,15 @@ class Graph_Widget extends \Elementor\Widget_Base {
 			]
 		);
 		
-		// Value
+		// Identifiant
 		$this->add_control(
-			'value',
+			'graph_identifier',
 			[
-				'label' => __( 'Valeur', Oak::$text_domain ),
+				'label' => __( 'Identifiant', Oak::$text_domain ),
 				'type' => \Elementor\Controls_Manager::TEXT,
-				'default' => $this->get_widgets_options()['graph_data']
+				'default' => $this->get_widgets_options()['graph_identifier']
 			]
-        );
+		);
         
 		$this->end_controls_section();
 	}
@@ -54,7 +54,7 @@ class Graph_Widget extends \Elementor\Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		?>
-		<div class="oak_front_graph_container" data='<?php echo( $settings['value'] ); ?>'>
+		<div class="oak_front_graph_container" graph-identifier="<?php echo( $settings['graph_identifier'] ); ?>">
 			<?php _e( 'Graph goes here', Oak::$text_domain ); ?>
 		</div>
 		<?php

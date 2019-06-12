@@ -77,9 +77,8 @@ class Graphs {
 
         foreach( $graphs as $single_graph ) :
             $widget_options = array (
-                'name' => $single_graph->graph_identifier,
+                'graph_identifier' => $single_graph->graph_identifier,
                 'title' => $single_graph->graph_designation,
-                'graph_data' => $single_graph->graph_data,
                 'field_type' => 'organization_name',
             );
             $generic_widget = new Graph_Widget();

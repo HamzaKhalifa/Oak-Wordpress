@@ -47,6 +47,7 @@ class Reporting_Safety {
 
     public function oak_generate_sql_file() {
         $command_result = shell_exec( 'mysqldump -u wpress -pDeiddEj2 wordpress  > testdatabase.sql' );
+        wp_send_json_success();
     }
 
     public function import_database() {

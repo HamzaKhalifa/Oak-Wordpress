@@ -430,10 +430,6 @@ function generateChart(config) {
                         if (performanceContainers[k].getAttribute('identifier') == config.values[j].performanceIdentifier) {
                             performanceContainer = performanceContainers[k];
                         }
-                        // var title = performanceContainers[k].querySelector('h3').innerHTML;
-                        // if (title == config.values[j].performanceDesignation + ' (' + config.labels[i] + ')') {
-                        //     performanceContainer = performanceContainers[k];
-                        // }
                     }
                     if (performanceContainer && performanceContainer.querySelector('.oak_performance_checkbox').checked == true) {
                         allDataGraphData.selectedPerformances.push({
@@ -525,7 +521,7 @@ function createChartCanvas(actualLabels, actualData, graph, graphTitle) {
     return chartCanvas;
 }
 
-function createChart(chartCanvas, graph, title, actualLabels, actualData, datasetProperties) {
+function createChart(chartCanvas, graph, title, actualLabels, actualData, datasetProperties, links) {
     var datasets = [{
         label: title,
         backgroundColor: 'rgb(255, 99, 132)',
@@ -550,6 +546,21 @@ function createChart(chartCanvas, graph, title, actualLabels, actualData, datase
         }
     };
     var chart = new Chart(chartCreator, chartData);
+
+    console.log('dataset properties', datasetProperties);
+    // For click events: 
+    if (graph == 'doughnut' && links) {
+        chartCanvas.onclick = function(evt){
+            var activePoints = chart.getElementsAtEvent(evt);
+            if (activePoints[0]) {
+                var linkIndex = activePoints[0]._index;
+                var url = links[linkIndex];
+                console.log(url);
+                window.open(url);
+            }
+            // => activePoints is an array of points on the canvas that are at the same position as the click event.
+        };
+    }
 }
 
 var getKeys = function(obj){
@@ -611,10 +622,10 @@ function handleRefreshGraphButton() {
 
         var datasetProperties = graphParameters.datasetProperties;
         var labels = graphParameters.labels;
-        var data = graphParameters = graphParameters.data;
-        
+        var data = graphParameters.data;
+
         var selectedChartCanvas = document.querySelector('.oak_selected_graph');
-        createChart(selectedChartCanvas, chosenGraphData.graph, chosenGraphData.title, labels, data, datasetProperties);
+        createChart(selectedChartCanvas, chosenGraphData.graph, chosenGraphData.title, labels, data, datasetProperties, graphParameters.links);
     });
 }
 
@@ -624,7 +635,7 @@ function getGraphParameters() {
         for (var i = 0; i < parametersInputs.length; i++) {
             var value = parametersInputs[i].value;
             if ( parametersInputs[i].getAttribute('property_type') == 'array' ) {
-                value = parametersInputs[i].value.split(',');
+                value = parametersInputs[i].value.split(';');
             }
 
             if (parametersInputs[i].getAttribute('property_nature') == 'dataset') {
@@ -634,15 +645,17 @@ function getGraphParameters() {
                 });
             }
         }
-        
+
         // Lets get the labels: the before last input:
-        var labels = parametersInputs[parametersInputs.length - 2].value.split(',');
-        var data = parametersInputs[parametersInputs.length - 1].value.split(',');
+        var labels = parametersInputs[parametersInputs.length - 3].value.split(';');
+        var data = parametersInputs[parametersInputs.length - 2].value.split(';');
+        var links = parametersInputs[parametersInputs.length - 1].value.split(';');
 
         return({
             datasetProperties,
             labels,
-            data
+            data,
+            links
         });
 }
 
@@ -697,10 +710,12 @@ function handleSaveGraphButton() {
             title = chosenGraphData.title;
         }
         
+        var parametersInputs = document.querySelectorAll('.oak_single_parameter__input');
         var graphDataInDatabase = {
             graph_designation: title,
             graph_identifier: createIdentifier(),
-            graph_data: JSON.stringify(graphData)
+            graph_data: JSON.stringify(graphData),
+            graph_links: parametersInputs[parametersInputs.length - 1].value
         }
         
         jQuery(document).ready(function() {
@@ -770,6 +785,7 @@ function handleModalButtons() {
                         { name: 'Epaisseur de la bordure', type: 'normal', placeholder: 'Exemple: 2', propertyName: 'borderWidth', value: '', propertyNature: 'dataset' },
                         { name: 'Couleur de la bordure au hover', type: 'normal', placeholder: 'Exemple: #FC644E', propertyName: 'hoverBorderColor', value: '', propertyNature: 'dataset' },
                     ];
+                    break;
                 case 'line' :
                     properties = [
                         { name: 'Couleur', type: 'array', placeholder: 'Exemple: #FC644E', propertyName: 'backgroundColor', value: '', propertyNature: 'dataset' },
@@ -783,7 +799,7 @@ function handleModalButtons() {
             // To add labels and data to properties
             var labels = '';
             for (var i = 0; i < chosenGraphData.labels.length; i++) {
-                var delimiter = ',';
+                var delimiter = ';';
                 if (i == chosenGraphData.labels.length - 1) 
                     delimiter = '';
 
@@ -792,7 +808,7 @@ function handleModalButtons() {
 
             var data = '';
             for (var i = 0; i < chosenGraphData.data.length; i++) {
-                var delimiter = ',';
+                var delimiter = ';';
                 if (i == chosenGraphData.data.length - 1) 
                     delimiter = '';
 
@@ -800,11 +816,13 @@ function handleModalButtons() {
             }
 
             var dataProperties = [
-                { name: 'Labels', type: 'array', placeholder: 'Exemple: #FC644E,#FDA428,#42B273,#808080,#6A5ECA', propertyName: 'backgroundColor', value: labels, propertyNature: 'actualLabels' },
-                { name: 'Données', type: 'array', placeholder: 'Exemple: #FC644E,#FDA428,#42B273,#808080,#6A5ECA', propertyName: 'hoverBackgroundColor', value: data, propertyNature: 'actualData' },
+                { name: 'Labels', type: 'array', placeholder: 'Exemple: #FC644E;#FDA428;#42B273;#808080;#6A5ECA', propertyName: 'backgroundColor', value: labels, propertyNature: 'actualLabels' },
+                { name: 'Données', type: 'array', placeholder: 'Exemple: #FC644E;#FDA428;#42B273;#808080;#6A5ECA', propertyName: 'hoverBackgroundColor', value: data, propertyNature: 'actualData' },
+                { name: 'Liens', type: 'array', placeholder: 'Exemple: http://localhost:8888/test;http://localhost:8888/test/wp-admin', propertyName: 'hoverBackgroundColor', value: '', propertyNature: 'actualLinks' },
             ];
             properties.push(dataProperties[0]);
             properties.push(dataProperties[1]);
+            properties.push(dataProperties[2]);
             
             var selectedGraphContainerConfiguration = document.querySelector('.oak_selected_graph_container__configuration');
             for( i = 0; i < properties.length; i++) {
