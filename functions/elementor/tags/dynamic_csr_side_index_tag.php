@@ -20,7 +20,7 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 	}
 
 	protected function _register_controls() {
-    $indexes_data = get_option('oak_indexes') == false ? [] : get_option('oak_indexes');
+    	$indexes_data = get_option('oak_indexes') == false ? [] : get_option('oak_indexes');
 		$frame_objects_designations = [''];
 		$frame_objects_data = [];
 		foreach( Oak::$all_frame_objects_without_redundancy as $key => $frame_object ) :
@@ -53,8 +53,8 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 				$actual_frame_object->object_identifier,
 				[
 					'label'   => $frame_object->object_designation,
-						'type' => \Elementor\Controls_Manager::SELECT,
-						'options' => $field_names,
+					'type' => \Elementor\Controls_Manager::SELECT,
+					'options' => $field_names,
 				]
 			);
 
@@ -68,17 +68,9 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 			        'type' => \Elementor\Controls_Manager::SELECT,
 			        'options' => $frame_objects_designations,
 			]
-    );
+    	);
 
 		update_option( 'oak_scr_side_frame_objects_data', $frame_objects_data );
-  	// $this->add_control (
-		// 	'frame_objects_data',
-		// 	[
-		// 		'label' => __( 'Données des objects cadres RSE', Oak::$text_domain ),
-		// 		'type' => \Elementor\Controls_Manager::HIDDEN,
-		// 		'default' => $frame_objects_data,
-		// 	]
-		// );
 	}
 
 	public function render() {

@@ -210,9 +210,12 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
                                         elseif( isset( $frame_object_data['data'] ) ) : ?>
                                         <?php
                                             foreach( $frame_object_data['data'] as $key => $data ) : 
-                                                if ( $key != 0 ) :
+                                                // Oak::var_dump( $key );
+                                                // Oak::var_dump( $key != 0 && $key !== '' && $key !== 'true' && $key !== 'false' );
+                                                if ( $key != '' && $key != 'true' && $key != 'false' ) :
+                                                    // Oak::var_dump('key won ' . $key );
                                             ?>
-                                                    <span class="oak_sidebar_frame_objects_container_single_frame__scroll_to_content_button" value="<?php echo( $data ); ?>"><i class="fas sidebar_thumbtack fa-thumbtack"></i></span>
+                                                    <span class="oak_sidebar_frame_objects_container_single_frame__scroll_to_content_button" value="<?php echo( $key ); ?>"><i class="fas sidebar_thumbtack fa-thumbtack"></i></span>
                                             <?php
                                                 endif;
                                             endforeach; ?>
@@ -308,5 +311,10 @@ class Sidebar_Widget extends \Elementor\Widget_Base {
         );
 
         return $publications_and_frame_objects;
+    }
+
+    public static function create_widgets( $widgets_manager ) {
+        $sidebar_widget = new Sidebar_Widget();
+        $widgets_manager->register_widget_type( $sidebar_widget );
     }
 }

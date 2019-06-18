@@ -8,8 +8,6 @@ function handleFrameObjectsButtons() {
 
         // Remove it in case it is not shown/used in the page: 
         var value = frameObjectsButtons[i].getAttribute('value');
-        console.log(value);
-        console.log(value == '');
         if (value == '' || value == 'true' || value == 'false') {
             frameObjectsButtons[i].classList.add('oak_hidden');
         } else {

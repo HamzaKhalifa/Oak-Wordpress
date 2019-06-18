@@ -12,7 +12,7 @@ class Oak_Elementor {
         wp_localize_script( 'oak_front_graphs', 'GRAPHS_DATA', array(
             'graphs' => Oak::$graphs_without_redundancy
         ) );
-        wp_enqueue_script( 'oak_front_sidebar', get_template_directory_uri() . '/src/js/front/sidebar.js', array('jquery'), false, true );
+        wp_enqueue_script( 'oak_front_sidebar', get_template_directory_uri() . '/src/js/front/content-panel.js', array('jquery'), false, true );
     }
 
     function oak_elementor_initialization() {
@@ -64,6 +64,14 @@ class Oak_Elementor {
                     'icon' => 'fa fa-plug',
                 ]
             );
+
+            $elements_manager->add_category(
+                'oak_content_panel',
+                [
+                    'title' => __( 'OAK Content Panel', Oak::$text_domain ),
+                    'icon' => 'fa fa-plug',
+                ]
+            );
         } );
     }
 
@@ -80,7 +88,6 @@ class Oak_Elementor {
             include_once get_template_directory() . '/functions/elementor/tags/dynamic_tag.php';
             include_once get_template_directory() . '/functions/elementor/tags/dynamic_index_tag.php';
             include_once get_template_directory() . '/functions/elementor/tags/dynamic_csr_side_index_tag.php';
-            include_once get_template_directory() . '/functions/elementor/tags/dynamic_content_panel.php';
 
             $tag = new Dynamic_Tag();
             $dynamic_tags->register_tag( 'Dynamic_Tag' );
@@ -89,20 +96,15 @@ class Oak_Elementor {
             $dynamic_tags->register_tag( 'Dynamic_Index_Tag' );
 
             $csr_side_indexes_tag = new Dynamic_Csr_Side_Index_Tag();
-            $dynamic_tags->register_tag( 'Dynamic_Csr_Side_Index_Tag' );
-
-            $content_panel_tag = new Dynamic_Content_Panel();
-            $dynamic_tags->register_tag( 'Dynamic_Content_Panel' );
+            $dynamic_tags->register_tag( 'Dynamic_Csr_Side_Index_Tag' );;
         } );
     }
 
     function oak_add_widgets() {
         add_action('elementor/widgets/widgets_registered', function( $widgets_manager ) {
-
             include_once get_template_directory() . '/functions/elementor/widgets/generic_widget.php';
-            include_once get_template_directory() . '/functions/elementor/tags/dynamic_content_panel.php';
-
-            $this->oak_add_side_bar_widgets( $widgets_manager );
+            include_once get_template_directory() . '/functions/elementor/widgets/sidebar_widget.php';
+            include_once get_template_directory() . '/functions/elementor/widgets/content_panel_widget.php';
 
             global $wpdb;
 
@@ -112,7 +114,7 @@ class Oak_Elementor {
             $the_returned_fields = [];
 
             Sidebar_Widget::$post_selected_objects[] = $our_objects;
-            Dynamic_Content_Panel::$post_selected_objects[] = $our_objects;
+            Oak_Content_Panel_Widget::$post_selected_objects[] = $our_objects;
 
             $metas = get_post_meta( get_the_ID() );
             foreach( $metas as $key => $meta ) :
@@ -227,6 +229,12 @@ class Oak_Elementor {
             // To create the graph widgets: 
             Graphs::create_widgets( $widgets_manager );
 
+            // To create the content panel widgets: 
+            Oak_Content_Panel_Widget::create_widgets( $widgets_manager );
+
+            // To create the sidebar widget: 
+            Sidebar_Widget::create_widgets( $widgets_manager );
+
         }, 14);
     }
     
@@ -283,12 +291,12 @@ class Oak_Elementor {
                     // For the designation: 
                     $the_quali = Oak::$qualis_without_redundancy[ $incrementer ];
                     $the_quali->quali_data = [];
-                    $the_quali->quali_data[] = $the_quali->quali_designation;
+                    $the_quali->quali_data = array_merge( $the_quali->quali_data,  array( $the_quali->quali_designation => __( 'Désignation', Oak::$text_domain ) ) );
                     update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': Designation', $the_quali->quali_designation );
                     foreach( Qualis::$properties as $key => $quali_property ) :
                         $property_name = $quali_property['property_name'];
                         if ( $quali_property['input_type'] != 'image' && $quali_property['input_type'] != 'select' ) :
-                            $the_quali->quali_data[] = $the_quali->$property_name;
+                            $the_quali->quali_data = array_merge( $the_quali->quali_data, array( $the_quali->$property_name => $quali_property['description'] ) );
                             update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': ' . $quali_property['description'], $the_quali->$property_name );
                         elseif ( $quali_property['input_type'] == 'image' ):
                             $image_id = attachment_url_to_postid( $the_quali->$property_name );
@@ -299,7 +307,7 @@ class Oak_Elementor {
                     $quali_number++;
 
                     Sidebar_Widget::$post_selected_qualis[] = $the_quali;
-                    Dynamic_Content_Panel::$post_selected_qualis[] = $the_quali;
+                    Oak_Content_Panel_Widget::$post_selected_qualis[] = $the_quali;
                 endif;
                 $incrementer++;
             } while( $incrementer < count( Oak::$qualis_without_redundancy ) && !$found_quali );
@@ -362,11 +370,11 @@ class Oak_Elementor {
                     $performance_text = __( 'Donnée de performance', Oak::$text_domain );
                     $performance->performance_data = [];
 
-                    $performance->performance_data[] = $performance->performance_designation;
+                    $performance->performance_data = array_merge( $performance->performance_data, array( $performance->performance_designation => __( 'Désignation', Oak::$text_domain ) ) );
                     update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Designation', $performance->performance_designation );
 
                     $unity_type_text = __( 'Type de l’unité', Oak::$text_domain );
-                    $performance->performance_data[] = $performance->performance_type;
+                    $performance->performance_data = array_merge ( $performance->performance_data, array( $performance->performance_type => __( 'Type', Oak::$text_domain ) ) );
                     update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $unity_type_text, $performance->performance_type );
 
                     $performance_results = explode( '|', $performance->performance_results );
@@ -376,9 +384,9 @@ class Oak_Elementor {
                             $year = $result_values[0];
                             $value = $result_values[1];
 
-                            $performance->performance_data[] = $year;
+                            $performance->performance_data = array_merge ( $performance->performance_data, array( $year => __( 'Anné ' . $result_key, Oak::$text_domain ) ) );
                             update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Année ' . $result_key, $year );
-                            $performance->performance_data[] = $value;
+                            $performance->performance_data = array_merge( $performance->performance_data, array( $value =>  __( 'Valeur ' . $result_key, Oak::$text_domain ) ) );
                             update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Résultalt ' . $year, $value );
                         endif;
                     endforeach;
@@ -387,14 +395,14 @@ class Oak_Elementor {
                         $property_name = $performance_property['property_name'];
 
                         if ( $performance_property['name'] == 'country' ) :
-                            $performance->performance_data[] = $performance->$property_name;
+                            $performance->performance_data = array_merge( $performance->performance_data, array( $performance->$property_name => $performance_property['description'] ) );
                             update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
                         elseif ( $performance_property['name'] == 'custom_perimeter' ) :
                             update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
                         elseif ( $performance_property['input_type'] != 'image' && $performance_property['input_type'] != 'select' ) :
                             update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
                         elseif ( $performance_property['input_type'] == 'image' ):
-                            $performance->performance_data[] = $performance->$property_name;
+                            $performance->performance_data = array_merge( $performance->performance_data, array( $performance->$property_name => $performance_property['description'] ) );
                             $image_id = attachment_url_to_postid( $performance->$property_name );
                             $post_images_to_show[] = array ( 'url' => $performance->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $performance . ' ' . $performance_number . ': ' .$performance_property['description'] );
                             // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
@@ -418,7 +426,7 @@ class Oak_Elementor {
 
                     $performance->performance_selectors = $performance_selectors;
                     Sidebar_Widget::$post_selected_performances[] = $performance;
-                    Dynamic_Content_Panel::$post_selected_performances[] = $performance;
+                    Oak_Content_Panel_Widget::$post_selected_performances[] = $performance;
                 endif;
             endforeach;
 
