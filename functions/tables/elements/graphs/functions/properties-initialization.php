@@ -19,5 +19,15 @@ Graphs::$properties = array (
         'description' => __( 'Données', Oak::$text_domain ), 
         'width' => '50',
         'translatable' => true
+    ),
+    array (
+        'name' => 'links', 
+        'property_name' => 'graph_links', 
+        'type' => 'text', 
+        'input_type' => 'textarea', 
+        'placeholder' => __( 'Liens/IDs', Oak::$text_domain ), 
+        'description' => __( 'Liens/IDs', Oak::$text_domain ), 
+        'width' => '50',
+        'translatable' => true
     )
 );
