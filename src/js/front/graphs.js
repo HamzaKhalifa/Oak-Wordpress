@@ -19,9 +19,12 @@ function handleGraphsInitialization() {
                 // Lets hide all elements ID: 
                 for (m = 0; m < linksArray.length; m++) {
                     if (!validURL(linksArray[m])) {
-                        var element = document.getElementById(linksArray[m]);
-                        if (element)
-                            element.classList.add('oak_hidden');
+                        var elements = document.querySelectorAll('.' + linksArray[m]);
+                        if (elements) {
+                            for (var n = 0; n < elements.length; n++) {
+                                elements[n].classList.add('oak_hidden');
+                            }
+                        }
                     }
                 }
                 if (linksArray) {
@@ -34,12 +37,14 @@ function handleGraphsInitialization() {
                                 if (validURL(url))
                                     window.location.replace(url); 
                                 else {
-                                    var element = document.getElementById(url);
-                                    if (element) {
-                                        if (classExists(element, 'oak_hidden'))
-                                            element.classList.remove('oak_hidden');
-                                        else
-                                            element.classList.add('oak_hidden');
+                                    var elements = document.querySelectorAll('.' + url);
+                                    if (elements) {
+                                        for (var n = 0; n < elements.length; n++) {
+                                            if (classExists(elements[n], 'oak_hidden'))
+                                                elements[n].classList.remove('oak_hidden');
+                                            else
+                                                elements[n].classList.add('oak_hidden');
+                                        }
                                     }
                                 }
                             }

@@ -819,7 +819,7 @@ function handleModalButtons() {
             var dataProperties = [
                 { name: 'Labels', type: 'array', placeholder: 'Exemple: #FC644E;#FDA428;#42B273;#808080;#6A5ECA', propertyName: 'backgroundColor', value: labels, propertyNature: 'actualLabels' },
                 { name: 'Données', type: 'array', placeholder: 'Exemple: #FC644E;#FDA428;#42B273;#808080;#6A5ECA', propertyName: 'hoverBackgroundColor', value: data, propertyNature: 'actualData' },
-                { name: 'Liens ou ID du Widget à montrer', type: 'array', placeholder: 'Exemple: http://localhost:8888/test;http://localhost:8888/test/wp-admin', propertyName: 'hoverBackgroundColor', value: '', propertyNature: 'actualLinks' },
+                { name: 'Liens ou Classes du Widget à montrer', type: 'array', placeholder: 'Exemple: http://localhost:8888/test;http://localhost:8888/test/wp-admin', propertyName: 'hoverBackgroundColor', value: '', propertyNature: 'actualLinks' },
             ];
             properties.push(dataProperties[0]);
             properties.push(dataProperties[1]);
