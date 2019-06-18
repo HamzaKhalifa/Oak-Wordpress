@@ -18,7 +18,7 @@ function handleGraphsInitialization() {
                 }
                 // Lets hide all elements ID: 
                 for (m = 0; m < linksArray.length; m++) {
-                    if (!validURL(linksArray[m])) {
+                    if (!validURL(linksArray[m]) && linksArray[m] != '') {
                         var elements = document.querySelectorAll('.' + linksArray[m]);
                         if (elements) {
                             for (var n = 0; n < elements.length; n++) {
@@ -54,9 +54,7 @@ function handleGraphsInitialization() {
                 }
 
                 console.log('data', data);
-                // data.options.legend = {
-                //     display: false
-                // }
+                data.options.legend = JSON.parse(GRAPHS_DATA.graphs[j].graph_legend_configuration);
 
                 var chart = new Chart(chartCreator, data);
             }

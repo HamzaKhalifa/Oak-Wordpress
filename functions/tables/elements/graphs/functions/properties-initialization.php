@@ -25,8 +25,18 @@ Graphs::$properties = array (
         'property_name' => 'graph_links', 
         'type' => 'text', 
         'input_type' => 'textarea', 
-        'placeholder' => __( 'Liens/IDs', Oak::$text_domain ), 
-        'description' => __( 'Liens/IDs', Oak::$text_domain ), 
+        'placeholder' => __( 'Liens/Classes', Oak::$text_domain ), 
+        'description' => __( 'Liens/Classes', Oak::$text_domain ), 
+        'width' => '50',
+        'translatable' => true
+    ),
+    array (
+        'name' => 'legend_configuration', 
+        'property_name' => 'graph_legend_configuration', 
+        'type' => 'text', 
+        'input_type' => 'textarea', 
+        'placeholder' => __( 'Configuration de la légende', Oak::$text_domain ), 
+        'description' => __( 'Configuration de la légende', Oak::$text_domain ), 
         'width' => '50',
         'translatable' => true
     )

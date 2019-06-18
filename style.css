@@ -1441,11 +1441,11 @@ body .oak_select_container_with_filters__add_button {
   margin-bottom: 5px;
 }
 
-.oak_add_element_ivwp__synchronise_button_container, .oak_add_element__add_graph_button {
+.oak_add_element_ivwp__synchronise_button_container {
   display: flex;
 }
 
-.oak_add_element_ivwp__synchronise_button, .oak_add_element_add_graph_button__span {
+.oak_add_element_ivwp__synchronise_button {
   background-color: #003366;
   color: white;
   width: 100%;
@@ -1454,7 +1454,7 @@ body .oak_select_container_with_filters__add_button {
   padding-bottom: 10px;
 }
 
-.oak_add_element_ivwp__synchronise_button:hover, .oak_add_element_add_graph_button__span:hover {
+.oak_add_element_ivwp__synchronise_button:hover {
   cursor: pointer;
 }
 
@@ -1615,16 +1615,6 @@ body .oak_select_container_with_filters__add_button {
   padding-right: 40px;
   justify-content: space-between;
   border-bottom: 1px solid #e2e4e7;
-  width: 100%;
-}
-
-.oak_single_list_row {
-  flex-direction: column;
-  display: flex;
-}
-
-.oak_list_row_child_elements_container {
-  margin-left: 35px;
 }
 
 .oak_list_row_container__title {
@@ -2420,6 +2410,23 @@ input.import_container__element_checkbox {
   width: 50%;
   border-right: 1px solid #003366;
   padding-right: 10px;
+}
+
+.oak_graph_legend_configuration {
+  margin-top: 30px;
+}
+
+.graph_legend_normal_configuration {
+  display: flex;
+  flex-direction: column;
+}
+
+.oak_single_legend_parameter__input, .oak_single_legend_label_parameter__input {
+  flex: 1;
+}
+
+.oak_graph_legend_configuration input[type=checkbox] {
+  flex: initial;
 }
 
 /*# sourceMappingURL=style.css.map */

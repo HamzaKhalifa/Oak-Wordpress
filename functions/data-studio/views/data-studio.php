@@ -48,86 +48,90 @@
 
         <div class="oak_selected_graph_container oak_hidden">
             <div class="oak_selected_graph_container__configuration">
-                <?php /*
                 <div class="oak_selected_graph_legend_configuration_container">
-                    <h2><?php _e( 'Configuration de la légende', Oak::$text_domain ); ?></h2>
 
-                    <div class="oak_single_parameter legend_html_content_container">
-                        <span class="oak_single_parameter__label"><?php _e( 'Configuration normale', Oak::$text_domain ); ?></span>
-                        <input type="text" value="" property_nature="dataset" property_type="normal"  class="legend_normal_configuration_checkbox">
-                    </div>
+                    <div class="oak_graph_legend_configuration">
+                    
+                        <h2><?php _e( 'Configuration de la légende', Oak::$text_domain ); ?></h2>
 
-                    <div class="oak_single_parameter legend_html_content_container oak_hidden">
-                        <span class="oak_single_parameter__label"><?php _e( 'Contenu HTML de la légende', Oak::$text_domain ); ?></span>
-                        <input type="text" value="" property_nature="dataset" property_type="normal" property_name="position" placeholder="top/left/bottom/right" class="oak_single_legend_parameter__input">
-                    </div>
-
-                    <div class="graph_legend_normal_configuration">
-                        <div class="oak_single_parameter">
-                            <span class="oak_single_parameter__label"><?php _e( 'Display', Oak::$text_domain ); ?></span>
-                            <input type="checkbox" property_nature="dataset" property_type="checkbox" property_name="display" class="oak_single_legend_parameter__input">
+                        <div class="oak_single_parameter legend_html_content_container oak_hidden">
+                            <span class="oak_single_parameter__label"><?php _e( 'Contenu HTML de la légende', Oak::$text_domain ); ?></span>
+                            <input type="textarea" value="" property_nature="dataset" property_type="normal" placeholder="" class="oak_single_legend_html__input">
                         </div>
 
-                        <div class="oak_single_parameter">
-                            <span class="oak_single_parameter__label"><?php _e( 'Position', Oak::$text_domain ); ?></span>
-                            <input type="text" value="" property_nature="dataset" property_type="normal" property_name="position" placeholder="top/left/bottom/right" class="oak_single_legend_parameter__input">
-                        </div>
+                        <div class="graph_legend_normal_configuration">
+                            <div class="oak_single_parameter">
+                                <span class="oak_single_parameter__label"><?php _e( 'Display', Oak::$text_domain ); ?></span>
+                                <input type="checkbox" property_nature="dataset" checked property_type="checkbox" property_name="display" class="oak_single_legend_parameter__input">
+                            </div>
 
-                        <div class="oak_single_parameter">
-                            <span class="oak_single_parameter__label"><?php _e( 'Largeur maximale', Oak::$text_domain ); ?></span>
-                            <input type="checkbox" property_nature="dataset" property_type="checkbox" property_name="fullWidth" class="oak_single_legend_parameter__input">
-                        </div>
+                            <div class="oak_single_parameter">
+                                <span class="oak_single_parameter__label"><?php _e( 'Position', Oak::$text_domain ); ?></span>
+                                <input type="text" property_nature="dataset" property_type="normal" property_name="position" placeholder="top/left/bottom/right" value="top" class="oak_single_legend_parameter__input">
+                            </div>
 
-                        <div class="oak_single_parameter">
-                            <span class="oak_single_parameter__label"><?php _e( 'Labels en ordre inversé', Oak::$text_domain ); ?></span>
-                            <input type="checkbox" value="" property_nature="dataset" property_type="checkbox" property_name="reverse" class="oak_single_legend_parameter__input">
-                        </div>
-                        
-                        <div class="oak_selected_graph_legend_label_configuration_container">
+                            <div class="oak_single_parameter">
+                                <span class="oak_single_parameter__label"><?php _e( 'Largeur maximale', Oak::$text_domain ); ?></span>
+                                <input type="checkbox" property_nature="dataset" property_type="checkbox" property_name="fullWidth" class="oak_single_legend_parameter__input">
+                            </div>
+
+                            <div class="oak_single_parameter">
+                                <span class="oak_single_parameter__label"><?php _e( 'Labels en ordre inversé', Oak::$text_domain ); ?></span>
+                                <input type="checkbox" value="" property_nature="dataset" property_type="checkbox" property_name="reverse" class="oak_single_legend_parameter__input">
+                            </div>
                             
-                            <h3><?php _e( 'Label de la légende', Oak::$text_domain ); ?></h3>
-                            
-                            <div class="oak_single_parameter">
-                                <span class="oak_single_parameter__label"><?php _e( 'Largeur du box', Oak::$text_domain ); ?></span>
-                                <input type="text" value="" property_nature="dataset" property_type="normal" property_name="boxWidth" placeholder="40" class="oak_single_legend_parameter__input">
-                            </div>
+                            <div class="oak_selected_graph_legend_label_configuration_container">
+                                
+                                <h3><?php _e( 'Label de la légende', Oak::$text_domain ); ?></h3>
+                                
+                                <div class="oak_single_parameter">
+                                    <span class="oak_single_parameter__label"><?php _e( 'Largeur du box', Oak::$text_domain ); ?></span>
+                                    <input type="text" property_nature="dataset" property_type="normal" property_name="boxWidth" placeholder="40" value="40" class="oak_single_legend_label_parameter__input">
+                                </div>
 
-                            <div class="oak_single_parameter">
-                                <span class="oak_single_parameter__label"><?php _e( 'Font size', Oak::$text_domain ); ?></span>
-                                <input type="text" value="" property_nature="dataset" property_type="normal" property_name="fontSize" placeholder="12" class="oak_single_legend_parameter__input">
-                            </div>
+                                <div class="oak_single_parameter">
+                                    <span class="oak_single_parameter__label"><?php _e( 'Font size', Oak::$text_domain ); ?></span>
+                                    <input type="text" property_nature="dataset" property_type="normal" property_name="fontSize" placeholder="12" value="12" class="oak_single_legend_label_parameter__input">
+                                </div>
 
-                            <div class="oak_single_parameter">
-                                <span class="oak_single_parameter__label"><?php _e( 'Font Style', Oak::$text_domain ); ?></span>
-                                <input type="text" value="" property_nature="dataset" property_type="normal" property_name="fontStyle" placeholder="normal" class="oak_single_legend_parameter__input">
-                            </div>
+                                <div class="oak_single_parameter">
+                                    <span class="oak_single_parameter__label"><?php _e( 'Font Style', Oak::$text_domain ); ?></span>
+                                    <input type="text"  property_nature="dataset" property_type="normal" property_name="fontStyle" placeholder="normal" value="normal" class="oak_single_legend_label_parameter__input">
+                                </div>
 
-                            <div class="oak_single_parameter">
-                                <span class="oak_single_parameter__label"><?php _e( 'Font Color', Oak::$text_domain ); ?></span>
-                                <input type="text" value="" property_nature="dataset" property_type="normal" property_name="fontColor" placeholder="normal" class="oak_single_legend_parameter__input">
-                            </div>
+                                <div class="oak_single_parameter">
+                                    <span class="oak_single_parameter__label"><?php _e( 'Font Color', Oak::$text_domain ); ?></span>
+                                    <input type="text" property_nature="dataset" property_type="normal" property_name="fontColor" placeholder="normal"  value="#666" class="oak_single_legend_label_parameter__input">
+                                </div>
 
-                            <div class="oak_single_parameter">
-                                <span class="oak_single_parameter__label"><?php _e( 'Font Family', Oak::$text_domain ); ?></span>
-                                <input type="text" value="" property_nature="dataset" property_type="normal" property_name="fontFamily" placeholder="'Helvetica Neue', 'Helvetica', 'Arial', sans-serif" class="oak_single_legend_parameter__input">
-                            </div>
+                                <div class="oak_single_parameter">
+                                    <span class="oak_single_parameter__label"><?php _e( 'Font Family', Oak::$text_domain ); ?></span>
+                                    <input type="text" property_nature="dataset" property_type="normal" property_name="fontFamily" placeholder="'Helvetica Neue', 'Helvetica', 'Arial', sans-serif" value="'Helvetica Neue', 'Helvetica', 'Arial', sans-serif" class="oak_single_legend_label_parameter__input">
+                                </div>
 
-                            <div class="oak_single_parameter">
-                                <span class="oak_single_parameter__label"><?php _e( 'Padding', Oak::$text_domain ); ?></span>
-                                <input type="text" value="" property_nature="dataset" property_type="normal" property_name="padding" placeholder="10" class="oak_single_legend_parameter__input">
-                            </div>
+                                <div class="oak_single_parameter">
+                                    <span class="oak_single_parameter__label"><?php _e( 'Padding', Oak::$text_domain ); ?></span>
+                                    <input type="text" property_nature="dataset" property_type="normal" property_name="padding" value="10" placeholder="10" class="oak_single_legend_label_parameter__input">
+                                </div>
 
-                            <div class="oak_single_parameter">
-                                <span class="oak_single_parameter__label"><?php _e( 'Utiliser Point Style', Oak::$text_domain ); ?></span>
-                                <input type="checkbox" property_nature="dataset" property_type="checkbox" property_name="usePointStyle" class="oak_single_legend_parameter__input">
+                                <div class="oak_single_parameter">
+                                    <span class="oak_single_parameter__label"><?php _e( 'Utiliser Point Style', Oak::$text_domain ); ?></span>
+                                    <input type="checkbox" property_nature="dataset" property_type="checkbox" property_name="usePointStyle" class="oak_single_legend_label_parameter__input">
+                                </div>
+
                             </div>
+                            <!-- Legend label configuration ends here -->
 
                         </div>
-                        <!-- Legend label configuration ends here -->
+
+                        <div class="oak_single_parameter legend_html_content_container">
+                            <span class="oak_single_parameter__label"><?php _e( 'Configuration normale', Oak::$text_domain ); ?></span>
+                            <input type="checkbox" checked property_nature="dataset" property_type="normal"  class="legend_normal_configuration_checkbox">
+                        </div>
 
                     </div>
 
-                </div> */?>
+                </div>
                 
             </div>
 

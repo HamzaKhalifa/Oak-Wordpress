@@ -125,3 +125,20 @@
     border-right: 1px solid #003366;
     padding-right: 10px;
 }
+
+.oak_graph_legend_configuration {
+    margin-top: 30px;
+}
+
+.graph_legend_normal_configuration {
+    display: flex;
+    flex-direction: column;
+}
+
+.oak_single_legend_parameter__input, .oak_single_legend_label_parameter__input {
+    flex: 1;
+}
+
+.oak_graph_legend_configuration input[type=checkbox] {
+    flex: initial;
+}

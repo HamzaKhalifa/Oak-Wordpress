@@ -521,19 +521,20 @@ function createChartCanvas(actualLabels, actualData, graph, graphTitle) {
     return chartCanvas;
 }
 
-function createChart(chartCanvas, graph, title, actualLabels, actualData, datasetProperties, links) {
+function createChart(chartCanvas, graph, title, actualLabels, actualData, datasetProperties, links, legendConfiguration) {
     var datasets = [{
         label: title,
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgb(255, 99, 132)',
         data: actualData
-    }]
+    }];
     for (var i = 0; i < datasetProperties.length; i++) {
         datasets[0][datasetProperties[i].propertyName] = datasetProperties[i].value;
     }
+    var legend = legendConfiguration ? legendConfiguration : {};
     
     var chartCreator = chartCanvas.getContext('2d');
-    
+
     chartData = {
         type: graph,
         // The data for our dataset
@@ -543,19 +544,21 @@ function createChart(chartCanvas, graph, title, actualLabels, actualData, datase
         },
         options: {
             responsive: true,
+            legend
         }
     };
+    console.log('legend', legend);
+    console.log('Chart legend', chartData.options.legend);
     var chart = new Chart(chartCreator, chartData);
 
-    console.log('dataset properties', datasetProperties);
     // For click events: 
+
     if (graph == 'doughnut' && links) {
         chartCanvas.onclick = function(evt){
             var activePoints = chart.getElementsAtEvent(evt);
             if (activePoints[0]) {
                 var linkIndex = activePoints[0]._index;
                 var url = links[linkIndex];
-                console.log(url);
                 window.open(url);
             }
             // => activePoints is an array of points on the canvas that are at the same position as the click event.
@@ -623,9 +626,11 @@ function handleRefreshGraphButton() {
         var datasetProperties = graphParameters.datasetProperties;
         var labels = graphParameters.labels;
         var data = graphParameters.data;
+        var legendConfiguration = graphParameters.legend;
+        console.log('legend configuration in handle refresh', graphParameters.legend);
 
         var selectedChartCanvas = document.querySelector('.oak_selected_graph');
-        createChart(selectedChartCanvas, chosenGraphData.graph, chosenGraphData.title, labels, data, datasetProperties, graphParameters.links);
+        createChart(selectedChartCanvas, chosenGraphData.graph, chosenGraphData.title, labels, data, datasetProperties, graphParameters.links, legendConfiguration);
     });
 }
 
@@ -651,11 +656,37 @@ function getGraphParameters() {
         var data = parametersInputs[parametersInputs.length - 2].value.split(';');
         var links = parametersInputs[parametersInputs.length - 1].value.split(';');
 
+        // For the legend: 
+        var legend = {};
+        if ( document.querySelector('.legend_normal_configuration_checkbox').checked == true ) {
+            var legendInputs = document.querySelectorAll('.oak_single_legend_parameter__input');
+            for (var i = 0; i < legendInputs.length; i++) {
+                if (legendInputs[i].getAttribute('property_type') == 'normal')
+                    legend[legendInputs[i].getAttribute('property_name')] = legendInputs[i].value;
+                else if (legendInputs[i].getAttribute('property_type') == 'checkbox')
+                    legend[legendInputs[i].getAttribute('property_name')] = legendInputs[i].checked;
+            }
+    
+            // For legend Labels:
+            legend.labels = {};
+            var legendLabelInputs = document.querySelectorAll('.oak_single_legend_label_parameter__input');
+            for (var i = 0; i < legendLabelInputs.length; i++) {
+                if (legendLabelInputs[i].getAttribute('property_type') == 'normal')
+                    legend.labels[legendLabelInputs[i].getAttribute('property_name')] = legendLabelInputs[i].value;
+                else if (legendLabelInputs[i].getAttribute('property_type') == 'checkbox')
+                    legend.labels[legendLabelInputs[i].getAttribute('property_name')] = legendLabelInputs[i].checked;
+            }
+            legend.labels.boxWidth = parseInt(legend.labels.boxWidth);
+            legend.labels.fontSize = parseInt(legend.labels.fontSize);
+            legend.labels.padding = parseInt(legend.labels.padding);
+        }
+
         return({
             datasetProperties,
             labels,
             data,
-            links
+            links,
+            legend
         });
 }
 
@@ -715,7 +746,8 @@ function handleSaveGraphButton() {
             graph_designation: title,
             graph_identifier: createIdentifier(),
             graph_data: JSON.stringify(graphData),
-            graph_links: parametersInputs[parametersInputs.length - 1].value
+            graph_links: parametersInputs[parametersInputs.length - 1].value,
+            graph_legend_configuration: JSON.stringify(graphParameters.legend)
         }
         
         jQuery(document).ready(function() {
@@ -760,6 +792,16 @@ function openModal(title, twoButtons) {
         cancelButtonContainer.style.display = 'none';
         okButtonContainer.style.display = 'flex';
     }
+}
+
+// For legend configuration html:
+var legendConfigurationInnerHTML = '';
+handleLegendConfigurationContent();
+function handleLegendConfigurationContent() {
+    var legendConfigurationContainer = document.querySelector('.oak_graph_legend_configuration');
+    legendConfigurationInnerHTML = legendConfigurationContainer.innerHTML;
+
+    legendConfigurationContainer.remove();
 }
 
 // For the confirm and cancel buttons
@@ -834,6 +876,14 @@ function handleModalButtons() {
 
                 selectedGraphContainerConfiguration.append(singleParameter);
             }
+
+            // For legend configuration: 
+            var legendConfigurationContainer = document.createElement('div');
+            legendConfigurationContainer.classList.add('oak_graph_legend_configuration');
+            legendConfigurationContainer.innerHTML = legendConfigurationInnerHTML;
+            selectedGraphContainerConfiguration.append(legendConfigurationContainer);
+            handleLegendConfigurationCheckboxEvents();
+
             createChart(selectedChartCanvas, chosenGraphData.graph, chosenGraphData.title, chosenGraphData.labels, chosenGraphData.data, {});
             doneLoading();
         }
@@ -843,6 +893,19 @@ function handleModalButtons() {
     cancelButton.addEventListener('click', function() {
         closeModals();
     });
+}
+
+function handleLegendConfigurationCheckboxEvents() {
+    var legendConfigurationCheckbox = document.querySelector('.legend_normal_configuration_checkbox');
+    legendConfigurationCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            document.querySelector('.graph_legend_normal_configuration').classList.remove('oak_hidden');
+            document.querySelector('.legend_html_content_container').classList.add('oak_hidden');
+        } else {
+            document.querySelector('.graph_legend_normal_configuration').classList.add('oak_hidden');
+            document.querySelector('.legend_html_content_container').classList.remove('oak_hidden');
+        }
+    })
 }
 
 function closeModals() {
