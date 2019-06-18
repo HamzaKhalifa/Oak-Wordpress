@@ -48,6 +48,40 @@
 
         <div class="oak_selected_graph_container oak_hidden">
             <div class="oak_selected_graph_container__configuration">
+                <?php/*
+                <div class="oak_selected_graph_legend_configuration_container">
+                    <h2><?php _e( 'Configuration de la légende', Oak::$text_domain ); ?></h2>
+                    <div class="oak_single_parameter">
+                        <span class="oak_single_parameter__label"><?php _e( 'Display', Oak::$text_domain ); ?></span>
+                        <input type="checkbox" property_nature="dataset" property_type="checkbox" property_name="display" class="oak_single_legend_parameter__input">
+                    </div>
+
+                    <div class="oak_single_parameter">
+                        <span class="oak_single_parameter__label"><?php _e( 'Position', Oak::$text_domain ); ?></span>
+                        <input type="text" value="" property_nature="dataset" property_type="normal" property_name="position" placeholder="top/left/bottom/right" class="oak_single_legend_parameter__input">
+                    </div>
+
+                    <div class="oak_single_parameter">
+                        <span class="oak_single_parameter__label"><?php _e( 'Largeur maximale', Oak::$text_domain ); ?></span>
+                        <input type="checkbox" property_nature="dataset" property_type="checkbox" property_name="fullWidth" class="oak_single_legend_parameter__input">
+                    </div>
+
+                    <div class="oak_single_parameter">
+                        <span class="oak_single_parameter__label"><?php _e( 'Labels en ordre inversé', Oak::$text_domain ); ?></span>
+                        <input type="checkbox" value="" property_nature="dataset" property_type="checkbox" property_name="reverse" class="oak_single_legend_parameter__input">
+                    </div>
+
+                    <div class="oak_selected_graph_legend_label_configuration_container">
+                        <h3><?php _e( 'Label de la légende', Oak::$text_domain ); ?></h3>
+                        
+                        <div class="oak_single_parameter">
+                            <span class="oak_single_parameter__label"><?php _e( 'Position', Oak::$text_domain ); ?></span>
+                            <input type="text" value="" property_nature="dataset" property_type="normal" property_name="position" placeholder="top/left/bottom/right" class="oak_single_legend_parameter__input">
+                        </div>
+                    </div>
+                </div>
+                */?>
+                
             </div>
 
             <span class="refresh_graph_button"><?php _e( 'Rafraîchir', Oak::$text_domain ); ?></span>

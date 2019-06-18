@@ -12,14 +12,14 @@ function handleGraphsInitialization() {
             if (GRAPHS_DATA.graphs[j].graph_identifier == graphIdentifier) {
                 var data = JSON.parse(GRAPHS_DATA.graphs[j].graph_data);
                 var links = GRAPHS_DATA.graphs[j].graph_links;
-                linksArray = links.split(';');
+                var linksArray = [];
+                if ( links != null ) {
+                    linksArray = links.split(';');
+                }
                 // Lets hide all elements ID: 
-                console.log(linksArray);
                 for (m = 0; m < linksArray.length; m++) {
                     if (!validURL(linksArray[m])) {
-                        console.log(linksArray[m]);
                         var element = document.getElementById(linksArray[m]);
-                        console.log(element);
                         if (element)
                             element.classList.add('oak_hidden');
                     }
@@ -49,6 +49,9 @@ function handleGraphsInitialization() {
                 }
 
                 console.log('data', data);
+                // data.options.legend = {
+                //     display: false
+                // }
 
                 var chart = new Chart(chartCreator, data);
             }
