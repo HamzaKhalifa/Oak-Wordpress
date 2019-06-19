@@ -70,8 +70,10 @@ function handleGraphsInitialization() {
                 } else {
                     canvas.style.position = 'absolute';
                 }
-
-                if( window.innerWidth > 1200) {
+                
+                if (window.innerWidth > 1350) {
+                    canvas.style.left = '-300px';
+                } else if( window.innerWidth > 1200) {
                     canvas.style.left = '-240px';
                 } else if(window.innerWidth > 950) {
                     canvas.style.left = '-200px';
@@ -94,7 +96,9 @@ function handleGraphsInitialization() {
                     }
 
                     
-                    if( window.innerWidth > 1200) {
+                    if (window.innerWidth > 1350) {
+                        canvas.style.left = '-300px';
+                    } else if( window.innerWidth > 1200) {
                         canvas.style.left = '-240px';
                     } else if(window.innerWidth > 950) {
                         canvas.style.left = '-200px';
