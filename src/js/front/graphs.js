@@ -57,16 +57,27 @@ function handleGraphsInitialization() {
                 }
                 
                 data.options.legend = JSON.parse(GRAPHS_DATA.graphs[j].graph_legend_configuration);
+
+                data.options.responsive = false;
+                document.querySelector('.oak_front_graph_container').style.height = '500px';
+                canvas.style.position = 'absolute';
+                canvas.style.left = '-170px';
+                canvas.style.width = '1000px';
+                canvas.style.height = '500px';
                 
                 var chart = new Chart(chartCreator, data);
 
+                document.querySelector('.oak_front_graph_container').style.height = '500px';
+                canvas.style.position = 'absolute';
+                canvas.left = '-150px';
+
                 // Make canvas full width: 
-                parent = canvas;
-                do {
-                    console.log(parent);
-                    parent.style.height = '100%';
-                    parent = parent.parentNode;
-                } while(parent.tagName != 'SECTION')
+                // parent = canvas;
+                // do {
+                //     console.log(parent);
+                //     parent.style.height = '100%';
+                //     parent = parent.parentNode;
+                // } while(parent.tagName != 'SECTION')
             }
         }
     }
