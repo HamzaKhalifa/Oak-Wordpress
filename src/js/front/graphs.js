@@ -72,12 +72,12 @@ function handleGraphsInitialization() {
                 canvas.left = '-150px';
 
                 // Make canvas full width: 
-                // parent = canvas;
-                // do {
-                //     console.log(parent);
-                //     parent.style.height = '100%';
-                //     parent = parent.parentNode;
-                // } while(parent.tagName != 'SECTION')
+                parent = canvas.parentNode;
+                do {
+                    console.log(parent);
+                    parent.style.height = '100%';
+                    parent = parent.parentNode;
+                } while(parent.tagName != 'SECTION')
             }
         }
     }
