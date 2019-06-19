@@ -1,0 +1,23 @@
+.add_element_graph_button {
+    background-color: #003366;
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    margin-top: 30px;
+}
+
+.add_element_graph_button:hover {
+    cursor: pointer;
+}
+
+.add_element_graph_canvas {
+    margin-top: 10px;
+}
+
+.oak_end_of_graph_data_object_div {
+    width: 98%;
+    height: 2px;
+    background-color: #003366;
+    margin-bottom: 20px;
+}

@@ -56,7 +56,7 @@
 
                         <div class="oak_single_parameter legend_html_content_container oak_hidden">
                             <span class="oak_single_parameter__label"><?php _e( 'Contenu HTML de la légende', Oak::$text_domain ); ?></span>
-                            <input type="textarea" value="" property_nature="dataset" property_type="normal" placeholder="" class="oak_single_legend_html__input">
+                            <textarea type="textarea" property_nature="dataset" property_type="normal" placeholder="" class="oak_single_legend_html__input"></textarea>
                         </div>
 
                         <div class="graph_legend_normal_configuration">
@@ -101,7 +101,7 @@
 
                                 <div class="oak_single_parameter">
                                     <span class="oak_single_parameter__label"><?php _e( 'Font Color', Oak::$text_domain ); ?></span>
-                                    <input type="text" property_nature="dataset" property_type="normal" property_name="fontColor" placeholder="normal"  value="#666" class="oak_single_legend_label_parameter__input">
+                                    <input type="text" property_nature="dataset" property_type="normal" property_name="fontColor" placeholder="#666"  value="#666" class="oak_single_legend_label_parameter__input">
                                 </div>
 
                                 <div class="oak_single_parameter">

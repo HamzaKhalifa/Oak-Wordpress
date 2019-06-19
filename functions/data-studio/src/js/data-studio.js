@@ -552,7 +552,6 @@ function createChart(chartCanvas, graph, title, actualLabels, actualData, datase
     var chart = new Chart(chartCreator, chartData);
 
     // For click events: 
-
     if (graph == 'doughnut' && links) {
         chartCanvas.onclick = function(evt){
             var activePoints = chart.getElementsAtEvent(evt);
@@ -729,6 +728,7 @@ function handleSaveGraphButton() {
             },
             options: {
                 responsive: true,
+                legend: graphParameters.legend
             }
         };
         var title = '';
@@ -747,7 +747,6 @@ function handleSaveGraphButton() {
             graph_identifier: createIdentifier(),
             graph_data: JSON.stringify(graphData),
             graph_links: parametersInputs[parametersInputs.length - 1].value,
-            graph_legend_configuration: JSON.stringify(graphParameters.legend)
         }
         
         jQuery(document).ready(function() {
@@ -761,6 +760,7 @@ function handleSaveGraphButton() {
                 success: function(data) {
                     doneLoading();
                     console.log(data);
+                    openModal('Votre graphe a été sauvegardé')
                 },
                 error: function(error) {
                     console.log(error);

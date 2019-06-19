@@ -12,10 +12,8 @@ $graphs_sql = "CREATE TABLE $graphs_table_name (
     graph_state varchar(555),
     graph_modification_time datetime,
     graph_content_language varchar(10) DEFAULT 'fr',
-    graph_title varchar(555) DEFAULT '' NOT NULL,
     graph_data LONGTEXT,
     graph_links LONGTEXT,
-    graph_legend_configuration LONGTEXT,
     graph_synchronized TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";

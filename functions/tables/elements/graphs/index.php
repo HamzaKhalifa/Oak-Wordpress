@@ -7,6 +7,9 @@ class Graphs {
         $this->table_creator();
         $this->data_collector();
 
+        add_action( 'admin_enqueue_scripts', array( $this, 'graphs_admin_enqueue_scripts' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'graphs_admin_enqueue_styles' ) );
+
         Oak::$elements_script_properties_functions['graphs'] = function() {
             $this->properties_to_enqueue_for_script();
         };
@@ -28,6 +31,21 @@ class Graphs {
 
     static function properties_initialization() {
         include get_template_directory() . '/functions/tables/elements/graphs/functions/properties-initialization.php';
+    }
+
+    function graphs_admin_enqueue_scripts() {
+        ?>
+        <?php
+        
+        wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true );
+        if ( isset( $_GET['graph_identifier'] ) ) :
+            wp_enqueue_script( 'oak_add_element_graph_script', get_template_directory_uri() . '/functions/tables/elements/graphs/src/js/add-element-graph.js', array(), false, true );
+        endif;
+        wp_enqueue_script( 'oak_lodash', 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js', array(), false, true );
+    }
+    
+    function graphs_admin_enqueue_styles() {
+        wp_enqueue_style( 'oak_add_element_graph_style', get_template_directory_uri() . '/functions/tables/elements/graphs/src/css/add-element-graph.css' );
     }
 
     public static function properties_to_enqueue_for_script() {
@@ -89,6 +107,10 @@ class Graphs {
 
     public static function data_studio_button() {
         include get_template_directory() . '/functions/tables/elements/graphs/views/data_studio_button.php';
+    }
+
+    public static function data_studio_graph_container() {
+        include get_template_directory() . '/functions/tables/elements/graphs/views/graph_container.php';
     }
 }
 

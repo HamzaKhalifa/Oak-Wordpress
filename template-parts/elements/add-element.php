@@ -907,6 +907,7 @@ $modification_time_property = $table . '_modification_time';
         <?php 
         if ( isset( $_GET['elements'] ) && $_GET['elements'] == 'graphs' ) :
             Graphs::data_studio_button();
+            Graphs::data_studio_graph_container();
         endif;
         ?>
 
