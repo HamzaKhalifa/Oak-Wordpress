@@ -61,7 +61,8 @@ function handleGraphsInitialization() {
                 data.options.responsive = false;
                 document.querySelector('.oak_front_graph_container').style.height = '500px';
                 //canvas.style.position = 'absolute';
-                var width = window.innerWidth;
+                var marginRelativeToWindowWidth = -150;
+                var width = window.innerWidth + marginRelativeToWindowWidth;
 
                 console.log('width', width);
                 if (width >= 768) {
@@ -76,7 +77,7 @@ function handleGraphsInitialization() {
                 window.addEventListener('scroll', function(e) {
                     var currentWidth = parseInt(canvas.style.width);
                     var currentHeight = parseInt(window.getComputedStyle(canvas).getPropertyValue('height'));
-                    var newWidth = window.innerWidth;
+                    var newWidth = window.innerWidth + marginRelativeToWindowWidth;
                     var newHeight = currentHeight * newWidth / currentWidth;
                     if (newWidth >= 768) {
                         canvas.style.position = 'absolute';
