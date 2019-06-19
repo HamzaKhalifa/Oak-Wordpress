@@ -70,7 +70,6 @@ function handleGraphsInitialization() {
                 } else {
                     canvas.style.position = 'absolute';
                 }
-                canvas.style.left = '-200px';
                 
                 canvas.style.width = width + 'px';
 
@@ -79,11 +78,22 @@ function handleGraphsInitialization() {
                     var currentHeight = parseInt(window.getComputedStyle(canvas).getPropertyValue('height'));
                     var newWidth = window.innerWidth + marginRelativeToWindowWidth;
                     var newHeight = currentHeight * newWidth / currentWidth;
-                    if (newWidth >= 768) {
+                    if (window.innerWidth >= 768) {
                         canvas.style.position = 'absolute';
                     } else {
                         canvas.style.position = 'initial';
+                        canvas.style.width = window.innerWidth + 'px';
                     }
+
+                    
+                    if(window.innerWidth > 1200) {
+                        canvas.style.left = '-240px';
+                    } else if(window.innerWidth > 950) {
+                        canvas.style.left = '-200px';
+                    } else {
+                        canvas.style.left = '-150px';
+                    }
+                    
                     canvas.style.width = newWidth + 'px';
                     console.log('newHeight', newHeight);
                     canvas.style.height = newHeight + 'px';
