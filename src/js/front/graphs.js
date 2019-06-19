@@ -61,17 +61,28 @@ function handleGraphsInitialization() {
                 data.options.responsive = false;
                 document.querySelector('.oak_front_graph_container').style.height = '500px';
                 //canvas.style.position = 'absolute';
-                //canvas.style.left = '-200px';
                 var width = window.innerWidth;
+
+                console.log('width', width);
+                if (width >= 768) {
+                    canvas.style.position = 'initial';
+                } else {
+                    canvas.style.position = 'absolute';
+                }
+                canvas.style.left = '-200px';
                 
                 canvas.style.width = width + 'px';
 
                 window.addEventListener('scroll', function(e) {
-                    console.log(window.innerWidth);
                     var currentWidth = parseInt(canvas.style.width);
-                    var currentHeight = parseInt(canvas.style.height);
+                    var currentHeight = parseInt(window.getComputedStyle(canvas).getPropertyValue('height'));
                     var newWidth = window.innerWidth;
                     var newHeight = currentHeight * newWidth / currentWidth;
+                    if (newWidth >= 768) {
+                        canvas.style.position = 'absolute';
+                    } else {
+                        canvas.style.position = 'initial';
+                    }
                     canvas.style.width = newWidth + 'px';
                     console.log('newHeight', newHeight);
                     canvas.style.height = newHeight + 'px';
@@ -83,7 +94,6 @@ function handleGraphsInitialization() {
                 // Make canvas full width: 
                 parent = canvas.parentNode;
                 do {
-                    console.log(parent);
                     parent.style.height = '100%';
                     parent = parent.parentNode;
                 } while(parent.tagName != 'SECTION')
