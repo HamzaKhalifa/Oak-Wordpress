@@ -60,16 +60,25 @@ function handleGraphsInitialization() {
 
                 data.options.responsive = false;
                 document.querySelector('.oak_front_graph_container').style.height = '500px';
-                canvas.style.position = 'absolute';
-                canvas.style.left = '-170px';
-                canvas.style.width = '1000px';
-                canvas.style.height = '500px';
+                //canvas.style.position = 'absolute';
+                //canvas.style.left = '-200px';
+                var width = window.innerWidth;
+                
+                canvas.style.width = width + 'px';
+
+                window.addEventListener('scroll', function(e) {
+                    console.log(window.innerWidth);
+                    var currentWidth = parseInt(canvas.style.width);
+                    var currentHeight = parseInt(canvas.style.height);
+                    var newWidth = window.innerWidth;
+                    var newHeight = currentHeight * newWidth / currentWidth;
+                    canvas.style.width = newWidth + 'px';
+                    console.log('newHeight', newHeight);
+                    canvas.style.height = newHeight + 'px';
+                });
                 
                 var chart = new Chart(chartCreator, data);
 
-                document.querySelector('.oak_front_graph_container').style.height = '500px';
-                canvas.style.position = 'absolute';
-                canvas.left = '-150px';
 
                 // Make canvas full width: 
                 parent = canvas.parentNode;
