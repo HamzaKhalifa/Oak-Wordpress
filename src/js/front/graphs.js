@@ -58,7 +58,7 @@ function handleGraphsInitialization() {
                 
                 data.options.legend = JSON.parse(GRAPHS_DATA.graphs[j].graph_legend_configuration);
 
-                data.options.responsive = false;
+                /*data.options.responsive = false;
                 document.querySelector('.oak_front_graph_container').style.height = '500px';
                 //canvas.style.position = 'absolute';
                 var marginRelativeToWindowWidth = -150;
@@ -109,7 +109,7 @@ function handleGraphsInitialization() {
                     canvas.style.width = newWidth + 'px';
                     console.log('newHeight', newHeight);
                     canvas.style.height = newHeight + 'px';
-                });
+                });*/
                 
                 var chart = new Chart(chartCreator, data);
 
