@@ -70,6 +70,14 @@ function handleGraphsInitialization() {
                 } else {
                     canvas.style.position = 'absolute';
                 }
+
+                if( window.innerWidth > 1200) {
+                    canvas.style.left = '-240px';
+                } else if(window.innerWidth > 950) {
+                    canvas.style.left = '-200px';
+                } else {
+                    canvas.style.left = '-150px';
+                }
                 
                 canvas.style.width = width + 'px';
 
@@ -86,7 +94,7 @@ function handleGraphsInitialization() {
                     }
 
                     
-                    if(window.innerWidth > 1200) {
+                    if( window.innerWidth > 1200) {
                         canvas.style.left = '-240px';
                     } else if(window.innerWidth > 950) {
                         canvas.style.left = '-200px';
