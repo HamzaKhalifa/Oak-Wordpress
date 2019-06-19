@@ -198,8 +198,10 @@ class Oak {
         // Data studio
         include_once get_template_directory() . '/functions/data-studio/index.php';
 
-        // Reporting safety 
+        // Reporting safety
         include_once get_template_directory() . '/functions/reporting-safety/index.php';
+
+        // add_action( 'wp_loaded', array( $this, 'oak_load_game' ) );
 
         // To permit cross origin communication 
         add_action( 'init', array( $this, 'add_cors_http_header' ) );
@@ -382,6 +384,11 @@ class Oak {
                 wp_localize_script( 'corn_elements_list', 'DATA', $final_data_to_pass );
             endif;
         endif;
+    }
+
+    function oak_load_game() {
+        // Loading game 
+        include_once get_template_directory() . '/functions/loading-game/index.php';
     }
 
     function oak_register_sidebars() {

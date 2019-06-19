@@ -1,0 +1,12 @@
+.oak_loading_game_character {
+    width: 200px;
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    z-index: 999999;
+    -moz-transform: scaleX(-1);
+}
+
+.oak_loading_game_character_changed_direction {
+    transform: rotateY(180deg);
+}

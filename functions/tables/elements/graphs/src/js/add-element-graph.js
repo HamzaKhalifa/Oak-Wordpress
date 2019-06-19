@@ -141,7 +141,7 @@ function refreshGraph() {
                             var elements = document.querySelectorAll('.' + url);
                             if (elements) {
                                 for (var n = 0; n < elements.length; n++) {
-                                    if (classExists(elements[n], 'oak_hidden'))
+                                    if (classExists(elements[n], 'oak_hidden')) 
                                         elements[n].classList.remove('oak_hidden');
                                     else
                                         elements[n].classList.add('oak_hidden');

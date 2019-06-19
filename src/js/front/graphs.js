@@ -31,6 +31,7 @@ function handleGraphsInitialization() {
                     canvas.onclick = function(evt) {
                         var activePoints = chart.getElementsAtEvent(evt);
                         if (activePoints[0]) {
+                            hideAllHideableWidgets(linksArray);
                             var linkIndex = activePoints[0]._index;
                             var url = linksArray[linkIndex];
                             if (url){
@@ -52,11 +53,21 @@ function handleGraphsInitialization() {
                         // => activePoints is an array of points on the canvas that are at the same position as the click event.
                     };
                 }
-
-                console.log('data', data);
+                
                 data.options.legend = JSON.parse(GRAPHS_DATA.graphs[j].graph_legend_configuration);
 
                 var chart = new Chart(chartCreator, data);
+            }
+        }
+    }
+}
+
+function hideAllHideableWidgets(ids) {
+    for(var i = 0; i < ids.length; i++) {
+        var elements = document.querySelectorAll('.' + ids[i]);
+        for (var j = 0; j < elements.length; j++) {
+            if (!classExists(elements[j], 'oak_hidden')) {
+                elements[j].classList.add('oak_hidden');
             }
         }
     }
