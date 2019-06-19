@@ -4,9 +4,11 @@ function handleGraphsInitialization() {
 
     for (var i = 0; i < allGraphContainers.length; i++) {
         var canvas = document.createElement('canvas');
+
         allGraphContainers[i].innerHTML = '';
         allGraphContainers[i].append(canvas);
         var chartCreator = canvas.getContext('2d');
+
         var graphIdentifier = allGraphContainers[i].getAttribute('graph-identifier');
         for (var j = 0; j < GRAPHS_DATA.graphs.length; j++) {
             if (GRAPHS_DATA.graphs[j].graph_identifier == graphIdentifier) {
@@ -55,8 +57,16 @@ function handleGraphsInitialization() {
                 }
                 
                 data.options.legend = JSON.parse(GRAPHS_DATA.graphs[j].graph_legend_configuration);
-
+                
                 var chart = new Chart(chartCreator, data);
+
+                // Make canvas full width: 
+                parent = canvas;
+                do {
+                    console.log(parent);
+                    parent.style.height = '100%';
+                    parent = parent.parentNode;
+                } while(parent.tagName != 'SECTION')
             }
         }
     }
