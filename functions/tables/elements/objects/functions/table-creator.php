@@ -60,7 +60,7 @@ foreach( Oak::$models_without_redundancy as $key => $model ) :
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $models_sql );
 
-    $wpdb->query("ALTER TABLE $table_name ROW_FORMAT=DYNAMIC");
+    $wpdb->query("ALTER TABLE $table_name ROW_FORMAT=COMPRESSED");
 
     foreach( $model_fields as $key => $field ) :
         $column_name = 'object_' . $key . '_' . $field->field_identifier;
