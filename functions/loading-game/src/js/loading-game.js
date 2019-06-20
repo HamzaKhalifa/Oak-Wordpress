@@ -41,9 +41,14 @@ function handleCharacterMovement() {
         const keyName = event.key;
         
         if ( keyName == 'ArrowRight' ) 
-            character.classList.remove('oak_loading_game_character_changed_direction');
+            character.classList.remove('oak_loading_game_object_changed_direction');
         else if (keyName == 'ArrowLeft')
-            character.classList.add('oak_loading_game_character_changed_direction');
+            character.classList.add('oak_loading_game_object_changed_direction');
+
+        console.log(keyName);
+        if ( keyName == 'Shift' ) {
+            fireBeam();
+        }
 
         for (var i = 0; i < keysValues.length; i++) {
             if (keysValues[i].name == keyName) {
@@ -91,6 +96,43 @@ function handleIdleAnimation() {
     }, 50);
 }
 
-fireBeam() {
+function fireBeam() {
+    var character = document.querySelector('.oak_loading_game_character');
+    
+    var characterPosition = getObjectPosition(character);
+    var beam = document.createElement('img');
+    beam.setAttribute('src', LOADING_GAME_DATA.fireBeamImage);
+    var beamDirection = classExists(character, 'oak_loading_game_object_changed_direction') ? -1 : 1;
+    if (beamDirection == -1) {
+        beam.classList.add('oak_loading_game_object_changed_direction');
+    }
+    beam.style.top = characterPosition.top + 50;
+    beam.style.left = characterPosition.left + 60;
+    beam.classList.add('oak_loading_game_firebeam');
 
+    document.querySelector('.oak_loaging_game_container').append(beam);
+    console.log('beam', beam);
+    setInterval(function() {
+        beam.style.left = parseInt(beam.style.left) + 7 * beamDirection;
+    }, 0.01);
+    setTimeout(() => {
+        beam.remove();
+    }, 4000);
+    
+}
+
+function getObjectPosition(object) {
+    return {
+        top: parseInt(getComputedStyle(object).getPropertyValue('top')),
+        left: parseInt(getComputedStyle(object).getPropertyValue('left'))
+    }
+}
+
+function classExists(element, className) {
+    for (var i = 0; i < element.classList.length; i++) {
+        if (element.classList[i] == className) 
+            return true
+    }
+
+    return false;
 }

@@ -9,14 +9,15 @@ class Loading_Game {
     }
 
     function loading_game_admin_enqueue_scripts() {
-        wp_enqueue_script( 'oak_loading_game', get_template_directory_uri() . '/functions/loading-game/src/js/loading-game.js', array('jquery'), false, true );
+        // wp_enqueue_script( 'oak_loading_game', get_template_directory_uri() . '/functions/loading-game/src/js/loading-game.js', array('jquery'), false, true );
         
         $character_idl_animations = [];
         for ( $i = 1; $i < 13; $i++ ) :
             $character_idl_animations[] = get_template_directory_uri() . '/functions/loading-game/src/sprites/drone/idle/' . $i . '.png';
         endfor;
         wp_localize_script( 'oak_loading_game', 'LOADING_GAME_DATA', array(
-            'characterIdlAnimationImage' => $character_idl_animations
+            'characterIdlAnimationImage' => $character_idl_animations,
+            'fireBeamImage' => get_template_directory_uri() . '/functions/loading-game/src/sprites/beams/bluebeam.png'
         ) );
     }
 
@@ -25,7 +26,7 @@ class Loading_Game {
     }
 
     function render_game() {
-        include_once get_template_directory() . '/functions/loading-game/views/character.php';
+        include_once get_template_directory() . '/functions/loading-game/views/game-view.php';
     }
 }
 
