@@ -23,6 +23,7 @@ $source_sql = "CREATE TABLE $sources_table_name (
     source_link TEXT,
     source_link_title TEXT,
     source_synchronized TEXT,
+    source_frame_objects TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

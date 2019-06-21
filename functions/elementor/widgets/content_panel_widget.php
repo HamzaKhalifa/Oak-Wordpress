@@ -5,6 +5,8 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
     public static $post_selected_objects = [];
     public static $post_selected_performances = [];
     public static $post_selected_qualis = [];
+    public static $post_selected_sources = [];
+    
     public $the_configuration = [];
 
 
@@ -272,7 +274,7 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
 
                 $frame_object_controller_id = $frame_object_identifier . '_publication_' . 'frame_objects_publication_' . $single_publication_and_frame_objects['publication']->publication_identifier;
                 
-                $quali_or_performance_data_controllers = array();
+                $source_quali_or_performance_data_controllers = array();
 
                 foreach( $frame_object_data_within_elements as $single_frame_object_within_element ) :
                     $data = '';
@@ -284,7 +286,7 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
                         $options = array_merge( $options, array(
                             $single_frame_object_within_element['performance_identifier'] => 'Lié à la Donnée de Performance: ' . $single_frame_object_within_element['performance_designation']
                         ) );
-                        $quali_or_performance_data_controllers[] = array(
+                        $source_quali_or_performance_data_controllers[] = array(
                             'controller_id' => $frame_object_identifier . '_frame_object_publication_' . $single_publication_and_frame_objects['publication']->publication_identifier . '_data_of_' . $single_frame_object_within_element['performance_identifier'],
                             'controller_dataset' => array( 
                                 'label' => __(' Données de la donnée de performance: ', Oak::$text_domain ) . $single_frame_object_within_element['performance_designation'],
@@ -301,7 +303,7 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
                         $options = array_merge( $options, array(
                             $single_frame_object_within_element['quali_identifier'] => 'Lié à l\'Indicateur Quali: ' . $single_frame_object_within_element['quali_designation']
                         ) );
-                        $quali_or_performance_data_controllers[] = array(
+                        $source_quali_or_performance_data_controllers[] = array(
                             'controller_id' => $frame_object_identifier . '_frame_object_publication_' . $single_publication_and_frame_objects['publication']->publication_identifier . '_data_of_' . $single_frame_object_within_element['quali_identifier'],
                             'controller_dataset' => array( 
                                 'label' => __( 'Données de l\indicateur qualitatif', Oak::$text_domain ) . $single_frame_object_within_element['quali_designation'],
@@ -309,6 +311,23 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
                                 'options' => $single_frame_object_within_element['data'],
                                 'condition' => [
                                     $frame_object_controller_id => [ $single_frame_object_within_element['quali_identifier'] ],
+                                    'publications_array' => [ $single_publication_and_frame_objects['publication']->publication_identifier ],
+                                    'frame_objects_publication_' . $single_publication_and_frame_objects['publication']->publication_identifier => [ $frame_object_identifier ],
+                                ],
+                            )
+                        );
+                    elseif ( isset( $single_frame_object_within_element['source_designation'] ) ) :
+                        $options = array_merge( $options, array(
+                            $single_frame_object_within_element['source_identifier'] => 'Lié à la source: ' . $single_frame_object_within_element['source_designation']
+                        ) );
+                        $source_quali_or_performance_data_controllers[] = array(
+                            'controller_id' => $frame_object_identifier . '_frame_object_publication_' . $single_publication_and_frame_objects['publication']->publication_identifier . '_data_of_' . $single_frame_object_within_element['source_identifier'],
+                            'controller_dataset' => array( 
+                                'label' => __( 'Données de la Source', Oak::$text_domain ) . $single_frame_object_within_element['source_designation'],
+                                'type' => Controls_Manager::SELECT,
+                                'options' => $single_frame_object_within_element['data'],
+                                'condition' => [
+                                    $frame_object_controller_id => [ $single_frame_object_within_element['source_identifier'] ],
                                     'publications_array' => [ $single_publication_and_frame_objects['publication']->publication_identifier ],
                                     'frame_objects_publication_' . $single_publication_and_frame_objects['publication']->publication_identifier => [ $frame_object_identifier ],
                                 ],
@@ -335,8 +354,8 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
                     ],
                 ] );
 
-                foreach( $quali_or_performance_data_controllers as $single_quali_or_performance_controller ) :
-                    $this->add_control( $single_quali_or_performance_controller['controller_id'], $single_quali_or_performance_controller['controller_dataset'] );
+                foreach( $source_quali_or_performance_data_controllers as $single_source_quali_or_performance_controller ) :
+                    $this->add_control( $single_source_quali_or_performance_controller['controller_id'], $single_source_quali_or_performance_controller['controller_dataset'] );
                 endforeach;
             endforeach;
 
@@ -361,11 +380,11 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
         if ( isset( $element_to_which_frame_object_is_linked['field_identifier'] ) ) :
             $value = $element_to_which_frame_object_is_linked['field_content'];
         elseif( isset( $element_to_which_frame_object_is_linked['performance_identifier'] ) ) :
-            // $value = $element_to_which_frame_object_is_linked['data'];
             $value = $settings[ $element_to_which_frame_object_is_linked['frame_object']->object_identifier . '_frame_object_publication_' . $settings['publications_array'] . '_data_of_' . $element_to_which_frame_object_is_linked['performance_identifier'] ];
         elseif( isset( $element_to_which_frame_object_is_linked['quali_identifier'] ) ) :
-            // $value = $element_to_which_frame_object_is_linked['data'];
             $value = $settings[ $element_to_which_frame_object_is_linked['frame_object']->object_identifier . '_frame_object_publication_' . $settings['publications_array'] . '_data_of_' . $element_to_which_frame_object_is_linked['quali_identifier'] ];
+        elseif( isset( $element_to_which_frame_object_is_linked['source_identifier'] ) ) :
+            $value = $settings[ $element_to_which_frame_object_is_linked['frame_object']->object_identifier . '_frame_object_publication_' . $settings['publications_array'] . '_data_of_' . $element_to_which_frame_object_is_linked['source_identifier'] ];
         elseif( isset( $element_to_which_frame_object_is_linked['object_identifier'] ) ) : 
             $value = '';
         endif;
@@ -428,6 +447,8 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
         elseif( isset( $element_to_which_frame_object_is_linked['performance_identifier'] ) ) :
             $value = $element_to_which_frame_object_is_linked['data'];
         elseif( isset( $element_to_which_frame_object_is_linked['quali_identifier'] ) ) :
+            $value = $element_to_which_frame_object_is_linked['data'];
+        elseif( isset( $element_to_which_frame_object_is_linked['source_identifier'] ) ) :
             $value = $element_to_which_frame_object_is_linked['data'];
         elseif( isset( $element_to_which_frame_object_is_linked['object_identifier'] ) ) : 
             $value = '';
@@ -598,7 +619,9 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
                     'performance_identifier' => $selected_performance->performance_identifier,
                     'frame_object' => Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier )
                 );
-                $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $selected_performance->performance_publication, $frame_object_data_within_performance );
+                
+                $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $frame_object_identifier );
+                $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_performance );
             endforeach;
         endforeach;
 
@@ -621,7 +644,31 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
                     'frame_object' => Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier )
                 );
 
-                $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $selected_quali->quali_publication, $frame_object_data_within_quali );
+                $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $frame_object_identifier );
+                $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_quali );
+            endforeach;
+        endforeach;
+
+        foreach( Oak_Content_Panel_Widget::$post_selected_sources as $selected_source ) :
+            $publication_identifier = $selected_source->source_publication;
+            $frame_objects_identifiers = [];
+            $source_frame_objects = explode( '|', $selected_source->source_frame_objects );
+            foreach( $source_frame_objects as $source_frame_object ) :
+                if ( $source_frame_object != '' ) :
+                    $frame_objects_identifiers[] = $source_frame_object;
+                endif;
+            endforeach;
+
+            foreach( $frame_objects_identifiers as $frame_object_identifier ) :
+                $frame_object_data_within_source = array(
+                    'data' => $selected_source->source_data,
+                    'source_designation' => $selected_source->source_designation,
+                    'source_identifier' => $selected_source->source_identifier,
+                    'frame_object' => Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier )
+                );
+
+                $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $frame_object_identifier );
+                $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_source );
             endforeach;
         endforeach;
 

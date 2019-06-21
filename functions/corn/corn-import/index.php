@@ -26,6 +26,21 @@ class Corn_Import {
                 'corn' => get_option('oak_corn'),
                 'centralUrl' => $central_url,
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                'organizationsTableName' => Oak::$organizations_table_name,
+                'publicationsTableName' => Oak::$publications_table_name,
+                'fieldsTableName' => Oak::$fields_table_name,
+                'formsTableName' => Oak::$forms_table_name,
+                'modelsTableName' => Oak::$models_table_name,
+                'taxonomiesTableName' => Oak::$taxonomies_table_name,
+                'glossariesTableName' => Oak::$glossaries_table_name,
+                'qualisTableName' => Oak::$qualis_table_name,
+                'quantisTableName' => Oak::$quantis_table_name,
+                'goodpracticesTableName' => Oak::$goodpractices_table_name,
+                'performancesTableName' => Oak::$performances_table_name,
+                'sourcesTableName' => Oak::$sources_table_name,
+                'termsAndObjectsTableName' => Oak::$terms_and_objects_table_name,
+                'formsAndFieldsTableName' => Oak::$forms_and_fields_table_name,
+                'modelsAndFormsTableName' => Oak::$models_and_forms_table_name,
             ) );
         endif;
     }
@@ -36,6 +51,21 @@ class Corn_Import {
 
         add_action('wp_ajax_corn_save_data', array( $this, 'corn_save_data') );
         add_action('wp_ajax_nopriv_corn_save_data', array( $this, 'corn_save_data') );
+
+        add_action('wp_ajax_corn_delete_everything', array( $this, 'corn_delete_everything') );
+        add_action('wp_ajax_nopriv_corn_delete_everything', array( $this, 'corn_delete_everything') );
+
+        add_action('wp_ajax_corn_save_element_request', array( $this, 'corn_save_element_request') );
+        add_action('wp_ajax_nopriv_corn_save_element_request', array( $this, 'corn_save_element_request') );
+
+        add_action('wp_ajax_create_models_tables', array( $this, 'create_models_tables') );
+        add_action('wp_ajax_nopriv_create_models_tables', array( $this, 'create_models_tables') );
+
+        add_action('wp_ajax_create_taxonomies_tables', array( $this, 'create_taxonomies_tables') );
+        add_action('wp_ajax_nopriv_create_taxonomies_tables', array( $this, 'create_taxonomies_tables') );
+
+        add_action('wp_ajax_delete_images_that_are_not_needed', array( $this, 'delete_images_that_are_not_needed') );
+        add_action('wp_ajax_nopriv_delete_images_that_are_not_needed', array( $this, 'delete_images_that_are_not_needed') );
     }
 
     function oak_get_all_data_for_corn() {
@@ -389,6 +419,152 @@ class Corn_Import {
         return $query_images;
     }
 
+    function corn_delete_everything() {
+        update_option( 'oak_corn_found_images', [] );
+
+        Oak::$all_images = $this->get_all_images()->posts;
+
+        Oak::delete_everything();
+        
+        wp_send_json_success();
+    }
+
+    function corn_save_element_request() {
+        $data = json_decode( stripslashes( $_POST['data'] ), true );
+        $elements = $data['elements'];
+        $table_name = $data['tableName'];
+
+        if ( $table_name == '' ) :
+            $this->corn_save_element( $elements );
+        else :
+            $this->corn_save_element( $elements, $table_name );
+        endif;
+
+        wp_send_json_success();
+    }
+
+    function create_models_tables() {
+        global $wpdb;
+
+        $data = json_decode( stripslashes( $_POST['data'] ), true );
+        $models = $data['models'];
+        $fields = $data['fields'];
+        $objects = $data['objects'];
+
+        foreach( $models as $model ) :
+            // Lets look for the model fields: 
+            $model_fields = [];
+            $found_object = false;
+            $counter = 0;
+            do {
+                if ( $objects[ $counter ]['model'] == $model['model_identifier'] ) :
+
+                    $found_object = true;
+                    $the_object = $objects[ $counter ];
+                    $properties_to_neglect = array('id', 'model', 'object_designation', 'object_identifier', 'object_modification_time', 'object_content_language', 'object_model_selector', 'object_selector',
+                        'object_locked', 'object_state', 'object_trashed', 'object_selectors', 'object_form_selectors', 'object_model_selector');
+                    foreach( $the_object as $key => $value ) :
+                        if ( !in_array( $key, $properties_to_neglect ) ) :
+                            $model_properties_array = explode( '_', $key );
+                            $field_identifier = '';
+                            if ( count( $model_properties_array == 3 ) ) :
+                                $field_identifier = $model_properties_array[2];
+                            endif;
+
+                            foreach( $fields as $field ) :
+                                if ( $field['field_identifier'] == $field_identifier ) :
+                                    $field_copy = $field;
+                                    $field_copy['form_and_field_properties'] = $form_and_field_instance;
+                                    $field_copy['field_key'] = $key;
+                                    array_push( $model_fields, $field_copy );
+                                endif;
+                            endforeach;
+                        endif;
+                    endforeach;
+                endif;
+                $counter++;
+            } while( $counter < count( $objects ) - 1 && !$found_object );
+
+            $table_name = $wpdb->prefix . 'oak_model_' . $model['model_identifier'];
+            $models_sql = "CREATE TABLE $table_name (
+                id mediumint(9) NOT NULL AUTO_INCREMENT,
+                object_designation varchar(555) DEFAULT '' NOT NULL,
+                object_identifier varchar(555) DEFAULT '' NOT NULL,
+                object_selector varchar(555),
+                object_locked varchar(555),
+                object_trashed varchar(555),
+                object_state varchar(555),
+                object_modification_time datetime,
+                object_content_language varchar(10) DEFAULT 'fr',
+                object_selectors varchar(999),
+                object_form_selectors varchar(999),
+                object_model_selector TEXT,
+                object_synchronized TEXT,
+                PRIMARY KEY (id)
+            ) $charset_collate;";
+            require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+            dbDelta( $models_sql );
+
+            foreach( $model_fields as $key => $field ) :
+                // $column_name = 'object_' . $key . '_' . $field['field_identifier'];
+                $column_name = $field['field_key'];
+                $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
+                $exists = false;
+                $table_column_names = [];
+                foreach( $columns as $column ) :
+                    $table_column_names[] = $column->COLUMN_NAME;
+                    if ( $column->COLUMN_NAME == $column_name ) :
+                        $exists = true;
+                    endif;
+                endforeach;
+
+                if ( !$exists ) {
+                    if ( $field['field_type'] == 'textarea' ) :
+                        $wpdb->query("ALTER TABLE $table_name ADD $column_name LONGTEXT");
+                    else :
+                        $wpdb->query("ALTER TABLE $table_name ADD $column_name TEXT");
+                    endif;
+                }
+            endforeach;
+        endforeach;
+
+        wp_send_json_success();
+    }
+
+    function create_taxonomies_tables() {
+        global $wpdb;
+
+        $data = json_decode( stripslashes( $_POST['data'] ), true );
+        $taxonomies = $data['taxonomies'];
+
+        foreach( $taxonomies as $taxonomy ) :
+            $table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy['taxonomy_identifier'];
+            $terms_sql = "CREATE TABLE $table_name (
+                id mediumint(9) NOT NULL AUTO_INCREMENT,
+                term_designation varchar(555) DEFAULT '' NOT NULL,
+                term_identifier varchar(555) DEFAULT '' NOT NULL,
+                term_selector varchar(555),
+                term_locked varchar(555),
+                term_trashed varchar(555),
+                term_state varchar(555),
+                term_modification_time datetime,
+                term_content_language varchar(10) DEFAULT 'fr',
+                term_numerotation varchar(555),
+                term_title varchar(555),
+                term_description varchar(555),
+                term_color varchar(555),
+                term_logo varchar(555),
+                term_order varchar(555),
+                term_parent varchar(555),
+                PRIMARY KEY (id)
+            ) $charset_collate;";
+            require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+            dbDelta( $terms_sql );
+        endforeach;
+
+        wp_send_json_success();
+    }
+
     function corn_save_data() {
         update_option( 'oak_corn_found_images', [] );
         
@@ -408,8 +584,6 @@ class Corn_Import {
         $forms = $selected_data['forms'];
         $models = $selected_data['models'];
         $taxonomies = $selected_data['taxonomies'];
-        $objects = $selected_data['objects'];
-        $terms = $selected_data['terms'];
         $glossaries = $selected_data['glossaries'];
         $qualis = $selected_data['qualis'];
         $quantis = $selected_data['quantis'];
@@ -417,8 +591,11 @@ class Corn_Import {
         $performances = $selected_data['performances'];
         $sources = $selected_data['sources'];
         $terms_and_objects = $selected_data['termsAndObjects'];
-        $models_and_forms = $selected_data['modelsAndForms'];
         $forms_and_fields = $selected_data['formsAndFields'];
+        $models_and_forms = $selected_data['modelsAndForms'];
+
+        $objects = $selected_data['objects'];
+        $terms = $selected_data['terms'];
 
         $this->corn_save_element( $organizations, Oak::$organizations_table_name );
         $this->corn_save_element( $publications, Oak::$publications_table_name );
@@ -515,7 +692,6 @@ class Corn_Import {
         endforeach;
 
         // Lets now add the objects
-
         $this->corn_save_element( $objects );
 
         // // Creating the tables for taxonomies
@@ -571,7 +747,7 @@ class Corn_Import {
                 elseif ( isset( $element['model'] ) ) :
                     $new_table_name = $wpdb->prefix . 'oak_model_' . $element['model'];
                 endif;
-
+                
                 $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$new_table_name'" );
                 $columns_names = [];
                 foreach( $columns as $column ) :
@@ -581,7 +757,7 @@ class Corn_Import {
             else :
                 $new_table_name = $table_name;
             endif;
-
+            
             foreach( $element as $key => $value ) :
                 // check if the key is included in the model:
                 if ( !in_array( $key, $columns_names ) ) :
@@ -655,6 +831,8 @@ class Corn_Import {
             endif;
         endforeach;
         update_option( 'oak_corn_found_images', [] );
+
+        wp_send_json_success();
     }
 }
 

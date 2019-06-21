@@ -1,3 +1,52 @@
+initializeGameView();
+function initializeGameView() {
+    var gameMainView = document.createElement('div');
+    gameMainView.className = 'oak_loading_game_container oak_hidden';
+    document.querySelector('body').append(gameMainView);
+    gameMainView.innerHTML = '<img class="oak_loading_game_character" src="' + LOADING_GAME_DATA.characterIdlAnimationImage[0] + '" alt="">'
+    + '<div class="oak_loading_game_bar_container">'
+    + '<div class="oak_loading_game_bar">'
+    + '<div class="oak_loading_game_bar_fill"></div>'
+    + '</div>'
+    + '<span class="oak_loading_game_bar_text_message">Loading</span>'
+    + '</div>'  
+}
+
+function startGame() {
+    var gameContainer = document.querySelector('.oak_loading_game_container');
+    gameContainer.classList.remove('oak_hidden');
+
+    startPeriodicalThreatSummon();
+}
+
+function startPeriodicalThreatSummon() {
+    var gameContainer = document.querySelector('.oak_loading_game_container');
+
+    setInterval(function() {
+        var boulder = document.createElement('img');
+        boulder.setAttribute('src', LOADING_GAME_DATA.boulderImage);
+        boulder.className = 'oak_loading_game_boulder';
+        gameContainer.append(boulder);
+        boulder.style.top = Math.floor((Math.random() * 90) + 10) + 'px';
+
+        // To move the boulder
+        setInterval(function() {
+            var newLeftPosition = parseInt(parseInt(getComputedStyle(boulder).getPropertyValue('left'))) - 1;
+            boulder.style.left = newLeftPosition + 'px';
+        }, 0.01);
+
+        // To destroy the boulder
+        setTimeout(function() {
+            boulder.remove();
+        }, 8000);
+    }, 2000);
+}
+
+function endGame() {
+    var gameContainer = document.querySelector('.oak_loading_game_container');
+    gameContainer.classList.add('oak_hidden');
+}
+
 handleCharacterMovement();
 function handleCharacterMovement() {
     var character = document.querySelector('.oak_loading_game_character');
@@ -44,8 +93,7 @@ function handleCharacterMovement() {
             character.classList.remove('oak_loading_game_object_changed_direction');
         else if (keyName == 'ArrowLeft')
             character.classList.add('oak_loading_game_object_changed_direction');
-
-        console.log(keyName);
+            
         if ( keyName == 'Shift' ) {
             fireBeam();
         }
@@ -106,14 +154,13 @@ function fireBeam() {
     if (beamDirection == -1) {
         beam.classList.add('oak_loading_game_object_changed_direction');
     }
-    beam.style.top = characterPosition.top + 50;
-    beam.style.left = characterPosition.left + 60;
+    beam.style.top = characterPosition.top + 50 + 'px';
+    beam.style.left = characterPosition.left + 60 + 'px';
     beam.classList.add('oak_loading_game_firebeam');
 
-    document.querySelector('.oak_loaging_game_container').append(beam);
-    console.log('beam', beam);
+    document.querySelector('.oak_loading_game_container').append(beam);
     setInterval(function() {
-        beam.style.left = parseInt(beam.style.left) + 7 * beamDirection;
+        beam.style.left = parseInt(beam.style.left) + 7 * beamDirection + 'px';
     }, 0.01);
     setTimeout(() => {
         beam.remove();
@@ -126,6 +173,23 @@ function getObjectPosition(object) {
         top: parseInt(getComputedStyle(object).getPropertyValue('top')),
         left: parseInt(getComputedStyle(object).getPropertyValue('left'))
     }
+}
+
+function setLoadingPercentage(percentage, message) {
+    var barFill = document.querySelector('.oak_loading_game_bar_fill');
+    if (percentage == '100%') {
+        setTimeout(function() {
+            endGame();
+            barFill.style.width = '0%';
+        }, 2000)
+    }
+
+    if (message) {
+        var messageSpan = document.querySelector('.oak_loading_game_bar_text_message');
+        messageSpan.innerHTML = message;
+    }
+
+    barFill.style.width = percentage;
 }
 
 function classExists(element, className) {

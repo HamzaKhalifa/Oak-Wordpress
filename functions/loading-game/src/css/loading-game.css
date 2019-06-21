@@ -10,8 +10,8 @@
 .oak_loading_game_character {
     width: 200px;
     position: fixed;
-    top: 15%;
-    left: 15%;
+    top: 50%;
+    left: 10%;
     z-index: 1;
     -moz-transform: scaleX(-1);
 }
@@ -28,7 +28,7 @@
 
 .oak_loading_game_bar_container {
     position: fixed;
-    top: 40%;
+    top: 20%;
     left: 30%;
     width: 40%;
     display: flex;
@@ -55,4 +55,10 @@
 
 .oak_loading_game_bar_text_message {
     font-size: 20px;
+}
+
+.oak_loading_game_boulder {
+    position: fixed;
+    width: 100px;
+    left: 100%;
 }

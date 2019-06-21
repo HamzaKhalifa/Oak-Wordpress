@@ -298,35 +298,236 @@ var steps = [];
                             addPublicationData(selectedData.publications[i].publication_identifier, []);
                     }
 
-
                     // For the terms and objects (Gotta filter this some day)
                     selectedData.termsAndObjects = allData.termsAndObjects;
                     
+                    // console.log('selected data', selectedData);
+                    // setLoading();
+                    // sendAjaxRequest({ models: selectedData.models, fields: selectedData.fields, objects: selectedData.objects }, 'create_models_tables', function(success) {
+                    //     setLoading();
+                    //     doneLoading();
+                    // });
+                    // return;
+
                     setLoading();
-                    jQuery(document).ready(function() {
-                        jQuery.ajax({
-                            type: 'POST',
-                            url: DATA.ajaxUrl,
-                            data: {
-                                'selectedData': JSON.stringify(selectedData),
-                                'action': 'corn_save_data'
-                            },
-                            success: function(data) {
-                                console.log(data);
-                                doneLoading();
-                                openModal('L\'import a été effectué avec succès');
-                            },
-                            error: function(error) {
-                                console.log(error);
-                                doneLoading();
-                            }
-                        });
-                    });
+                    startGame();
+                    setLoadingPercentage('0%', 'Suppression des données..');
+                    sendAjaxRequest({},'corn_delete_everything', function(success) {
+                        if (success) {
+                            setLoadingPercentage('5%', 'Enregistrement des organisations...');
+                            sendAjaxRequest({ elements: [selectedData.organization], tableName: DATA.organizationsTableName }, 'corn_save_element_request', function(success) {
+                                if (success) {
+                                    setLoadingPercentage('10%', 'Enregistrement des publications...');
+                                    sendAjaxRequest({ elements: selectedData.publications, tableName: DATA.publicationsTableName }, 'corn_save_element_request', function(success) {
+                                        if (success) {
+                                            setLoadingPercentage('15%', 'Enregistrement des champs...');
+                                            sendAjaxRequest({ elements: selectedData.fields, tableName: DATA.fieldsTableName }, 'corn_save_element_request', function(success) {
+                                                if (success) {
+                                                    setLoadingPercentage('20%', 'Enregistrement des formulaires...');
+                                                    sendAjaxRequest({ elements: selectedData.forms, tableName: DATA.formsTableName }, 'corn_save_element_request', function(success) {
+                                                        if (success) {  
+                                                            setLoadingPercentage('25%', 'Enregistrement des modèles...');
+                                                            sendAjaxRequest({ elements: selectedData.models, tableName: DATA.modelsTableName }, 'corn_save_element_request', function(success) {
+                                                                if (success) {  
+                                                                    setLoadingPercentage('30%', 'Enregistrement des taxonomies...');
+                                                                    sendAjaxRequest({ elements: selectedData.taxonomies, tableName: DATA.taxonomiesTableName }, 'corn_save_element_request', function(success) {
+                                                                        if (success) {  
+                                                                            setLoadingPercentage('35%', 'Enregistrement des terminologies...');
+                                                                            sendAjaxRequest({ elements: selectedData.glossaries, tableName: DATA.glossariesTableName }, 'corn_save_element_request', function(success) {
+                                                                                if (success) {  
+                                                                                    setLoadingPercentage('40%', 'Enregistrement des indicateurs qualitatifs...');
+                                                                                    sendAjaxRequest({ elements: selectedData.qualis, tableName: DATA.qualisTableName }, 'corn_save_element_request', function(success) {
+                                                                                        if (success) {  
+                                                                                            setLoadingPercentage('45%', 'Enregistrement des indicateurs quantatifs...');
+                                                                                            sendAjaxRequest({ elements: selectedData.quantis, tableName: DATA.quantisTableName }, 'corn_save_element_request', function(success) {
+                                                                                                if (success) {  
+                                                                                                    setLoadingPercentage('50%', 'Enregistrement des bonnes pratiques...');
+                                                                                                    sendAjaxRequest({ elements: selectedData.goodpractices, tableName: DATA.goodpracticesTableName }, 'corn_save_element_request', function(success) {
+                                                                                                        if (success) {  
+                                                                                                            setLoadingPercentage('55%', 'Enregistrement des données de performances...');
+                                                                                                            sendAjaxRequest({ elements: selectedData.performances, tableName: DATA.performancesTableName }, 'corn_save_element_request', function(success) {
+                                                                                                                if (success) {  
+                                                                                                                    setLoadingPercentage('60%', 'Enregistrement des sources...');
+                                                                                                                    sendAjaxRequest({ elements: selectedData.sources, tableName: DATA.sourcesTableName }, 'corn_save_element_request', function(success) {
+                                                                                                                        if (success) {  
+                                                                                                                            setLoadingPercentage('70%', 'Enregistrement des liaisons entre termes et objets...');
+                                                                                                                            sendAjaxRequest({ elements: selectedData.termsAndObjects, tableName: DATA.termsAndObjectsTableName }, 'corn_save_element_request', function(success) {
+                                                                                                                                if (success) {  
+                                                                                                                                    setLoadingPercentage('75%', 'Enregistrement des liaisons entre formulaires et champs...');
+                                                                                                                                    sendAjaxRequest({ elements: selectedData.formsAndFields, tableName: DATA.formsAndFieldsTableName }, 'corn_save_element_request', function(success) {
+                                                                                                                                        if (success) {  
+                                                                                                                                            setLoadingPercentage('80%', 'Enregistrement des liasons entre modèles et formulaires...');
+                                                                                                                                            sendAjaxRequest({ elements: selectedData.modelsAndForms, tableName: DATA.modelsAndFormsTableName }, 'corn_save_element_request', function(success) {
+                                                                                                                                                if (success) {  
+                                                                                                                                                    setLoadingPercentage('85%', 'Création des tables des modèles...');
+                                                                                                                                                    sendAjaxRequest({ models: selectedData.models, fields: selectedData.fields, objects: selectedData.objects }, 'create_models_tables', function(success) {
+                                                                                                                                                        if (success) {  
+                                                                                                                                                            setLoadingPercentage('90%', 'Enregistrement des objets...');
+                                                                                                                                                            sendAjaxRequest({ elements: selectedData.objects, tableName: '' }, 'corn_save_element_request', function(success) {
+                                                                                                                                                                if (success) {  
+                                                                                                                                                                    setLoadingPercentage('95%', 'Création des tables des taxonomies...');
+                                                                                                                                                                    sendAjaxRequest({ taxonomies: selectedData.taxonomies }, 'create_taxonomies_tables', function(success) {
+                                                                                                                                                                        if (success) {  
+                                                                                                                                                                            setLoadingPercentage('98%', 'Enregistrement des termes des taxonomies...');
+                                                                                                                                                                            sendAjaxRequest({ elements: selectedData.terms, tableName: '' }, 'corn_save_element_request', function(success) {
+                                                                                                                                                                                if (success) {  
+                                                                                                                                                                                    setLoadingPercentage('100%', 'Suppression des images inutiles...');
+                                                                                                                                                                                    sendAjaxRequest({}, 'delete_images_that_are_not_needed', function(success) {
+                                                                                                                                                                                        if (success) {  
+                                                                                                                                                                                            setLoadingPercentage('100%', 'Création des termes des taxonomies');
+                                                                                                                                                                                            doneLoading();
+                                                                                                                                                                                            openModal('Enregistrement effectué avec succès !');
+                                                                                                                                                                                        } else {
+                                                                                                                                                                                            doneLoading();
+                                                                                                                                                                                            setLoadingPercentage('0%', 'Erreur avec la suppression des images inutiles');
+                                                                                                                                                                                        }
+                                                                                                                                                                                    });
+                                                                                                                                                                                } else {
+                                                                                                                                                                                    doneLoading();
+                                                                                                                                                                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des termes');
+                                                                                                                                                                                }
+                                                                                                                                                                            });
+                                                                                                                                                                        } else {
+                                                                                                                                                                            doneLoading();
+                                                                                                                                                                            setLoadingPercentage('0%', 'Erreur avec la céation des tables des taxonomies');
+                                                                                                                                                                        }
+                                                                                                                                                                    });
+                                                                                                                                                                } else {
+                                                                                                                                                                    doneLoading();
+                                                                                                                                                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des objets');
+                                                                                                                                                                }
+                                                                                                                                                            });
+                                                                                                                                                        } else {
+                                                                                                                                                            doneLoading();
+                                                                                                                                                            setLoadingPercentage('0%', 'Erreur avec la création des tables des modèles');
+                                                                                                                                                        }
+                                                                                                                                                    });
+                                                                                                                                                } else {
+                                                                                                                                                    doneLoading();
+                                                                                                                                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Liasons modèles et formulaires');
+                                                                                                                                                }
+                                                                                                                                            });
+                                                                                                                                        } else {
+                                                                                                                                            doneLoading();
+                                                                                                                                            setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Liasons formulaires et champs');
+                                                                                                                                        }
+                                                                                                                                    });
+                                                                                                                                } else {
+                                                                                                                                    doneLoading();
+                                                                                                                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Liasons termes et objets');
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                        } else {
+                                                                                                                            doneLoading();
+                                                                                                                            setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Sources');
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                } else {
+                                                                                                                    doneLoading();
+                                                                                                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Données de performances');
+                                                                                                                }
+                                                                                                            });
+                                                                                                        } else {
+                                                                                                            doneLoading();
+                                                                                                            setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Bonnes pratiques');
+                                                                                                        }
+                                                                                                    });
+                                                                                                } else {
+                                                                                                    doneLoading();
+                                                                                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Indicateurs Quantitatifs');
+                                                                                                }
+                                                                                            });
+                                                                                        } else {
+                                                                                            doneLoading();
+                                                                                            setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Indicateurs Qualitatifs');
+                                                                                        }
+                                                                                    });
+                                                                                } else {
+                                                                                    doneLoading();
+                                                                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Terminologies');
+                                                                                }
+                                                                            });
+                                                                        } else {
+                                                                            doneLoading();
+                                                                            setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Taxonomies');
+                                                                        }
+                                                                    });
+                                                                } else {
+                                                                    doneLoading();
+                                                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Modèles');
+                                                                }
+                                                            });
+                                                        } else {
+                                                            doneLoading();
+                                                            setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Formulaires');
+                                                        }
+                                                    });
+                                                } else {
+                                                    doneLoading();
+                                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des Champs');
+                                                }
+                                            });
+                                        } else {
+                                            doneLoading();
+                                            setLoadingPercentage('0%', 'Erreur avec l\'enregistrement des publications');
+                                        }
+                                    });
+                                } else {
+                                    doneLoading();
+                                    setLoadingPercentage('0%', 'Erreur avec l\'enregistrement de l\'organisation');
+                                }
+                            });
+                        } else {
+                            doneLoading();
+                            setLoadingPercentage('0%', 'Erreur avec la suppression des données');
+                        }
+                    }); 
+                    
+                    // jQuery(document).ready(function() {
+                    //     jQuery.ajax({
+                    //         type: 'POST',
+                    //         url: DATA.ajaxUrl,
+                    //         data: {
+                    //             'selectedData': JSON.stringify(selectedData),
+                    //             'action': 'corn_save_data'
+                    //         },
+                    //         success: function(data) {
+                    //             console.log(data);
+                    //             doneLoading();
+                    //             openModal('L\'import a été effectué avec succès');
+                    //         },
+                    //         error: function(error) {
+                    //             console.log(error);
+                    //             doneLoading();
+                    //         }
+                    //     });
+                    // });
                 break;
             }
         });
     })()
 })();
+
+function sendAjaxRequest(data, functionName, callback) {
+    jQuery(document).ready(function() {
+        jQuery.ajax({
+            type: 'POST',
+            url: DATA.ajaxUrl,
+            data: {
+                'data': JSON.stringify(data),
+                'action': functionName
+            },
+            success: function(data) {
+                console.log(data);
+                callback(true);
+            },
+            error: function(error) {
+                console.log(error);
+                callback(false);
+            }
+        });
+    });
+}
 
 function addPublicationData(publicationIdentifier, termIdentifiers) {
     var addedTermsIdentifiers = [];

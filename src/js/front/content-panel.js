@@ -16,8 +16,18 @@ function handleFrameObjectsButtons() {
                 // Now search for images before hiding: 
                 var imageExists = false;
                 for(var j = 0; j < allImages.length; j++) {
-                    if (allImages[j].getAttribute('src') == value) 
+                    var valueWithoutExtension = '';
+                    var valueArray = value.split('.');
+                    for (var m = 0; m < valueArray.length - 1; m++) {
+                        var delimiter = '.';
+                        if ( m == valueArray.length - 2 )
+                            delimiter = '';
+
+                        valueWithoutExtension += valueArray[m] + delimiter;
+                    }
+                    if (allImages[j].getAttribute('src').indexOf(valueWithoutExtension) != -1 && valueWithoutExtension != '') {
                         imageExists = true;
+                    }
                 }
                 if (!imageExists)
                     frameObjectsButtons[i].classList.add('oak_hidden');
@@ -30,7 +40,17 @@ function handleFrameObjectsButtons() {
             var allElementsThatContainValue = jQuery('*:contains("' + value + '")'); 
             if (allElementsThatContainValue.length == 0) {
                 for(var j = 0; j < allImages.length; j++) {
-                    if (allImages[j].getAttribute('src') == value) 
+                    var valueWithoutExtension = '';
+                    var valueArray = value.split('.');
+                    for (var m = 0; m < valueArray.length - 1; m++) {
+                        var delimiter = '.';
+                        if ( m == valueArray.length - 2 )
+                            delimiter = '';
+
+                        valueWithoutExtension += valueArray[m] + delimiter;
+                    }
+
+                    if (allImages[j].getAttribute('src').indexOf(valueWithoutExtension) != -1) 
                         theElement = allImages[j];
                 }
             } else 

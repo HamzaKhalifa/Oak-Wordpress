@@ -258,18 +258,25 @@ class Oak_Elementor {
                     // For the designation: 
                     $the_source = Oak::$sources_without_redundancy[ $incrementer ];
                     $the_source = Sources::get_source_of_corresponding_language( $the_source );
+                    $the_source->source_data = [];
+                    $the_source->source_data = array_merge( $the_source->source_data,  array( $the_source->source_designation => __( 'Désignation', Oak::$text_domain ) ) );
                     update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_number . ': Designation', $the_source->source_designation );
                     foreach( Sources::$properties as $key => $source_property ) :
                         $property_name = $source_property['property_name'];
                         if ( $source_property['input_type'] != 'image' && $source_property['input_type'] != 'select' ) :
+                            $the_source->source_data = array_merge( $the_source->source_data,  array( $the_source->$property_name => $source_property['description'] ) );
                             update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_number . ': ' . $source_property['description'], $the_source->$property_name );
                         elseif ( $source_property['input_type'] == 'image' ):
                             $image_id = attachment_url_to_postid( $the_source->$property_name );
+                            $the_source->source_data = array_merge( $the_source->source_data,  array( $the_source->$property_name => $source_property['description'] ) );
                             $post_images_to_show[] = array ( 'url' => $the_source->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $source . ' ' . $source_number . ': ' .$source_property['description'] );
                             // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
                         endif;
                     endforeach;
                     $source_number++;
+
+                    Sidebar_Widget::$post_selected_sources[] = $the_source;
+                    Oak_Content_Panel_Widget::$post_selected_sources[] = $the_source;
                 endif;
                 $incrementer++;
             } while( $incrementer < count( Oak::$sources_without_redundancy ) && !$found_source );
