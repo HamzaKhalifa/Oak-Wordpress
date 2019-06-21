@@ -27,18 +27,51 @@ function startPeriodicalThreatSummon() {
         boulder.setAttribute('src', LOADING_GAME_DATA.boulderImage);
         boulder.className = 'oak_loading_game_boulder';
         gameContainer.append(boulder);
-        boulder.style.top = Math.floor((Math.random() * 90) + 10) + 'px';
+        boulder.style.top = Math.floor((Math.random() * window.innerHeight - 30) + 10) + 'px';
+        
+        var speed = Math.floor((Math.random() * 5) + 1);
+        var spawnRightOrLeft = Math.floor((Math.random() * 10) + 0);
+        if (spawnRightOrLeft > 5) {
+            boulder.style.left = '0%';
+            speed = -speed;
+        }
 
         // To move the boulder
         setInterval(function() {
-            var newLeftPosition = parseInt(parseInt(getComputedStyle(boulder).getPropertyValue('left'))) - 1;
+            var newLeftPosition = parseInt(parseInt(getComputedStyle(boulder).getPropertyValue('left'))) - speed;
             boulder.style.left = newLeftPosition + 'px';
+
+            // To detect Collision
+            var width = parseInt(getComputedStyle(boulder).getPropertyValue('width'));
+            var height = parseInt(getComputedStyle(boulder).getPropertyValue('height'));
+            var top = parseInt(getComputedStyle(boulder).getPropertyValue('top'));
+            var left = parseInt(getComputedStyle(boulder).getPropertyValue('left'));
+
+            var fireBeams = document.querySelectorAll('.oak_loading_game_firebeam');
+            for (var i = 0; i < fireBeams.length; i++) {
+                var firebeamWidth = parseInt(getComputedStyle(fireBeams[i]).getPropertyValue('width'));
+                var firebeamHeight = parseInt(getComputedStyle(fireBeams[i]).getPropertyValue('height'));
+                var firebeamTop = parseInt(getComputedStyle(fireBeams[i]).getPropertyValue('top'));
+                var firebeamLeft = parseInt(getComputedStyle(fireBeams[i]).getPropertyValue('left'));
+
+                if ( firebeamTop + firebeamHeight >= top && firebeamTop <= top + height
+                    && firebeamLeft + firebeamWidth >= left && firebeamLeft <= left + width  ) {
+                        fireBeams[i].remove();
+                        boulder.remove();
+                }
+            }
+
+            // To destroy the boulder when it leaves
+            if (left >= parseInt(window.innerWidth) || left <= -width ) {
+                boulder.remove();
+            }
         }, 0.01);
 
+
         // To destroy the boulder
-        setTimeout(function() {
-            boulder.remove();
-        }, 8000);
+        // setTimeout(function() {
+        //     boulder.remove();
+        // }, 15000);
     }, 2000);
 }
 
