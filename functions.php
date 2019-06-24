@@ -143,6 +143,8 @@ class Oak {
     function __construct() {
         global $wpdb;
 
+        // Oak::var_dump( get_option('oak_indexes') );
+
         Oak::$elements_script_properties_functions = [];
 
         Oak::$text_domain = 'oak';
@@ -182,6 +184,8 @@ class Oak {
 
         // Initializing all the tables properties
         include_once get_template_directory() . '/functions/properties-initialization.php';
+
+        include_once get_template_directory() . '/functions/elementor/index.php';
 
         // Create post and page meta boxes
         include_once get_template_directory() . '/functions/post_meta_boxes/index.php';
@@ -1518,6 +1522,84 @@ class Oak {
             </div>
             <?php
         endforeach;
+    }
+
+    public static function oak_get_all_posts_and_pages() {
+        $posts = get_posts( array(
+            'numberposts' => -1,
+        ) );
+    
+        $pages = get_pages( array(
+            'sort_order' => 'asc',
+            'sort_column' => 'post_title',
+            'hierarchical' => 1,
+            'exclude' => '',
+            'include' => '',
+            'meta_key' => '',
+            'meta_value' => '',
+            'authors' => '',
+            'child_of' => 0,
+            'parent' => -1,
+            'exclude_tree' => '',
+            'number' => '',
+            'offset' => 0,
+            'post_type' => 'page',
+            'post_status' => 'publish'
+        ) );
+    
+        $all_posts_and_pages = array_merge( $posts, $pages );
+
+        return $all_posts_and_pages;
+    }
+
+    function oak_get_quali_indicators_and_specific_objects_linked_frame_objects( $post, $oak_indexes, $object, $table_name ) {
+        $frame_objects_property_name = $table_name . '_frame_objects';
+        $identifier_property_name = $table_name . '_identifier';
+        $designation_property_name = $table_name . '_designation';
+        $object_data_property_name = $table_name . '_data';
+
+        $frame_linked_objects_identifiers_array_with_possible_empty_strings = explode( '|', $object->$frame_objects_property_name );
+        $frame_linked_objects_array = [];
+        foreach( $frame_linked_objects_identifiers_array_with_possible_empty_strings as $frame_linked_object_identifier ) :
+            if ( $frame_linked_object_identifier != '' ) :
+                $frame_linked_objects_array[] = $frame_linked_object_identifier;
+            endif;
+        endforeach;
+
+        $object_data = array(
+            'object' => array(
+                'identifier' => $object->$identifier_property_name,
+                'designation' => $object->$designation_property_name,
+            ),
+            'fields_data' => [],
+            'forms_frame_linked_objects' => array(),
+            'model_frame_linked_objects' => $frame_linked_objects_array,
+            'post_url' => $post->guid,
+            'post_title' => $post->post_title
+        );
+        $post_content = file_get_contents( $post->guid );
+        foreach( $object->$object_data_property_name as $value => $field_name ) :
+            $used_in_posts = [];
+            if ( strpos( $post_content, $value ) !== false ) :
+                $used_in_posts[] = array ( 
+                    'id' => $post->ID,
+                    'post_url' => $post->guid,
+                    'post_title' => $post->post_title,
+                    'object_designation' => $object->$designation_property_name
+                );
+            endif;
+            $single_field_data = array(
+                'field_name' => $field_name,
+                'value' => $value,
+                'frame_linked_objects' => $frame_linked_objects_array,
+                'used_in_posts' => $used_in_posts
+            );
+            $object_data['fields_data'][] = $single_field_data;
+        endforeach;
+
+        $oak_indexes[] = $object_data;
+
+        return $oak_indexes;
     }
 }
 

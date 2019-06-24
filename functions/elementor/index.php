@@ -245,9 +245,9 @@ class Oak_Elementor {
         $widgets_manager->register_widget_type( $image_widget );
     }
 
-    function add_sources_post_meta( $post_images_to_show ) {
-        // For sources
-        $selected_sources = get_post_meta( get_the_ID(), 'sources_selector' ) ? get_post_meta( get_the_ID(), 'sources_selector' ) [0] : [];
+    public static function get_post_sources_data( $post_id, $post_images_to_show, $inside_post ) {
+        $sources_to_return = [];
+        $selected_sources = get_post_meta( $post_id, 'sources_selector' ) ? get_post_meta( $post_id, 'sources_selector' ) [0] : [];
         $source_number = 1;
         $source = __( 'Source', Oak::$text_domain );
         foreach( $selected_sources as $source_key => $selected_identifier ) :
@@ -260,12 +260,15 @@ class Oak_Elementor {
                     $the_source = Sources::get_source_of_corresponding_language( $the_source );
                     $the_source->source_data = [];
                     $the_source->source_data = array_merge( $the_source->source_data,  array( $the_source->source_designation => __( 'Désignation', Oak::$text_domain ) ) );
-                    update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_number . ': Designation', $the_source->source_designation );
+                    if ( $inside_post ) 
+                        update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': Designation', $the_source->source_designation );
                     foreach( Sources::$properties as $key => $source_property ) :
                         $property_name = $source_property['property_name'];
                         if ( $source_property['input_type'] != 'image' && $source_property['input_type'] != 'select' ) :
                             $the_source->source_data = array_merge( $the_source->source_data,  array( $the_source->$property_name => $source_property['description'] ) );
-                            update_post_meta( get_the_ID(), 'Oak: ' . $source . ' ' . $source_number . ': ' . $source_property['description'], $the_source->$property_name );
+                            if ( $inside_post ) :
+                                update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': ' . $source_property['description'], $the_source->$property_name );
+                            endif;
                         elseif ( $source_property['input_type'] == 'image' ):
                             $image_id = attachment_url_to_postid( $the_source->$property_name );
                             $the_source->source_data = array_merge( $the_source->source_data,  array( $the_source->$property_name => $source_property['description'] ) );
@@ -275,19 +278,33 @@ class Oak_Elementor {
                     endforeach;
                     $source_number++;
 
-                    Sidebar_Widget::$post_selected_sources[] = $the_source;
-                    Oak_Content_Panel_Widget::$post_selected_sources[] = $the_source;
+                    if ( $inside_post ) :
+                        Sidebar_Widget::$post_selected_sources[] = $the_source;
+                        Oak_Content_Panel_Widget::$post_selected_sources[] = $the_source;
+                    endif;
+                    $sources_to_return[] = $the_source;
+
                 endif;
                 $incrementer++;
             } while( $incrementer < count( Oak::$sources_without_redundancy ) && !$found_source );
         endforeach;
 
+        return array(
+            'sources' => $sources_to_return,
+            'post_images_to_show' => $post_images_to_show
+        );
+    }
+
+    function add_sources_post_meta( $post_images_to_show ) {
+        // For sources
+        $post_images_to_show = Oak_Elementor::get_post_sources_data( get_the_ID(), $post_images_to_show, true )['post_images_to_show'];
+
         return $post_images_to_show;
     }
 
-    function add_qualis_post_meta( $post_images_to_show ) {
-        $selected_qualis = get_post_meta( get_the_ID(), 'qualis_selector' ) ? get_post_meta( get_the_ID(), 'qualis_selector' ) [0] : [];
-
+    public static function get_post_qualis_data( $post_id, $post_images_to_show, $inside_post ) {
+        $selected_qualis = get_post_meta( $post_id, 'qualis_selector' ) ? get_post_meta( $post_id, 'qualis_selector' ) [0] : [];
+        $qualis_to_return = [];
         $quali_number = 1;
         $quali = __( 'Indicateur Qualitatif', Oak::$text_domain );
         foreach( $selected_qualis as $quali_key => $selected_identifier ) :
@@ -299,12 +316,16 @@ class Oak_Elementor {
                     $the_quali = Oak::$qualis_without_redundancy[ $incrementer ];
                     $the_quali->quali_data = [];
                     $the_quali->quali_data = array_merge( $the_quali->quali_data,  array( $the_quali->quali_designation => __( 'Désignation', Oak::$text_domain ) ) );
-                    update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': Designation', $the_quali->quali_designation );
+                    if ( $inside_post ) :
+                        update_post_meta( $post_id, 'Oak: ' . $quali . ' ' . $quali_number . ': Designation', $the_quali->quali_designation );
+                    endif;
                     foreach( Qualis::$properties as $key => $quali_property ) :
                         $property_name = $quali_property['property_name'];
                         if ( $quali_property['input_type'] != 'image' && $quali_property['input_type'] != 'select' ) :
                             $the_quali->quali_data = array_merge( $the_quali->quali_data, array( $the_quali->$property_name => $quali_property['description'] ) );
-                            update_post_meta( get_the_ID(), 'Oak: ' . $quali . ' ' . $quali_number . ': ' . $quali_property['description'], $the_quali->$property_name );
+                            if ( $inside_post ) :
+                                update_post_meta( $post_id, 'Oak: ' . $quali . ' ' . $quali_number . ': ' . $quali_property['description'], $the_quali->$property_name );
+                            endif;
                         elseif ( $quali_property['input_type'] == 'image' ):
                             $image_id = attachment_url_to_postid( $the_quali->$property_name );
                             $post_images_to_show[] = array ( 'url' => $the_quali->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $quali . ' ' . $quali_number . ': ' .$quali_property['description'] );
@@ -313,19 +334,34 @@ class Oak_Elementor {
                     endforeach;
                     $quali_number++;
 
-                    Sidebar_Widget::$post_selected_qualis[] = $the_quali;
-                    Oak_Content_Panel_Widget::$post_selected_qualis[] = $the_quali;
+                    if ( $inside_post ) :
+                        Sidebar_Widget::$post_selected_qualis[] = $the_quali;
+                        Oak_Content_Panel_Widget::$post_selected_qualis[] = $the_quali;
+                    endif;
+
+                    $qualis_to_return[] = $the_quali;
                 endif;
                 $incrementer++;
             } while( $incrementer < count( Oak::$qualis_without_redundancy ) && !$found_quali );
         endforeach;
 
+
+        return array(
+            'qualis' => $qualis_to_return, 
+            'post_images_to_show' => $post_images_to_show
+        );
+    }
+
+    function add_qualis_post_meta( $post_images_to_show ) {
+        $post_images_to_show = Oak_Elementor::get_post_qualis_data( get_the_ID(), $post_images_to_show, true )['post_images_to_show'];
+
         return $post_images_to_show;
     }
 
-    function add_goodpractices_post_meta( $post_images_to_show ) {
+    public static function get_post_goodpractices_data( $post_id, $post_images_to_show, $inside_post ) {
         // For the good practices: 
-        $selected_goodpractices = get_post_meta( get_the_ID(), 'good_practices_selector' ) ? get_post_meta( get_the_ID(), 'good_practices_selector' ) [0] : [];
+        $goodpractices_to_return = [];
+        $selected_goodpractices = get_post_meta( $post_id, 'good_practices_selector' ) ? get_post_meta( $post_id, 'good_practices_selector' ) [0] : [];
         $good_practice = __( 'Bonne Pratique', Oak::$text_domain );
         $good_practice_number = 1;
         foreach( $selected_goodpractices as $good_practice_key => $goodpractice_identifier ) :
@@ -336,28 +372,43 @@ class Oak_Elementor {
                     // For the designation: 
                     $the_goodpractice = Oak::$goodpractices_without_redundancy[ $incrementer ];
                     $the_goodpractice = Good_Practices::get_goodpractice_of_corresponding_language( $the_goodpractice );
-                    update_post_meta( get_the_ID(), 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': Designation', $the_goodpractice->goodpractice_designation );
+                    if ( $inside_post )
+                        update_post_meta( $post_id, 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': Designation', $the_goodpractice->goodpractice_designation );
                     foreach( Good_Practices::$properties as $key => $goodpractice_property ) :
                         $property_name = $goodpractice_property['property_name'];
                         if ( $goodpractice_property['input_type'] != 'image' && $goodpractice_property['input_type'] != 'select' ) :
-                            update_post_meta( get_the_ID(), 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': ' . $goodpractice_property['description'], $the_goodpractice->$property_name );
+                            if ( $inside_post ) :
+                                update_post_meta( $post_id, 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': ' . $goodpractice_property['description'], $the_goodpractice->$property_name );
+                            endif;
                         elseif ( $goodpractice_property['input_type'] == 'image' ):
                             $image_id = attachment_url_to_postid( $the_goodpractice->$property_name );
                             $post_images_to_show[] = array ( 'url' => $the_goodpractice->$property_name, 'id' => $image_id, 'label' => 'Oak: ' . $good_practice . ' ' . $good_practice_number . ': ' .$goodpractice_property['description'] );
                             // Handle the images: We are gonna have to find the id of the image in the database for elementor to be able to handle it: 
                         endif;
                     endforeach;
+
+                    $goodpractices_to_return[] = $the_goodpractice;
                     $good_practice_number++;
                 endif;
                 $incrementer++;
             } while( $incrementer < count( Oak::$goodpractices_without_redundancy ) && !$found_goodpractice );
         endforeach;
 
+        return array(
+            'post_images_to_show' => $post_images_to_show,
+            'goodpractices' => $goodpractices_to_return
+        );
+    }
+
+    function add_goodpractices_post_meta( $post_images_to_show ) {
+        $post_images_to_show = Oak_Elementor::get_post_goodpractices_data( get_the_Id(), $post_images_to_show, true )['post_images_to_show'];
+        
         return $post_images_to_show;
     }
 
-    function add_performances_post_meta( $post_images_to_show ) {
-        $selected_quantis = get_post_meta( get_the_ID(), 'quantis_selector' ) ? get_post_meta( get_the_ID(), 'quantis_selector' ) [0] : [];
+    public static function get_post_performances_data( $post_id, $post_images_to_show, $inside_post ) {
+        $selected_quantis = get_post_meta( $post_id, 'quantis_selector' ) ? get_post_meta( $post_id, 'quantis_selector' ) [0] : [];
+        $performances_to_return = [];
         $performance_number = 1;
         foreach( $selected_quantis as $quanti_identifier ) :
             $performance_selectors = '';
@@ -378,11 +429,13 @@ class Oak_Elementor {
                     $performance->performance_data = [];
 
                     $performance->performance_data = array_merge( $performance->performance_data, array( $performance->performance_designation => __( 'Désignation', Oak::$text_domain ) ) );
-                    update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Designation', $performance->performance_designation );
+                    if ( $inside_post )
+                        update_post_meta( $post_id, 'Oak: ' . $performance_text . ' ' . $performance_number . ': Designation', $performance->performance_designation );
 
                     $unity_type_text = __( 'Type de l’unité', Oak::$text_domain );
                     $performance->performance_data = array_merge ( $performance->performance_data, array( $performance->performance_type => __( 'Type', Oak::$text_domain ) ) );
-                    update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $unity_type_text, $performance->performance_type );
+                    if ( $inside_post )
+                        update_post_meta( $post_id, 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $unity_type_text, $performance->performance_type );
 
                     $performance_results = explode( '|', $performance->performance_results );
                     foreach( $performance_results as $result_key => $result ) :
@@ -392,9 +445,11 @@ class Oak_Elementor {
                             $value = $result_values[1];
 
                             $performance->performance_data = array_merge ( $performance->performance_data, array( $year => __( 'Anné ' . $result_key, Oak::$text_domain ) ) );
-                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Année ' . $result_key, $year );
+                            if ( $inside_post )
+                                update_post_meta( $post_id, 'Oak: ' . $performance_text . ' ' . $performance_number . ': Année ' . $result_key, $year );
                             $performance->performance_data = array_merge( $performance->performance_data, array( $value =>  __( 'Valeur ' . $result_key, Oak::$text_domain ) ) );
-                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': Résultalt ' . $year, $value );
+                            if ( $inside_post )
+                                update_post_meta( $post_id, 'Oak: ' . $performance_text . ' ' . $performance_number . ': Résultalt ' . $year, $value );
                         endif;
                     endforeach;
 
@@ -403,11 +458,17 @@ class Oak_Elementor {
 
                         if ( $performance_property['name'] == 'country' ) :
                             $performance->performance_data = array_merge( $performance->performance_data, array( $performance->$property_name => $performance_property['description'] ) );
-                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
+                            if ( $inside_post ) :
+                                update_post_meta( $post_id, 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
+                            endif;
                         elseif ( $performance_property['name'] == 'custom_perimeter' ) :
-                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
+                            if ( $inside_post ) :
+                                update_post_meta( $post_id, 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
+                        endif;
                         elseif ( $performance_property['input_type'] != 'image' && $performance_property['input_type'] != 'select' ) :
-                            update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
+                            if ( $inside_post ) :
+                                update_post_meta( $post_id, 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $performance->$property_name );
+                            endif;
                         elseif ( $performance_property['input_type'] == 'image' ):
                             $performance->performance_data = array_merge( $performance->performance_data, array( $performance->$property_name => $performance_property['description'] ) );
                             $image_id = attachment_url_to_postid( $performance->$property_name );
@@ -423,7 +484,8 @@ class Oak_Elementor {
                                                 $value = $choice['innerHTML'];
                                             endif;
                                         endforeach;
-                                        update_post_meta( get_the_ID(), 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $value );
+                                        if ( $inside_post )
+                                            update_post_meta( $post_id, 'Oak: ' . $performance_text . ' ' . $performance_number . ': ' . $performance_property['description'], $value );
                                     endif;
                                 endif;
                             endif;
@@ -432,13 +494,25 @@ class Oak_Elementor {
                     $performance_number++;
 
                     $performance->performance_selectors = $performance_selectors;
-                    Sidebar_Widget::$post_selected_performances[] = $performance;
-                    Oak_Content_Panel_Widget::$post_selected_performances[] = $performance;
+
+                    if ( $inside_post ) :
+                        Sidebar_Widget::$post_selected_performances[] = $performance;
+                        Oak_Content_Panel_Widget::$post_selected_performances[] = $performance;
+                    endif;
+                    $performances_to_return[] = $performance;
+
                 endif;
             endforeach;
-
-            
         endforeach;
+
+        return array(
+            'post_images_to_show' => $post_images_to_show,
+            'performances' => $performances_to_return
+        );
+    }
+
+    function add_performances_post_meta( $post_images_to_show ) {
+        $post_images_to_show = Oak_Elementor::get_post_performances_data( get_the_ID(), $post_images_to_show, true )['post_images_to_show'];
 
         return $post_images_to_show;
     }

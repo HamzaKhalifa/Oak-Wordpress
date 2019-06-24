@@ -42,6 +42,7 @@ $performance_sql = "CREATE TABLE $performances_table_name (
     performance_quantis TEXT,
     performance_objects TEXT,
     performance_synchronized TEXT,
+    performance_frame_objects TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

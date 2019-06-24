@@ -21,6 +21,7 @@ $goodpractice_sql = "CREATE TABLE $goodpractices_table_name (
     goodpractice_objects TEXT,
     goodpractice_quantis TEXT,
     goodpractice_synchronized TEXT,
+    goodpractice_frame_objects TEXT,
     PRIMARY KEY (id)
 ) $charset_collate;";
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

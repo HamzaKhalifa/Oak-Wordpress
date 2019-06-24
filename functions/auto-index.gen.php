@@ -6,29 +6,7 @@ endif;
 // if ( get_option( 'central' ) === false ) :
     $indexes = [];
 
-    $posts = get_posts( array(
-        'numberposts' => -1,
-    ) );
-
-    $pages = get_pages( array(
-        'sort_order' => 'asc',
-        'sort_column' => 'post_title',
-        'hierarchical' => 1,
-        'exclude' => '',
-        'include' => '',
-        'meta_key' => '',
-        'meta_value' => '',
-        'authors' => '',
-        'child_of' => 0,
-        'parent' => -1,
-        'exclude_tree' => '',
-        'number' => '',
-        'offset' => 0,
-        'post_type' => 'page',
-        'post_status' => 'publish'
-    ) );
-
-    $all_posts_and_pages = array_merge( $posts, $pages );
+    $all_posts_and_pages = Oak::oak_get_all_posts_and_pages();
 
     foreach( $all_posts_and_pages as $post ) :
         $post_selected_objects = get_post_meta( $post->ID, 'objects_selector' ) ? get_post_meta( $post->ID, 'objects_selector' ) [0] : [];
@@ -108,6 +86,29 @@ endif;
             endforeach;
 
             $indexes[] = $object_data;
+        endforeach;
+
+        $all_posts_and_pages = Oak::oak_get_all_posts_and_pages();
+
+        // For quali indictors and specific objects: 
+        $sources = Oak_Elementor::get_post_sources_data( $post->ID, [], false );
+        $qualis = Oak_Elementor::get_post_qualis_data( $post->ID, [], false );
+        // $goodpractices = Oak_Elementor::get_post_goodpractices_data( $post->ID, [], false );
+        $performances = Oak_Elementor::get_post_performances_data( $post->ID, [], false );
+
+        foreach ( $sources as $source_data ) :
+            $source = $source_data[0];
+            $indexes = Oak::oak_get_quali_indicators_and_specific_objects_linked_frame_objects( $post, $indexes, $source, 'source' );
+        endforeach;
+
+        foreach ( $qualis as $quali_data ) :
+            $quali = $quali_data[0];
+            $indexes = Oak::oak_get_quali_indicators_and_specific_objects_linked_frame_objects( $post, $indexes, $quali, 'quali' );
+        endforeach;
+
+        foreach ( $performances as $performance_data ) :
+            $performance = $performance_data[0];
+            $indexes = Oak::oak_get_quali_indicators_and_specific_objects_linked_frame_objects( $post, $indexes, $performance, 'performance' );
         endforeach;
     endforeach;
 // endif;

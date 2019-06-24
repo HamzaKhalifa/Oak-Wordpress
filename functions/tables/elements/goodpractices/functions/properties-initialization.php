@@ -81,4 +81,18 @@ Good_Practices::$properties = array(
         'description' => __( 'Indicteurs.', Oak::$text_domain ), 
         'width' => '50' 
     ),
+    array (
+        'name' => 'frame_objects', 
+        'property_name' => 'goodpractice_frame_objects', 
+        'type' => 'text',
+        'input_type' => 'select_with_filters',
+        'can_add_more' => 'true',
+        'select_multiple' => 'true',
+        'choices' => Oak::$frame_objects_array,
+        'filters' => [
+        ],
+        'placeholder' => __( 'Objets Cadres RSE', Oak::$text_domain ), 
+        'description' => __( 'Objets Cadres RSE', Oak::$text_domain ), 
+        'width' => '100',
+    ),
 );
