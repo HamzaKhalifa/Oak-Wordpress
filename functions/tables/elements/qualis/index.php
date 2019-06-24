@@ -44,6 +44,10 @@ class Qualis {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/qualis/functions/data-collector.php';
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $qualis = new Qualis();

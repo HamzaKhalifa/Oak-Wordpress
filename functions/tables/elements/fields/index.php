@@ -65,6 +65,66 @@ class Fields {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/fields/functions/data-collector.php';
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        $tabs_data = array();
+        if ( $identifier == '' ) :
+            return $tabs_data;
+        endif;
+
+        $tabs_element = array(
+            'title' => __( 'Formulaires', Oak::$text_domain ),
+            'elements' => 'forms',
+            'elements_instances' => array(),
+            'table' => 'form'
+        );
+
+        $models_elements_instances = [];
+        foreach( Oak::$forms_without_redundancy as $form ) :
+            foreach( Oak::$all_forms_and_fields as $single_form_and_field ) :
+                if ( $single_form_and_field->form_revision_number == $form->form_revision_number 
+                    && $single_form_and_field->field_identifier == $identifier
+                    && $single_form_and_field->form_identifier == $form->form_identifier ) :
+                    $form_already_exists = false;
+                    foreach( $tabs_element['elements_instances'] as $element ) :
+                        if ( $element->form_identifier == $form->form_identifier ) :
+                            $form_already_exists = true;
+                        endif;
+                    endforeach;
+                    
+                    if ( !$form_already_exists ) :
+                        $tabs_element['elements_instances'][] = $form;
+
+                        $form_tabs = Forms::get_tabs_data( $form->form_identifier );
+                        foreach( $form_tabs[0]['elements_instances'] as $models_using_form ) :
+                            $model_already_exists = false;
+                            foreach( $models_elements_instances as $model_single_instance ) :
+                                if ( $model_single_instance->model_identifier == $models_using_form->model_identifier ) :
+                                    $model_already_exists = true;
+                                endif;
+                            endforeach;
+                            if ( !$model_already_exists ) :
+                                $models_elements_instances[] = $models_using_form;
+                            endif; 
+                        endforeach;
+                    endif;
+                endif;
+            endforeach;
+        endforeach;
+
+        $tabs_data[] = $tabs_element;
+
+        $tables_model_element = array(
+            'title' => __( 'Modèles', Oak::$text_domain ),
+            'elements' => 'models',
+            'elements_instances' => $models_elements_instances,
+            'table' => 'model'
+        );
+
+        $tabs_data[] = $tables_model_element;
+
+        return $tabs_data;
+    }
 }
 
 $fields = new Fields();

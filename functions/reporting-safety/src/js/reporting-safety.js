@@ -6,7 +6,6 @@ function handleConfigurationButton() {
         jQuery(document).ready(function() {
             setLoading();
             backupAjaxUrl = document.querySelector('.oak_reporting_safety__backup_instance_ajax_url').value;
-            console.log(backupAjaxUrl);
             jQuery.ajax({
                 url: REPORTING_SAFETY_DATA.ajaxUrl,
                 type: 'POST',

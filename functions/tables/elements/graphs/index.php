@@ -111,6 +111,10 @@ class Graphs {
     public static function data_studio_graph_container() {
         include get_template_directory() . '/functions/tables/elements/graphs/views/graph_container.php';
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $graphs = new Graphs();

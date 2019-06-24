@@ -44,6 +44,10 @@ class Quantis {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/quantis/functions/data-collector.php';
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $quantis = new Quantis();

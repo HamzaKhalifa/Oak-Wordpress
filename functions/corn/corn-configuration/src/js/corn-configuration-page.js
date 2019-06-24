@@ -451,9 +451,6 @@ function handleSystemBarSettingsSaveButton() {
 
         var systemBarBackgroundColor = document.querySelector('.oak_social_media_background_color_configuration').value
 
-        console.log(socialMediaData);
-        console.log(systemBarBackgroundColor);
-
         setLoading();
         // $(document).ready(function() {
             $.ajax({
@@ -490,7 +487,6 @@ function handleAppBarSettingsSaveButton() {
                 value: checkboxes[i].checked
             });
         }
-        console.log('app bar settings', appBarSettings);
         var appBarBackgroundColor = document.querySelector('.oak_app_bar_background_color').value;
 
         setLoading();
@@ -615,12 +611,10 @@ function handleAddNewColorContainer(colorData) {
     colorsContainer.append(newColorContainer);
     jQuery('.oak_configuration_page__style_config').find('.color_input').wpColorPicker({
         change: function(event, ui) {
-            console.log('changed');
         }
     });
 
     if (colorData) {
-        console.log('Entered the if colordata');
         for (var i = 0; i < colorData.secondary.length; i++) {
             colorData.primary.push(colorData.secondary[i]);
         }
@@ -688,7 +682,6 @@ function handleSaveStylesButton() {
 initializeColors();
 function initializeColors() {
     for (var i = 0; i < DATA.oakColors.length; i++) {
-        console.log('euh');
         handleAddNewColorContainer(DATA.oakColors[i]);
     }
 }

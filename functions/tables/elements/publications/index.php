@@ -96,6 +96,10 @@ class Publications {
             )
         );
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $publications = new Publications();

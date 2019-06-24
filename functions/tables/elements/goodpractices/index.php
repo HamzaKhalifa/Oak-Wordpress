@@ -58,6 +58,10 @@ class Good_Practices {
 
         return $goodpractice;
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $goodpractices = new Good_Practices();

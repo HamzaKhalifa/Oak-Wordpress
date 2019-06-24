@@ -113,6 +113,10 @@ class Organizations {
             )
         );
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $organizations = new Organizations();

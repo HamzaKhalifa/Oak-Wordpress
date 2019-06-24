@@ -65,6 +65,43 @@ class Forms {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/forms/functions/data-collector.php';
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        $tabs_data = array();
+        if ( $identifier == '' ) :
+            return $tabs_data;
+        endif;
+
+        $tabs_element = array(
+            'title' => __( 'Modèles', Oak::$text_domain ),
+            'elements' => 'models',
+            'elements_instances' => array(),
+            'table' => 'model'
+        );
+        foreach( Oak::$models_without_redundancy as $model ) :
+            foreach( Oak::$all_models_and_forms as $single_model_and_form ) :
+                if ( $single_model_and_form->model_revision_number == $model->model_revision_number 
+                    && $single_model_and_form->form_identifier == $identifier 
+                    && $single_model_and_form->model_identifier == $model->model_identifier
+                    ) :
+                    $model_already_exists = false;
+                    foreach( $tabs_element['elements_instances'] as $element ) :
+                        if ( $element->model_identifier == $model->model_identifier ) :
+                            $model_already_exists = true;
+                        endif;
+                    endforeach;
+                    
+                    if ( !$model_already_exists ) :
+                        $tabs_element['elements_instances'][] = $model;
+                    endif;
+                endif;
+            endforeach;
+        endforeach;
+
+        $tabs_data[] = $tabs_element;
+
+        return $tabs_data;
+    }
 }
 
 $forms = new Forms();

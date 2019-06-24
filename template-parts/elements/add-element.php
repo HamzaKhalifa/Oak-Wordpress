@@ -1157,89 +1157,97 @@ $modification_time_property = $table . '_modification_time';
                 </div>
             </div>
 
-            <div class="oak_add_element_big_container_tabs_single_tab__section">
-                <h5 class="oak_add_element_big_container_tabs_single_tab_section__title"><?php _e( 'Formulaires: ', Oak::$text_domain ); ?></h5>
-                <div class="oak_add_element_big_container_tabs_single_tab_section__state">
-                    <select class="oak_add_element_big_container_tabs_single_tab_section__formulas_select" name="" id="">
-                        <?php 
-                        if ( count( $revisions ) > 0 ) :
-                            $found_field = false;
-                            $forms_counter = 0;
-                            do {
-                                $form_fields_array = explode( '|', Oak::$forms_without_redundancy[ $forms_counter ]->form_fields );
-                                $form_fields_counter = 0;
-                                do {
-                                    $field_data = explode( ':', $form_fields_array[ $form_fields_counter ] );
-                                    if ( count( $field_data ) > 1 ) :
-                                        if ( $field_data[1] == $last_revision->$identifier_property ) : 
-                                            $found_field = true;
-                                        ?>
-                                            <option value="<?php Oak::$forms_without_redundancy[ $forms_counter ]->form_identifier ?>"><?php echo( esc_attr( Oak::$forms_without_redundancy[ $forms_counter ]->form_designation ) ); ?></option>
-                                        <?php
-                                        endif;
-                                    endif;
-                                    $form_fields_counter++;
-                                } while( !$found_field && $form_fields_counter < count( $form_fields_array ) );
-                                $forms_counter++;
-                            } while ( $forms_counter < count( Oak::$forms_without_redundancy ) );
-                        endif;
-                        ?>
-                    </select>
+            
+            <?php 
+            $identifier = '';
+            $tabs_data = array();
 
-                    <span class="oak_select_go_button"><?php _e( 'Accéder', Oak::$text_domain ); ?></span>
-                </div>
-            </div>
+            if ( isset( $_GET[ $table . '_identifier' ] ) ) :
+                $identifier = $_GET[ $table . '_identifier' ];
+            endif;
 
-            <div class="oak_add_element_big_container_tabs_single_tab__section">
-                <h5 class="oak_add_element_big_container_tabs_single_tab_section__title"><?php _e( 'Modèles: ', Oak::$text_domain ); ?></h5>
-                <div class="oak_add_element_big_container_tabs_single_tab_section__state">
-                    <select class="oak_add_element_big_container_tabs_single_tab_section__formulas_select" name="" id="">
-                    <?php 
-                        if ( count( $revisions ) > 0 ) :
-                            foreach( Oak::$models_without_redundancy as $model ) :
-                                $model_forms_array = explode( '|', $model->model_forms );
-                                $model_forms_counter = 0;
-                                $found_field = false;
-                                do {
-                                    $form_data = explode( ':', $model_forms_array[ $model_forms_counter ] );
-                                    if ( count( $form_data ) > 0 ) :
-                                        $form_identifier = $form_data[1];
-                                        $oak_forms_counter = 0;
-                                        do {
-                                            if ( Oak::$forms_without_redundancy[ $oak_forms_counter ]->form_identifier == $form_identifier ) :
-                                                $form_fields_array = explode( '|', Oak::$forms_without_redundancy[ $oak_forms_counter ]->form_fields );
-                                                $form_fields_counter = 0;
-                                                do {
-                                                    $fields_data = explode( ':', $form_fields_array[ $form_fields_counter ] );
-                                                    if ( count( $fields_data ) > 1 ) :
-                                                        if ( $fields_data[1] == $last_revision->$identifier_property ) : 
-                                                            $found_field = true;
-                                                        ?>
-                                                            <option value="<?php $model->model_identifier ?>"><?php echo( esc_attr( $model->model_designation ) ); ?></option>
-                                                        <?php
-                                                        endif;
-                                                    endif;
-                                                    $form_fields_counter++;
-                                                } while ( !$found_field && $form_fields_counter < count( $form_fields_array ) );
-                                            endif;
-                                            $oak_forms_counter++;
-                                        } while ( !$found_field && $oak_forms_counter < count ( Oak::$forms_without_redundancy ) );
-                                    endif;
-                                    $model_forms_counter++;
-                                } while ( !$found_field && $model_forms_counter < count( $model_forms_array ) );
-                            endforeach;
-                        endif;
-                        ?>
-                    </select>
-                </div>
-            </div>
+            switch ( $_GET['elements'] ) :
+                case 'fields':
+                    $tabs_data = Fields::get_tabs_data( $identifier );
+                break;
+                case 'forms' :
+                    $tabs_data = Forms::get_tabs_data( $identifier );
+                break;
+                case 'models' :
+                    $tabs_data = Models::get_tabs_data( $identifier );
+                break;
+                case 'organizations' :
+                    $tabs_data = Organizations::get_tabs_data( $identifier );
+                break;
+                case 'publications' :
+                    $tabs_data = Publications::get_tabs_data( $identifier );
+                break;
+                case 'taxonomies' :
+                    $tabs_data = Taxonomies::get_tabs_data( $identifier );
+                break;
+                case 'terms' :
+                    $tabs_data = Terms::get_tabs_data( $identifier );
+                break;
+                case 'term_objects' :
+                    $tabs_data = Terms::get_tabs_data( $identifier );
+                break;
+                case 'glossaries' :
+                    $tabs_data = Glossaries::get_tabs_data( $identifier );
+                break;
+                case 'qualis' :
+                    $tabs_data = Qualis::get_tabs_data( $identifier );
+                break;
+                case 'quantis' :
+                    $tabs_data = Quantis::get_tabs_data( $identifier );
+                break;
+                case 'objects' :
+                    $tabs_data = Objects::get_tabs_data( $identifier );
+                break;
+                case 'performances' :
+                    $tabs_data = Performances::get_tabs_data( $identifier );
+                break;
+                case 'goodpractices' :
+                    $tabs_data = Good_Practices::get_tabs_data( $identifier );
+                break;
+                case 'sources' :
+                    $tabs_data = Sources::get_tabs_data( $identifier );
+                break;
+                case 'publishers' :
+                    $tabs_data = Publishers::get_tabs_data( $identifier );
+                break;
+                case 'graphs' :
+                    $tabs_data = Graphs::get_tabs_data( $identifier );
+                break;
+            endswitch;
 
-            <div class="oak_add_element_big_container_tabs_single_tab__section">
-                <h5 class="oak_add_element_big_container_tabs_single_tab_section__title"><?php _e( 'Publications: ', Oak::$text_domain ); ?></h5>
-                <div class="oak_add_element_big_container_tabs_single_tab_section__state">
-                    <select class="oak_add_element_big_container_tabs_single_tab_section__formulas_select" name="" id=""></select>
+            foreach( $tabs_data as $tabs_single_data ) :
+                $element_identifier_property = $tabs_single_data['table'] . '_identifier';
+                $element_designation_property = $tabs_single_data['table'] . '_designation';
+            ?>
+            <form action="?" method="GET">
+                <div class="oak_add_element_big_container_tabs_single_tab__section">
+                    <h5 class="oak_add_element_big_container_tabs_single_tab_section__title"><?php echo( $tabs_single_data['title'] ); ?></h5>
+                    <div class="oak_add_element_big_container_tabs_single_tab_section__state">
+                        <input type="hidden" name="page" value="oak_add_element">
+                        <input type="hidden" name="elements" value="<?php echo( $tabs_single_data['elements'] ); ?>">
+                        <input type="hidden" name="listorformula" value="<?php echo( $_GET['listorformula'] ); ?>">
+                        
+
+                        <select class="oak_add_element_big_container_tabs_single_tab_section__select" name="<?php echo( $element_identifier_property ); ?>" id="">
+                            <?php
+                            foreach( $tabs_single_data['elements_instances'] as $element ) : ?>
+                                <option value="<?php echo( $element->$element_identifier_property ); ?>"><?php echo( $element->$element_designation_property ); ?></option>
+                            <?php
+                            endforeach; 
+                            ?>
+                        </select>
+                    </div>
+                    <button class="oak_select_go_button"><?php _e( 'Accéder', Oak::$text_domain ); ?></button>
                 </div>
-            </div>
+            </form>
+            <?php 
+            endforeach;
+            ?>
         </div>
     </div>
 </div>

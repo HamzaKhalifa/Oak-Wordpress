@@ -44,6 +44,10 @@ class Glossaries {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/glossaries/functions/data-collector.php';
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $glossaries = new Glossaries();

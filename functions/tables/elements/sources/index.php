@@ -58,6 +58,10 @@ class Sources {
 
         return $source;
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $sources = new Sources();

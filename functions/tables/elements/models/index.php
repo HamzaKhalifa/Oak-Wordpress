@@ -91,6 +91,10 @@ class Models {
 
         return $model_fields;
     }
+    
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $models = new Models();

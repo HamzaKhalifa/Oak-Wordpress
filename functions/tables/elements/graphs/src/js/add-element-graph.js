@@ -86,8 +86,7 @@ function handleGraphProperties(graphData, trace) {
 
     }
     trace.pop();
-
-    console.log('lastDrawn', lastDrawn);
+    
     if ( lastDrawn != 'endOfObject' ) {
         var endOfObjectDiv = document.createElement('div');
         endOfObjectDiv.className = 'oak_end_of_graph_data_object_div';

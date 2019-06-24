@@ -185,6 +185,10 @@ class Publishers {
     public static function synchronize_view() {
         include get_template_directory() . '/functions/tables/elements/publishers/views/synchronize-view.php';
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $publishers = new Publishers();

@@ -503,8 +503,6 @@ function createElementData(state) {
     // For the language: 
     elementData[DATA.table + '_content_language'] = document.querySelector('.oak_system_bar__languages_select').value;
 
-    console.log(elementData);
-
     return elementData;
 }
 
@@ -752,7 +750,6 @@ function addOtherElementButton() {
 }
 
 function addOtherElement(data) {
-    console.log(data);
     var otherElementsContainer = document.querySelector('.oak_other_elements_container');
     var newElement = document.createElement('div');
     newElement.className = 'oak_other_elements_single_elements_container__single_element oak_other_elements_single_elements_container__single_element_not_checked';
@@ -1059,7 +1056,6 @@ function otherElementsCopyButton() {
                 var entireElement = checkboxes[i].parentNode.parentNode.innerHTML;
                 var selectValue = checkboxes[i].parentNode.querySelector('.oak_other_elements_select').value;
                 var designationInputValue = checkboxes[i].parentNode.querySelector('.designation_input').value;
-                console.log(designationInputValue);
 
                 var theCopy = document.createElement('div');
                 theCopy.className = 'oak_other_elements_single_elements_container__single_element';

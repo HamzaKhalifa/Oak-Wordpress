@@ -270,7 +270,6 @@ var steps = [];
                 break;
                 case 'performance':
                     selectedData.performances = [];
-                    console.log('performances', selectedData.performances);
                     checkBoxes = document.querySelector('.import_container').querySelectorAll('.import_container__element_checkbox');
                     for (var i = 0; i < checkBoxes.length; i++) {
                         if (checkBoxes[i].checked) {
@@ -402,7 +401,6 @@ function handleGraphConfigurationScreen() {
 }
 
 function generateChart(config) {
-    console.log('config', config);
     var allDataGraphData = {
         selectedLabels: [],
         selectedPerformances: [],
@@ -442,7 +440,6 @@ function generateChart(config) {
                         for (var k = 0; k < config.values[j].yearsData.length; k++) {
                             var yearsContainers = performanceContainer.querySelectorAll('.oak_graphs_configuration_year');
                             for (var m = 0; m < yearsContainers.length; m++) {
-                                console.log('test', config.values[j].yearsData[k]);
                                 if (yearsContainers[m].getAttribute('year') == config.values[j].yearsData[k][0] && yearsContainers[m].getAttribute('value') == config.values[j].yearsData[k][1]
                                     && containsClass(yearsContainers[m], 'oak_graphs_configuration_element_container_single_element__considered')) {
                                     actualLabels.push(config.values[j].yearsData[k][0]);
@@ -547,8 +544,6 @@ function createChart(chartCanvas, graph, title, actualLabels, actualData, datase
             legend
         }
     };
-    console.log('legend', legend);
-    console.log('Chart legend', chartData.options.legend);
     var chart = new Chart(chartCreator, chartData);
 
     // For click events: 
@@ -626,7 +621,6 @@ function handleRefreshGraphButton() {
         var labels = graphParameters.labels;
         var data = graphParameters.data;
         var legendConfiguration = graphParameters.legend;
-        console.log('legend configuration in handle refresh', graphParameters.legend);
 
         var selectedChartCanvas = document.querySelector('.oak_selected_graph');
         createChart(selectedChartCanvas, chosenGraphData.graph, chosenGraphData.title, labels, data, datasetProperties, graphParameters.links, legendConfiguration);

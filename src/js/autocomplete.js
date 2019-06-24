@@ -7,7 +7,6 @@ function initializeAutoComplete() {
         var args = [];
         var options = autoCompleteInputs[i].parentNode.querySelector('select').querySelectorAll('option');
         for (var j = 0; j < options.length; j++) {
-            console.log(options[j].innerHTML);
             args.push(options[j].innerHTML);
         }
         autocomplete(autoCompleteInputs[i], args);
@@ -64,7 +63,6 @@ function autocomplete(inp, arr) {
 
                 var selectedValueInput = document.createElement('input');
                 selectedValueInput.disabled = true;
-                console.log(this.getElementsByTagName("input"));
                 selectedValueInput.value = this.getElementsByTagName("input")[0].value;
                 var identifier = '';
                 var options = inp.parentNode.querySelector('select').querySelectorAll('option');

@@ -82,6 +82,10 @@ class Terms {
     function data_collector() {
         include get_template_directory() . '/functions/tables/elements/terms/functions/data-collector.php';
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $terms = new Terms();

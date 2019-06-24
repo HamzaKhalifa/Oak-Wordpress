@@ -300,17 +300,9 @@ var steps = [];
 
                     // For the terms and objects (Gotta filter this some day)
                     selectedData.termsAndObjects = allData.termsAndObjects;
-                    
-                    // console.log('selected data', selectedData);
-                    // setLoading();
-                    // sendAjaxRequest({ models: selectedData.models, fields: selectedData.fields, objects: selectedData.objects }, 'create_models_tables', function(success) {
-                    //     setLoading();
-                    //     doneLoading();
-                    // });
-                    // return;
 
                     setLoading();
-                    startGame();
+                    // startGame();
                     setLoadingPercentage('0%', 'Suppression des données..');
                     sendAjaxRequest({},'corn_delete_everything', function(success) {
                         if (success) {

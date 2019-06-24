@@ -42,7 +42,6 @@ function handleLanguagesSelectListener() {
             }
             var titleContainers = listRows[i].querySelectorAll('.oak_list_titles_container__title');
             titleContainers[0].innerHTML = element[DATA.table + '_designation'] + language;
-            console.log(titleContainers);
             for (var k = 0; k < 3; k++) {
                 titleContainers[k + 1].innerHTML = element[DATA.filters[k].property] + language;
             }
@@ -428,7 +427,6 @@ function handleShowHideChildrenButtons() {
     for (var i = 0; i < showHideButtons.length; i++) {
         showHideButtons[i].addEventListener('click', function() {
             var childrenContainer = this.parentNode.parentNode.parentNode.querySelector('.oak_list_row_child_elements_container');
-            console.log(childrenContainer);
             if (classExists(childrenContainer, 'oak_hidden')) {
                 childrenContainer.classList.remove('oak_hidden');
                 this.classList.add('fa-sort-up');
@@ -562,7 +560,6 @@ function exportButton() {
                 }
             }
             let associativeTableCSV = 'data:text/csv;charset=utf-8,' + model + '\r\n';
-            console.log(rows);
             for (var i = 0; i < rows.length; i++) {
                 let row = rows[i].join(",");
                 var nextLine = '';
@@ -763,7 +760,6 @@ function handleModalButtons() {
             var tableInPlural = DATA.table_in_plural;
 
             jQuery(document).ready(function() {
-                console.log(tableInPlural);
                 jQuery.ajax({
                     url: DATA.ajaxUrl,
                     type: 'POST',
@@ -846,9 +842,7 @@ function readCSV(input) {
         reader.onload = function (e) {
             var rows = e.target.result.split('\n');
             for (var i = 0; i < rows.length; i++ ) {
-                console.log(rows[i]);
                 var valuesOfI = CSVtoArray(rows[i]);
-                console.log('valuesOf', valuesOfI);
                 for (var j = 0; j < valuesOfI.length; j++) {
                     valuesOfI[j] = valuesOfI[j].replace(/\\"/g, '"')
                         .replace(/\\'/g, '\'')

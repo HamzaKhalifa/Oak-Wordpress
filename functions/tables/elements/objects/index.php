@@ -85,6 +85,10 @@ class Objects {
 
         return $object;
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $objects = new Objects();

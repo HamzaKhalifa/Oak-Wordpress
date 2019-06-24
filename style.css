@@ -1458,6 +1458,10 @@ body .oak_select_container_with_filters__add_button {
   cursor: pointer;
 }
 
+.oak_add_element_big_container_tabs_single_tab_section__select {
+  width: 100%;
+}
+
 .oak_system_bar {
   background-color: #000c3b;
 }

@@ -58,6 +58,10 @@ class Performances {
 
         return $performance;
     }
+
+    public static function get_tabs_data( $identifier  ) {
+        return array();
+    }
 }
 
 $performances = new Performances();

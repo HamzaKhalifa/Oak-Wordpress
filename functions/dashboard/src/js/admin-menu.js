@@ -121,7 +121,6 @@ function handleStickyMenu() {
 
 // For the content type filter button
 handleContentTypeFilterButton();
-console.log(ADMIN_MENU_DATA.currentUser);
 function handleContentTypeFilterButton() {
     var contentFilterButton = document.querySelector('.oak_content_type_filter_button');
     contentFilterButton.addEventListener('click', function() {
