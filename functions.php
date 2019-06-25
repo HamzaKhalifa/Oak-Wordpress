@@ -183,7 +183,7 @@ class Oak {
         include_once get_template_directory() . '/functions/tables/index.php';
 
         // Initializing all the tables properties
-        /*include_once get_template_directory() . '/functions/properties-initialization.php';
+        include_once get_template_directory() . '/functions/properties-initialization.php';
 
         include_once get_template_directory() . '/functions/elementor/index.php';
 
@@ -223,7 +223,7 @@ class Oak {
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
 
         // Handle all ajax calls
-        $this->oak_ajax_calls();*/
+        $this->oak_ajax_calls();
     }
 
     function oak_ajax_calls() {
