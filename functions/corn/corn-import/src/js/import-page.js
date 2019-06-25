@@ -302,7 +302,7 @@ var steps = [];
                     selectedData.termsAndObjects = allData.termsAndObjects;
 
                     setLoading();
-                    // startGame();
+                    startGame();
                     setLoadingPercentage('0%', 'Suppression des données..');
                     sendAjaxRequest({},'corn_delete_everything', function(success) {
                         if (success) {

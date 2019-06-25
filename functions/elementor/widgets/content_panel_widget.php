@@ -204,7 +204,7 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
 				'label' => __( 'Content Panel', Oak::$text_domain ),
 			]
         );
-
+        
         $publications_and_frame_objects = Oak_Content_Panel_Widget::make_publications_and_frame_objects();
 
         $publications_options = array(
@@ -532,29 +532,30 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
                     
                     // Lets get the frame object now: 
                     $field_frame_object = Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier );
+                    if ( $field_frame_object != null ) :
+                        // Find the field 
+                        $the_field = null;
+                        $field_counter = 0;
+                        $found_the_field = false;
+                        do {
+                            if ( Oak::$fields_without_redundancy[ $field_counter ]->field_identifier == $field_identifier ) :
+                                $the_field = Oak::$fields_without_redundancy[ $field_counter ];
+                            endif;
+                            $field_counter++;
+                        } while ( !$found_the_field && $field_counter < count( Oak::$fields_without_redundancy ) );
 
-                    // Find the field 
-                    $the_field = null;
-                    $field_counter = 0;
-                    $found_the_field = false;
-                    do {
-                        if ( Oak::$fields_without_redundancy[ $field_counter ]->field_identifier == $field_identifier ) :
-                            $the_field = Oak::$fields_without_redundancy[ $field_counter ];
-                        endif;
-                        $field_counter++;
-                    } while ( !$found_the_field && $field_counter < count( Oak::$fields_without_redundancy ) );
+                        $frame_object_data_within_object = array (
+                            'field_index' => $field_index,
+                            'field_identifier' => $field_identifier,
+                            'field_designation' => $the_field->field_designation,
+                            'field_content_property' => $field_content_property,
+                            'field_content' => $field_content,
+                            'frame_object' => $field_frame_object
+                        );
 
-                    $frame_object_data_within_object = array (
-                        'field_index' => $field_index,
-                        'field_identifier' => $field_identifier,
-                        'field_designation' => $the_field->field_designation,
-                        'field_content_property' => $field_content_property,
-                        'field_content' => $field_content,
-                        'frame_object' => $field_frame_object
-                    );
-
-                    $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $field_frame_object->object_identifier );
-                    $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object ); 
+                        $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $field_frame_object->object_identifier );
+                        $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object ); 
+                    endif;
                 endif;
             endforeach;
 
@@ -567,37 +568,41 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
                     $form_frame_object = Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier );
                     // Lets get the frame object now: 
 
-                    $found_form = false;
-                    $forms_counter = 0;
-                    $the_form = null;
-                    do {
-                        if ( Oak::$forms_without_redundancy[ $forms_counter ]->form_identifier == $form_identifier ) :
-                            $found_form = true;
-                            $the_form = Oak::$forms_without_redundancy[ $forms_counter ];
-                        endif;
-                        $forms_counter++;
-                    } while ( $forms_counter < count( Oak::$forms_without_redundancy ) && !$found_form );
-                    $frame_object_data_within_object = array (
-                        'form_identifier' => $form_identifier,
-                        'form_designation' => $the_form->form_designation,
-                        'frame_object' => $form_frame_object,
-                    );
+                    if ( $form_frame_object != null ) :
+                        $found_form = false;
+                        $forms_counter = 0;
+                        $the_form = null;
+                        do {
+                            if ( Oak::$forms_without_redundancy[ $forms_counter ]->form_identifier == $form_identifier ) :
+                                $found_form = true;
+                                $the_form = Oak::$forms_without_redundancy[ $forms_counter ];
+                            endif;
+                            $forms_counter++;
+                        } while ( $forms_counter < count( Oak::$forms_without_redundancy ) && !$found_form );
+                        $frame_object_data_within_object = array (
+                            'form_identifier' => $form_identifier,
+                            'form_designation' => $the_form->form_designation,
+                            'frame_object' => $form_frame_object,
+                        );
 
-                    $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $form_frame_object->object_identifier );
-                    $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object );
+                        $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $form_frame_object->object_identifier );
+                        $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object );
+                    endif;
                 endif;
             endforeach;
             // for object model selector
             if ( $object->object_model_selector != null && $object->object_model_selector != '' ) :
                 $model_frame_object = Oak_Content_Panel_Widget::find_frame_object( $object->object_model_selector );
-                $frame_object_data_within_object = array(
-                    'object_identifier' => $object->object_identifier,
-                    'object_designation' => $object->object_designation,
-                    'frame_object' => $model_frame_object,
-                );
+                if ( $model_frame_object != null ) :
+                    $frame_object_data_within_object = array(
+                        'object_identifier' => $object->object_identifier,
+                        'object_designation' => $object->object_designation,
+                        'frame_object' => $model_frame_object,
+                    );
 
-                $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $model_frame_object->object_identifier );
-                $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object );
+                    $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $model_frame_object->object_identifier );
+                    $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_object );
+                endif;
             endif;
         endforeach;
         
@@ -613,15 +618,18 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
             endforeach;
 
             foreach( $frame_objects_identifiers as $frame_object_identifier ) :
-                $frame_object_data_within_performance = array(
-                    'data' => $selected_performance->performance_data,
-                    'performance_designation' => $selected_performance->performance_designation,
-                    'performance_identifier' => $selected_performance->performance_identifier,
-                    'frame_object' => Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier )
-                );
-                
-                $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $frame_object_identifier );
-                $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_performance );
+                $the_frame_object = Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier );
+                if ( $the_frame_object != null ) :
+                    $frame_object_data_within_performance = array(
+                        'data' => $selected_performance->performance_data,
+                        'performance_designation' => $selected_performance->performance_designation,
+                        'performance_identifier' => $selected_performance->performance_identifier,
+                        'frame_object' => $the_frame_object
+                    );
+                    
+                    $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $frame_object_identifier );
+                    $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_performance );
+                endif;
             endforeach;
         endforeach;
 
@@ -637,15 +645,18 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
             endforeach;
 
             foreach( $frame_objects_identifiers as $frame_object_identifier ) :
-                $frame_object_data_within_quali = array(
-                    'data' => $selected_quali->quali_data,
-                    'quali_designation' => $selected_quali->quali_designation,
-                    'quali_identifier' => $selected_quali->quali_identifier,
-                    'frame_object' => Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier )
-                );
+                $the_frame_object = Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier );
+                if ( $the_frame_object != null ) :
+                    $frame_object_data_within_quali = array(
+                        'data' => $selected_quali->quali_data,
+                        'quali_designation' => $selected_quali->quali_designation,
+                        'quali_identifier' => $selected_quali->quali_identifier,
+                        'frame_object' => $the_frame_object
+                    );
 
-                $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $frame_object_identifier );
-                $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_quali );
+                    $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $frame_object_identifier );
+                    $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_quali );
+                endif;
             endforeach;
         endforeach;
 
@@ -660,15 +671,18 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
             endforeach;
 
             foreach( $frame_objects_identifiers as $frame_object_identifier ) :
-                $frame_object_data_within_source = array(
-                    'data' => $selected_source->source_data,
-                    'source_designation' => $selected_source->source_designation,
-                    'source_identifier' => $selected_source->source_identifier,
-                    'frame_object' => Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier )
-                );
+                $the_frame_object = Oak_Content_Panel_Widget::find_frame_object( $frame_object_identifier );
+                if ( $the_frame_object != null ) : 
+                    $frame_object_data_within_source = array(
+                        'data' => $selected_source->source_data,
+                        'source_designation' => $selected_source->source_designation,
+                        'source_identifier' => $selected_source->source_identifier,
+                        'frame_object' => $the_frame_object
+                    );
 
-                $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $frame_object_identifier );
-                $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_source );
+                    $publication_identifier = Oak_Content_Panel_Widget::to_which_publication_frame_object_belongs( $frame_object_identifier );
+                    $publications_and_frame_objects = Oak_Content_Panel_Widget::add_publication_and_frame_object( $publications_and_frame_objects, $publication_identifier, $frame_object_data_within_source );
+                endif;
             endforeach;
         endforeach;
 
@@ -678,11 +692,11 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
     public static function find_frame_object( $frame_object_identifier ) {
         $incrementer = 0;
         $found_frame_object = false;
-        $frame_object;
+        $frame_object = null;
         do {
-            if ( Oak::$all_frame_objects_without_redundancy[$incrementer]->object_identifier == $frame_object_identifier ) :
+            if ( Oak::$all_frame_objects_without_redundancy[ $incrementer ]->object_identifier == $frame_object_identifier ) :
                 $found_frame_object = true;
-                $frame_object = Oak::$all_frame_objects_without_redundancy[$incrementer];
+                $frame_object = Oak::$all_frame_objects_without_redundancy[ $incrementer ];
             endif;
             $incrementer++;
         } while( $incrementer < count( Oak::$all_frame_objects_without_redundancy ) && !$found_frame_object );
@@ -746,10 +760,6 @@ class Oak_Content_Panel_Widget extends \Elementor\Widget_Heading {
     }
 
     public static function create_widgets( $widgets_manager ) {
-        // $publications_and_frame_objects = Oak_Content_Panel_Widget::make_publications_and_frame_objects();
-        // Oak::var_dump( $publications_and_frame_objects );
-        // die;
-
         $content_panel_widget = new Oak_Content_Panel_Widget();
         $widgets_manager->register_widget_type( $content_panel_widget );
     }

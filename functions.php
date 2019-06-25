@@ -183,7 +183,7 @@ class Oak {
         include_once get_template_directory() . '/functions/tables/index.php';
 
         // Initializing all the tables properties
-        include_once get_template_directory() . '/functions/properties-initialization.php';
+        /*include_once get_template_directory() . '/functions/properties-initialization.php';
 
         include_once get_template_directory() . '/functions/elementor/index.php';
 
@@ -223,7 +223,7 @@ class Oak {
         add_action( 'admin_menu', array( $this, 'oak_handle_admin_menu' ) );
 
         // Handle all ajax calls
-        $this->oak_ajax_calls();
+        $this->oak_ajax_calls();*/
     }
 
     function oak_ajax_calls() {
@@ -431,30 +431,32 @@ class Oak {
         
         $our_objects = [];
 
-        foreach( Oak::$models_without_redundancy as $model ) :
-            $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
-            $objects = $wpdb->get_results ( "
-                SELECT *
-                FROM  $table_name
-            " );
-            $objects = array_reverse( $objects );
-            foreach( $objects as $object ) :
-                if ( in_array( $object->object_identifier, $selected_objects ) ) :
-                    $exists = false;
-                    foreach( $our_objects as $already_added_object ) :
-                        if ( $already_added_object->object_identifier == $object->object_identifier ) :
-                            $exists = true;
-                        endif;
-                    endforeach;
-                    if ( !$exists ) :
-                        $model_fields = Models::get_model_fields( $model, $modify_current_model_fields );
-                        $object = Objects::get_object_of_corresponding_language( $object );
-                        $object->object_model_fields = $model_fields;
+        foreach( $selected_objects as $selected_object_identifier ) :
+            foreach( Oak::$models_without_redundancy as $model ) :
+                $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
+                $objects = $wpdb->get_results ( "
+                    SELECT *
+                    FROM  $table_name
+                " );
+                $objects = array_reverse( $objects );
+                foreach( $objects as $object ) :
+                    if ( $object->object_identifier == $selected_object_identifier ) :
+                        $exists = false;
+                        foreach( $our_objects as $already_added_object ) :
+                            if ( $already_added_object->object_identifier == $object->object_identifier ) :
+                                $exists = true;
+                            endif;
+                        endforeach;
+                        if ( !$exists ) :
+                            $model_fields = Models::get_model_fields( $model, $modify_current_model_fields );
+                            $object = Objects::get_object_of_corresponding_language( $object );
+                            $object->object_model_fields = $model_fields;
 
-                        $object->object_model_fields_names = $model->model_fields_names;
-                        $our_objects[] = $object;
+                            $object->object_model_fields_names = $model->model_fields_names;
+                            $our_objects[] = $object;
+                        endif;
                     endif;
-                endif;
+                endforeach;
             endforeach;
         endforeach;
 

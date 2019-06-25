@@ -20,8 +20,20 @@ function startGame() {
 }
 
 function startPeriodicalThreatSummon() {
+    var canSummon = true;
     var gameContainer = document.querySelector('.oak_loading_game_container');
 
+    window.addEventListener('focus', function() {
+        console.log('Focus');
+        canSummon = true;
+    });
+    window.addEventListener('blur', function() {
+        console.log('Blur');
+        canSummon = false;
+    })
+    
+    if (!canSummon) 
+        return;
     setInterval(function() {
         var boulder = document.createElement('img');
         boulder.setAttribute('src', LOADING_GAME_DATA.boulderImage);

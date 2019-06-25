@@ -248,6 +248,7 @@ class Oak_Elementor {
     public static function get_post_sources_data( $post_id, $post_images_to_show, $inside_post ) {
         $sources_to_return = [];
         $selected_sources = get_post_meta( $post_id, 'sources_selector' ) ? get_post_meta( $post_id, 'sources_selector' ) [0] : [];
+        // $selected_sources = array_reverse( $selected_sources );
         $source_number = 1;
         $source = __( 'Source', Oak::$text_domain );
         foreach( $selected_sources as $source_key => $selected_identifier ) :
@@ -304,6 +305,7 @@ class Oak_Elementor {
 
     public static function get_post_qualis_data( $post_id, $post_images_to_show, $inside_post ) {
         $selected_qualis = get_post_meta( $post_id, 'qualis_selector' ) ? get_post_meta( $post_id, 'qualis_selector' ) [0] : [];
+        //$selected_qualis = array_reverse( $selected_qualis );
         $qualis_to_return = [];
         $quali_number = 1;
         $quali = __( 'Indicateur Qualitatif', Oak::$text_domain );
@@ -408,6 +410,7 @@ class Oak_Elementor {
 
     public static function get_post_performances_data( $post_id, $post_images_to_show, $inside_post ) {
         $selected_quantis = get_post_meta( $post_id, 'quantis_selector' ) ? get_post_meta( $post_id, 'quantis_selector' ) [0] : [];
+        //$selected_quantis = array_reverse( $selected_quantis );
         $performances_to_return = [];
         $performance_number = 1;
         foreach( $selected_quantis as $quanti_identifier ) :

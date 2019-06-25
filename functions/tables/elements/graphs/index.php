@@ -39,8 +39,8 @@ class Graphs {
         if ( isset( $_GET['graph_identifier'] ) ) :
             wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true );
             wp_enqueue_script( 'oak_add_element_graph_script', get_template_directory_uri() . '/functions/tables/elements/graphs/src/js/add-element-graph.js', array(), false, true );
+            wp_enqueue_script( 'oak_lodash', 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js', array(), false, true );
         endif;
-        wp_enqueue_script( 'oak_lodash', 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js', array(), false, true );
     }
     
     function graphs_admin_enqueue_styles() {

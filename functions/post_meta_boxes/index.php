@@ -17,7 +17,7 @@ class Post_meta_boxes {
                 $post, // $screen
                 'normal', // $context
                 'high', // $priority
-                array( 'element' => 'object', 'elements' => Oak::$all_objects_without_redundancy, 'select_name' => 'objects_selector[]' ) 
+                array( 'element' => 'object', 'elements' => Oak::$all_objects_without_redundancy, 'select_name' => 'objects_selector' ) 
             );
 
             add_meta_box(
@@ -27,7 +27,7 @@ class Post_meta_boxes {
                 $post, // $screen
                 'normal', // $context
                 'high', // $priority
-                array( 'element' => 'goodpractice', 'elements' => Oak::$goodpractices_without_redundancy, 'select_name' => 'good_practices_selector[]' ) 
+                array( 'element' => 'goodpractice', 'elements' => Oak::$goodpractices_without_redundancy, 'select_name' => 'good_practices_selector' ) 
             );
 
             add_meta_box(
@@ -37,7 +37,7 @@ class Post_meta_boxes {
                 $post, // $screen
                 'normal', // $context
                 'high', // $priority
-                array( 'element' => 'source', 'elements' => Oak::$sources_without_redundancy, 'select_name' => 'sources_selector[]' ) 
+                array( 'element' => 'source', 'elements' => Oak::$sources_without_redundancy, 'select_name' => 'sources_selector' ) 
             );
 
             add_meta_box(
@@ -47,7 +47,7 @@ class Post_meta_boxes {
                 $post, // $screen
                 'normal', // $context
                 'high', // $priority
-                array( 'element' => 'quanti', 'elements' => Oak::$quantis_without_redundancy, 'select_name' => 'quantis_selector[]' ) 
+                array( 'element' => 'quanti', 'elements' => Oak::$quantis_without_redundancy, 'select_name' => 'quantis_selector' ) 
             );
 
             add_meta_box(
@@ -57,7 +57,7 @@ class Post_meta_boxes {
                 $post, // $screen
                 'normal', // $context
                 'high', // $priority
-                array( 'element' => 'quali', 'elements' => Oak::$qualis_without_redundancy, 'select_name' => 'qualis_selector[]' ) 
+                array( 'element' => 'quali', 'elements' => Oak::$qualis_without_redundancy, 'select_name' => 'qualis_selector' ) 
             );
         endforeach;
     }
@@ -69,6 +69,8 @@ class Post_meta_boxes {
     function enqueue_scripts() {
         if ( get_current_screen()->id == 'post' || get_current_screen()->id == 'page' ) :
             wp_enqueue_script( 'oak_edit_post', get_template_directory_uri() . '/functions/post_meta_boxes/src/js/metax_boxes.js', array('jquery'), false, true );
+            wp_enqueue_script( 'oak_edit_post', 'https://code.jquery.com/ui/1.12.1/jquery-ui.js', array('jquery'), false, true );
+            
         endif;
     }
 
@@ -97,8 +99,8 @@ class Post_meta_boxes {
         $old = get_post_meta( $post_id, 'objects_selector', true );
         if ( isset( $_POST['objects_selector'] ) ) :
 
-            $new = $_POST['objects_selector'];
-
+            $new = explode( ',', $_POST['objects_selector'] );
+            
             if ( $new && $new !== $old ) {
                 update_post_meta( $post_id, 'objects_selector', $new );
             } elseif ( '' === $new && $old ) {
@@ -110,7 +112,7 @@ class Post_meta_boxes {
 
         $old_goodpractices = get_post_meta( $post_id, 'good_practices_selector', true );
         if ( isset( $_POST['good_practices_selector'] ) ) :
-            $new_goodpractices = $_POST['good_practices_selector'];
+            $new_goodpractices = explode( ',', $_POST['good_practices_selector'] );
 
             if ( $new_goodpractices && $new_goodpractices !== $old_goodpractices ) {
                 update_post_meta( $post_id, 'good_practices_selector', $new_goodpractices );
@@ -123,7 +125,7 @@ class Post_meta_boxes {
 
         $old_sources = get_post_meta( $post_id, 'sources_selector', true );
         if ( isset( $_POST['sources_selector'] ) ) :
-            $new_sources = $_POST['sources_selector'];
+            $new_sources = explode( ',', $_POST['sources_selector'] );
 
             if ( $new_sources && $new_sources !== $old_sources ) {
                 update_post_meta( $post_id, 'sources_selector', $new_sources );
@@ -136,7 +138,7 @@ class Post_meta_boxes {
 
         $old_quantis = get_post_meta( $post_id, 'quantis_selector', true );
         if ( isset( $_POST['quantis_selector'] ) ) :
-            $new_quantis = $_POST['quantis_selector'];
+            $new_quantis = explode( ',', $_POST['quantis_selector'] );
 
             if ( $new_quantis && $new_quantis !== $old_quantis ) {
                 update_post_meta( $post_id, 'quantis_selector', $new_quantis );
@@ -149,7 +151,7 @@ class Post_meta_boxes {
 
         $old_qualis = get_post_meta( $post_id, 'qualis_selector', true );
         if ( isset( $_POST['qualis_selector'] ) ) :
-            $new_qualis = $_POST['qualis_selector'];
+            $new_qualis = explode( ',', $_POST['qualis_selector'] );
 
             if ( $new_qualis && $new_qualis !== $old_qualis ) {
                 update_post_meta( $post_id, 'qualis_selector', $new_qualis );

@@ -9,8 +9,8 @@ endif;
     $all_posts_and_pages = Oak::oak_get_all_posts_and_pages();
 
     foreach( $all_posts_and_pages as $post ) :
-        $post_selected_objects = get_post_meta( $post->ID, 'objects_selector' ) ? get_post_meta( $post->ID, 'objects_selector' ) [0] : [];
-
+        $post_selected_objects = get_post_meta( $post->ID, 'objects_selector' ) ? get_post_meta( $post->ID, 'objects_selector' )[0] : [];
+        
         global $wpdb;
 
         $objects = Oak::oak_get_selected_objects_data( $post_selected_objects, false );

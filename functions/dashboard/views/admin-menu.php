@@ -498,7 +498,7 @@
                 'submenu' => true
             ),
             array(
-                'title' => __( 'Thèmes', Oak::$text_domain ),
+                'title' => __( 'Widgets', Oak::$text_domain ),
                 'url' => 'widgets.php',
                 'icon' => 'fas fa-th-large',
                 'submenu' => true
