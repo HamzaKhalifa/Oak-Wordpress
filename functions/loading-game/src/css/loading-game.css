@@ -57,8 +57,13 @@
     font-size: 20px;
 }
 
-.oak_loading_game_boulder {
+.oak_loading_game_boulder, .oak_loading_game__explosion {
     position: fixed;
     width: 100px;
     left: 100%;
+}
+
+.oak_loading_game__explosion {
+    width: 200px;
+    height: 200px;
 }

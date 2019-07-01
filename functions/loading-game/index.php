@@ -15,10 +15,14 @@ class Loading_Game {
         for ( $i = 1; $i < 13; $i++ ) :
             $character_idl_animations[] = get_template_directory_uri() . '/functions/loading-game/src/sprites/drone/idle/' . $i . '.png';
         endfor;
+        for ( $i = 1; $i < 10; $i++ ) :
+            $explosion_animation_images[] = get_template_directory_uri() . '/functions/loading-game/src/sprites/explosion/Explosion_00' . $i . '.png';
+        endfor;
         wp_localize_script( 'oak_loading_game', 'LOADING_GAME_DATA', array(
             'characterIdlAnimationImage' => $character_idl_animations,
             'fireBeamImage' => get_template_directory_uri() . '/functions/loading-game/src/sprites/beams/bluebeam.png',
-            'boulderImage' => get_template_directory_uri() . '/functions/loading-game/src/sprites/boulder.png'
+            'boulderImage' => get_template_directory_uri() . '/functions/loading-game/src/sprites/boulder.png',
+            'explosionImages' => $explosion_animation_images
         ) );
     }
 

@@ -451,11 +451,13 @@ function createElementData(state) {
             var formIdentifier = formSelectors[i].getAttribute('form-identifier');
             var options = formSelectors[i].querySelectorAll('option');
             var selectedObjects = [];
-            for (var i = 1; i < options.length; i++ ) {
-                if (options[i].selected) {
-                    selectedObjects.push(options[i].getAttribute('value'));
+            for (var j = 1; j < options.length; j++ ) {
+                if (options[j].selected) {
+                    selectedObjects.push(options[j].getAttribute('value'));
                 }
             }
+            console.log(formSelectors[i]);
+            console.log('selected objects', selectedObjects);
             for (var j = 0; j < selectedObjects.length; j++) {
                 objectFormSelectors += 'form_' + formIdentifier + '_object_' + selectedObjects[j] + '|';
             }
@@ -463,6 +465,8 @@ function createElementData(state) {
         }
         elementData.object_form_selectors = objectFormSelectors;
         
+        console.log('form selectors', elementData.object_form_selectors);
+
         // Check for model selector: 
         var objectModelSelector = document.querySelector('.object_model_selector');
         if (objectModelSelector) {

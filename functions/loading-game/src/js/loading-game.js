@@ -32,9 +32,10 @@ function startPeriodicalThreatSummon() {
         canSummon = false;
     })
     
-    if (!canSummon) 
-        return;
     setInterval(function() {
+        if (!canSummon)
+            return;
+            
         var boulder = document.createElement('img');
         boulder.setAttribute('src', LOADING_GAME_DATA.boulderImage);
         boulder.className = 'oak_loading_game_boulder';
@@ -69,6 +70,13 @@ function startPeriodicalThreatSummon() {
                 if ( firebeamTop + firebeamHeight >= top && firebeamTop <= top + height
                     && firebeamLeft + firebeamWidth >= left && firebeamLeft <= left + width  ) {
                         fireBeams[i].remove();
+                        // We are gonna summon the explosion
+                        var explosion = document.createElement('img');
+                        gameContainer.append(explosion);
+                        explosion.className = 'oak_loading_game__explosion';
+                        explosion.style.top = top - parseInt(getComputedStyle(boulder).getPropertyValue('height')) / 2 + 'px'  
+                        explosion.style.left = left - parseInt(getComputedStyle(boulder).getPropertyValue('width')) / 2 + 'px'  
+                        handleAnimation(explosion, LOADING_GAME_DATA.explosionImages, true);
                         boulder.remove();
                 }
             }
@@ -177,15 +185,17 @@ function handleCharacterMovement() {
     })();
 }
 
-handleIdleAnimation();
-function handleIdleAnimation() {
-    var character = document.querySelector('.oak_loading_game_character');
+handleAnimation(document.querySelector('.oak_loading_game_character'), LOADING_GAME_DATA.characterIdlAnimationImage, false);
+function handleAnimation(element, animationImages, destroyAfterFinish) {
     var currentImage = 0;
     setInterval(function() {
         currentImage++;
-        if (currentImage == LOADING_GAME_DATA.characterIdlAnimationImage.length )
+        if (currentImage == animationImages.length ) {
             currentImage = 0;
-        character.setAttribute('src', LOADING_GAME_DATA.characterIdlAnimationImage[currentImage]);
+            if (destroyAfterFinish === true) 
+                element.remove();
+        }
+        element.setAttribute('src', animationImages[currentImage]);
     }, 50);
 }
 
