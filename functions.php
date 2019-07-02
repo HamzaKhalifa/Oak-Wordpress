@@ -205,7 +205,11 @@ class Oak {
         // Reporting safety
         include_once get_template_directory() . '/functions/reporting-safety/index.php';
         
+        // For the loading game
         include_once get_template_directory() . '/functions/loading-game/index.php';
+        
+        // For the chat
+        // include_once get_template_directory() . '/functions/chat/index.php';
 
         // To permit cross origin communication 
         add_action( 'init', array( $this, 'add_cors_http_header' ) );
@@ -279,6 +283,9 @@ class Oak {
 
     function oak_admin_enqueue_scripts( $hook ) {
         global $wpdb;
+
+        // For the system bar 
+        wp_enqueue_script( 'oak_chat', get_template_directory_uri() . '/functions/dashboard/src/js/system-bar.js', array('jquery'), false, true );
 
         // For the media library
         wp_enqueue_script( 'oak_media_library', get_template_directory_uri() . '/src/js/vendor/wp-media-modal.js', array('jquery'), false, true );

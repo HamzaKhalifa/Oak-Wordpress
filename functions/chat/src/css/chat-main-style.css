@@ -1,0 +1,114 @@
+.oak_chat_menu {
+    position: fixed;
+    padding: 10px;
+    right: 0px;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    background-color: #003366;
+    color: white;
+    height: 100%;
+    z-index: 99;
+    transition: all .2s ease-in-out;
+}
+
+.oak_chat_authenticated {
+    display: flex;
+    flex-direction: column;
+}
+
+.oak_chat_menu_hidden {
+    right: -25%;
+    opacity: 0;
+}
+
+.oak_chat_menu__single_user_view {
+    display: flex;
+    flex-direction: row;
+    background-color: #96CEF0;
+    padding: 5px;
+    align-items: center;
+    height: 30px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.oak_chat_menu__single_user_view:hover {
+    cursor: pointer;
+}
+
+
+.oak_chat_menu__authentication {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.oak_chat_menu__title {
+    color: white;
+    margin-right: 10px;
+}
+
+.oak_chat_menu__single_user_profile_image {
+    width: 30px;
+    background: black;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.oak_chat_input {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px 20px 10px 20px;
+    border: none!important;
+}
+
+.oak_chat_login_or_register_button {
+    margin-top: 10px;
+    background-color: #96CEF0;
+    border: none;
+    color: white;
+    padding: 10px 20px 10px 20px;
+    width: 100%;
+}
+
+.oak_chat_login_or_register_button:hover {
+    cursor: pointer;
+}
+
+.oak_chat_loader_container {
+    text-align: center;
+}
+
+.oak_loader {
+    position: initial;
+}
+
+.oak_chat_authentication__error_message {
+    color: red;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.oak_chat_loader_container__loading_message {
+    color: white;
+    margin-bottom: 30px;
+}
+
+.oak_chat_sign_out_button {
+    position: absolute;
+    right: 10px;
+    background-color: #000c3b;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px 5px 10px;
+    bottom: 40px;
+    z-index: 99;
+}
+
+.oak_chat_sign_out_button:hover {
+    cursor: pointer;
+}

@@ -981,7 +981,7 @@ $modification_time_property = $table . '_modification_time';
             <div class="oak_other_elements_container">
                 <h2 class="oak_other_elements_container__title"><?php echo( $other_properties['title'] ); ?></h2>
                 
-                <div class="oak_other_elements_container__add_button">
+                <div class="oak_other_elements_container__add_button first_add_other_elements_button">
                     <i class="fas fa-plus"></i>
                 </div>
 
@@ -1069,7 +1069,12 @@ $modification_time_property = $table . '_modification_time';
                         <div class="oak_model_fields_renaming_container">
 
                         </div>
+
+                        <div class="oak_other_elements_container__add_button">
+                            <i class="fas fa-plus"></i>
+                        </div>
                     </div>
+                    
                 </div>
             </div>
         <?php 

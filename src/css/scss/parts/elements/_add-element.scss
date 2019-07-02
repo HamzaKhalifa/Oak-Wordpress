@@ -595,6 +595,10 @@ input.oak_add_other_elements_list_single_element__chekcbox {
     transition: all .2s ease-in-out;
 }
 
+.oak_other_elements_container__add_button {
+    position: initial;
+}
+
 .oak_other_elements_container__add_button i, .oak_performance_result_add_button i {
     color: white;
 }

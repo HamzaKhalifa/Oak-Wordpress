@@ -15,6 +15,11 @@
     font-family: 'lato';
 }
 
+body {
+    position: relative;
+    transition: all .2s ease-in-out;
+}
+
 .adminmenuwrap {
     display: 'none';
 }

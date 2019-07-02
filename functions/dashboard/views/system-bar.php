@@ -65,5 +65,6 @@
         <img class="oak_system_bar_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/isivalue.png' ); ?>" alt="">
         <img class="oak_system_bar_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/joro.png' ); ?>" alt="">
         <img class="oak_system_bar_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/user.png' ); ?>" alt="">
+        <img class="oak_system_bar_icon oak_chat_menu_button" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/user.png' ); ?>" alt="">
     </div>
 </div>

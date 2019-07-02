@@ -456,8 +456,6 @@ function createElementData(state) {
                     selectedObjects.push(options[j].getAttribute('value'));
                 }
             }
-            console.log(formSelectors[i]);
-            console.log('selected objects', selectedObjects);
             for (var j = 0; j < selectedObjects.length; j++) {
                 objectFormSelectors += 'form_' + formIdentifier + '_object_' + selectedObjects[j] + '|';
             }
@@ -739,21 +737,38 @@ function initializeElements() {
         for (var i = 0; i < otherElements.length; i++) {
             if ( otherElements[i][table + '_identifier'] == theRevision[table + '_identifier'] 
                 && otherElements[i][table + '_revision_number'] == theRevision[table + '_revision_number'] ) {
-                    addOtherElement(otherElements[i]);
+                    addOtherElement(null, otherElements[i]);
             }
         }
     }
 }
 
-if (DATA.otherElementProperties)
-    addOtherElementButton();
-function addOtherElementButton() {
-    document.querySelector('.oak_other_elements_container__add_button').addEventListener('click', function() {
-        addOtherElement();
-    });
+handleAddOtherElementButton();
+function handleAddOtherElementButton() {
+    if (!DATA.otherElementProperties) {
+        return;
+    }
+    
+    var firstAddOtherElementButton = document.querySelector('.first_add_other_elements_button');
+    var allOtherElements = document.querySelectorAll('.oak_other_elements_single_elements_container__single_element');
+    if (allOtherElements.length > 0) {
+        firstAddOtherElementButton.classList.add('oak_hidden');
+    } else {
+        firstAddOtherElementButton.classList.remove('oak_hidden');
+    }
+
+    var addButtons = document.querySelectorAll('.oak_other_elements_container__add_button');
+    for (var i = 0; i < addButtons.length; i++) {
+        if (addButtons[i].getAttribute('listener-added') != 'true') {
+            addButtons[i].setAttribute('listener-added', 'true');
+            addButtons[i].addEventListener('click', function() {
+                addOtherElement(this, null);
+            });
+        }
+    }
 }
 
-function addOtherElement(data) {
+function addOtherElement(button, data) {
     var otherElementsContainer = document.querySelector('.oak_other_elements_container');
     var newElement = document.createElement('div');
     newElement.className = 'oak_other_elements_single_elements_container__single_element oak_other_elements_single_elements_container__single_element_not_checked';
@@ -761,7 +776,7 @@ function addOtherElement(data) {
 
     // If it's a model, we are gonna allow fields renaming: 
     if (DATA.table == 'model') {
-        if (data) {
+        if (data != null) {
             addFieldsListToSelectedModelForm(data.form_identifier, newElement.querySelector('.oak_model_fields_renaming_container'), true);
         }
         // We are gonna add the listener for the selector change: 
@@ -775,9 +790,14 @@ function addOtherElement(data) {
         });
     }
 
-    otherElementsContainer.append(newElement);
+    if (button == null)
+        otherElementsContainer.append(newElement);
+    else {
+        button.parentNode.parentNode.insertBefore(newElement, button.parentNode.nextSibling);
+    }
+    
 
-    if (data) {
+    if (data != null) {
         var elementsSelect = newElement.querySelector('.oak_other_elements_select');
         elementsSelect.value = data[DATA.otherElementProperties.table + '_identifier'];
         newElement.querySelector('.designation_input').value = data[DATA.otherElementProperties.table + '_designation'];
@@ -787,6 +807,7 @@ function addOtherElement(data) {
     handleOtherElementsCheckboxes();
     textFieldsAnimations();
     handleOtherElementsFilters();
+    handleAddOtherElementButton();
 }
 
 function addFieldsListToSelectedModelForm(formIdentifier, renamingContainer, fieldNameAlreadyStored) {
@@ -1044,9 +1065,9 @@ function otherElementsDeleteButton() {
                 checkboxes[i].checked = false;
                 checkboxClickListener(checkboxes[i]);
                 checkboxes[i].parentNode.parentNode.remove();
-            }
-                
+            }   
         }
+        handleAddOtherElementButton();
     });
 }
 
