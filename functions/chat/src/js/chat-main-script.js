@@ -140,23 +140,26 @@
                     username, 
                     id: uid
                 }
+
+                loaderContainer.classList.add('oak_hidden');
+                authenticatedView.classList.remove('oak_hidden');
+                authentificationForm.classList.add('oak_hidden');
+                loadingMessage.innerHTML = 'Authentification en cours...';
+
                 sendAjaxRequest('true', 'modify_authenticated', function(data) {
-                    loaderContainer.classList.add('oak_hidden');
-                    authenticatedView.classList.remove('oak_hidden');
-                    authentificationForm.classList.add('oak_hidden');
-                    loadingMessage.innerHTML = 'Authentification en cours...';
                 });
 
-                handleSystemBarChatNotifications()
+                handleSystemBarChatNotifications();
+                handleUsersList();
             } else {
                 // User is signed out.
                 currentUser = {};
                 document.querySelector('.oak_chat_menu_button__notification').classList.add('oak_hidden');
+                loaderContainer.classList.add('oak_hidden');
+                authenticatedView.classList.add('oak_hidden');
+                authentificationForm.classList.remove('oak_hidden');
 
                 sendAjaxRequest('false', 'modify_authenticated', function(data) {
-                    loaderContainer.classList.add('oak_hidden');
-                    authenticatedView.classList.add('oak_hidden');
-                    authentificationForm.classList.remove('oak_hidden');
                 })
 
                 // Fermer toutes les fenêtres de chat au sign out: 
@@ -253,7 +256,7 @@
         firebase.database().ref('users/' + userId + '/username').set(name);
     }
 
-    handleUsersList();
+    // handleUsersList();
     function handleUsersList() {
         firebase.database().ref('users').on('value', function(snapshot) {
             var userIds = getKeys(snapshot.val());
