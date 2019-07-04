@@ -181,6 +181,7 @@
     padding: 10px;
     margin: 0px;
     flex: 1;
+    max-width: 70%;
 }
 
 .oak_message_container__file_input {
@@ -246,6 +247,10 @@
 .chat_box_bigger {
     width: 500px;
     height: 600px;
+}
+
+.chat_box_bigger .oak_message_text_style {
+    max-width: 85%;
 }
 
 .oak_single_chat_box_message_form__buttons_container {
