@@ -158,6 +158,12 @@
                     authenticatedView.classList.add('oak_hidden');
                     authentificationForm.classList.remove('oak_hidden');
                 })
+
+                // Fermer toutes les fenêtres de chat au sign out: 
+                var allChatBoxes = document.querySelectorAll('.oak_single_chat_box');
+                for(var i = 0; i < allChatBoxes.length; i++) {
+                    allChatBoxes[i].remove();
+                }
             }
         });
     }
@@ -176,7 +182,6 @@
         else if (Notification.permission === "granted") {
             // If it's okay let's create a notification
             var audio = new Audio(OAK_MAIN_CHAT_DATA.notificationSound);
-            console.log(OAK_MAIN_CHAT_DATA.notificationSound)
             audio.play();
             var notification = new Notification("Vous avez " + numberOfNotifications + " message(s) non lu(s)");
         }
@@ -364,7 +369,6 @@
             handleSendMessageForm();
             function handleSendMessageForm() {
                 chatBox.querySelector('.oak_single_chat_box_message_form').addEventListener('submit', function(e) {
-                    console.log('actual submit got triggered....');
                     e.preventDefault();
                     
                     if (chatBox.querySelector('.oak_single_chat_box_message_textarea').value != '')
@@ -426,7 +430,6 @@
                         // jQuery(this).closest("form");
                         forceSubmitFormWithVirtualButton(chatBox.querySelector('.oak_single_chat_box_message_form'));
                         // chatBox.querySelector('.oak_single_chat_box_message_form').trigger('submit');
-                        console.log('submit got triggered');
                         e.preventDefault();
                         return false;
                     }
@@ -459,12 +462,8 @@
             function fileInputChange(input) {
                 input.addEventListener('change', function(e) {
                     readURL(this, function(result) {
-                        console.log(e);
                         var fileIdentifier = createIdentifier();
                         input.setAttribute('data', result);
-                        console.log('file data', result);
-                        console.log('file value', input.value);
-                        console.log('file identifier', fileIdentifier);
                     })
                 })
             }
