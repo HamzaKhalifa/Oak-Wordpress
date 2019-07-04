@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="oak_chat_loader_container oak_hidden">
+    <div class="oak_chat_loader_container">
         <h2 class="oak_chat_loader_container__loading_message"></h2>
         <div class="oak_loader chat_loader"></div>
     </div>

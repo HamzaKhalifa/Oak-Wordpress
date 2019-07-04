@@ -141,10 +141,10 @@
                     id: uid
                 }
 
-                loaderContainer.classList.add('oak_hidden');
+                // loaderContainer.classList.add('oak_hidden');
                 authenticatedView.classList.remove('oak_hidden');
                 authentificationForm.classList.add('oak_hidden');
-                loadingMessage.innerHTML = 'Authentification en cours...';
+                loadingMessage.innerHTML = 'Chargement de la liste...';
 
                 sendAjaxRequest('true', 'modify_authenticated', function(data) {
                 });
@@ -299,6 +299,7 @@
                 authenticatedView.append(newSingleUserChatButton);
             }
 
+            loaderContainer.classList.add('oak_hidden');
             handleChatButtons();
         });
     }
