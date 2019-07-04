@@ -175,6 +175,9 @@
         // Let's check whether notification permissions have already been granted
         else if (Notification.permission === "granted") {
             // If it's okay let's create a notification
+            var audio = new Audio(OAK_MAIN_CHAT_DATA.notificationSound);
+            console.log(OAK_MAIN_CHAT_DATA.notificationSound)
+            audio.play();
             var notification = new Notification("Vous avez " + numberOfNotifications + " message(s) non lu(s)");
         }
 

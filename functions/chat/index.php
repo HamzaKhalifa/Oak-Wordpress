@@ -25,7 +25,8 @@ class Oak_Chat {
         wp_enqueue_script( 'oak_main_chat_script', get_template_directory_uri() . '/functions/chat/src/js/chat-main-script.js', array('jquery'), false, true );
         wp_localize_script( 'oak_main_chat_script', 'OAK_MAIN_CHAT_DATA', array(
             'ajaxUrl' => admin_url ('admin-ajax.php'),
-            'authenticated' => get_option( 'oak_chat_authenticated' ) ? get_option( 'oak_chat_authenticated' ) : 'false'
+            'authenticated' => get_option( 'oak_chat_authenticated' ) ? get_option( 'oak_chat_authenticated' ) : 'false',
+            'notificationSound' => get_template_directory_uri() . '/functions/chat/src/audio/notification.mp3'
         ) );
     }
 
