@@ -65,6 +65,11 @@
         <img class="oak_system_bar_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/isivalue.png' ); ?>" alt="">
         <img class="oak_system_bar_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/joro.png' ); ?>" alt="">
         <img class="oak_system_bar_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/user.png' ); ?>" alt="">
-        <img class="oak_system_bar_icon oak_chat_menu_button" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/user.png' ); ?>" alt="">
+        <i class="fas fa-comments oak_chat_menu_button">
+            <div class="oak_chat_menu_button__notification oak_hidden">0</div>
+        </i>
+        <!-- <img class="oak_system_bar_icon oak_chat_menu_button" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/user.png' ); ?>" alt=""> -->
     </div>
 </div>
+
+<?php Oak_Chat::render_chat(); ?>

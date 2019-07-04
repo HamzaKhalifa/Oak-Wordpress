@@ -209,7 +209,7 @@ class Oak {
         include_once get_template_directory() . '/functions/loading-game/index.php';
         
         // For the chat
-        // include_once get_template_directory() . '/functions/chat/index.php';
+        include_once get_template_directory() . '/functions/chat/index.php';
 
         // To permit cross origin communication 
         add_action( 'init', array( $this, 'add_cors_http_header' ) );

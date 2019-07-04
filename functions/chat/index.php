@@ -7,8 +7,6 @@ class Oak_Chat {
 
         add_action( 'wp_ajax_modify_authenticated', array( $this, 'modify_authenticated') );
         add_action( 'wp_ajax_nopriv_modify_authenticated', array( $this, 'modify_authenticated') );
-
-        $this->render_chat();
     }
 
     function chat_enqueue_style() {
@@ -21,6 +19,7 @@ class Oak_Chat {
         wp_enqueue_script( 'oak_firebase_auth', 'https://www.gstatic.com/firebasejs/6.2.4/firebase-auth.js', array(), false, true );
         wp_enqueue_script( 'oak_firebase_firestore', 'https://www.gstatic.com/firebasejs/6.2.4/firebase-firestore.js', array(), false, true );
         wp_enqueue_script( 'oak_firebase_database', 'https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js', array(), false, true );
+        wp_enqueue_script( 'oak_firebase_database', 'https://www.gstatic.com/firebasejs/6.2.4/firebase-storage.js', array(), false, true );
 
         wp_enqueue_script( 'oak_main_firebase_conf', get_template_directory_uri() . '/functions/chat/src/js/firebase-conf.js', array(), false, true );
         wp_enqueue_script( 'oak_main_chat_script', get_template_directory_uri() . '/functions/chat/src/js/chat-main-script.js', array('jquery'), false, true );
@@ -30,7 +29,7 @@ class Oak_Chat {
         ) );
     }
 
-    function render_chat() {
+    public static function render_chat() {
         include_once get_template_directory() . '/functions/chat/views/chat-view.php';
     }
 

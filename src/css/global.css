@@ -485,3 +485,29 @@ div {
 .oak_post_elements_selector_selected_elements_single_element_element_remove_button:hover {
     cursor: pointer;
 }
+
+.oak_chat_menu_button {
+    background-color: #96CEF0;
+    color: #000c3b;
+    padding: 4px;
+    position: relative;
+}
+
+.oak_chat_menu_button:hover {
+    cursor: pointer;
+}
+
+.oak_chat_menu_button__notification {
+    position: absolute;
+    background: red;
+    width: 26px;
+    height: 26px;
+    font-size: 15px;
+    border-radius: 13px;
+    top: -10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    right: -18px;
+}
