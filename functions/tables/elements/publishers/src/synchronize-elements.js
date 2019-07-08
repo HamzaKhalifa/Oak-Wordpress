@@ -14,7 +14,6 @@ function handleSyncButton() {
                         'data': {}
                     },
                     success: function(data) {
-                        console.log(data.data);
                         jQuery.ajax({
                             type: 'POST', 
                             url: DATA.ajaxUrl,
@@ -24,7 +23,6 @@ function handleSyncButton() {
                                 'termsAndObjects': data.data.terms_and_objects
                             },
                             success: function(response) {
-                                console.log(response);
                                 jQuery.ajax({
                                     type: 'POST', 
                                     url: ivwpAjaxUrl,

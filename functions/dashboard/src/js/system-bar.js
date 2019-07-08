@@ -22,7 +22,6 @@
     handleWindowResizeListener();
     function handleWindowResizeListener() {
         window.onresize = function(event) {
-            console.log('window width', window.innerWidth);
             var chatMenu = document.querySelector('.oak_chat_menu'); 
             if (!classExists(chatMenu, 'oak_chat_menu_hidden')) {
                 var chatMenuWidth = window.innerWidth * 20 / 100;

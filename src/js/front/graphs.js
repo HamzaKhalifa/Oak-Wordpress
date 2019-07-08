@@ -57,59 +57,6 @@ function handleGraphsInitialization() {
                 }
                 
                 data.options.legend = JSON.parse(GRAPHS_DATA.graphs[j].graph_legend_configuration);
-
-                /*data.options.responsive = false;
-                document.querySelector('.oak_front_graph_container').style.height = '500px';
-                //canvas.style.position = 'absolute';
-                var marginRelativeToWindowWidth = -150;
-                var width = window.innerWidth + marginRelativeToWindowWidth;
-
-                console.log('width', width);
-                if (width >= 768) {
-                    canvas.style.position = 'initial';
-                } else {
-                    canvas.style.position = 'absolute';
-                }
-                
-                if (window.innerWidth > 1350) {
-                    canvas.style.left = '-300px';
-                } else if( window.innerWidth > 1200) {
-                    canvas.style.left = '-240px';
-                } else if(window.innerWidth > 950) {
-                    canvas.style.left = '-200px';
-                } else {
-                    canvas.style.left = '-150px';
-                }
-                
-                canvas.style.width = width + 'px';
-
-                window.addEventListener('scroll', function(e) {
-                    var currentWidth = parseInt(canvas.style.width);
-                    var currentHeight = parseInt(window.getComputedStyle(canvas).getPropertyValue('height'));
-                    var newWidth = window.innerWidth + marginRelativeToWindowWidth;
-                    var newHeight = currentHeight * newWidth / currentWidth;
-                    if (window.innerWidth >= 768) {
-                        canvas.style.position = 'absolute';
-                    } else {
-                        canvas.style.position = 'initial';
-                        canvas.style.width = window.innerWidth + 'px';
-                    }
-
-                    
-                    if (window.innerWidth > 1350) {
-                        canvas.style.left = '-300px';
-                    } else if( window.innerWidth > 1200) {
-                        canvas.style.left = '-240px';
-                    } else if(window.innerWidth > 950) {
-                        canvas.style.left = '-200px';
-                    } else {
-                        canvas.style.left = '-150px';
-                    }
-                    
-                    canvas.style.width = newWidth + 'px';
-                    console.log('newHeight', newHeight);
-                    canvas.style.height = newHeight + 'px';
-                });*/
                 
                 var chart = new Chart(chartCreator, data);
 

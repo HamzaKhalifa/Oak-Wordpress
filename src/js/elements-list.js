@@ -409,12 +409,6 @@ function edit() {
                 else if ( elementsTypeToPutInUrl == 'terms' )
                     additionalData = '&taxonomy_identifier=' + taxonomyIdentifier;
                 
-                // console.log(theTable);
-                // console.log(elementsTypeToPutInUrl);
-                // console.log(modelIndentifier);
-                // console.log(taxonomyIdentifier);
-                // return;
-
                 window.location.replace(DATA.adminUrl + 'admin.php?page=oak_add_element&' + theTable + '_identifier=' + identifier + '&elements=' + elementsTypeToPutInUrl + '&listorformula=formula' + additionalData);
             }
         }

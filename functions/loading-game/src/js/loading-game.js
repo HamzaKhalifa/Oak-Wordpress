@@ -24,11 +24,9 @@ function startPeriodicalThreatSummon() {
     var gameContainer = document.querySelector('.oak_loading_game_container');
 
     window.addEventListener('focus', function() {
-        console.log('Focus');
         canSummon = true;
     });
     window.addEventListener('blur', function() {
-        console.log('Blur');
         canSummon = false;
     })
     
