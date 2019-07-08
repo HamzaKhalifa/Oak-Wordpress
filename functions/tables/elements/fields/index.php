@@ -8,7 +8,7 @@ class Fields {
 
     function __construct() {
         $this->table_creator();
-        $this->data_collector();
+        Fields::data_collector();
 
         Oak::$elements_script_properties_functions['fields'] = function() {
             $this->properties_to_enqueue_for_script();
@@ -62,7 +62,7 @@ class Fields {
         include get_template_directory() . '/functions/tables/elements/fields/functions/table-creator.php';
     }
 
-    function data_collector() {
+    public static function data_collector() {
         include get_template_directory() . '/functions/tables/elements/fields/functions/data-collector.php';
     }
 

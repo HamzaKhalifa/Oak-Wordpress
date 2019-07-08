@@ -447,14 +447,8 @@ class Corn_Import {
         $table_name = $data['tableName'];
         $properties = isset( $data['properties'] ) ? $data['properties'] : null;
 
-        // For testing purposes: 
-        // if ( $table_name != '') :
-        //     wp_send_json_success();
-        //     return;
-        // endif;
-
         $this->corn_save_element( $elements, $table_name, $properties );
-        
+
         wp_send_json_success();
     }
 
@@ -473,7 +467,6 @@ class Corn_Import {
             $counter = 0;
             do {
                 if ( $objects[ $counter ]['model'] == $model['model_identifier'] ) :
-
                     $found_object = true;
                     $the_object = $objects[ $counter ];
                     $properties_to_neglect = array('id', 'model', 'object_designation', 'object_identifier', 'object_modification_time', 'object_content_language', 'object_model_selector', 'object_selector',
@@ -758,11 +751,17 @@ class Corn_Import {
         endif;
 
         foreach ( $elements as $element ) :
+            $is_object = false;
             if ( $table_name == '' ) :
                 // this is an object or a term
                 if ( isset( $element['term_taxonomy_identifier'] ) ) :
                     $new_table_name = $wpdb->prefix . 'oak_taxonomy_' . $element['term_taxonomy_identifier'];
                 elseif ( isset( $element['model'] ) ) :
+                    $is_object = true;
+                    if ( count( Oak::$fields_without_redundancy ) == 0 ) :
+                        Fields::data_collector();
+                    endif;
+
                     $new_table_name = $wpdb->prefix . 'oak_model_' . $element['model'];
                 endif;
 
@@ -781,11 +780,11 @@ class Corn_Import {
                 endif;
             endforeach;
 
-            $this->corn_simple_register_element( $element, $new_table_name, $properties );
+            $this->corn_simple_register_element( $element, $new_table_name, $properties, $is_object );
         endforeach;
     }
 
-    function corn_simple_register_element( $element, $table_name, $properties ) {
+    function corn_simple_register_element( $element, $table_name, $properties, $is_object ) {
         require_once get_template_directory() . '/functions/class-download-remote-image.php';
 
         global $wpdb;
@@ -805,14 +804,26 @@ class Corn_Import {
                     endif;
                 endforeach;
             else :
-                // This is an object
-                if ( strpos( $value, 'ttps://' ) != false || strpos( $value, 'ttp://' ) != false ) :
-                    if (  wp_http_validate_url( $value ) ) :
-                        if ( @getimagesize( $value ) ) :
-                            $is_image = true;
+                // This is a term or object: 
+                if ( $is_object ) :
+                    // This is an object
+                    $key_array = explode( '_', $key );
+                    $key_field_identifier = $key_array[ count( $key_array ) - 1 ];
+                    foreach( Oak::$fields_without_redundancy as $field ) :
+                        if ( $field->field_identifier == $key_field_identifier ) :
+                            if ( $field->field_type == 'image' ) :
+                                $is_image = true;
+                            endif;
                         endif;
-                    endif;
+                    endforeach;
                 endif;
+                // if ( strpos( $value, 'ttps://' ) != false || strpos( $value, 'ttp://' ) != false ) :
+                //     if (  wp_http_validate_url( $value ) ) :
+                //         if ( @getimagesize( $value ) ) :
+                //             $is_image = true;
+                //         endif;
+                //     endif;
+                // endif;
             endif;
 
             if ( $is_image ) :
