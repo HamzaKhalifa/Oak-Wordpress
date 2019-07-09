@@ -1248,7 +1248,7 @@ input.oak_add_other_elements_list_single_element__chekcbox {
   color: white;
 }
 
-.oak_other_elements_container__add_button:hover, .oak_performance_result_add_button:hover {
+.oak_other_elements_container__add_button:hover, .oak_performance_result_add_button:hover, .oak_performance_objective_add_button:hover {
   background-color: white;
   cursor: pointer;
 }
