@@ -2,6 +2,8 @@
 class Organizations {
     public static $properties;
     public static $filters;
+    public static $organizations_types;
+    public static $organizations_sectors;
     
     function __construct() {
         $this->table_creator();
@@ -11,10 +13,24 @@ class Organizations {
             $this->properties_to_enqueue_for_script();
         };
 
+        Organizations::$organizations_types = array(
+            array ( 'value' => 'type 1', 'innerHTML' => __( 'Type 1', Oak::$text_domain ) ),
+            array ( 'value' => 'type 2', 'innerHTML' => __( 'Type 2', Oak::$text_domain ) ),
+            array ( 'value' => 'type 3', 'innerHTML' => __( 'Type 3', Oak::$text_domain ) ),
+        );
+
+        Organizations::$organizations_sectors = array(
+            array ( 'value' => 'sector_1', 'innerHTML' => __( 'Secteur 1', Oak::$text_domain ) ),
+            array ( 'value' => 'sector_2', 'innerHTML' => __( 'Secteur 2', Oak::$text_domain ) ),
+            array ( 'value' => 'Secteur_3', 'innerHTML' => __( 'Secteur 3', Oak::$text_domain ) ),
+        );
+    }
+
+    public static function initialize_filters() {
         Organizations::$filters = array(
-            array ( 'title' => __( 'Acronyme', Oak::$text_domain ), 'property' => 'organization_acronym' ),
-            array ( 'title' => __( 'Description', Oak::$text_domain ), 'property' => 'organization_description' ),
-            array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'organization_description' )
+            array ( 'title' => __( 'Pays', Oak::$text_domain ), 'property' => 'organization_country', 'choices' => Oak::$countries ),
+            array ( 'title' => __( 'Type', Oak::$text_domain ), 'property' => 'organization_type', 'choices' => Organizations::$organizations_types ),
+            array ( 'title' => __( 'Secteurs d\'activités', Oak::$text_domain ), 'property' => 'organization_sectors', 'choices' => Organizations::$organizations_sectors )
         );
     }
 

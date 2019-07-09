@@ -51,7 +51,7 @@ Organizations::$properties = array(
     array ( 
         'name' => 'country', 
         'property_name' => 'organization_country', 
-        'type' => 'text', 
+        'type' => 'text',
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => Oak::$countries,
@@ -75,11 +75,7 @@ Organizations::$properties = array(
         'type' => 'text', 
         'input_type' => 'select',
         'select_multiple' => 'false',
-        'choices' => array(
-            array ( 'value' => 'type 1', 'innerHTML' => 'Type 1' ),
-            array ( 'value' => 'type 2', 'innerHTML' => 'Type 2' ),
-            array ( 'value' => 'type 3', 'innerHTML' => 'Type 3' ),
-        ),
+        'choices' => Organizations::$organizations_types,
         'placeholder' => __( 'Entreprise', Oak::$text_domain ), 
         'description' => __( 'Entreprise.', Oak::$text_domain ), 
         'width' => '50' 
@@ -93,13 +89,16 @@ Organizations::$properties = array(
         'description' => __( 'Cotée.', Oak::$text_domain ), 
         'width' => '50' 
     ),
-    array ( 
-        'name' => 'sectors', 
+    array (
+        'name' => 'sectors',
         'property_name' => 'organization_sectors', 
-        'type' => 'text', 
-        'input_type' => 'text',
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => Organizations::$organizations_sectors,
         'placeholder' => __( 'Secteurs d\'activité', Oak::$text_domain ), 
-        'description' => __( 'Secteurs d\'activité', Oak::$text_domain ), 
+        'description' => __( 'Secteurs d\'activité.', Oak::$text_domain ), 
         'width' => '100' 
     ),
+    
 );

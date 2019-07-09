@@ -118,3 +118,6 @@ if ( isset( $_GET['elements'] ) ) :
         Graphs::properties_initialization();
     endif;
 endif;
+
+// For filters: 
+Organizations::initialize_filters();

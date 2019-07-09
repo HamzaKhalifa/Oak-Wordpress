@@ -689,127 +689,133 @@ class Oak {
         $table = '';
         $title = '';
 
-        switch( $_GET['elements'] ) :
-            case 'fields' :
-                $title = __( 'Champs', Oak::$text_domain );
-                $elements = Oak::$fields_without_redundancy;
-                $elements_with_redundancy = Oak::$fields;
-                $table = 'field';
-                $filters = Fields::$filters;
-            break;
-            case 'forms' :
-                $title = __( 'Formes', Oak::$text_domain );
-                $elements = Oak::$forms_without_redundancy;
-                $elements_with_redundancy = Oak::$forms;
-                $table = 'form';
-                $filters = Forms::$filters;
-            break;
-            case 'models' :
-                $title = __( 'Modèles', Oak::$text_domain );
-                $elements = Oak::$models_without_redundancy;
-                $elements_with_redundancy = Oak::$models;
-                $table = 'model';
-                $filters = models::$filters;
-            break;
-            case 'taxonomies' :
-                $title = __( 'Taxonomies', Oak::$text_domain );
-                $elements = Oak::$taxonomies_without_redundancy;
-                $elements_with_redundancy = Oak::$taxonomies;
-                $table = 'taxonomy';
-                $filters = Taxonomies::$filters;
-            break;
-            case 'organizations' :
-                $title = __( 'Organisations', Oak::$text_domain );
-                $elements = Oak::$organizations_without_redundancy;
-                $elements_with_redundancy = Oak::$organizations;
-                $table = 'organization';
-                $filters = Organizations::$filters;
-            break;
-            case 'publications' :
-                $title = __( 'Publications', Oak::$text_domain );
-                $elements = Oak::$publications_without_redundancy;
-                $elements_with_redundancy = Oak::$publications;
-                $table = 'publication';
-                $filters = Publications::$filters;
-            break;
-            case 'quantis' :
-                $title = __( 'Indicateurs Quantitatifs', Oak::$text_domain );
-                $elements = Oak::$quantis_without_redundancy;
-                $elements_with_redundancy = Oak::$quantis;
-                $table = 'quanti';
-                $filters = Quantis::$filters;
-            break;
-            case 'qualis' :
-                $title = __( 'Indicateurs Qualitatifs', Oak::$text_domain );
-                $elements = Oak::$qualis_without_redundancy;
-                $elements_with_redundancy = Oak::$qualis;
-                $table = 'quali';
-                $filters = Qualis::$filters;
-            break;
-            case 'glossaries' :
-                $title = __( 'Terminologies', Oak::$text_domain );
-                $elements = Oak::$glossaries_without_redundancy;
-                $elements_with_redundancy = Oak::$glossaries;
-                $table = 'glossary';
-                $filters = Glossaries::$filters;
-            break;
-            case 'goodpractices' :
-                $title = __( 'Bonnes Pratiques', Oak::$text_domain );
-                $elements = Oak::$goodpractices_without_redundancy;
-                $elements_with_redundancy = Oak::$goodpractices;
-                $table = 'goodpractice';
-                $filters = Good_Practices::$filters;
-            break;
-            case 'performances' :
-                $title = __( 'Données de performances', Oak::$text_domain );
-                $elements = Oak::$performances_without_redundancy;
-                $elements_with_redundancy = Oak::$performances;
-                $table = 'performance';
-                $filters = Performances::$filters;
-            break;
-            case 'sources' :
-                $title = __( 'Sources', Oak::$text_domain );
-                $elements = Oak::$sources_without_redundancy;
-                $elements_with_redundancy = Oak::$sources;
-                $table = 'source';
-                $filters = Sources::$filters;
-            break;
-            case 'objects' :
-                $title = __( 'Objets', Oak::$text_domain );
-                $elements = Oak::$objects_without_redundancy;
-                $elements_with_redundancy = Oak::$objects;
-                $table = 'object';
-                $filters = Objects::$filters;
-            break;
-            case 'terms' :
-                $title = __( 'Termes', Oak::$text_domain );
-                $elements = Oak::$terms_without_redundancy;
-                $elements_with_redundancy = Oak::$terms;
-                $table = 'term';
-                $filters = Terms::$filters;
-            break;
-            case 'term_objects' :
-                $title = __( 'Objets', Oak::$text_domain );
-                $elements = Oak::$term_objects_without_redundancy;
-                $elements_with_redundancy = Oak::$objects;
-                $table = 'object';
-                $filters = Objects::$filters;
-            break;
-            case 'publishers' :
-                $title = __( 'IVWPs', Oak::$text_domain );
-                $elements = Oak::$publishers_without_redundancy;
-                $elements_with_redundancy = Oak::$publishers;
-                $table = 'publisher';
-                $filters = Publishers::$filters;
-            break;
-            case 'graphs' :
-                $title = __( 'Graphes', Oak::$text_domain );
-                $elements = Oak::$graphs_without_redundancy;
-                $elements_with_redundancy = Oak::$graphs;
-                $table = 'graph';
-                $filters = Graphs::$filters;
-            break;
-        endswitch;
+        $arguments_handler = array(
+            'fields' => array( 
+                __( 'Champs', Oak::$text_domain ),
+                Oak::$fields_without_redundancy,
+                Oak::$fields,
+                'field',
+                Fields::$filters,
+            ),
+            'forms' =>  array( 
+                __( 'Formes', Oak::$text_domain ),
+                Oak::$forms_without_redundancy,
+                Oak::$forms,
+                'form',
+                Forms::$filters,
+            ),
+            'models' =>  array( 
+                __( 'Modèles', Oak::$text_domain ),
+                Oak::$models_without_redundancy,
+                Oak::$models,
+                'model',
+                models::$filters,
+            ),
+            'taxonomies' =>  array( 
+                __( 'Taxonomies', Oak::$text_domain ),
+                Oak::$taxonomies_without_redundancy,
+                Oak::$taxonomies,
+                'taxonomy',
+                Taxonomies::$filters,
+            ),
+            'organizations' =>  array( 
+                __( 'Organisations', Oak::$text_domain ),
+                Oak::$organizations_without_redundancy,
+                Oak::$organizations,
+                'organization',
+                Organizations::$filters,
+            ),
+            'publications' =>  array( 
+                __( 'Publications', Oak::$text_domain ),
+                Oak::$publications_without_redundancy,
+                Oak::$publications,
+                'publication',
+                Publications::$filters,
+            ),
+            'quantis' =>  array( 
+                __( 'Indicateurs Quantitatifs', Oak::$text_domain ),
+                Oak::$quantis_without_redundancy,
+                Oak::$quantis,
+                'quanti',
+                Quantis::$filters,
+            ),
+            'qualis' =>  array( 
+                __( 'Indicateurs Qualitatifs', Oak::$text_domain ),
+                Oak::$qualis_without_redundancy,
+                Oak::$qualis,
+                'quali',
+                Qualis::$filters,
+            ),
+            'glossaries' =>  array( 
+                __( 'Terminologies', Oak::$text_domain ),
+                Oak::$glossaries_without_redundancy,
+                Oak::$glossaries,
+                'glossary',
+                Glossaries::$filters,
+            ),
+            'goodpractices' =>  array( 
+                __( 'Bonnes Pratiques', Oak::$text_domain ),
+                Oak::$goodpractices_without_redundancy,
+                Oak::$goodpractices,
+                'goodpractice',
+                Good_Practices::$filters,
+            ),
+            'performances' =>  array( 
+                __( 'Données de performances', Oak::$text_domain ),
+                Oak::$performances_without_redundancy,
+                Oak::$performances,
+                'performance',
+                Performances::$filters,
+            ),
+            'sources' =>  array( 
+                __( 'Sources', Oak::$text_domain ),
+                Oak::$sources_without_redundancy,
+                Oak::$sources,
+                'source',
+                Sources::$filters,
+            ),
+            'objects' =>  array( 
+                __( 'Objets', Oak::$text_domain ),
+                Oak::$objects_without_redundancy,
+                Oak::$objects,
+                'object',
+                Objects::$filters,
+            ),
+            'terms' =>  array( 
+                __( 'Termes', Oak::$text_domain ),
+                Oak::$terms_without_redundancy,
+                Oak::$terms,
+                'term',
+                Terms::$filters,
+            ),
+            'term_objects' =>  array( 
+                __( 'Objets', Oak::$text_domain ),
+                Oak::$term_objects_without_redundancy,
+                Oak::$objects,
+                'object',
+                Objects::$filters,
+            ),
+            'publishers' =>  array( 
+                __( 'IVWPs', Oak::$text_domain ),
+                Oak::$publishers_without_redundancy,
+                Oak::$publishers,
+                'publisher',
+                Publishers::$filters,
+            ),
+            'graphs' =>  array( 
+                __( 'Graphes', Oak::$text_domain ),
+                Oak::$graphs_without_redundancy,
+                Oak::$graphs,
+                'graph',
+                Graphs::$filters,
+            ),
+        );
+        $handler = $arguments_handler[ $_GET['elements'] ];
+        $title = $handler[0];
+        $elements = $handler[1];
+        $elements_with_redundancy = $handler[2];
+        $table = $handler[3];
+        $filters = $handler[4];
         include get_template_directory() . '/template-parts/elements/elements-list.php';
     }
 
