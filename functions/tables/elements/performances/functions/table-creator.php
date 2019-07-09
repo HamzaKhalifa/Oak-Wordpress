@@ -38,6 +38,7 @@ $performance_sql = "CREATE TABLE $performances_table_name (
     performance_region TEXT,
     performance_custom_perimeter TEXT,
     performance_results TEXT,
+    performance_objectives TEXT,
     performance_publication TEXT,
     performance_quantis TEXT,
     performance_objects TEXT,

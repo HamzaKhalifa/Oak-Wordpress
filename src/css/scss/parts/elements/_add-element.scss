@@ -34,13 +34,13 @@
     flex: 1;
 }
 
-.oak_add_element_container__horizontal_container, .oak_superficial_results_container {
+.oak_add_element_container__horizontal_container, .oak_superficial_results_container, .oak_superficial_objectives_container {
     display: flex;
     align-items: center;
     padding-bottom: 15px;
 }
 
-.oak_superficial_results_container {
+.oak_superficial_results_container, .oak_superficial_objectives_container {
     width: 100%;
 }
 
@@ -581,7 +581,7 @@ input.oak_add_other_elements_list_single_element__chekcbox {
     overflow: hidden;
 }
 
-.oak_other_elements_container__add_button, .oak_performance_result_add_button {
+.oak_other_elements_container__add_button, .oak_performance_result_add_button, .oak_performance_objective_add_button {
     background-color: #1c6bb5;
     position: absolute;
     width: 40px;
@@ -725,7 +725,7 @@ span.oak_number_of_selected_elements_text, .oak_number_of_other_selected_element
     color: #003366;
 }
 
-.oak_performance_results_container {
+.oak_performance_results_container, .oak_performance_objectives_container {
     position: relative;
     margin-bottom: 50px;
 }

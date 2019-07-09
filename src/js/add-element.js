@@ -498,6 +498,22 @@ function createElementData(state) {
 
             elementData.performance_results = performanceResults;
         }
+
+        var performanceObjectives = '';
+        var singlePerformanceObjectives = document.querySelectorAll('.oak_single_performance_objective');
+        for (var i = 0; i < singlePerformanceObjectives.length; i++) {
+            var delimiter = '|';
+            if ( i == singlePerformanceObjectives.length - 1 ) 
+                delimiter = '';
+            var year = singlePerformanceObjectives[i].querySelector('.performance_goal_year_input').value;
+            var goal = singlePerformanceObjectives[i].querySelector('.performance_goal_input').value;
+            var estimation = singlePerformanceObjectives[i].querySelector('.performance_estimated_input').checked;
+            var noValue = singlePerformanceObjectives[i].querySelector('.performance_no_value_input').checked;
+
+            performanceObjectives += year + ':' + goal + ':' + estimation + ':' + noValue + delimiter;
+
+            elementData.performance_objectives = performanceObjectives;
+        }
     }
 
     // For the language: 
@@ -649,13 +665,22 @@ var getKeys = function(obj){
     return keys;
 }
 
-// Everything related to performance results: 
+// Everything related to performance results and objectives: 
 var singlePerformanceResultModel;
 handlePerformanceResults();
 function handlePerformanceResults() {
     if (DATA.table == 'performance') {
         singlePerformanceResultModel = document.querySelector('.oak_single_performance_result').innerHTML;
         document.querySelector('.oak_single_performance_result').remove();
+    }
+}
+
+var singlePerformanceObjectiveModel;
+handlePerformanceObjectives();
+function handlePerformanceObjectives() {
+    if (DATA.table == 'performance') {
+        singlePerformanceObjectiveModel = document.querySelector('.oak_single_performance_objective').innerHTML;
+        document.querySelector('.oak_single_performance_objective').remove();
     }
 }
 
@@ -676,14 +701,34 @@ function initializePerformancesResults() {
                 noValue: attributes[3]
             });
         }
+
+        var performanceObjectives = [];
+        if (DATA.revisions[DATA.revisions.length - 1].performance_objectives) {
+            performanceObjectives = DATA.revisions[DATA.revisions.length - 1].performance_objectives.split('|');
+        }
+        for (var i = 0; i < performanceObjectives.length; i++) {
+            var attributes = performanceObjectives[i].split(':');
+
+            addObjective({
+                year: attributes[0],
+                goal: attributes[1],
+                estimation: attributes[2],
+                noValue: attributes[3]
+            });
+        }
     }
 }
 
-handlePerformanceResultAddButton();
-function handlePerformanceResultAddButton() {
+handlePerformanceResultAndObjectiveAddButton();
+function handlePerformanceResultAndObjectiveAddButton() {
     if (DATA.table == 'performance') {
         document.querySelector('.oak_performance_result_add_button').addEventListener('click', function() {
             addPerformanceResult();
+            // performanceResultsContainer.innerHTML = performanceResultsContainer.innerHTML + singlePerformanceResult;
+        });
+
+        document.querySelector('.oak_performance_objective_add_button').addEventListener('click', function() {
+            addObjective();
             // performanceResultsContainer.innerHTML = performanceResultsContainer.innerHTML + singlePerformanceResult;
         });
     }
@@ -700,6 +745,22 @@ function addPerformanceResult(data) {
         singlePerformanceResult.querySelector('.performance_goal_input').value = data.goal;
         singlePerformanceResult.querySelector('.performance_estimated_input').checked = data.estimation == 'true' ? true : false;
         singlePerformanceResult.querySelector('.performance_no_value_input').checked = data.noValue == 'true' ? true : false;
+    }
+    textFieldsAnimations();
+    handleOtherElementsCheckboxes();
+}
+
+function addObjective(data) {
+    var performanceResultsContainer = document.querySelector('.oak_performance_objectives_container');
+    var singlePerformanceObjective = document.createElement('div');
+    singlePerformanceObjective.className = 'oak_other_elements_single_elements_container__single_element_not_checked oak_single_performance_objective oak_add_element_container__horizontal_container';
+    singlePerformanceObjective.innerHTML = singlePerformanceObjectiveModel;
+    performanceResultsContainer.append(singlePerformanceObjective);
+    if (data) {
+        singlePerformanceObjective.querySelector('.performance_goal_year_input').value = data.year;
+        singlePerformanceObjective.querySelector('.performance_goal_input').value = data.goal;
+        singlePerformanceObjective.querySelector('.performance_estimated_input').checked = data.estimation == 'true' ? true : false;
+        singlePerformanceObjective.querySelector('.performance_no_value_input').checked = data.noValue == 'true' ? true : false;
     }
     textFieldsAnimations();
     handleOtherElementsCheckboxes();

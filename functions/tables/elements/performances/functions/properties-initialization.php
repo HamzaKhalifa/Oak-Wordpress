@@ -28,6 +28,7 @@ Performances::$properties = array(
             array( 'value' => 'money', 'innerHTML' => __( 'Monnaie', Oak::$text_domain ) ),
             array( 'value' => 'ratio', 'innerHTML' => __( 'Ratio', Oak::$text_domain ) ),
             array( 'value' => 'raw', 'innerHTML' => __( 'Brut', Oak::$text_domain ) ),
+            array( 'value' => 'part', 'innerHTML' => __( 'Part', Oak::$text_domain ) ),
         ),
         'placeholder' => __( 'Type', Oak::$text_domain ), 
         'description' => __( 'Type.', Oak::$text_domain ), 
@@ -35,7 +36,7 @@ Performances::$properties = array(
         'condition' => true,
         'line' => 'beginning'
     ),
-    array ( 
+    array (
         'name' => 'distance_unity_filter', 
         'property_name' => 'performance_distance_unity_filter', 
         'type' => 'text', 
