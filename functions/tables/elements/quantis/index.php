@@ -50,20 +50,20 @@ class Quantis {
     }
 }
 
-if ( 
-    ( 
-        isset( $_GET['elements'] ) && 
-        in_array( $_GET['elements'], ['quantis', 'goodpractices'] ) 
-    )
-    ||
-    (
-        did_action( 'elementor/loaded' ) &&
-        \Elementor\Plugin::$instance->editor != null &&
-        \Elementor\Plugin::$instance->editor->is_edit_mode() 
-    )
-    ||
-    ( 
-        isset( $_GET['post'] ) 
-    )
-) 
+// if ( 
+//     ( 
+//         isset( $_GET['elements'] ) && 
+//         in_array( $_GET['elements'], ['quantis', 'goodpractices'] ) 
+//     )
+//     ||
+//     (
+//         did_action( 'elementor/loaded' ) &&
+//         \Elementor\Plugin::$instance->editor != null &&
+//         \Elementor\Plugin::$instance->editor->is_edit_mode() 
+//     )
+//     ||
+//     ( 
+//         isset( $_GET['post'] ) 
+//     )
+// ) 
 $quantis = new Quantis();
