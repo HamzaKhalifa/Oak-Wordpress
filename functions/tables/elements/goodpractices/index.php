@@ -64,4 +64,17 @@ class Good_Practices {
     }
 }
 
-$goodpractices = new Good_Practices();
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], ['goodpractices'] ) 
+    ) || 
+    ( 
+        did_action( 'elementor/loaded' ) &&
+        \Elementor\Plugin::$instance->editor->is_edit_mode() 
+    ) ||
+    ( 
+        isset( $_GET['post'] ) 
+    )
+) 
+    $goodpractices = new Good_Practices();

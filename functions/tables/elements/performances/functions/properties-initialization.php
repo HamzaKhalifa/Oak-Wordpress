@@ -385,6 +385,7 @@ Performances::$properties = array(
         'choices' => array(
             array( 'value' => '€', 'innerHTML' => __( '€', Oak::$text_domain ) ),
             array( 'value' => '$', 'innerHTML' => __( '$', Oak::$text_domain ) ),
+            array( 'value' => 'billion_fcfa', 'innerHTML' => __( 'Milliards FCFA', Oak::$text_domain ) ),
         ),
         'placeholder' => __( 'Unité de Monnaie', Oak::$text_domain ), 
         'description' => __( 'Unité de Monnaie.', Oak::$text_domain ), 

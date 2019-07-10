@@ -135,4 +135,10 @@ class Organizations {
     }
 }
 
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], ['organizations', 'publications'] ) 
+    )
+) 
 $organizations = new Organizations();

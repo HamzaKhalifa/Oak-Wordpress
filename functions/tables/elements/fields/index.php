@@ -127,4 +127,14 @@ class Fields {
     }
 }
 
-$fields = new Fields();
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], ['fields', 'forms', 'models', 'objects', 'sources', 'performances', 'goodpractices'] ) 
+    ) || 
+    ( 
+        did_action( 'elementor/loaded' ) &&
+        \Elementor\Plugin::$instance->editor->is_edit_mode() 
+    )
+) 
+    $fields = new Fields();

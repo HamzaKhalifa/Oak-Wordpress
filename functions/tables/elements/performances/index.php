@@ -64,4 +64,17 @@ class Performances {
     }
 }
 
-$performances = new Performances();
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], ['performances'] ) 
+    ) ||
+    (
+        did_action( 'elementor/loaded' ) &&
+        \Elementor\Plugin::$instance->editor->is_edit_mode() 
+    ) ||
+    ( 
+        isset( $_GET['post'] ) 
+    )
+) 
+    $performances = new Performances();

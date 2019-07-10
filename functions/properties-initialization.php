@@ -95,6 +95,7 @@ foreach( $regions_array as $single_regions ) :
     endif;
 endforeach;
 
+
 Fields::properties_initialization();
 Forms::properties_initialization();
 Models::properties_initialization();

@@ -86,6 +86,13 @@ class Terms {
     public static function get_tabs_data( $identifier  ) {
         return array();
     }
+
 }
 
-$terms = new Terms();
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], ['terms', 'publications', 'organizations', 'taxonomies', 'objects'] ) 
+    )
+) 
+    $terms = new Terms();

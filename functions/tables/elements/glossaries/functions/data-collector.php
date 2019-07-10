@@ -2,10 +2,23 @@
 global $wpdb;
 
 $glossaries_table_name = Oak::$glossaries_table_name;
-Oak::$glossaries = $wpdb->get_results ( "
-    SELECT * 
-    FROM  $glossaries_table_name
-" );
+
+if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
+    foreach( Oak::$content_filters['selected_publications'] as $publication_identifier ) :
+        $publication_glossaries = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $glossaries_table_name
+            WHERE glossary_publication = '$publication_identifier'
+        " ); 
+        Oak::$glossaries = array_merge( Oak::$glossaries, $publication_glossaries );
+    endforeach;
+else:
+    Oak::$glossaries = $wpdb->get_results ( "
+        SELECT * 
+        FROM  $glossaries_table_name
+    " );
+endif;
+
 $reversed_glossaries = array_reverse( Oak::$glossaries );
 $glossaries_without_redundancy = [];
 foreach( $reversed_glossaries as $glossary ) :
@@ -15,12 +28,6 @@ foreach( $reversed_glossaries as $glossary ) :
             $added = true;
         endif;
     endforeach;
-    
-    if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
-        if ( !in_array( $glossary->glossary_publication, Oak::$content_filters['selected_publications'] ) ) :
-            $added = true;
-        endif;
-    endif;
 
     if ( !$added ) :
         $glossaries_without_redundancy[] = $glossary;

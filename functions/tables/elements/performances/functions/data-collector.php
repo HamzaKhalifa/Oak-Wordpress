@@ -2,10 +2,23 @@
 global $wpdb;
 
 $performances_table_name = Oak::$performances_table_name;
-Oak::$performances = $wpdb->get_results ( "
-    SELECT * 
-    FROM  $performances_table_name
-" );
+
+if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
+    foreach( Oak::$content_filters['selected_publications'] as $publication_identifier ) :
+        $publication_performances = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $performances_table_name
+            WHERE performance_publication = '$publication_identifier'
+        " ); 
+        Oak::$performances = array_merge( Oak::$performances, $publication_performances );
+    endforeach;
+else:
+    Oak::$performances = $wpdb->get_results ( "
+        SELECT * 
+        FROM  $performances_table_name
+    " );
+endif;
+
 $reversed_performances = array_reverse( Oak::$performances );
 $performances_without_redundancy = [];
 foreach( $reversed_performances as $performance ) :
@@ -15,12 +28,6 @@ foreach( $reversed_performances as $performance ) :
             $added = true;
         endif;
     endforeach;
-
-    if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
-        if ( !in_array( $performance->performance_publication, Oak::$content_filters['selected_publications'] ) ) :
-            $added = true;
-        endif;
-    endif;
 
     if ( !$added ) :
         $performances_without_redundancy[] = $performance;

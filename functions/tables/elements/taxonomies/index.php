@@ -50,4 +50,10 @@ class Taxonomies {
     }
 }
 
-$taxonomies = new Taxonomies();
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], ['taxonomies', 'publications', 'organizations', 'objects'] ) 
+    )
+) 
+    $taxonomies = new Taxonomies();

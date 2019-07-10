@@ -1828,6 +1828,10 @@ body .oak_select_container_with_filters__add_button {
   cursor: pointer;
 }
 
+.oak_list_row_child_elements_container {
+  margin-left: 30px;
+}
+
 .oak_add_element_modal_container {
   position: fixed;
   width: 100%;

@@ -29,80 +29,80 @@ class Oak {
 
     public static $revisions = [];
 
-    public static $fields;
-    public static $fields_without_redundancy;
-    public static $field_properties;
+    public static $fields = [];
+    public static $fields_without_redundancy = [];
+    public static $field_properties = [];
 
-    public static $forms;
-    public static $forms_without_redundancy;
+    public static $forms = [];
+    public static $forms_without_redundancy = [];
     public static $forms_attributes = [];
-    public static $form_properties;
+    public static $form_properties = [];
     public static $all_forms_and_fields = [];
 
-    public static $objects;
+    public static $objects = [];
     public static $objects_without_redundancy = [];
     public static $all_objects = [];
     public static $all_objects_without_redundancy = [];
 
-    public static $terms;
+    public static $terms = [];
     public static $terms_without_redundancy = [];
     public static $all_terms = [];
     public static $all_terms_without_redundancy = [];
 
     public static $terms_and_objects = [];
 
-    public static $models;
+    public static $models = [];
     public static $models_without_redundancy = [];
-    public static $model_properties;
+    public static $model_properties = [];
     public static $model_other_elements;
     public static $all_models_and_forms = [];
     public static $current_model_fields = [];
     public static $object_properties = [];
     public static $term_properties = [];
 
-    public static $organizations;
-    public static $organizations_without_redundancy;
-    public static $organization_properties;
+    public static $organizations = [];
+    public static $organizations_without_redundancy = [];
+    public static $organization_properties = [];
 
-    public static $publications;
-    public static $publications_without_redundancy;
-    public static $publication_properties;
+    public static $publications = [];
+    public static $publications_without_redundancy = [];
+    public static $publication_properties = [];
 
-    public static $glossaries;
-    public static $glossaries_without_redundancy;
-    public static $glossary_properties;
+    public static $glossaries = [];
+    public static $glossaries_without_redundancy = [];
+    public static $glossary_properties = [];
 
-    public static $qualis;
-    public static $qualis_without_redundancy;
-    public static $quali_properties;
+    public static $qualis = [];
+    public static $qualis_without_redundancy = [];
+    public static $quali_properties = [];
 
-    public static $quantis;
-    public static $quantis_without_redundancy;
-    public static $quanti_properties;
+    public static $quantis = [];
+    public static $quantis_without_redundancy = [];
+    public static $quanti_properties = [];
 
-    public static $goodpractices;
-    public static $goodpractices_without_redundancy;
-    public static $goodpractice_properties;
+    public static $goodpractices = [];
+    public static $goodpractices_without_redundancy = [];
+    public static $goodpractice_properties = [];
 
-    public static $sources;
-    public static $sources_without_redundancy;
-    public static $source_properties;
+    public static $sources = [];
+    public static $sources_without_redundancy = [];
+    public static $source_properties = [];
 
-    public static $performances;
-    public static $performances_without_redundancy;
-    public static $performance_properties;
+    public static $performances = [];
+    public static $performances_without_redundancy = [];
+    public static $performance_properties = [];
 
-    public static $taxonomies;
+    public static $taxonomies = [];
     public static $taxonomies_without_redundancy = [];
-    public static $taxonomy_properties;
+    public static $taxonomy_properties = [];
 
-    public static $publishers;
-    public static $publishers_without_redundancy;
-    public static $publisher_properties;
+    public static $publishers = [];
+    public static $publishers_without_redundancy = [];
+    public static $publisher_properties = [];
 
-    public static $graphs;
-    public static $graphs_without_redundancy;
-    public static $graph_properties;
+    public static $graphs = [];
+    public static $graphs_without_redundancy = [];
+    public static $graph_properties = [];
 
     public static $frame_publications_identifiers = [];
     public static $frame_terms_identifiers = [];
@@ -1515,10 +1515,10 @@ class Oak {
                 identifier="<?php echo( $single_child_element->$child_element_identifier_property ); ?>" 
                 class="oak_single_list_row"
                 <?php if ( $child_elements['table'] == 'object' ) : ?>
-                model-identifier="<?php echo( $single_child_element->object_model_identifier ); ?>"
+                    model-identifier="<?php echo( $single_child_element->object_model_identifier ); ?>"
                 <?php endif; ?>
                 <?php if ( $child_elements['table'] == 'term' ) : ?>
-                taxonomy-identifier="<?php echo( $element_identifier ) ?>"
+                    taxonomy-identifier="<?php echo( $element_identifier ) ?>"
                 <?php endif; ?>
             >
                 <div class="oak_list_row">

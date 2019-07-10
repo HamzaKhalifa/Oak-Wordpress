@@ -2,10 +2,23 @@
 global $wpdb; 
 
 $goodpractices_table_name = Oak::$goodpractices_table_name;
-Oak::$goodpractices = $wpdb->get_results ( "
-    SELECT * 
-    FROM  $goodpractices_table_name
-" );
+
+if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
+    foreach( Oak::$content_filters['selected_publications'] as $publication_identifier ) :
+        $publication_goodpractices = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $goodpractices_table_name
+            WHERE goodpractice_publication = '$publication_identifier'
+        " ); 
+        Oak::$goodpractices = array_merge( Oak::$goodpractices, $publication_goodpractices );
+    endforeach;
+else:
+    Oak::$goodpractices = $wpdb->get_results ( "
+        SELECT * 
+        FROM  $goodpractices_table_name
+    " );
+endif;
+
 $reversed_goodpractices = array_reverse( Oak::$goodpractices );
 $goodpractices_without_redundancy = [];
 foreach( $reversed_goodpractices as $goodpractice ) :
@@ -15,12 +28,6 @@ foreach( $reversed_goodpractices as $goodpractice ) :
             $added = true;
         endif;
     endforeach;
-
-    if ( !in_array( '0', Oak::$content_filters['selected_publications'] ) ) :
-        if ( !in_array( $goodpractice->goodpractice_publication, Oak::$content_filters['selected_publications'] ) ) :
-            $added = true;
-        endif;
-    endif;
 
     if ( !$added ) :
         $goodpractices_without_redundancy[] = $goodpractice;

@@ -64,4 +64,17 @@ class Sources {
     }
 }
 
-$sources = new Sources();
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], ['sources'] ) 
+    ) || 
+    ( 
+        did_action( 'elementor/loaded' ) &&
+        \Elementor\Plugin::$instance->editor->is_edit_mode() 
+    ) ||
+    ( 
+        isset( $_GET['post'] ) 
+    )
+) 
+    $sources = new Sources();
