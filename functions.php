@@ -1,7 +1,7 @@
 <?php
-@ini_set( 'upload_max_size' , '64M' );
-@ini_set( 'post_max_size', '64M');
-@ini_set( 'max_execution_time', '300' );
+@ini_set( 'upload_max_size' , '99M' );
+@ini_set( 'post_max_size', '99M');
+// @ini_set( 'max_execution_time', '300' );
 
 class Oak {
     public static $charset_collate; 
