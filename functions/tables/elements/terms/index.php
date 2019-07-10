@@ -89,10 +89,10 @@ class Terms {
 
 }
 
-// if ( 
-//     ( 
-//         isset( $_GET['elements'] ) && 
-//         in_array( $_GET['elements'], ['terms', 'publications', 'organizations', 'taxonomies', 'objects'] ) 
-//     )
-// ) 
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], ['terms', 'publications', 'organizations', 'taxonomies', 'objects'] ) 
+    )
+) 
     $terms = new Terms();

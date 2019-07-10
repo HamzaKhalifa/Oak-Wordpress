@@ -6,7 +6,7 @@
     </div>
 
     <img class="oak_admin_menu__joro_icon" src="<?php echo( get_template_directory_uri() . '/src/assets/icons/jörö.png' ); ?>" alt="">
-    <h3 class="oak_admin_menu__joro">JÖRÖ</h3>
+    <h3 class="oak_admin_menu__joro"><?php if ( get_option( 'oak_corn' ) != 'true' ) : echo( 'JÖRÖ' ); else : echo( 'Web Publisher' ); endif; ?></h3>
     <h5 class="oak_admin_menu_central_application" style="color: <?php echo( Oak::$secondary_text_color ); ?>"><?php _e( 'Application centrale', Oak::$text_domain ); ?></h5>
     <hr>
     <br>

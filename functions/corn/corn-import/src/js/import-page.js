@@ -301,6 +301,8 @@ var steps = [];
                     // For the terms and objects (Gotta filter this some day)
                     selectedData.termsAndObjects = allData.termsAndObjects;
 
+                    console.log('selected Data', selectedData);
+
                     setLoading();
                     startGame();
                     setLoadingPercentage('0%', 'Suppression des données..');
@@ -372,6 +374,7 @@ var steps = [];
                                                                                                                                                                                         } else {
                                                                                                                                                                                             doneLoading();
                                                                                                                                                                                             setLoadingPercentage('0%', 'Erreur avec la suppression des images inutiles');
+                                                                                                                                                                                            endGame();
                                                                                                                                                                                         }
                                                                                                                                                                                     });
                                                                                                                                                                                 } else {

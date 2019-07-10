@@ -106,6 +106,6 @@ class Publications {
 //     ( 
 //         isset( $_GET['elements'] ) && 
 //         in_array( $_GET['elements'], ['publications', 'organizations', 'taxonomies', 'terms', 'goodpractices', 'sources', 'performances', 'qualis', 'quantis'] ) 
-//     )
+//     ) 
 // )
     $publications = new Publications();

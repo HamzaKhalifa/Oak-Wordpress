@@ -460,6 +460,8 @@ class Corn_Import {
         $fields = $data['fields'];
         $objects = $data['objects'];
 
+        $charset_collate = Oak::$charset_collate;
+
         foreach( $models as $model ) :
             // Lets look for the model fields: 
             $model_fields = [];
@@ -475,14 +477,13 @@ class Corn_Import {
                         if ( !in_array( $key, $properties_to_neglect ) ) :
                             $model_properties_array = explode( '_', $key );
                             $field_identifier = '';
-                            if ( count( $model_properties_array == 3 ) ) :
+                            if ( count( $model_properties_array ) == 3 ) :
                                 $field_identifier = $model_properties_array[2];
                             endif;
-
+                            
                             foreach( $fields as $field ) :
                                 if ( $field['field_identifier'] == $field_identifier ) :
                                     $field_copy = $field;
-                                    $field_copy['form_and_field_properties'] = $form_and_field_instance;
                                     $field_copy['field_key'] = $key;
                                     array_push( $model_fields, $field_copy );
                                 endif;
@@ -740,10 +741,10 @@ class Corn_Import {
 
         $new_table_name = '';
 
+        $columns_names = [];
         if ( $table_name != '' ) :
             $new_table_name = $table_name;
             $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$new_table_name'" );
-            $columns_names = [];
             foreach( $columns as $column ) :
                 if ( $column->COLUMN_NAME != 'id' )
                     $columns_names[] = $column->COLUMN_NAME;
@@ -761,7 +762,7 @@ class Corn_Import {
                     if ( count( Oak::$fields_without_redundancy ) == 0 ) :
                         Fields::data_collector();
                     endif;
-
+                    
                     $new_table_name = $wpdb->prefix . 'oak_model_' . $element['model'];
                 endif;
 
@@ -771,6 +772,7 @@ class Corn_Import {
                     if ( $column->COLUMN_NAME != 'id' )
                         $columns_names[] = $column->COLUMN_NAME;
                 endforeach;
+
             endif;
 
             foreach( $element as $key => $value ) :
@@ -779,7 +781,7 @@ class Corn_Import {
                     unset( $element[ $key ] );
                 endif;
             endforeach;
-
+            
             $this->corn_simple_register_element( $element, $new_table_name, $properties, $is_object );
         endforeach;
     }
@@ -832,6 +834,8 @@ class Corn_Import {
 
                 $image_incrementer = 0;
                 $found_image = false;
+                error_log('Images -----------------------------------');
+                error_log( Oak::$all_images );
                 do {
                     $oak_image_exploded = explode( '/', Oak::$all_images[ $image_incrementer ]->guid );
                     $oak_image_name = $oak_image_exploded[ count( $oak_image_exploded ) - 1 ];
@@ -855,10 +859,6 @@ class Corn_Import {
 
             $element[ $key ] = Oak::oak_filter_word( $the_value );
         endforeach;
-
-        // if ( $properties == null ) :
-        //     var_dump( $table_name );
-        // endif;
 
         $result = $wpdb->insert(
             $table_name,

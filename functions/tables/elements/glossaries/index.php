@@ -50,10 +50,10 @@ class Glossaries {
     }
 }
 
-// if ( 
-//     ( 
-//         isset( $_GET['elements'] ) && 
-//         in_array( $_GET['elements'], ['glossaries'] ) 
-//     )
-// ) 
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], ['glossaries'] ) 
+    )
+) 
     $glossaries = new Glossaries();

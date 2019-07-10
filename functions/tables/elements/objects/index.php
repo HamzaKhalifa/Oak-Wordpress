@@ -91,19 +91,19 @@ class Objects {
     }
 }
 
-// if ( 
-//     ( 
-//         isset( $_GET['elements'] ) && 
-//         in_array( $_GET['elements'], [ 'organizations', 'publications', 'taxonomies', 'terms', 'objects', 'sources', 'performances', 'goodpractices', 'qualis', 'quantis'] ) 
-//     )
-//     ||
-//     (
-//         did_action( 'elementor/loaded' ) &&
-//         \Elementor\Plugin::$instance->editor != null &&
-//         \Elementor\Plugin::$instance->editor->is_edit_mode() 
-//     ) ||
-//     ( 
-//         isset( $_GET['post'] ) 
-//     )
-// ) 
+if ( 
+    ( 
+        isset( $_GET['elements'] ) && 
+        in_array( $_GET['elements'], [ 'organizations', 'publications', 'taxonomies', 'terms', 'objects', 'sources', 'performances', 'goodpractices', 'qualis', 'quantis'] ) 
+    )
+    ||
+    (
+        did_action( 'elementor/loaded' ) &&
+        \Elementor\Plugin::$instance->editor != null &&
+        \Elementor\Plugin::$instance->editor->is_edit_mode() 
+    ) ||
+    ( 
+        isset( $_GET['post'] ) 
+    )
+) 
     $objects = new Objects();
