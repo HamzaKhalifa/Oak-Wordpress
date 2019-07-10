@@ -127,7 +127,6 @@ class Fields {
     }
 }
 
-var_dump( did_action( 'elementor/loaded' ) );
 if ( 
     ( 
         isset( $_GET['elements'] ) && 
