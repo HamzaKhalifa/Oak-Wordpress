@@ -159,7 +159,7 @@ class Publishers {
         global $wpdb; 
 
         Oak::$all_images = Corn_Import::get_all_images()->posts;
-        
+
         $elements_types_to_sync = array(
             array( 'elements' => json_decode( stripslashes( $_POST['organizations'] ), true ), 'table_name' => Oak::$organizations_table_name, 'properties' => Organizations::$properties, Organizations::$properties ),
             array( 'elements' => json_decode( stripslashes( $_POST['publications'] ), true ), 'table_name' => Oak::$publications_table_name, 'properties' => Publications::$properties ),
@@ -264,23 +264,37 @@ class Publishers {
         );
 
         foreach( $elements_types_to_confirm_for_sync as $single_element_type_to_confirm_for_sync ) :
-            $result = $wpdb->update (
-                $single_element_type_to_confirm_for_sync['table_name'],
-                array (
-                    $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'true'
-                ),
-                array( $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'NULL' )
-            );
-            $result = $wpdb->update (
-                $single_element_type_to_confirm_for_sync['table_name'],
-                array (
-                    $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'true'
-                ),
-                array( $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'false' )
-            );
+            $table_name = $single_element_type_to_confirm_for_sync['table_name'];
+            
+            $elements = $wpdb->get_results ( "
+                SELECT *
+                FROM $table_name
+            " );
+            $identifier_property = $single_element_type_to_confirm_for_sync['element_name'] . '_identifier';
+
+            error_log('---------');
+            error_log($table_name);
+            error_log( count( $elements ) );
+            error_log( $identifier_property);
+            error_log('---------');
+
+            foreach( $elements as $element ) :
+                $identifier = $element->$identifier_property;
+                $result = $wpdb->update (
+                    $table_name,
+                    array (
+                        $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'true'
+                    ),
+                    array( $identifier_property => $identifier )
+                );
+            endforeach;
         endforeach;
         
         foreach( Oak::$all_objects_without_redundancy as $object ) :
+            error_log('**************');
+            error_log( $object->object_synchronized );
+            error_log('**************');
+            
             if ( $object->object_synchronized != 'true' ) :
                 $model_identifier = $object->object_model_identifier;
                 $table_name = $wpdb->prefix . 'oak_model_' . $model_identifier;
