@@ -226,6 +226,13 @@ class Publishers {
                     $object_to_save[ $property ] = $object[ $property ];
                 endforeach;
                 
+                
+                error_log('**************');
+                error_log('object to save identifier');
+                error_log( $object_to_save['object_identifier'] );
+                error_log('table name');
+                error_log( $wpdb->prefix . 'oak_model_' . $model->model_identifier );
+                error_log('**************');
                 Corn_Import::corn_simple_register_element( $object_to_save, $wpdb->prefix . 'oak_model_' . $model->model_identifier, null, true );
                 // $result = $wpdb->insert(
                 //     $wpdb->prefix . 'oak_model_' . $model->model_identifier,
@@ -275,7 +282,7 @@ class Publishers {
             error_log('---------');
             error_log($table_name);
             error_log( count( $elements ) );
-            error_log( $identifier_property);
+            error_log( $identifier_property );
             error_log('---------');
 
             foreach( $elements as $element ) :
@@ -289,12 +296,16 @@ class Publishers {
                 );
             endforeach;
         endforeach;
-        
+        error_log('**************');
+        error_log('number of objects without redundancy: ');
+        error_log( count( Oak::$all_objects_without_redundancy ) );
+        error_log('**************');
+
         foreach( Oak::$all_objects_without_redundancy as $object ) :
             error_log('**************');
             error_log( $object->object_synchronized );
             error_log('**************');
-            
+
             if ( $object->object_synchronized != 'true' ) :
                 $model_identifier = $object->object_model_identifier;
                 $table_name = $wpdb->prefix . 'oak_model_' . $model_identifier;
