@@ -26,29 +26,4 @@ foreach( Oak::$taxonomies_without_redundancy as $taxonomy ) :
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $terms_sql );
-
-    // lets get all the terms: 
-    $terms = $wpdb->get_results( "
-        SELECT *
-        FROM $table_name
-    ");
-    $terms = array_reverse( $terms );
-    foreach( $terms as $term ) :
-        $term->term_taxonomy_identifier = $taxonomy->taxonomy_identifier;
-        $added = false;
-        foreach( Oak::$all_terms_without_redundancy as $added_term ) :
-            if ( $added_term->term_identifier == $term->term_identifier ) :
-                $added = true;
-            endif;
-        endforeach;
-        if ( !$added ) :
-            Oak::$all_terms_without_redundancy[] = $term;
-
-            if ( in_array( $taxonomy->taxonomy_publication, Oak::$frame_publications_identifiers ) ) :
-                Oak::$frame_terms_identifiers[] = $term->term_identifier;
-            endif;
-        endif;
-    endforeach;
-
-    Oak::$all_terms = array_merge( Oak::$all_terms, $terms );
 endforeach;
