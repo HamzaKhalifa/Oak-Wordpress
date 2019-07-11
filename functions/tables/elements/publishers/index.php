@@ -169,9 +169,6 @@ class Publishers {
             array( 'elements' => json_decode( stripslashes( $_POST['sources'] ), true ), 'table_name' => Oak::$sources_table_name, 'properties' => Sources::$properties ),
         );
 
-
-        wp_send_json_success( array( 'elements_types_to_sync' =>  $elements_types_to_sync ) );
-
         $objects = $_POST['objectsToSave'];
         $terms_and_objects = $_POST['termsAndObjects'];
 
@@ -179,12 +176,11 @@ class Publishers {
             $table_name = $single_element_type_to_sync['table_name'];
 
             foreach( $single_element_type_to_sync['elements'] as $element ) :
-                unset( $elemen['id'] );
+                unset( $element['id'] );
                 Corn_Import::corn_simple_register_element( $element, $table_name, $single_element_type_to_sync['properties'], false );
             endforeach;
 
         endforeach;
-        
         
         foreach( $objects as $object ) :
             // We delete all the terms related to our objects (we are gonna re-add them later)
