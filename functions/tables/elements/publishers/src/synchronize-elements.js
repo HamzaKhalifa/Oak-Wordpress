@@ -14,20 +14,29 @@ function handleSyncButton() {
                         'data': {}
                     },
                     success: function(data) {
+                        console.log('data', data.data);
                         jQuery.ajax({
                             type: 'POST', 
                             url: DATA.ajaxUrl,
                             data: {
                                 'action': 'save_sync_data',
                                 'objectsToSave': data.data.objects,
-                                'termsAndObjects': data.data.terms_and_objects
+                                'termsAndObjects': data.data.terms_and_objects,
+                                'organizations': data.data.organizations,
+                                'publications': data.data.publications,
+                                'quantis': data.data.quantis,
+                                'qualis': data.data.qualis,
+                                'glossaries': data.data.glossaries,
+                                'goodpractices': data.data.goodpractices,
+                                'performances': data.data.performances,
+                                'sources': data.data.sources,
                             },
                             success: function(response) {
                                 jQuery.ajax({
                                     type: 'POST', 
                                     url: ivwpAjaxUrl,
                                     data: {
-                                        'action': 'all_objects_synchronized',
+                                        'action': 'all_elements_synchronized',
                                         'data': {}
                                     },
                                     success: function(response) {

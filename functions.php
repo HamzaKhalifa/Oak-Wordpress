@@ -859,7 +859,10 @@ class Oak {
 
         $table = $_POST['table'];
 
-        $element[ $table . '_synchronized' ] = 'false';
+        if ( get_option( 'oak_corn' ) == 'true' )
+            $element[ $table . '_synchronized' ] = 'false';
+        else 
+            $element[ $table . '_synchronized' ] = 'true';
 
         // Handling the copying of terms to the new copy of the object
         if ( $table == 'object' && isset( $_POST['copy'] ) ) :

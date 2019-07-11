@@ -380,7 +380,12 @@
             endforeach;
         endif;
 
-        if ( ( in_array( '0', Oak::$content_filters['selected_steps'] ) || in_array( 'content_library', Oak::$content_filters['selected_steps'] ) ) ) :
+        $central = get_option( 'oak_corn' );
+
+        if ( 
+            ( in_array( '0', Oak::$content_filters['selected_steps'] ) || in_array( 'content_library', Oak::$content_filters['selected_steps'] ) ) &&
+            $central != 'true'
+        ) :
             $content_library_beginning = array(
                 array(
                     'title' => __( 'Content Library', Oak::$text_domain ),
@@ -417,7 +422,6 @@
 
         endif;
 
-        $central = get_option( 'oak_corn' );
         if ( $central == 'true' ) :
             $import_page = array(
                 'title' => __( 'WebPublisher', Oak::$text_domain ),

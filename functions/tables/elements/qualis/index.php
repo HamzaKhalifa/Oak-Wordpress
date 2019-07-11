@@ -53,7 +53,7 @@ class Qualis {
 if (
     (
         isset( $_GET['elements'] ) && 
-        in_array( $_GET['elements'], ['qualis'] ) 
+        in_array( $_GET['elements'], ['qualis', 'publishers'] ) 
     ) ||
     (
         did_action( 'elementor/loaded' ) &&

@@ -107,7 +107,7 @@ class Forms {
 if ( 
     ( 
         isset( $_GET['elements'] ) && 
-        in_array( $_GET['elements'], ['forms', 'models', 'objects', 'sources', 'performances', 'goodpractices'] ) 
+        in_array( $_GET['elements'], ['forms', 'models', 'objects', 'sources', 'performances', 'goodpractices', 'publishers'] ) 
     ) || 
     ( 
         did_action( 'elementor/loaded' ) &&

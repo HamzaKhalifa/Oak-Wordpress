@@ -223,7 +223,7 @@ class Corn_Import {
             SELECT *
             FROM  $taxonomies_table_name
         " );
-        $reversed_taxonomies = array_reverse( Oak::$taxonomies );
+        $reversed_taxonomies = array_reverse( $taxonomies );
         $taxonomies_without_redundancy = [];
         foreach( $reversed_taxonomies as $taxonomy ) :
             $added = false;
@@ -236,7 +236,7 @@ class Corn_Import {
                 $taxonomies_without_redundancy[] = $taxonomy;
             endif;
         endforeach;
-
+        
         $all_terms = [];
         foreach( $taxonomies_without_redundancy as $taxonomy ) :
             $taxonomy_table_name = $wpdb->prefix . 'oak_taxonomy_' . $taxonomy->taxonomy_identifier;

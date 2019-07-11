@@ -65,11 +65,73 @@ class Publishers {
         add_action('wp_ajax_save_sync_data', array( $this, 'save_sync_data') );
         add_action('wp_ajax_nopriv_save_sync_data', array( $this, 'save_sync_data') );
 
-        add_action('wp_ajax_all_objects_synchronized', array( $this, 'all_objects_synchronized') );
-        add_action('wp_ajax_nopriv_all_objects_synchronized', array( $this, 'all_objects_synchronized') );
+        add_action('wp_ajax_all_elements_synchronized', array( $this, 'all_elements_synchronized') );
+        add_action('wp_ajax_nopriv_all_elements_synchronized', array( $this, 'all_elements_synchronized') );
     }
 
     public function send_sync_data() {
+        $table_name = $wpdb->prefix . 'oak_organizations';
+        $organizations = $wpdb->get_results ( "
+            SELECT *
+            FROM $table_name
+            WHERE organization_synchronized = 'false'
+        " );
+
+        $table_name = $wpdb->prefix . 'oak_publications';
+        $publications = $wpdb->get_results ( "
+            SELECT *
+            FROM $table_name
+            WHERE publication_synchronized = 'false'
+        " );
+
+        $taxonomies_table_name = $wpdb->prefix . 'oak_taxonomies';
+        $taxonomies = $wpdb->get_results ( "
+            SELECT *
+            FROM  $taxonomies_table_name
+        " );
+        
+        $qualis_table_name = $wpdb->prefix . 'oak_qualis';
+        $qualis = $wpdb->get_results ( "
+            SELECT *
+            FROM  $qualis_table_name
+            WHERE quali_synchronized = 'false'
+        " );
+
+        $quantis_table_name = $wpdb->prefix . 'oak_quantis';
+        $quantis = $wpdb->get_results ( "
+            SELECT *
+            FROM  $quantis_table_name
+            WHERE quanti_synchronized = 'false'
+        " );
+
+        $goodpractices_table_name = $wpdb->prefix . 'oak_goodpractices';
+        $goodpractices = $wpdb->get_results ( "
+            SELECT *
+            FROM  $goodpractices_table_name
+            WHERE goodpractice_synchronized = 'false'
+        " );
+
+        $performances_table_name = $wpdb->prefix . 'oak_performances';
+        $performances = $wpdb->get_results ( "
+            SELECT *
+            FROM  $performances_table_name
+            WHERE performance_synchronized = 'false'
+        " );
+
+        $sources_table_name = $wpdb->prefix . 'oak_sources';
+        $sources = $wpdb->get_results ( "
+            SELECT *
+            FROM  $sources_table_name
+            WHERE source_synchronized = 'false'
+        " );
+
+        $glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
+        $glossaries = $wpdb->get_results ( "
+            SELECT *
+            FROM  $glossaries_table_name
+            WHERE glossary_synchronized = 'false'
+        " );
+        
         $objects_to_send = [];
         $terms_and_objects_to_send = [];
         foreach( Oak::$all_objects_without_redundancy as $object ) :
@@ -84,6 +146,14 @@ class Publishers {
         endforeach;
         
         wp_send_json_success( array(
+            'organizations' => $organizations, 
+            'publications' => $publications,
+            'qualis' => $qualis,
+            'quantis' => $quantis,
+            'glossaries' => $glossaries,
+            'goodpractices' => $goodpractices,
+            'performances' => $performances,
+            'sources' => $sources,
             'objects' => $objects_to_send,
             'terms_and_objects' => $terms_and_objects_to_send,
         ) );
@@ -92,10 +162,33 @@ class Publishers {
     public function save_sync_data() {
         global $wpdb; 
 
+        $elements_types_to_sync = array(
+            array( 'elements' => $_POST['organizations'], 'table_name' => Oak::$organizations_table_name ),
+            array( 'elements' => $_POST['publications'], 'table_name' => Oak::$publications_table_name ),
+            array( 'elements' => $_POST['qualis'], 'table_name' => Oak::$qualis_table_name ),
+            array( 'elements' => $_POST['quantis'], 'table_name' => Oak::$quantis_table_name ),
+            array( 'elements' => $_POST['glossaries'], 'table_name' => Oak::$glossaries_table_name ),
+            array( 'elements' => $_POST['goodpractices'], 'table_name' => Oak::$goodpractices_table_name ),
+            array( 'elements' => $_POST['performances'], 'table_name' => Oak::$performances_table_name ),
+            array( 'elements' => $_POST['sources'], 'table_name' => Oak::$sources_table_name ),
+        );
+
         $objects = $_POST['objectsToSave'];
         $terms_and_objects = $_POST['termsAndObjects'];
+
+        foreach( $elements_types_to_sync as $single_element_type_to_sync ) :
+            $table_name = $single_element_type_to_sync['table_name'];
+            foreach( $single_element_type_to_sync['elements'] as $element ) :
+                $result = $wpdb->insert(
+                    $table_name,
+                    $element
+                );
+            endforeach;
+        endforeach;
+        
         
         foreach( $objects as $object ) :
+            // We delete all the terms related to our objects (we are gonna re-add them later)
             foreach( Oak::$terms_and_objects as $term_and_object ) :
                 if ( $term_and_object->object_identifier == $object['object_identifier'] ) :
                     $wpdb->delete(
@@ -158,7 +251,7 @@ class Publishers {
         wp_send_json_success();
     }
 
-    public function all_objects_synchronized() {
+    public function all_elements_synchronized() {
         global $wpdb; 
 
         foreach( Oak::$all_objects_without_redundancy as $object ) :
