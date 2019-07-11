@@ -176,6 +176,7 @@ class Publishers {
             $table_name = $single_element_type_to_sync['table_name'];
 
             foreach( $single_element_type_to_sync['elements'] as $element ) :
+                unset( $elemen['id'] );
                 Corn_Import::corn_simple_register_element( $element, $table_name, $single_element_type_to_sync['properties'], false );
             endforeach;
 
@@ -267,7 +268,14 @@ class Publishers {
                 array (
                     $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'true'
                 ),
-                array()
+                array( $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'NULL' )
+            );
+            $result = $wpdb->update (
+                $single_element_type_to_confirm_for_sync['table_name'],
+                array (
+                    $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'true'
+                ),
+                array( $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'false' )
             );
         endforeach;
         
