@@ -169,6 +169,9 @@ class Publishers {
             array( 'elements' => $_POST['sources'], 'table_name' => Oak::$sources_table_name, 'properties' => Sources::$properties ),
         );
 
+
+        wp_send_json_success( array( 'elements_types_to_sync', $elements_types_to_sync ) );
+
         $objects = $_POST['objectsToSave'];
         $terms_and_objects = $_POST['termsAndObjects'];
 
