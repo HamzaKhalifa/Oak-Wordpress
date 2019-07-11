@@ -71,67 +71,61 @@ class Publishers {
 
     public function send_sync_data() {
         global $wpdb;
-        
+
         $table_name = $wpdb->prefix . 'oak_organizations';
         $organizations = $wpdb->get_results ( "
             SELECT *
             FROM $table_name
-            WHERE organization_synchronized = 'false'
+            WHERE organization_synchronized = 'false' OR organization_synchronized IS NULL
         " );
 
         $table_name = $wpdb->prefix . 'oak_publications';
         $publications = $wpdb->get_results ( "
             SELECT *
             FROM $table_name
-            WHERE publication_synchronized = 'false'
-        " );
-
-        $taxonomies_table_name = $wpdb->prefix . 'oak_taxonomies';
-        $taxonomies = $wpdb->get_results ( "
-            SELECT *
-            FROM  $taxonomies_table_name
+            WHERE publication_synchronized = 'false' OR publication_synchronized IS NULL
         " );
         
         $qualis_table_name = $wpdb->prefix . 'oak_qualis';
         $qualis = $wpdb->get_results ( "
             SELECT *
             FROM  $qualis_table_name
-            WHERE quali_synchronized = 'false'
+            WHERE quali_synchronized = 'false' OR quali_synchronized IS NULL
         " );
 
         $quantis_table_name = $wpdb->prefix . 'oak_quantis';
         $quantis = $wpdb->get_results ( "
             SELECT *
             FROM  $quantis_table_name
-            WHERE quanti_synchronized = 'false'
+            WHERE quanti_synchronized = 'false' OR quanti_synchronized IS NULL
         " );
 
         $goodpractices_table_name = $wpdb->prefix . 'oak_goodpractices';
         $goodpractices = $wpdb->get_results ( "
             SELECT *
             FROM  $goodpractices_table_name
-            WHERE goodpractice_synchronized = 'false'
+            WHERE goodpractice_synchronized = 'false' OR goodpractice_synchronized IS NULL
         " );
 
         $performances_table_name = $wpdb->prefix . 'oak_performances';
         $performances = $wpdb->get_results ( "
             SELECT *
             FROM  $performances_table_name
-            WHERE performance_synchronized = 'false'
+            WHERE performance_synchronized = 'false' OR performance_synchronized IS NULL
         " );
 
         $sources_table_name = $wpdb->prefix . 'oak_sources';
         $sources = $wpdb->get_results ( "
             SELECT *
             FROM  $sources_table_name
-            WHERE source_synchronized = 'false'
+            WHERE source_synchronized = 'false' OR source_synchronized IS NULL
         " );
 
         $glossaries_table_name = $wpdb->prefix . 'oak_glossaries';
         $glossaries = $wpdb->get_results ( "
             SELECT *
             FROM  $glossaries_table_name
-            WHERE glossary_synchronized = 'false'
+            WHERE glossary_synchronized = 'false' OR glossary_synchronized IS NULL
         " );
         
         $objects_to_send = [];
@@ -165,14 +159,14 @@ class Publishers {
         global $wpdb; 
 
         $elements_types_to_sync = array(
-            array( 'elements' => $_POST['organizations'], 'table_name' => Oak::$organizations_table_name ),
-            array( 'elements' => $_POST['publications'], 'table_name' => Oak::$publications_table_name ),
-            array( 'elements' => $_POST['qualis'], 'table_name' => Oak::$qualis_table_name ),
-            array( 'elements' => $_POST['quantis'], 'table_name' => Oak::$quantis_table_name ),
-            array( 'elements' => $_POST['glossaries'], 'table_name' => Oak::$glossaries_table_name ),
-            array( 'elements' => $_POST['goodpractices'], 'table_name' => Oak::$goodpractices_table_name ),
-            array( 'elements' => $_POST['performances'], 'table_name' => Oak::$performances_table_name ),
-            array( 'elements' => $_POST['sources'], 'table_name' => Oak::$sources_table_name ),
+            array( 'elements' => $_POST['organizations'], 'table_name' => Oak::$organizations_table_name, 'properties' => Organizations::$properties, Organizations::$properties ),
+            array( 'elements' => $_POST['publications'], 'table_name' => Oak::$publications_table_name, 'properties' => Publications::$properties ),
+            array( 'elements' => $_POST['qualis'], 'table_name' => Oak::$qualis_table_name, 'properties' => Qualis::$properties ),
+            array( 'elements' => $_POST['quantis'], 'table_name' => Oak::$quantis_table_name, 'properties' => Quantis::$properties ),
+            array( 'elements' => $_POST['glossaries'], 'table_name' => Oak::$glossaries_table_name, 'properties' => Glossaries::$properties ),
+            array( 'elements' => $_POST['goodpractices'], 'table_name' => Oak::$goodpractices_table_name, 'properties' => Good_Practices::$properties ),
+            array( 'elements' => $_POST['performances'], 'table_name' => Oak::$performances_table_name, 'properties' => Performances::$properties ),
+            array( 'elements' => $_POST['sources'], 'table_name' => Oak::$sources_table_name, 'properties' => Sources::$properties ),
         );
 
         $objects = $_POST['objectsToSave'];
@@ -180,12 +174,11 @@ class Publishers {
 
         foreach( $elements_types_to_sync as $single_element_type_to_sync ) :
             $table_name = $single_element_type_to_sync['table_name'];
+
             foreach( $single_element_type_to_sync['elements'] as $element ) :
-                $result = $wpdb->insert(
-                    $table_name,
-                    $element
-                );
+                Corn_Import::corn_simple_register_element( $element, $table_name, $single_element_type_to_sync['properties'], false );
             endforeach;
+
         endforeach;
         
         
@@ -231,10 +224,11 @@ class Publishers {
                     $object_to_save[ $property ] = $object[ $property ];
                 endforeach;
                 
-                $result = $wpdb->insert(
-                    $wpdb->prefix . 'oak_model_' . $model->model_identifier,
-                    $object_to_save
-                );
+                Corn_Import::corn_simple_register_element( $object_to_save, $wpdb->prefix . 'oak_model_' . $model->model_identifier, null, true );
+                // $result = $wpdb->insert(
+                //     $wpdb->prefix . 'oak_model_' . $model->model_identifier,
+                //     $object_to_save
+                // );
 
             endif;
         endforeach;
@@ -272,7 +266,8 @@ class Publishers {
                 $single_element_type_to_confirm_for_sync['table_name'],
                 array (
                     $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'true'
-                )
+                ),
+                array()
             );
         endforeach;
         

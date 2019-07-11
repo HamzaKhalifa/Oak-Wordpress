@@ -67,7 +67,7 @@ class Sources {
 if ( 
     ( 
         isset( $_GET['elements'] ) && 
-        in_array( $_GET['elements'], ['sources'] ) 
+        in_array( $_GET['elements'], ['sources', 'publishers'] ) 
     ) || 
     ( 
         did_action( 'elementor/loaded' ) &&

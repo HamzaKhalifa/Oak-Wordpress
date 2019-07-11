@@ -782,11 +782,11 @@ class Corn_Import {
                 endif;
             endforeach;
             
-            $this->corn_simple_register_element( $element, $new_table_name, $properties, $is_object );
+            Corn_Import::corn_simple_register_element( $element, $new_table_name, $properties, $is_object );
         endforeach;
     }
 
-    function corn_simple_register_element( $element, $table_name, $properties, $is_object ) {
+    public static function corn_simple_register_element( $element, $table_name, $properties, $is_object ) {
         require_once get_template_directory() . '/functions/class-download-remote-image.php';
 
         global $wpdb;
@@ -834,8 +834,6 @@ class Corn_Import {
 
                 $image_incrementer = 0;
                 $found_image = false;
-                error_log('Images -----------------------------------');
-                error_log( Oak::$all_images );
                 do {
                     $oak_image_exploded = explode( '/', Oak::$all_images[ $image_incrementer ]->guid );
                     $oak_image_name = $oak_image_exploded[ count( $oak_image_exploded ) - 1 ];

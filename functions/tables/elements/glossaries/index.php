@@ -53,7 +53,7 @@ class Glossaries {
 if ( 
     ( 
         isset( $_GET['elements'] ) && 
-        in_array( $_GET['elements'], ['glossaries'] ) 
+        in_array( $_GET['elements'], ['glossaries', 'publishers'] ) 
     )
 ) 
     $glossaries = new Glossaries();
