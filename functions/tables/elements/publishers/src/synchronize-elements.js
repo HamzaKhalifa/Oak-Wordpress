@@ -32,6 +32,7 @@ function handleSyncButton() {
                                 'sources': data.data.sources,
                             },
                             success: function(response) {
+                                console.log(response);
                                 jQuery.ajax({
                                     type: 'POST', 
                                     url: ivwpAjaxUrl,
