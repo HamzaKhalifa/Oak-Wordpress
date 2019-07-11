@@ -418,7 +418,7 @@ class Corn_Import {
         ) );
     }
 
-    function get_all_images() {
+    public static function get_all_images() {
         $query_images_args = array(
             'post_type'      => 'attachment',
             'post_mime_type' => 'image',
@@ -434,7 +434,7 @@ class Corn_Import {
     function corn_delete_everything() {
         update_option( 'oak_corn_found_images', [] );
 
-        Oak::$all_images = $this->get_all_images()->posts;
+        Oak::$all_images = Corn_Import::get_all_images()->posts;
 
         Oak::delete_everything();
         

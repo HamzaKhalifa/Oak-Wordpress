@@ -158,6 +158,8 @@ class Publishers {
     public function save_sync_data() {
         global $wpdb; 
 
+        Oak::$all_images = Corn_Import::get_all_images()->posts;
+        
         $elements_types_to_sync = array(
             array( 'elements' => json_decode( stripslashes( $_POST['organizations'] ), true ), 'table_name' => Oak::$organizations_table_name, 'properties' => Organizations::$properties, Organizations::$properties ),
             array( 'elements' => json_decode( stripslashes( $_POST['publications'] ), true ), 'table_name' => Oak::$publications_table_name, 'properties' => Publications::$properties ),
