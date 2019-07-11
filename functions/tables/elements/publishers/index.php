@@ -169,8 +169,8 @@ class Publishers {
             array( 'elements' => json_decode( stripslashes( $_POST['sources'] ), true ), 'table_name' => Oak::$sources_table_name, 'properties' => Sources::$properties ),
         );
 
-        $objects = $_POST['objectsToSave'];
-        $terms_and_objects = $_POST['termsAndObjects'];
+        $objects =  json_decode( stripslashes( $_POST['objectsToSave'] ), true );
+        $terms_and_objects = json_decode( stripslashes( $_POST['termsAndObjects'] ), true );
 
         foreach( $elements_types_to_sync as $single_element_type_to_sync ) :
             $table_name = $single_element_type_to_sync['table_name'];
