@@ -52,7 +52,7 @@ class Taxonomies {
 
 if ( 
     ( 
-        isset( $_GET['elements'] ) 
+        isset( $_GET['elements'] )
     ) || 
     ( 
         did_action( 'elementor/loaded' ) &&

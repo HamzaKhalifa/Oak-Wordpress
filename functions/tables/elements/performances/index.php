@@ -67,7 +67,7 @@ class Performances {
 if ( 
     ( 
         isset( $_GET['elements'] ) && 
-        in_array( $_GET['elements'], ['performances', 'publishers'] ) 
+        in_array( $_GET['elements'], ['performances'] ) 
     ) ||
     (
         did_action( 'elementor/loaded' ) &&

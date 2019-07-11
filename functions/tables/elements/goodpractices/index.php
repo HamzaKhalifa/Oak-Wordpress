@@ -67,7 +67,7 @@ class Good_Practices {
 if ( 
     ( 
         isset( $_GET['elements'] ) && 
-        in_array( $_GET['elements'], ['goodpractices', 'publishers'] ) 
+        in_array( $_GET['elements'], ['goodpractices'] ) 
     ) || 
     ( 
         did_action( 'elementor/loaded' ) &&
