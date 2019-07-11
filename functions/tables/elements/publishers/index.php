@@ -254,6 +254,26 @@ class Publishers {
     public function all_elements_synchronized() {
         global $wpdb; 
 
+        $elements_types_to_confirm_for_sync = array(
+            array( 'element_name' => 'organization', 'table_name' => Oak::$organizations_table_name ),
+            array( 'element_name' => 'publication', 'table_name' => Oak::$publications_table_name ),
+            array( 'element_name' => 'quali', 'table_name' => Oak::$qualis_table_name ),
+            array( 'element_name' => 'quanti', 'table_name' => Oak::$quantis_table_name ),
+            array( 'element_name' => 'glossary', 'table_name' => Oak::$glossaries_table_name ),
+            array( 'element_name' => 'goodpractice', 'table_name' => Oak::$goodpractices_table_name ),
+            array( 'element_name' => 'performance', 'table_name' => Oak::$performances_table_name ),
+            array( 'element_name' => 'source', 'table_name' => Oak::$sources_table_name ),
+        );
+
+        foreach( $elements_types_to_confirm_for_sync as $single_element_type_to_confirm_for_sync ) :
+            $result = $wpdb->update (
+                $single_element_type_to_confirm_for_sync['table_name'],
+                array (
+                    $single_element_type_to_confirm_for_sync['element_name'] . '_synchronized' => 'true'
+                )
+            );
+        endforeach;
+        
         foreach( Oak::$all_objects_without_redundancy as $object ) :
             if ( $object->object_synchronized != 'true' ) :
                 $model_identifier = $object->object_model_identifier;
