@@ -184,6 +184,11 @@ class Publishers {
 
         endforeach;
         
+        error_log('*************');
+        error_log('Number of objects to save');
+        error_log( count( $objects ) );
+        error_log('*************');
+
         foreach( $objects as $object ) :
             // We delete all the terms related to our objects (we are gonna re-add them later)
             foreach( Oak::$terms_and_objects as $term_and_object ) :
