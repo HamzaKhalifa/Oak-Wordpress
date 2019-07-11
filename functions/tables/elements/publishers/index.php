@@ -159,18 +159,18 @@ class Publishers {
         global $wpdb; 
 
         $elements_types_to_sync = array(
-            array( 'elements' => $_POST['organizations'], 'table_name' => Oak::$organizations_table_name, 'properties' => Organizations::$properties, Organizations::$properties ),
-            array( 'elements' => $_POST['publications'], 'table_name' => Oak::$publications_table_name, 'properties' => Publications::$properties ),
-            array( 'elements' => $_POST['qualis'], 'table_name' => Oak::$qualis_table_name, 'properties' => Qualis::$properties ),
-            array( 'elements' => $_POST['quantis'], 'table_name' => Oak::$quantis_table_name, 'properties' => Quantis::$properties ),
-            array( 'elements' => $_POST['glossaries'], 'table_name' => Oak::$glossaries_table_name, 'properties' => Glossaries::$properties ),
-            array( 'elements' => $_POST['goodpractices'], 'table_name' => Oak::$goodpractices_table_name, 'properties' => Good_Practices::$properties ),
-            array( 'elements' => $_POST['performances'], 'table_name' => Oak::$performances_table_name, 'properties' => Performances::$properties ),
-            array( 'elements' => $_POST['sources'], 'table_name' => Oak::$sources_table_name, 'properties' => Sources::$properties ),
+            array( 'elements' => json_decode( stripslashes( $_POST['organizations'] ), true ), 'table_name' => Oak::$organizations_table_name, 'properties' => Organizations::$properties, Organizations::$properties ),
+            array( 'elements' => json_decode( stripslashes( $_POST['publications'] ), true ), 'table_name' => Oak::$publications_table_name, 'properties' => Publications::$properties ),
+            array( 'elements' => json_decode( stripslashes( $_POST['qualis'] ), true ), 'table_name' => Oak::$qualis_table_name, 'properties' => Qualis::$properties ),
+            array( 'elements' => json_decode( stripslashes( $_POST['quantis'] ), true ), 'table_name' => Oak::$quantis_table_name, 'properties' => Quantis::$properties ),
+            array( 'elements' => json_decode( stripslashes( $_POST['glossaries'] ), true ), 'table_name' => Oak::$glossaries_table_name, 'properties' => Glossaries::$properties ),
+            array( 'elements' => json_decode( stripslashes( $_POST['goodpractices'] ), true ), 'table_name' => Oak::$goodpractices_table_name, 'properties' => Good_Practices::$properties ),
+            array( 'elements' => json_decode( stripslashes( $_POST['performances'] ), true ), 'table_name' => Oak::$performances_table_name, 'properties' => Performances::$properties ),
+            array( 'elements' => json_decode( stripslashes( $_POST['sources'] ), true ), 'table_name' => Oak::$sources_table_name, 'properties' => Sources::$properties ),
         );
 
 
-        wp_send_json_success( array( 'elements_types_to_sync', $elements_types_to_sync ) );
+        wp_send_json_success( array( 'elements_types_to_sync' =>  $elements_types_to_sync ) );
 
         $objects = $_POST['objectsToSave'];
         $terms_and_objects = $_POST['termsAndObjects'];
