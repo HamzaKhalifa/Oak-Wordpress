@@ -70,6 +70,8 @@ class Publishers {
     }
 
     public function send_sync_data() {
+        global $wpdb;
+        
         $table_name = $wpdb->prefix . 'oak_organizations';
         $organizations = $wpdb->get_results ( "
             SELECT *
