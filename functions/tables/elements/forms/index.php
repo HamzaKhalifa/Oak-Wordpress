@@ -113,6 +113,10 @@ if (
         did_action( 'elementor/loaded' ) &&
         \Elementor\Plugin::$instance->editor != null &&
         \Elementor\Plugin::$instance->editor->is_edit_mode() 
+    ) || 
+    ( 
+        isset( $_GET['page'] ) && 
+        $_GET['page'] == 'oak_import_page'
     )
 ) 
     $forms = new Forms();

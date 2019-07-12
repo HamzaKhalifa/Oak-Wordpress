@@ -54,6 +54,10 @@ if (
     ( 
         isset( $_GET['elements'] ) && 
         in_array( $_GET['elements'], ['glossaries', 'publishers'] ) 
+    ) || 
+    ( 
+        isset( $_GET['page'] ) && 
+        $_GET['page'] == 'oak_import_page'
     )
 ) 
     $glossaries = new Glossaries();

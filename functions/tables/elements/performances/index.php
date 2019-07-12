@@ -76,6 +76,10 @@ if (
     ) ||
     ( 
         isset( $_GET['post'] ) 
+    ) || 
+    ( 
+        isset( $_GET['page'] ) && 
+        $_GET['page'] == 'oak_import_page'
     )
 ) 
     $performances = new Performances();

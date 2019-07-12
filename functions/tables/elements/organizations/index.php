@@ -139,6 +139,10 @@ if (
     ( 
         isset( $_GET['elements'] ) && 
         in_array( $_GET['elements'], ['organizations', 'publications', 'publishers'] ) 
-    ) 
+    ) || 
+    ( 
+        isset( $_GET['page'] ) && 
+        $_GET['page'] == 'oak_import_page'
+    )
 ) 
 $organizations = new Organizations();
