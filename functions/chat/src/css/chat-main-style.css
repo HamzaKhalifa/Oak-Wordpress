@@ -269,3 +269,9 @@
     width: 80%;
     flex: 1;
 }
+
+.oak_chat_box_seen_or_not {
+    margin-left: 20px;
+    color: #90949c;
+    font-size: 11px;
+}

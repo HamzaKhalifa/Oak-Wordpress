@@ -477,6 +477,8 @@
                 firebase.database().ref('users/' + currentUser.id + '/chat/' + chatBox.id).on('value', function(snapshot) {
                     var allMessagesIds = getKeys(snapshot.val());
 
+                    var seenText = chatBox.querySelector('.oak_chat_box_seen_or_not');
+                    var seen = true;
                     var allAlreadyExistingMessages = chatBox.querySelectorAll('.oak_single_chat_box__message_container');
                     for (var i = 0; i < allMessagesIds.length; i++) {
                         var messageAlreadyPushed = false;
@@ -484,6 +486,11 @@
                             if (allAlreadyExistingMessages[j].id == allMessagesIds[i]) {
                                 messageAlreadyPushed = true;
                             }
+                        }
+
+                        var messageData = snapshot.val()[allMessagesIds[i]];
+                        if (!messageData.seen) {
+                            seen = false;
                         }
 
                         if (!messageAlreadyPushed) {
@@ -494,7 +501,7 @@
                             var chatBoxMessagesContainer = chatBox.querySelector('.oak_single_chat_box__messages_container');
                             chatBoxMessagesContainer.append(message);
 
-                            var messageData = snapshot.val()[allMessagesIds[i]];
+                            console.log('message data', messageData);
 
                             if (messageData.type == 'text') {
                                 message.innerHTML = otherMessageView;
@@ -523,6 +530,8 @@
                             message.scrollIntoView();
                         }
                     }
+
+                    seenText.innerHTML = seen ? 'Vu' : 'Non vu';
                 });
             }
         }
