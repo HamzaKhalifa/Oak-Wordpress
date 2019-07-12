@@ -32,7 +32,7 @@ foreach( Oak::$models_without_redundancy as $key => $model ) :
                                     //     Oak::var_dump( $model_fields_names );
                                     // endif;
 
-                                    $field_copy->field_name_in_model = $model_fields_names[ count( $model_fields ) - 1 ];
+                                    // $field_copy->field_name_in_model = $model_fields_names[ count( $model_fields ) - 1 ];
                                     if ( isset( $_GET['model_identifier'] ) ) :
                                         if ( $model->model_identifier == $_GET['model_identifier'] ) :
                                             array_push( Oak::$current_model_fields, $field_copy );
