@@ -514,6 +514,8 @@ class Corn_Import {
             ) $charset_collate;";
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
             dbDelta( $models_sql );
+            
+            $wpdb->query("ALTER TABLE $table_name ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;");
 
             foreach( $model_fields as $key => $field ) :
                 // $column_name = 'object_' . $key . '_' . $field['field_identifier'];

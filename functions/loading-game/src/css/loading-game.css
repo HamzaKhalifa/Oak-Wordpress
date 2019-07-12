@@ -55,6 +55,7 @@
 
 .oak_loading_game_bar_text_message {
     font-size: 20px;
+    text-align: center;
 }
 
 .oak_loading_game_boulder, .oak_loading_game__explosion {
