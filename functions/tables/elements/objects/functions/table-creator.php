@@ -25,7 +25,7 @@ foreach( Oak::$models_without_redundancy as $key => $model ) :
                                     $field_copy->model_and_form_instance = $model_and_form_instance;
                                     $field_copy->form = $form;
 
-                                    if ( !isset( $model_fields_names[ count( $model_fields ) ] ) )
+                                    if ( !isset( $model_fields_names[ count( $model_fields ) ] ) ) :
                                         Oak::var_dump( $model->model_designation );
                                         Oak::var_dump( $model->model_designation );
                                         Oak::var_dump( $model->model_fields_names );
