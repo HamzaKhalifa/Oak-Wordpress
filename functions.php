@@ -1336,6 +1336,21 @@ class Oak {
         wp_send_json_success();
     }
 
+    public function check_table_exists( $table_name ) {
+        global $wpdb;
+        $my_tables=$wpdb->get_results("SHOW TABLES");
+        $exists = false;
+        foreach( $my_tables as $table ) :
+            foreach( $table as $key => $value ) :
+                if ( $value == $table_name ) :
+                    $exists = true;
+                endif;
+            endforeach;
+        endforeach;
+
+        return $exists;
+    }
+
     public static function delete_everything() {
         global $wpdb;
         $tables = [ Oak::$fields_table_name, Oak::$forms_table_name, Oak::$models_table_name, Oak::$taxonomies_table_name
@@ -1346,10 +1361,12 @@ class Oak {
 
         // Lets get the taxonomies (because delete_everything is called before tables.php) :
         $taxonomies_table_name = Oak::$taxonomies_table_name;
-        Oak::$taxonomies = $wpdb->get_results ( "
-            SELECT *
-            FROM  $taxonomies_table_name
-        " );
+        if ( $this->check_table_exists( $taxonomies_table_name ) ) :
+            Oak::$taxonomies = $wpdb->get_results ( "
+                SELECT *
+                FROM  $taxonomies_table_name
+            " );
+        endif;
         $reversed_taxonomies = array_reverse( Oak::$taxonomies );
         $taxonomies_without_redundancy = [];
         foreach( $reversed_taxonomies as $taxonomy ) :
@@ -1367,10 +1384,12 @@ class Oak {
 
         // Now lets get the models :
         $models_table_name = Oak::$models_table_name;
-        Oak::$models = $wpdb->get_results ( "
-            SELECT *
-            FROM  $models_table_name
-        " );
+        if ( $this->check_table_exists( $models_table_name ) ) :
+            Oak::$models = $wpdb->get_results ( "
+                SELECT *
+                FROM  $models_table_name
+            " );
+        endif;
         $reversed_models = array_reverse( Oak::$models );
         $models_without_redundancy = [];
         foreach( $reversed_models as $model ) :
@@ -1400,7 +1419,9 @@ class Oak {
         endforeach;
 
         foreach( $tables as $table ) :
-            $delete = $wpdb->query("DELETE FROM $table");
+            if ( $this->check_table_exists( $table ) ) :
+                $delete = $wpdb->query("DELETE FROM $table");
+            endif;
         endforeach;
     }
 
