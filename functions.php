@@ -1336,7 +1336,7 @@ class Oak {
         wp_send_json_success();
     }
 
-    public function check_table_exists( $table_name ) {
+    public static function check_table_exists( $table_name ) {
         global $wpdb;
         $my_tables=$wpdb->get_results("SHOW TABLES");
         $exists = false;
@@ -1361,7 +1361,7 @@ class Oak {
 
         // Lets get the taxonomies (because delete_everything is called before tables.php) :
         $taxonomies_table_name = Oak::$taxonomies_table_name;
-        if ( $this->check_table_exists( $taxonomies_table_name ) ) :
+        if ( Oak::check_table_exists( $taxonomies_table_name ) ) :
             Oak::$taxonomies = $wpdb->get_results ( "
                 SELECT *
                 FROM  $taxonomies_table_name
@@ -1384,7 +1384,7 @@ class Oak {
 
         // Now lets get the models :
         $models_table_name = Oak::$models_table_name;
-        if ( $this->check_table_exists( $models_table_name ) ) :
+        if ( Oak::check_table_exists( $models_table_name ) ) :
             Oak::$models = $wpdb->get_results ( "
                 SELECT *
                 FROM  $models_table_name
@@ -1419,7 +1419,7 @@ class Oak {
         endforeach;
 
         foreach( $tables as $table ) :
-            if ( $this->check_table_exists( $table ) ) :
+            if ( Oak::check_table_exists( $table ) ) :
                 $delete = $wpdb->query("DELETE FROM $table");
             endif;
         endforeach;
