@@ -23,17 +23,19 @@
             <select class="oak_grouped_actions__element oak_grouped_actions__first_property_filter" name="" id="">
                 <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == 'all' ) : echo('selected'); endif; endif; ?> value="all"><?php echo( $filters[0]['title'] ) ?></option>
                 <?php 
-                foreach( $filters[0]['choices'] as $choice ) : ?>
-                    <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
-                <?php
-                endforeach;
+                if ( count( $filters ) > 0  && isset( $filters[0]['choices'] ) ) :
+                    foreach( $filters[0]['choices'] as $choice ) : ?>
+                        <option <?php if( isset( $_GET['firstproperty'] ) ) : if ( $_GET['firstproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
+                    <?php
+                    endforeach;
+                endif;
                 ?>
             </select>
 
             <select class="oak_grouped_actions__element oak_grouped_actions__second_property_filter" name="" id="">
                 <option value="all"><?php echo( $filters[1]['title'] ); ?></option>
                 <?php
-                if ( count( $filters ) > 0 ) :
+                if ( count( $filters ) > 1 && isset( $filters[1]['choices'] ) ) :
                     foreach( $filters[1]['choices'] as $choice ) : ?>
                         <option <?php if( isset( $_GET['secondproperty'] ) ) : if ( $_GET['secondproperty'] == $choice['value'] ) : echo('selected'); endif; endif; ?> value="<?php echo( $choice['value'] ); ?>"><?php echo( $choice['innerHTML'] ); ?></option>
                     <?php

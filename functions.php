@@ -146,8 +146,6 @@ class Oak {
     function __construct() {
         global $wpdb;
 
-        // Oak::var_dump( get_option('oak_indexes') );
-
         Oak::$elements_script_properties_functions = [];
 
         Oak::$text_domain = 'oak';

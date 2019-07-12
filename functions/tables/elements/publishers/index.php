@@ -69,6 +69,70 @@ class Publishers {
         add_action('wp_ajax_nopriv_all_elements_synchronized', array( $this, 'all_elements_synchronized') );
     }
 
+    public function get_models_without_redundancy() {
+        global $wpdb; 
+
+        $models_table_name = $wpdb->prefix . 'oak_models';
+        $models = $wpdb->get_results ( "
+            SELECT * 
+            FROM  $models_table_name
+        " );
+        $reversed_models = array_reverse( $models );
+        $models_without_redundancy = [];
+        foreach( $reversed_models as $model ) :
+            $added = false;
+            foreach( $models_without_redundancy as $model_without_redundancy ) :
+                if ( $model_without_redundancy->model_identifier == $model->model_identifier ) :
+                    $added = true;
+                endif;
+            endforeach;
+            if ( !$added ) :
+                $models_without_redundancy[] = $model;
+            endif;
+        endforeach;
+
+        return $models_without_redundancy;
+    }
+
+    public function get_all_objects_without_redundancy() {
+        global $wpdb; 
+
+        $all_objects_without_redundancy = [];
+
+        $models_without_redundancy = $this->get_models_without_redundancy();
+
+        
+        $all_objects = [];
+        foreach( $models_without_redundancy as $model ) :
+            $table_name = $wpdb->prefix . 'oak_model_' . $model->model_identifier;
+        
+            $model_objects = [];
+            $model_objects = $wpdb->get_results ( "
+                SELECT * 
+                FROM $table_name
+            " );
+        
+            foreach( $model_objects as $object ) :
+                $object->model = $model->model_identifier;
+            endforeach;
+        
+            $all_objects = array_merge( $all_objects, $model_objects );
+        endforeach;
+
+        $objects_reversed = array_reverse( $all_objects );
+        foreach( $objects_reversed as $object ) :
+            $exists = false;
+            foreach( $all_objects_without_redundancy as $object_without_redundancy) :
+                if ( $object_without_redundancy->object_identifier == $object->object_identifier ) 
+                    $exists = true;
+            endforeach;
+            if ( !$exists )
+                $all_objects_without_redundancy[] = $object;
+        endforeach;
+
+        return $all_objects_without_redundancy;
+    }
+
     public function send_sync_data() {
         global $wpdb;
 
@@ -128,16 +192,19 @@ class Publishers {
             WHERE glossary_synchronized = 'false' OR glossary_synchronized IS NULL
         " );
         
+        $all_objects_without_redundancy = $this->get_all_objects_without_redundancy();
+
+        $terms_and_objects_table_name = $wpdb->prefix . 'oak_terms_and_objects';
+        $terms_and_objects = $wpdb->get_results ( "
+            SELECT * 
+            FROM $terms_and_objects_table_name
+            WHERE term_and_object_synchronized = 'false' OR term_and_object_synchronized IS NULL
+        " );
+
         $objects_to_send = [];
-        $terms_and_objects_to_send = [];
-        foreach( Oak::$all_objects_without_redundancy as $object ) :
+        foreach( $all_objects_without_redundancy as $object ) :
             if ( $object->object_synchronized == 'false' ) :
                 $objects_to_send[] = $object;
-                foreach( Oak::$terms_and_objects as $term_and_object ) :
-                    if ( $term_and_object->object_identifier == $object->object_identifier ) :
-                        $terms_and_objects_to_send[] = $term_and_object;
-                    endif;
-                endforeach;
             endif;
         endforeach;
         
@@ -151,7 +218,7 @@ class Publishers {
             'performances' => $performances,
             'sources' => $sources,
             'objects' => $objects_to_send,
-            'terms_and_objects' => $terms_and_objects_to_send,
+            'terms_and_objects' => $terms_and_objects,
         ) );
     }
 
@@ -161,14 +228,14 @@ class Publishers {
         Oak::$all_images = Corn_Import::get_all_images()->posts;
 
         $elements_types_to_sync = array(
-            array( 'elements' => json_decode( stripslashes( $_POST['organizations'] ), true ), 'table_name' => Oak::$organizations_table_name, 'properties' => Organizations::$properties, Organizations::$properties ),
-            array( 'elements' => json_decode( stripslashes( $_POST['publications'] ), true ), 'table_name' => Oak::$publications_table_name, 'properties' => Publications::$properties ),
-            array( 'elements' => json_decode( stripslashes( $_POST['qualis'] ), true ), 'table_name' => Oak::$qualis_table_name, 'properties' => Qualis::$properties ),
-            array( 'elements' => json_decode( stripslashes( $_POST['quantis'] ), true ), 'table_name' => Oak::$quantis_table_name, 'properties' => Quantis::$properties ),
-            array( 'elements' => json_decode( stripslashes( $_POST['glossaries'] ), true ), 'table_name' => Oak::$glossaries_table_name, 'properties' => Glossaries::$properties ),
-            array( 'elements' => json_decode( stripslashes( $_POST['goodpractices'] ), true ), 'table_name' => Oak::$goodpractices_table_name, 'properties' => Good_Practices::$properties ),
-            array( 'elements' => json_decode( stripslashes( $_POST['performances'] ), true ), 'table_name' => Oak::$performances_table_name, 'properties' => Performances::$properties ),
-            array( 'elements' => json_decode( stripslashes( $_POST['sources'] ), true ), 'table_name' => Oak::$sources_table_name, 'properties' => Sources::$properties ),
+            array( 'element_name' => 'organization', 'elements' => json_decode( stripslashes( $_POST['organizations'] ), true ), 'table_name' => Oak::$organizations_table_name, 'properties' => Organizations::$properties, Organizations::$properties ),
+            array( 'element_name' => 'publication', 'elements' => json_decode( stripslashes( $_POST['publications'] ), true ), 'table_name' => Oak::$publications_table_name, 'properties' => Publications::$properties ),
+            array( 'element_name' => 'quali', 'elements' => json_decode( stripslashes( $_POST['qualis'] ), true ), 'table_name' => Oak::$qualis_table_name, 'properties' => Qualis::$properties ),
+            array( 'element_name' => 'quanti', 'elements' => json_decode( stripslashes( $_POST['quantis'] ), true ), 'table_name' => Oak::$quantis_table_name, 'properties' => Quantis::$properties ),
+            array( 'element_name' => 'glossary', 'elements' => json_decode( stripslashes( $_POST['glossaries'] ), true ), 'table_name' => Oak::$glossaries_table_name, 'properties' => Glossaries::$properties ),
+            array( 'element_name' => 'goodpractice', 'elements' => json_decode( stripslashes( $_POST['goodpractices'] ), true ), 'table_name' => Oak::$goodpractices_table_name, 'properties' => Good_Practices::$properties ),
+            array( 'element_name' => 'performance', 'elements' => json_decode( stripslashes( $_POST['performances'] ), true ), 'table_name' => Oak::$performances_table_name, 'properties' => Performances::$properties ),
+            array( 'element_name' => 'source', 'elements' => json_decode( stripslashes( $_POST['sources'] ), true ), 'table_name' => Oak::$sources_table_name, 'properties' => Sources::$properties ),
         );
 
         $objects =  json_decode( stripslashes( $_POST['objectsToSave'] ), true );
@@ -179,73 +246,17 @@ class Publishers {
 
             foreach( $single_element_type_to_sync['elements'] as $element ) :
                 unset( $element['id'] );
+                $element[ $single_element_type_to_sync['element_name'] . '_synchronized' ] = 'true';
                 Corn_Import::corn_simple_register_element( $element, $table_name, $single_element_type_to_sync['properties'], false );
             endforeach;
 
         endforeach;
-        
-        error_log('*************');
-        error_log('Number of objects to save');
-        error_log( count( $objects ) );
-        error_log('*************');
 
         foreach( $objects as $object ) :
-            // We delete all the terms related to our objects (we are gonna re-add them later)
-            foreach( Oak::$terms_and_objects as $term_and_object ) :
-                if ( $term_and_object->object_identifier == $object['object_identifier'] ) :
-                    $wpdb->delete(
-                        $wpdb->prefix . 'oak_terms_and_objects',
-                        array( 'term_identifier' => $term_and_object->term_identifier, 'object_identifier' => $object['object_identifier'] )
-                    );
-                endif;
-            endforeach;
-
-            // Lets get the model:
-            $found_model = false;
-            $counter = 0;
-            $model = null;
-            do {
-                if ( Oak::$models_without_redundancy[ $counter ]->model_identifier == $object['object_model_identifier'] ) :
-                    $found_model = true;
-                    $model = Oak::$models_without_redundancy[ $counter ];
-                endif;
-                $counter++;
-            } while( !$found_model && $counter < count( Oak::$models_without_redundancy ) );
-
-            if ( $model != null ) :
-                // Lets get the model fields
-                $model_fields = Models::get_model_fields( $model, false );
-
-                $object_to_save = array(
-                    'object_synchronized' => 'true',
-                );
-                foreach( $model_fields as $key => $field ) :
-                    $column_name = 'object_' . $key . '_' . $field->field_identifier;
-                    $object_to_save[ $column_name ] = $object[ $column_name ];
-                endforeach;
-
-                $default_properties = array('object_designation', 'object_identifier', 'object_modification_time', 'object_content_language', 'object_model_selector', 'object_selector',
-                        'object_locked', 'object_state', 'object_trashed', 'object_selectors', 'object_form_selectors', 'object_model_selector');
-
-                foreach( $default_properties as $property ) :
-                    $object_to_save[ $property ] = $object[ $property ];
-                endforeach;
-                
-                
-                error_log('**************');
-                error_log('object to save identifier');
-                error_log( $object_to_save['object_identifier'] );
-                error_log('table name');
-                error_log( $wpdb->prefix . 'oak_model_' . $model->model_identifier );
-                error_log('**************');
-                Corn_Import::corn_simple_register_element( $object_to_save, $wpdb->prefix . 'oak_model_' . $model->model_identifier, null, true );
-                // $result = $wpdb->insert(
-                //     $wpdb->prefix . 'oak_model_' . $model->model_identifier,
-                //     $object_to_save
-                // );
-
-            endif;
+            $object['object_synchronized'] = 'true';
         endforeach;
+
+        Corn_Import::corn_save_element( $objects, '', null );
 
         // Now lets insert all the terms: 
         foreach( $terms_and_objects as $term_and_object ) :
@@ -253,7 +264,8 @@ class Publishers {
                 $wpdb->prefix . 'oak_terms_and_objects',
                 array(
                     'term_identifier' => $term_and_object['term_identifier'],
-                    'object_identifier' => $term_and_object['object_identifier']
+                    'object_identifier' => $term_and_object['object_identifier'],
+                    'term_and_object_synchronized' => 'true'
                 )
             );
         endforeach;
@@ -273,7 +285,23 @@ class Publishers {
             array( 'element_name' => 'goodpractice', 'table_name' => Oak::$goodpractices_table_name ),
             array( 'element_name' => 'performance', 'table_name' => Oak::$performances_table_name ),
             array( 'element_name' => 'source', 'table_name' => Oak::$sources_table_name ),
+            array( 'element_name' => 'source', 'table_name' => Oak::$sources_table_name ),
         );
+
+        $terms_and_objects_table_name = Oak::$terms_and_objects_table_name;
+        $all_terms_and_objects = $wpdb->get_results ( "
+            SELECT *
+            FROM $terms_and_objects_table_name
+        " );
+        foreach( $all_terms_and_objects as $term_and_object ) :
+            $result = $wpdb->update (
+                $terms_and_objects_table_name,
+                array (
+                    'term_and_object_synchronized' => 'true'
+                ),
+                array( 'id' => $term_and_object->id )
+            );
+        endforeach;
 
         foreach( $elements_types_to_confirm_for_sync as $single_element_type_to_confirm_for_sync ) :
             $table_name = $single_element_type_to_confirm_for_sync['table_name'];
@@ -283,12 +311,6 @@ class Publishers {
                 FROM $table_name
             " );
             $identifier_property = $single_element_type_to_confirm_for_sync['element_name'] . '_identifier';
-
-            error_log('---------');
-            error_log($table_name);
-            error_log( count( $elements ) );
-            error_log( $identifier_property );
-            error_log('---------');
 
             foreach( $elements as $element ) :
                 $identifier = $element->$identifier_property;
@@ -301,18 +323,12 @@ class Publishers {
                 );
             endforeach;
         endforeach;
-        error_log('**************');
-        error_log('number of objects without redundancy: ');
-        error_log( count( Oak::$all_objects_without_redundancy ) );
-        error_log('**************');
 
-        foreach( Oak::$all_objects_without_redundancy as $object ) :
-            error_log('**************');
-            error_log( $object->object_synchronized );
-            error_log('**************');
+        $all_objects_without_redundancy = $this->get_all_objects_without_redundancy();
+        foreach( $all_objects_without_redundancy as $object ) :
 
             if ( $object->object_synchronized != 'true' ) :
-                $model_identifier = $object->object_model_identifier;
+                $model_identifier = $object->model;
                 $table_name = $wpdb->prefix . 'oak_model_' . $model_identifier;
 
                 $result = $wpdb->update (

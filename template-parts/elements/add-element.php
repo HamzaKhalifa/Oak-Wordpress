@@ -754,7 +754,7 @@ $modification_time_property = $table . '_modification_time';
                         <input  value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $last_revision->$property_name ) ); endif; ?>" class="oak_text_field <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
                     </div>
                     <span class="oak_text_field_placeholder <?php if( count( $revisions ) > 0 && $last_revision->$property_name != '' ) : echo('oak_text_field_placeholder_not_focused_but_something_written'); endif; ?>"><?php echo( $property['placeholder'] ); ?></span>
-                    <div class="text_field_line <?php if( count( $revisions ) > 0 && $last_revision->property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
+                    <div class="text_field_line <?php if( count( $revisions ) > 0 && $last_revision->$property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
                     <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
                 </div><?php
             elseif ( $property['input_type'] == 'textarea' ) : ?>
@@ -769,7 +769,7 @@ $modification_time_property = $table . '_modification_time';
                         <textarea class="oak_text_field <?php echo( $table . '_' . $property['name'] . '_input' ) ?>" name="" id="" cols="30" rows="5"  ><?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $last_revision->$property_name ) ); endif; ?></textarea>
                     </div>
                     <span class="oak_text_field_placeholder <?php if( count( $revisions ) > 0 && $last_revision->$property_name != '' ) : echo('oak_text_field_placeholder_not_focused_but_something_written'); endif; ?>"><?php echo( $property['placeholder'] ); ?></span>
-                    <div class="text_field_line <?php if( count( $revisions ) > 0 && $last_revision->property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
+                    <div class="text_field_line <?php if( count( $revisions ) > 0 && $last_revision->$property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
                     <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
                 </div><?php
             elseif ( $property['input_type'] == 'color' ) : ?>
@@ -783,7 +783,7 @@ $modification_time_property = $table . '_modification_time';
                     <div class="color_additional_container">
                         <input type="<?php echo( $property['input_type'] ); ?>" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $last_revision->$property_name ) ); endif; ?>" class="oak_color <?php echo( $table . '_' . $property['name'] . '_input' ) ?>">
                     </div>
-                    <div class="text_field_line <?php if( count( $revisions ) > 0 && $last_revision->property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
+                    <div class="text_field_line <?php if( count( $revisions ) > 0 && $last_revision->$property_name != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
                     <span class="text_field_description"><?php echo( $property['description'] ); ?></span>
                 </div><?php
             elseif ( $property['input_type'] == 'select' ) : ?>
