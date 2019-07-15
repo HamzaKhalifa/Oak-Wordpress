@@ -85,6 +85,8 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 		$frame_objects_data = get_option('oak_scr_side_frame_objects_data');
 
 		$selected_frame_object_data = $frame_objects_data[ $settings['frame_object'] - 1 ];
+
+
 		$selected_frame_object_identifier = $selected_frame_object_data->object_identifier;
 
 		$field_index = $settings[ $selected_frame_object_identifier ];

@@ -94,7 +94,11 @@ if (
         isset( $_GET['elements'] ) 
     ) || 
     ( 
-        !is_admin()
+        isset( $_GET['post'] ) 
+    ) || 
+    ( 
+        isset( $_GET['page'] ) && 
+        $_GET['page'] == 'oak_corn_configuration_page'
     )
 ) 
     $terms = new Terms();

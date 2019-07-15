@@ -95,8 +95,7 @@ if (
     ( 
         isset( $_GET['elements'] ) && 
         in_array( $_GET['elements'], [ 'organizations', 'publications', 'taxonomies', 'terms', 'objects', 'sources', 'performances', 'goodpractices', 'qualis', 'quantis', 'publishers'] ) 
-    )
-    ||
+    ) ||
     (
         !is_admin()
     ) ||

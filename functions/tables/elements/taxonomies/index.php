@@ -55,7 +55,7 @@ if (
         isset( $_GET['elements'] )
     ) || 
     ( 
-        !is_admin()
-    )
+        isset( $_GET['post'] ) 
+    ) 
 ) 
     $taxonomies = new Taxonomies();

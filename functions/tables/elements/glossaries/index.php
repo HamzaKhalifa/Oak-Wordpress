@@ -62,6 +62,9 @@ if (
     ( 
         isset( $_GET['page'] ) && 
         $_GET['page'] == 'oak_corn_configuration_page'
-    )
+    ) || 
+    ( 
+        isset( $_GET['post'] ) 
+    ) 
 ) 
     $glossaries = new Glossaries();
