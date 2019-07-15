@@ -21,7 +21,6 @@ Class Dynamic_Csr_Side_Index_Tag extends \Elementor\Core\DynamicTags\Tag {
 
 	protected function _register_controls() {
     	$indexes_data = get_option('oak_indexes') == false ? [] : get_option('oak_indexes');
-		Oak::var_dump( $indexes_data );
 		$frame_objects_designations = [''];
 		$frame_objects_data = [];
 		foreach( Oak::$all_frame_objects_without_redundancy as $key => $frame_object ) :
