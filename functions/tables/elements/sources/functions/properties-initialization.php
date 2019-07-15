@@ -149,22 +149,9 @@ Sources::$properties = array(
         'choices' => Oak::$objects_array,
         'placeholder' => __( 'Object', Oak::$text_domain ), 
         'description' => __( 'Object.', Oak::$text_domain ), 
-        'width' => '50',
+        'width' => '100',
         'depends' => array(
             array( 'name' => 'type', 'values' => array( 'internal' ) ),
-        ),
-    ),
-    array ( 
-        'name' => 'link_title', 
-        'property_name' => 'source_link_title', 
-        'type' => 'text', 
-        'input_type' => 'text',
-        'placeholder' => __( 'Titre du lien', Oak::$text_domain ), 
-        'description' => __( 'Titre du lien.', Oak::$text_domain ), 
-        'width' => '50',
-        'translatable' => true,
-        'depends' => array(
-            array( 'name' => 'type', 'values' => array( 'external' ) ),
         ),
     ),
     array ( 

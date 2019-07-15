@@ -519,6 +519,8 @@ function createElementData(state) {
     // For the language: 
     elementData[DATA.table + '_content_language'] = document.querySelector('.oak_system_bar__languages_select').value;
 
+    console.log('element data', elementData);
+
     return elementData;
 }
 
