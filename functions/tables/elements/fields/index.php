@@ -138,8 +138,10 @@ if (
     ( 
         isset( $_GET['page'] ) && 
         $_GET['page'] == 'oak_import_page'
+    ) || 
+    ( 
+        isset( $_GET['page'] ) && 
+        $_GET['page'] == 'oak_corn_configuration_page'
     )
-
-    
 ) 
     $fields = new Fields();
