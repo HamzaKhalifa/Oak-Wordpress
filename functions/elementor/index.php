@@ -151,7 +151,7 @@ class Oak_Elementor {
 
                 $object_number = $index + 1;
 
-                update_post_meta( get_the_ID(), 'Oak: Object ' . $object_number . ': ' . $object->object_designation . ', Designation', $object->object_designation );
+                update_post_meta( get_the_ID(), 'Oak: Objet ' . $object_number . ': ' . $object->object_designation . ', Designation', $object->object_designation );
                 $generic_widget = new Generic_Widget();
                 $generic_widget->set_widgets_options( $widget_options );
                 $widgets_manager->register_widget_type( $generic_widget );
@@ -187,7 +187,7 @@ class Oak_Elementor {
                         'field_type' => $object_model_field->field_type
                     );
 
-                    update_post_meta( get_the_ID(), 'Oak: Object ' . $object_number . ': ' . $object->object_designation . ', Champ ' . count( $the_returned_fields ) . ': ' . $object_model_field_names_array[ $key ], $value );
+                    update_post_meta( get_the_ID(), 'Oak: Objet ' . $object_number . ': ' . $object->object_designation . ', Champ ' . count( $the_returned_fields ) . ': ' . $object_model_field_names_array[ $key ], $value );
                     $generic_widget = new Generic_Widget();
                     $generic_widget->set_widgets_options( $widget_options );
                     $widgets_manager->register_widget_type( $generic_widget );
