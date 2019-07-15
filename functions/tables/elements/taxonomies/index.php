@@ -55,9 +55,7 @@ if (
         isset( $_GET['elements'] )
     ) || 
     ( 
-        did_action( 'elementor/loaded' ) &&
-        \Elementor\Plugin::$instance->editor != null &&
-        \Elementor\Plugin::$instance->editor->is_edit_mode() 
+        !is_admin()
     )
 ) 
     $taxonomies = new Taxonomies();
