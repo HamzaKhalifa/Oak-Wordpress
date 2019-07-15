@@ -501,8 +501,6 @@
                             var chatBoxMessagesContainer = chatBox.querySelector('.oak_single_chat_box__messages_container');
                             chatBoxMessagesContainer.append(message);
 
-                            console.log('message data', messageData);
-
                             if (messageData.type == 'text') {
                                 message.innerHTML = otherMessageView;
                                 message.querySelector('.oak_message_text_style').innerHTML = messageData.message;

@@ -4,14 +4,26 @@ include_once get_template_directory() . '/functions/tables/constants/social-medi
 
 Oak::$publications_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucune Publication sélectionnée', Oak::$text_domain ) ) ];
 Oak::$frame_publications_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucune Publication sélectionnée', Oak::$text_domain ) ) ];
+Oak::$pdf_publications_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucune Publication sélectionnée', Oak::$text_domain ) ) ];
 foreach( Oak::$publications_without_redundancy as $publication ) :
     Oak::$publications_array[] = array( 'value' => $publication->publication_identifier, 'innerHTML' => $publication->publication_designation );
     if ( $publication->publication_report_or_frame == 'frame' ) :
         Oak::$frame_publications_array[] = array( 'value' => $publication->publication_identifier, 'innerHTML' => $publication->publication_designation );
     endif;
+    if ( $publication->publication_format == 'pdf' ) :
+        Oak::$pdf_publications_array[] = array( 'value' => $publication->publication_identifier, 'innerHTML' => $publication->publication_designation );
+    endif;
 endforeach;
 
-Oak::$organizations_array = [];
+Oak::$all_posts_and_pages_array = [ array ( 'value' => '0', 'innerHTML' => __( 'Aucun(e) posts/page sélectionné(e)', Oak::$text_domain ) ) ];
+if ( isset( $_GET['elements'] ) && $_GET['elements'] == 'sources' ) :
+    $all_posts_and_pages = Oak::oak_get_all_posts_and_pages();
+    foreach( $all_posts_and_pages as $post_or_page ) :
+        Oak::$all_posts_and_pages_array[] = array('value' => $post_or_page->ID, 'innerHTML' => $post_or_page->post_title );
+    endforeach;
+endif;
+
+Oak::$organizations_array = [ array( 'value' => '', 'innerHTML' => 'Aucune organisation sélectionnée' ) ];
 foreach( Oak::$organizations_without_redundancy as $organization ) :
     Oak::$organizations_array[] = array( 'value' => $organization->organization_identifier, 'innerHTML' => $organization->organization_designation );
 endforeach;

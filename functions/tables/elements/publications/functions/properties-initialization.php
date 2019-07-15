@@ -109,6 +109,7 @@ Publications::$properties = array (
         'choices' => array(
             array( 'value' => 'report', 'innerHTML' => 'Rapport' ),
             array( 'value' => 'frame', 'innerHTML' => 'Cadres RSE' ),
+            array( 'value' => 'corporate', 'innerHTML' => 'Corporate' ),
         ),
         'placeholder' => __( 'Rapport/Cadre RSE', Oak::$text_domain ), 
         'description' => __( 'Rapport/Cadre RSE', Oak::$text_domain ), 
@@ -153,6 +154,24 @@ Publications::$properties = array (
         'width' => '50',
         'depends' => array(
             array( 'name' => 'report_or_frame', 'values' => array( 'report' ) )
+        )
+    ),
+    array ( 
+        'name' => 'corporate_type', 
+        'property_name' => 'publication_corporate_type', 
+        'type' => 'text',
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => array(
+            array ( 'value' => 'chart', 'innerHTML' => __( 'Charte', Oak::$text_domain ) ),
+            array ( 'value' => 'politics', 'innerHTML' => __( 'Politique', Oak::$text_domain ) ),
+            array ( 'value' => 'corporate-site', 'innerHTML' => __( 'Site Corporate', Oak::$text_domain ) ), 
+        ),
+        'placeholder' => __( 'Type de Publication Corporate', Oak::$text_domain ), 
+        'description' => __( 'Type de Publication Corporate', Oak::$text_domain ), 
+        'width' => '100',
+        'depends' => array(
+            array( 'name' => 'report_or_frame', 'values' => array( 'corporate' ) )
         )
     ),
     array ( 

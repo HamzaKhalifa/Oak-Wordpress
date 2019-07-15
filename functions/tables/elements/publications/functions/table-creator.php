@@ -23,6 +23,7 @@ $publications_sql = "CREATE TABLE $publications_table_name (
     publication_country varchar(555),
     publication_report_type varchar(555),
     publication_frame_type varchar(555),
+    publication_corporate_type varchar(555),
     publication_sectorial_frame varchar(555),
     publication_sectors varchar(555),
     publication_language varchar(555),

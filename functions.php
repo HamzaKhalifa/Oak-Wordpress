@@ -123,6 +123,7 @@ class Oak {
     public static $social_medias;
     public static $publications_array = [];
     public static $frame_publications_array = [];
+    public static $pdf_publications_array = [];
     public static $organizations_array = [];
     public static $glossaries_array = [];
     public static $quantis_and_qualis = [];
@@ -142,6 +143,7 @@ class Oak {
     public static $regions = [];
     public static $all_images = [];
     public static $content_filters = [];
+    public static $all_posts_and_pages_array = [];
 
     function __construct() {
         global $wpdb;
