@@ -81,6 +81,15 @@
                 <span class="oak_passiv oak_list_titles_container__title"><?php echo( $filters[2]['title'] ); ?></span>
             </div>
 
+            <?php
+            if ( isset( $filters[3] ) ) : ?>
+                <div class="oak_list_row__container">
+                    <span class="oak_passiv oak_list_titles_container__title"><?php echo( $filters[3]['title'] ); ?></span>
+                </div>
+                <?php
+            endif;
+            ?>
+
             <div class="oak_list_row__container">
                 <i class="fas fa-file-invoice"></i>
                 <span class="oak_passiv oak_list_titles_container__title"><?php _e( 'Dernière modification', Oak::$text_domain ); ?></span>
@@ -164,6 +173,7 @@
                 $the_first_property = $filters[0]['property'];
                 $the_second_property = $filters[1]['property'];
                 $the_third_property = $filters[2]['property'];
+                $the_fourth_property = isset( $filters[3] ) ? $filters[3]['property'] : '';
 
                 $designation_to_show = $element->$designation_property;
 
@@ -207,7 +217,17 @@
                         </div>
 
                         <div class="oak_list_row__container">
-                            <span class="oak_list_titles_container__title oak_list_nature"><?php echo( esc_attr( $element->$the_first_property ) ); ?></span>
+                            <?php
+                            $first_property_value = $element->$the_first_property;
+                            if ( $_GET['elements'] == 'publications' ) :
+                                foreach( Oak::$organizations_without_redundancy as $organization ) :
+                                    if ( $organization->organization_identifier == $first_property_value ) :
+                                        $first_property_value = $organization->organization_designation;
+                                    endif;
+                                endforeach;
+                            endif;
+                            ?>
+                            <span class="oak_list_titles_container__title oak_list_nature"><?php echo( esc_attr( $first_property_value ) ); ?></span>
                         </div>
 
                         <div class="oak_list_row__container">
@@ -217,6 +237,15 @@
                         <div class="oak_list_row__container">
                             <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$the_third_property ) ); ?></span>
                         </div>
+                        
+                        <?php
+                        if ( isset( $filters[3] ) ) : ?>
+                            <div class="oak_list_row__container">
+                                <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$the_fourth_property ) ); ?></span>
+                            </div>
+                        <?php
+                        endif;
+                        ?>
                         
                         <div class="oak_list_row__container">
                             <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$modification_time_property ) ); ?></span>

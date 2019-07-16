@@ -11,10 +11,11 @@ class Publications {
             $this->properties_to_enqueue_for_script();
         };
         
-        Publications::$filters = array(
+        Publications::$filters = array (
+            array ( 'title' => __( 'Organisation', Oak::$text_domain ), 'property' => 'publication_organization' ),
             array ( 'title' => __( 'Année', Oak::$text_domain ), 'property' => 'publication_year' ),
-            array ( 'title' => __( 'Format', Oak::$text_domain ), 'property' => 'publication_format' ),
-            array ( 'title' => __( 'Instances', Oak::$text_domain ), 'property' => 'publication_format' )
+            array ( 'title' => __( 'Langue', Oak::$text_domain ), 'property' => 'publication_language' ),
+            array ( 'title' => __( 'Format', Oak::$text_domain ), 'property' => 'publication_format' )
         );
 
        
