@@ -76,7 +76,7 @@
             <textarea placeholder="<?php _e( 'Saisissez votre message ici', Oak::$text_domain ); ?>" name="" id="" cols="30" rows="10" class="oak_single_chat_box_message_textarea"></textarea>
             <div class="oak_single_chat_box_message_form__buttons_container">
                 <i class="fas fa-file">
-                    <input type="file" accept="application/*" class="oak_single_chat_box_message_form__files_button">
+                    <input type="file" accept="application/* text/xml" class="oak_single_chat_box_message_form__files_button">
                 </i>
 
                 <i class="fas fa-images">
