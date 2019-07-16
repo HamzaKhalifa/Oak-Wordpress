@@ -164,6 +164,7 @@ Publications::$properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
+            array ( 'value' => '0', 'innerHTML' => __( 'Aucun type n\'est sélectionné', Oak::$text_domain ) ),
             array ( 'value' => 'reference-document', 'innerHTML' => __( 'Document de référence', Oak::$text_domain ) ),
             array ( 'value' => 'annual-report', 'innerHTML' => __( 'Rapport annuel', Oak::$text_domain ) ),
             array ( 'value' => 'integrated-reporting', 'innerHTML' => __( 'Reporting intégré', Oak::$text_domain ) ), 
