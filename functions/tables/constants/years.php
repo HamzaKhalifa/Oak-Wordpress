@@ -1,5 +1,6 @@
 <?php
 Oak::$years = array(
+    array ( 'value' => '0', 'innerHTML' => 'Aucune année sélectionnée' ),
     array ( 'value' => '1990', 'innerHTML' => '1990' ),
     array ( 'value' => '1991', 'innerHTML' => '1991' ),
     array ( 'value' => '1992', 'innerHTML' => '1992' ),

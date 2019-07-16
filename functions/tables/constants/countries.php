@@ -1,5 +1,10 @@
 <?php
 Oak::$countries = array (
+    array(
+        "value" => "0",
+        "innerHTML" => "Aucun pays sélectionné",
+        "type" => "country"
+    ),
     array (
         "value" => "Afghanistan",
         "innerHTML" => "Afghanistan",
@@ -1249,6 +1254,11 @@ Oak::$countries = array (
         "value" => "Zimbabwe",
         "innerHTML" => "Zimbabwe",
         "type" => "country"
+    ),
+    array (
+        "value" => "00",
+        "innerHTML" => "Aucune région sélectionnée",
+        "type" => "region"
     ),
     array (
         "value" => "Europe",

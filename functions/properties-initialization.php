@@ -57,7 +57,7 @@ endforeach;
 
 include get_template_directory() . '/functions/tables/constants/countries.php';
 
-Oak::$languages = array();
+Oak::$languages = [ array( 'value' => '0', 'innerHTML' => __( 'Aucune langue sélectionnée' ) ) ];
 Oak::$languages_names = Oak::oak_get_languages();
 
 // if ( isset( $_GET['elements'] ) && ( $_GET['elements'] == 'publications' || $_GET['elements'] == 'organizations' || $_GET['elements'] == 'performances' ) ) :

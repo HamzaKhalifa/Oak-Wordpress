@@ -136,7 +136,7 @@ $modification_time_property = $table . '_modification_time';
                 <input type="text" value="<?php if ( count( $revisions ) > 0 ) : echo( esc_attr( $last_revision->$designation_property ) ); endif; ?>" class="oak_text_field <?php echo( $table . '_designation_input' ); ?>">
                 <span class="oak_text_field_placeholder <?php if( count( $revisions ) > 0 && $last_revision->$designation_property != '' ) : echo('oak_text_field_placeholder_not_focused_but_something_written'); endif; ?>"><?php _e( 'Designation', Oak::$text_domain ); ?></span>
                 <div class="text_field_line <?php if( count( $revisions ) > 0 && $last_revision->$designation_property != '' ) : echo('text_field_line_not_focused_but_something_written'); endif; ?>"></div>
-                <span class="text_field_description"><?php _e('Nom'); ?></span>
+                <span class="text_field_description"><?php _e('Désignation'); ?></span>
             </div>
 
             <!-- For the identifier -->

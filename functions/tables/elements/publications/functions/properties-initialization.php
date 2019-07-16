@@ -1,6 +1,16 @@
 <?php
 Publications::$properties = array (
     array ( 
+        'name' => 'title', 
+        'property_name' => 'publication_title', 
+        'type' => 'text',
+        'input_type' => 'text',
+        'placeholder' => __( 'Titre', Oak::$text_domain ), 
+        'description' => __( 'Titre', Oak::$text_domain ), 
+        'width' => '50',
+        'translatable' => true
+    ),
+    array ( 
         'name' => 'organization', 
         'property_name' => 'publication_organization', 
         'type' => 'text', 
@@ -17,7 +27,17 @@ Publications::$properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => Oak::$years,
-        'description' => __( 'Année', Oak::$text_domain ), 
+        'description' => __( 'Année de publication', Oak::$text_domain ), 
+        'width' => '50' 
+    ),
+    array ( 
+        'name' => 'covert_year', 
+        'property_name' => 'publication_covert_year', 
+        'type' => 'text', 
+        'input_type' => 'select',
+        'select_multiple' => 'false',
+        'choices' => Oak::$years,
+        'description' => __( 'Année de couverture', Oak::$text_domain ), 
         'width' => '50' 
     ),
     array ( 
@@ -36,9 +56,10 @@ Publications::$properties = array (
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array(
-            array( 'value' => 'web', 'innerHTML' => 'WEB' ),
-            array( 'value' => 'pdf', 'innerHTML' => 'Fichier PDF' ),
-            array( 'value' => 'epub', 'innerHTML' => 'ePub' ),
+            array( 'value' => '0', 'innerHTML' => __( 'Aucun format sélectionné' ) ),
+            array( 'value' => 'web', 'innerHTML' => __( 'WEB', Oak::$text_domain ) ),
+            array( 'value' => 'pdf', 'innerHTML' => __( 'Fichier PDF', Oak::$text_domain ) ),
+            array( 'value' => 'epub', 'innerHTML' => __( 'ePub', Oak::$text_domain ) ),
         ),
         'description' => __( 'Format', Oak::$text_domain ), 
         'width' => '50',
