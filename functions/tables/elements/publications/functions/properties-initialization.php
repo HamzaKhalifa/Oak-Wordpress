@@ -169,6 +169,8 @@ Publications::$properties = array (
             array ( 'value' => 'integrated-reporting', 'innerHTML' => __( 'Reporting intégré', Oak::$text_domain ) ), 
             array ( 'value' => 'evaluation-initiatives', 'innerHTML' => __( 'Initiatives d\'évaluation (Notation)', Oak::$text_domain ) ),
             array ( 'value' => 'extra-finantial-notation', 'innerHTML' => __( 'Notation extra financière (Classement)', Oak::$text_domain ) ),
+            array ( 'value' => 'financial-report', 'innerHTML' => __( 'Rapport financier', Oak::$text_domain ) ),
+            array ( 'value' => 'other', 'innerHTML' => __( 'Autre rapport', Oak::$text_domain ) ),
         ),
         'placeholder' => __( 'Type de rapport', Oak::$text_domain ), 
         'description' => __( 'Type de rapport', Oak::$text_domain ), 
