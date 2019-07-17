@@ -258,7 +258,6 @@ class Oak {
     }
 
     function oak_enqueue_scripts() {
-        var_dump('difidfid');
         wp_enqueue_script( 'oak_charts', get_template_directory_uri() . '/src/js/vendor/chart.bundle.min.js', array(), false, true );
         Oak_Elementor::oak_elementor_editor_enqueue_scripts();
 
