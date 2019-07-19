@@ -103,7 +103,7 @@
             $other_corn_elements = array(
                 array(
                     'title' => __( 'Catégories', Oak::$text_domain ),
-                    'url' => '',
+                    'url' => '?page=oak_categories_list',
                     'icon' => 'fas fa-th-large',
                     'submenu' => true
                 ),

@@ -116,12 +116,12 @@ class Oak_Elementor {
             Sidebar_Widget::$post_selected_objects[] = $our_objects;
             Oak_Content_Panel_Widget::$post_selected_objects[] = $our_objects;
 
-            $metas = get_post_meta( get_the_ID() );
-            foreach( $metas as $key => $meta ) :
-                if ( strpos( $key, 'Oak:' ) !== false ) :
-                    delete_post_meta( get_the_ID(), $key );
-                endif;
-            endforeach;
+            // $metas = get_post_meta( get_the_ID() );
+            // foreach( $metas as $key => $meta ) :
+            //     if ( strpos( $key, 'Oak:' ) !== false ) :
+            //         delete_post_meta( get_the_ID(), $key );
+            //     endif;
+            // endforeach;
             
             $post_images_to_show = array();
             update_option( 'oak_post_images_to_show', array() );
