@@ -173,8 +173,6 @@ class Oak {
 
         add_action('get_header', array( $this, 'oak_remove_admin_login_header' ) );
 
-        add_shortcode('show_categories', array ( $this, 'oak_show_categories_fn' ) );
-
         // Initialize table names
         include_once get_template_directory() . '/functions/tables/constants/table-names.php';
 
@@ -478,8 +476,6 @@ class Oak {
     function oak_handle_admin_menu() {
         add_menu_page( __( 'Elements', Oak::$text_domain ), 'Elements', 'manage_options', 'oak_elements_list', array ( $this, 'oak_elements_list'), 'dashicons-index-card', 100 );
         add_submenu_page( 'oak_elements_list', 'Ajouter un Element', __( 'Ajouter un Element', Oak::$text_domain ), 'manage_options', 'oak_add_element',  array( $this, 'oak_add_element' ) );
-
-        add_menu_page( __( 'Categories', Oak::$text_domain ), 'Catégories', 'manage_options', 'oak_categories_list', array ( $this, 'oak_categories_list'), 'dashicons-index-card', 100 );
 
         if ( get_option( 'oak_corn' ) == 'true' ) :
             foreach( Oak::$all_terms_without_redundancy as $term ) :
@@ -1645,16 +1641,6 @@ class Oak {
         $oak_indexes[] = $object_data;
 
         return $oak_indexes;
-    }
-
-    function oak_show_categories_fn() {
-        return wp_list_categories ("echo = 0 & title_li");
-
-    }
-
-    function oak_categories_list() {
-        echo( do_shortcode( '[show_categories]', false ) );
-
     }
 }
 
