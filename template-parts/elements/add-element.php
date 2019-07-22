@@ -24,6 +24,7 @@ $locked_property = $table . '_locked';
 $trashed_property = $table . '_trashed';
 $state_property = $table . '_state';
 $modification_time_property = $table . '_modification_time';
+$form_selector_index = 0;
 ?>
 
 <div class="oak_element_header">
@@ -128,6 +129,7 @@ $modification_time_property = $table . '_modification_time';
 </div>
     
 <div class="oak_add_element_big_container">
+    
     <div class="oak_add_element_container">
         
         <div class="oak_add_element_container__horizontal_container">
@@ -1048,6 +1050,7 @@ $modification_time_property = $table . '_modification_time';
 
                 // We are gonna set the selector for the previous form:
                 if ( $property['form']->form_selector == 'true' && $at_the_end_of_form ) :
+                    $form_selector_index++;
                     $showed_a_selector = true;
                     ?>
                     <div class="oak_select_container oak_select_container__selector">
@@ -1064,8 +1067,9 @@ $modification_time_property = $table . '_modification_time';
                                             $attributes = explode( '_', $selector );
                                             
                                             $object_form_selectors_attributes[] = array(
-                                                'form' => $attributes[1],
-                                                'object' => $attributes[3]
+                                                'form_selector_index' => $attributes[1],
+                                                'form' => $attributes[2],
+                                                'object' => $attributes[4]
                                             );
                                         endif;
                                     endforeach;
@@ -1074,7 +1078,7 @@ $modification_time_property = $table . '_modification_time';
                                 foreach( Oak::$all_frame_objects_without_redundancy as $frame_object ) : 
                                     $selected = '';
                                     foreach( $object_form_selectors_attributes as $object_form_attributes ) :
-                                        if ( $object_form_attributes['form'] == $property['form']->form_identifier && $object_form_attributes['object'] == $frame_object->object_identifier ) :
+                                        if ( $form_selector_index == $object_form_attributes['form_selector_index'] && $object_form_attributes['form'] == $property['form']->form_identifier && $object_form_attributes['object'] == $frame_object->object_identifier ) :
                                             $selected = 'selected';
                                         endif;
                                     endforeach; 

@@ -453,15 +453,18 @@ function createElementData(state) {
             var selectedObjects = [];
             for (var j = 1; j < options.length; j++ ) {
                 if (options[j].selected) {
+                    console.log(options[j]);
                     selectedObjects.push(options[j].getAttribute('value'));
                 }
             }
+            var formIndex = i + 1;
             for (var j = 0; j < selectedObjects.length; j++) {
-                objectFormSelectors += 'form_' + formIdentifier + '_object_' + selectedObjects[j] + '|';
+                objectFormSelectors += 'form_' + formIndex + '_' + formIdentifier + '_object_' + selectedObjects[j] + '|';
             }
             
         }
         elementData.object_form_selectors = objectFormSelectors;
+        console.log(objectFormSelectors);
 
         // Check for model selector: 
         var objectModelSelector = document.querySelector('.object_model_selector');
