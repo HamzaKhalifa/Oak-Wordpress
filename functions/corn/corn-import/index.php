@@ -466,6 +466,7 @@ class Corn_Import {
             $counter = 0;
             do {
                 if ( $objects[ $counter ]['model'] == $model['model_identifier'] ) :
+                    // error_log( $objects[ $counter ]['model'] );
                     $found_object = true;
                     $the_object = $objects[ $counter ];
                     $properties_to_neglect = array('id', 'model', 'object_designation', 'object_identifier', 'object_modification_time', 'object_content_language', 'object_model_selector', 'object_selector',
@@ -493,7 +494,7 @@ class Corn_Import {
                     endforeach;
                 endif;
                 $counter++;
-            } while( $counter < count( $objects ) - 1 && !$found_object );
+            } while( $counter < count( $objects ) && !$found_object );
 
             $table_name = $wpdb->prefix . 'oak_model_' . $model['model_identifier'];
             $models_sql = "CREATE TABLE $table_name (
@@ -700,6 +701,9 @@ class Corn_Import {
 
     function delete_images_that_are_not_needed() {
         $found_images = get_option( 'oak_corn_found_images' ) ? get_option( 'oak_corn_found_images' ) : [];
+
+        Oak::$all_images = Corn_Import::get_all_images()->posts;
+
         foreach( Oak::$all_images as $image ) :
             $is_in_found_images = false;
             foreach( $found_images as $found_image ) :
