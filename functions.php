@@ -1132,6 +1132,8 @@ class Oak {
             $array_data
         );
 
+        error_log( print_r( $array_data, TRUE ) );
+
         wp_send_json_success( array(
             'properties' => $_POST['properties'],
             'array_data' => $array_data,
