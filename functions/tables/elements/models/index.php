@@ -95,6 +95,58 @@ class Models {
     public static function get_tabs_data( $identifier  ) {
         return array();
     }
+
+    public static function get_child_elements() {
+        return ( 
+            array (
+                'for_table' => 'model',
+                'table' => 'form',
+                'elements_name' => 'forms',
+                'get_child_elements_function' => function( $model_identifier ) {
+                    $elements_to_return = array();
+                    foreach( Oak::$all_models_and_forms as $model_and_form ) :
+                        if ( $model_and_form->model_identifier == $model_identifier ) :
+                            $forms_counter = 0;
+                            $found_form = false;
+                            do {
+                                if ( Oak::$forms_without_redundancy[ $forms_counter ]->form_identifier == $model_and_form->form_identifier ) :
+                                    $found_form = true;
+                                    $elements_to_return[] = Oak::$forms_without_redundancy[ $forms_counter ];
+                                endif;
+                                $forms_counter++;
+                            } while ( $forms_counter < count( Oak::$forms_without_redundancy ) && !$found_form );
+                        endif;
+                    endforeach;
+
+                    return $elements_to_return;
+                },
+                'child_elements' => array(
+                    'for_table' => 'form',
+                    'table' => 'field',
+                    'elements_name' => 'fields',
+                    'get_child_elements_function' => function( $form_identifier ) {
+                        $elements_to_return = array();
+                        foreach( Oak::$all_forms_and_fields as $form_and_field ) :
+                            if ( $form_and_field->form_identifier == $form_identifier ) :
+                                $fields_counter = 0;
+                                $found_field = false;
+                                do {
+                                    if ( Oak::$fields_without_redundancy[ $fields_counter ]->field_identifier == $form_and_field->field_identifier ) :
+                                        $found_field = true;
+                                        $elements_to_return[] = Oak::$fields_without_redundancy[ $fields_counter ];
+                                    endif;
+                                    $fields_counter++;
+                                } while ( $fields_counter < count( Oak::$fields_without_redundancy ) && !$found_field );
+                            endif;
+                        endforeach;
+
+                        return $elements_to_return;
+                    },
+                    'child_elements' => array()
+                )
+            )
+        );
+    }
 }
 
 $models = new Models();

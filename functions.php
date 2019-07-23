@@ -1510,12 +1510,16 @@ class Oak {
     }
 
     public static function oak_get_child_elements( $table, $child_elements ) {
-        if ( $table == 'object' || $child_elements['table'] == 'object' ) :
+        if ( $table == 'object' || $child_elements['table'] == 'object' || $table == 'field' ) :
             return null;
         endif;
 
         if ( $child_elements == null ) :
-            $child_elements = Organizations::get_child_elements();
+            if ( $table == 'organization' || $table == 'publication' || $table == 'taxonomy' || $table == 'term' ) :
+                $child_elements = Organizations::get_child_elements();
+            elseif ( $table == 'model' || $table == 'form' || $table == 'field') :
+                $child_elements = Models::get_child_elements();
+            endif;
         endif;
 
         if ( $child_elements['for_table'] == $table ) :
