@@ -275,3 +275,9 @@
     color: #90949c;
     font-size: 11px;
 }
+
+.oak_single_chat_box_load_everything {
+    color: #003366;
+    margin-left: 20px;
+    cursor: pointer;
+}

@@ -346,6 +346,7 @@
                 })
 
                 chatBoxesContainer.append(newChatBox);
+                newChatBox.setAttribute('load-everything', 'false');
                 handleChatBoxButtons(newChatBox);
             });
         }
@@ -472,15 +473,38 @@
                 })
             }
 
+            handleLoadEverything();
+            function handleLoadEverything() {
+                chatBox.querySelector('.oak_single_chat_box_load_everything').addEventListener('click', function() {
+                    if (chatBox.getAttribute('load-everything') === 'true') {
+                        chatBox.setAttribute('load-everything', 'false');
+                    } else {
+                        this.classList.add('oak_hidden');
+                        chatBox.setAttribute('load-everything', 'true');
+                    }
+
+                    handleChatListener(true);
+                });
+            }
+
             handleChatListener();
-            function handleChatListener() {
+            function handleChatListener(fromLoadEverythingButton) {
                 firebase.database().ref('users/' + currentUser.id + '/chat/' + chatBox.id).on('value', function(snapshot) {
                     var allMessagesIds = getKeys(snapshot.val());
 
                     var seenText = chatBox.querySelector('.oak_chat_box_seen_or_not');
                     var seen = true;
                     var allAlreadyExistingMessages = chatBox.querySelectorAll('.oak_single_chat_box__message_container');
-                    for (var i = 0; i < allMessagesIds.length; i++) {
+
+                    var firstIncrementerValue = 0;
+                    console.log('attribute', chatBox.getAttribute('load-everything'))
+                    if (chatBox.getAttribute('load-everything') == 'false' && allMessagesIds.length > 20) {
+                        firstIncrementerValue = allMessagesIds.length - 20;
+                    }
+                    if(fromLoadEverythingButton) {
+                        allAlreadyExistingMessages = [];
+                    }
+                    for (var i = firstIncrementerValue; i < allMessagesIds.length; i++) {
                         var messageAlreadyPushed = false;
                         for (var j = 0; j < allAlreadyExistingMessages.length; j++) {
                             if (allAlreadyExistingMessages[j].id == allMessagesIds[i]) {

@@ -69,6 +69,7 @@
         </div>
 
         <span class="oak_chat_box_seen_or_not"><?php _e( 'Non vu', Oak::$text_domain ); ?></span>
+        <span class="oak_single_chat_box_load_everything"><?php _e( 'Charger tout..', Oak::$text_domain ); ?></span>
         <form class="oak_single_chat_box_message_form">
             <div class="oak_single_chat_box_message_form__files_container">
 
