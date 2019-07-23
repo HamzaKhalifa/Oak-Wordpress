@@ -253,9 +253,11 @@
                     </div>
                     <div class="oak_list_row_child_elements_container oak_hidden">
                         <?php
-                        $child_elements = Oak::oak_get_child_elements( $table, null );
-                        if ( $child_elements != null ) :
-                            Oak::oak_handle_child_elements_display( $child_elements, $element->$identifier_property, $table );
+                        if ( $table == 'organization' || $table == 'publication' || $table == 'taxonomy' || $table == 'model' || $table == 'form' ) :
+                            $child_elements = Oak::oak_get_child_elements( $table, null );
+                            if ( $child_elements != null ) :
+                                Oak::oak_handle_child_elements_display( $child_elements, $element->$identifier_property, $table );
+                            endif;
                         endif;
                         ?>
                     </div>
