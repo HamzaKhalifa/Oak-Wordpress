@@ -466,7 +466,6 @@ class Corn_Import {
             $counter = 0;
             do {
                 if ( $objects[ $counter ]['model'] == $model['model_identifier'] ) :
-                    // error_log( $objects[ $counter ]['model'] );
                     $found_object = true;
                     $the_object = $objects[ $counter ];
                     $properties_to_neglect = array('id', 'model', 'object_designation', 'object_identifier', 'object_modification_time', 'object_content_language', 'object_model_selector', 'object_selector',
@@ -685,7 +684,10 @@ class Corn_Import {
                     $download_remote_image = new KM_Download_Remote_Image( $value, array() );
                     $id = $download_remote_image->download();
                     if ( is_object( get_post( $id ) ) ) 
+                    {
                         $the_value = get_post( $id )->guid;
+                    }
+                        
                 endif;
             endif;
 
@@ -700,22 +702,25 @@ class Corn_Import {
 
 
     function delete_images_that_are_not_needed() {
-        $found_images = get_option( 'oak_corn_found_images' ) ? get_option( 'oak_corn_found_images' ) : [];
+        // $found_images = get_option( 'oak_corn_found_images' ) ? get_option( 'oak_corn_found_images' ) : [];
 
-        Oak::$all_images = Corn_Import::get_all_images()->posts;
+        // Oak::$all_images = Corn_Import::get_all_images()->posts;
 
-        foreach( Oak::$all_images as $image ) :
-            $is_in_found_images = false;
-            foreach( $found_images as $found_image ) :
-                if ( $found_image == $image->ID ) :
-                    $is_in_found_images = true;
-                endif;
-            endforeach;
-            if ( !$is_in_found_images ) :
-                wp_delete_attachment( $image->ID, true );
-            endif;
-        endforeach;
-        update_option( 'oak_corn_found_images', [] );
+        // foreach( Oak::$all_images as $image ) :
+        //     $is_in_found_images = false;
+        //     foreach( $found_images as $found_image ) :
+        //         error_log('-------------');
+        //         error_log( $found_image );
+        //         error_log( $image->ID );
+        //         if ( $found_image == $image->ID ) :
+        //             $is_in_found_images = true;
+        //         endif;
+        //     endforeach;
+        //     if ( !$is_in_found_images ) :
+        //         wp_delete_attachment( $image->ID, true );
+        //     endif;
+        // endforeach;
+        // update_option( 'oak_corn_found_images', [] );
 
         wp_send_json_success();
     }

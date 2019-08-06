@@ -246,7 +246,6 @@
                         <?php
                         endif;
                         ?>
-                        
                         <div class="oak_list_row__container">
                             <span class="oak_list_titles_container__title"><?php echo( esc_attr( $element->$modification_time_property ) ); ?></span>
                         </div>

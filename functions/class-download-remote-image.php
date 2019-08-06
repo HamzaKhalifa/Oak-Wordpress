@@ -111,6 +111,7 @@ class KM_Download_Remote_Image {
 		}
 		// Insert the image as a new attachment.
 		$this->insert_attachment( $file_attributes['file'], $file_attributes['type'] );
+		
 		if ( ! $this->attachment_id ) {
 			return false;
 		}
@@ -240,6 +241,10 @@ class KM_Download_Remote_Image {
 			'post_content'   => '',
 			'post_status'    => 'inherit',
 		);
+		error_log('post title');
+		error_log( preg_replace( '/\.[^.]+$/', '', basename( $file_path ) ) );
+		error_log('mime type');
+		error_log( $mime_type );
 		$attachment_id = wp_insert_attachment( $attachment_data, $file_path );
 		if ( ! $attachment_id ) {
 			return;

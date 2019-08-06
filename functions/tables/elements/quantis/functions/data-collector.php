@@ -19,6 +19,11 @@ else:
     " );
 endif;
 
+$results = $wpdb->get_results("
+    SELECT * FROM $quantis_table_name WHERE id IN (SELECT MAX(id) FROM $quantis_table_name GROUP BY quanti_identifier);
+");
+// Oak::var_dump($results);
+
 $reversed_quantis = array_reverse( Oak::$quantis );
 $quantis_without_redundancy = [];
 foreach( $reversed_quantis as $quanti ) :
