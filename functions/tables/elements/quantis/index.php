@@ -53,7 +53,7 @@ class Quantis {
 if ( 
     ( 
         isset( $_GET['elements'] ) && 
-        in_array( $_GET['elements'], ['quantis', 'goodpractices', 'publishers'] ) 
+        in_array( $_GET['elements'], ['quantis', 'goodpractices', 'publishers', 'performances'] ) 
     )
     ||
     (

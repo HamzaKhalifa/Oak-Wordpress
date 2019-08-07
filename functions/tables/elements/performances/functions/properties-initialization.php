@@ -14,7 +14,7 @@ Performances::$properties = array(
     array ( 
         'name' => 'type', 
         'property_name' => 'performance_type', 
-        'type' => 'text', 
+        'type' => 'text',
         'input_type' => 'select',
         'select_multiple' => 'false',
         'choices' => array (

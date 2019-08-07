@@ -702,25 +702,27 @@ class Corn_Import {
 
 
     function delete_images_that_are_not_needed() {
-        // $found_images = get_option( 'oak_corn_found_images' ) ? get_option( 'oak_corn_found_images' ) : [];
+        $found_images = get_option( 'oak_corn_found_images' ) ? get_option( 'oak_corn_found_images' ) : [];
 
-        // Oak::$all_images = Corn_Import::get_all_images()->posts;
+        Oak::$all_images = Corn_Import::get_all_images()->posts;
 
-        // foreach( Oak::$all_images as $image ) :
-        //     $is_in_found_images = false;
-        //     foreach( $found_images as $found_image ) :
-        //         error_log('-------------');
-        //         error_log( $found_image );
-        //         error_log( $image->ID );
-        //         if ( $found_image == $image->ID ) :
-        //             $is_in_found_images = true;
-        //         endif;
-        //     endforeach;
-        //     if ( !$is_in_found_images ) :
-        //         wp_delete_attachment( $image->ID, true );
-        //     endif;
-        // endforeach;
-        // update_option( 'oak_corn_found_images', [] );
+        foreach( Oak::$all_images as $image ) :
+            $is_in_found_images = false;
+            foreach( $found_images as $found_image ) :
+                error_log('-------------');
+                error_log( $found_image );
+                error_log( $image->ID );
+                if ( $found_image == $image->ID ) :
+                    $is_in_found_images = true;
+                endif;
+            endforeach;
+            error_log('IIIIIIIIIS IN FOUUUUUUUUND');
+            error_log( $is_in_found_images );
+            if ( !$is_in_found_images ) :
+                // wp_delete_attachment( $image->ID, true );
+            endif;
+        endforeach;
+        update_option( 'oak_corn_found_images', [] );
 
         wp_send_json_success();
     }
