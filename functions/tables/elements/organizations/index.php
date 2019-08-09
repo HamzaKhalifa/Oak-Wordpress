@@ -150,6 +150,10 @@ if (
     ) || 
     ( 
         isset( $_GET['post'] ) 
+    ) || 
+    ( 
+        isset( $_GET['page'] ) && 
+        $_GET['page'] == 'oak_data_studio'
     ) 
 ) 
 $organizations = new Organizations();
