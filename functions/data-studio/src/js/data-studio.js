@@ -830,6 +830,15 @@ function handleModalButtons() {
                         { name: 'Titre', type: 'normal', placeholder: 'Titre', propertyName: 'label', value: '', propertyNature: 'dataset' },
                         { name: 'Tension de la ligne', type: 'normal', placeholder: 'Exemple: 0.4', propertyName: 'lineTension', value: '', propertyNature: 'dataset' },
                     ];
+                case 'pie': 
+                    properties = [
+                        { name: 'Couleurs', type: 'array', placeholder: 'Exemple: #FC644E,#FDA428,#42B273,#808080,#6A5ECA', propertyName: 'backgroundColor', value: [], propertyNature: 'dataset' },
+                        { name: 'Couleurs des background au hover', type: 'array', placeholder: 'Exemple: #FC644E,#FDA428,#42B273,#808080,#6A5ECA', propertyName: 'hoverBackgroundColor', value: [], propertyNature: 'dataset' },
+                        { name: 'Couleur de la bordure', type: 'normal', placeholder: 'Exemple: #FC644E', propertyName: 'borderColor', value: '', propertyNature: 'dataset' },
+                        { name: 'Epaisseur de la bordure', type: 'normal', placeholder: 'Exemple: 2', propertyName: 'borderWidth', value: '', propertyNature: 'dataset' },
+                        { name: 'Couleur de la bordure au hover', type: 'normal', placeholder: 'Exemple: #FC644E', propertyName: 'hoverBorderColor', value: '', propertyNature: 'dataset' },
+                        { name: 'Titre', type: 'normal', placeholder: 'Titre', propertyName: 'label', value: '', propertyNature: 'dataset' },
+                    ];
                 break;
             }
 
