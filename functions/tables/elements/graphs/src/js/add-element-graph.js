@@ -153,6 +153,10 @@ function refreshGraph() {
             };
         }
 
+        if (data.data.datasets[0].backgroundColor) {
+            data.data.datasets[0].backgroundColor = data.data.datasets[0].backgroundColor.split(',')
+        }
+        
         var chart = new Chart(ctx, data);
     }
 }
