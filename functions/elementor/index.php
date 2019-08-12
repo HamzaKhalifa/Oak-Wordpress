@@ -263,12 +263,23 @@ class Oak_Elementor {
                     $the_source = Sources::get_source_of_corresponding_language( $the_source );
                     $the_source->source_data = [];
                     $the_source->source_data = array_merge( $the_source->source_data,  array( $the_source->source_designation => __( 'Désignation', Oak::$text_domain ) ) );
-                    if ( $inside_post ) 
+                    if ( $inside_post ) :
                         update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': Designation', $the_source->source_designation );
+                        if ( $the_source->source_type == 'internal' ) :
+                            if ( $the_source->source_internal_type == 'post_or_page' ) :
+                                error_log('dfkldfdfjkldfjld');
+                                update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': Lien Poste/Page', get_post( $the_source->source_post )->guid );
+                            endif;
+                        else :
+                            update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': Lien', $the_source->source_link );
+                            update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': Titre du lien', $the_source->source_link_title );
+                        endif;
+                    endif;
                         // update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': ' . $the_source->source_designation . ': Designation', $the_source->source_designation );
                     foreach( Sources::$properties as $key => $source_property ) :
                         $property_name = $source_property['property_name'];
-                        if ( $source_property['input_type'] != 'image' && $source_property['input_type'] != 'select' ) :
+                        if ( $source_property['input_type'] != 'image' && $source_property['input_type'] != 'select' && $property_name != 'source_link' && $property_name != 'source_link_title' ) :
+                            error_log( $property_name );
                             $the_source->source_data = array_merge( $the_source->source_data,  array( $the_source->$property_name => $source_property['description'] ) );
                             if ( $inside_post ) :
                                 update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': ' . $source_property['description'], $the_source->$property_name );

@@ -35,8 +35,6 @@
                 chatMenuWidth += 20;
                 document.querySelector('.oak_chat_boxes_container').style.right = chatMenuWidth  + 'px';
             }
-            
-
         }
     }
 
