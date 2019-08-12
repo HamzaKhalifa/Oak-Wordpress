@@ -606,7 +606,7 @@ class Oak {
                 $properties = Organizations::$properties;
                 $table = 'organization';
                 $title = __( 'Ajouter une organisation', Oak::$text_domain );
-                $elements = Oak::$publications_without_redundancy;
+                $elements = Oak::$organizations_without_redundancy;
             break;
             case 'quantis':
                 $properties = Quantis::$properties;
