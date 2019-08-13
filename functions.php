@@ -1127,22 +1127,38 @@ class Oak {
             unset( $array_data['selected_terms'] );
         endif;
 
-        $wpdb->show_errors();
+        $columns = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'" );
+        $columns_names = [];
+        foreach( $columns as $column ) :
+            if ( $column->COLUMN_NAME != 'id' ) :
+                // if ( $number_of_times_found_object_designation < 2 )
+                    $columns_names[] = $column->COLUMN_NAME;
+            endif;
+        endforeach;
+
+        foreach( $array_data as $key => $value ) :
+            // check if the key is included in the model:
+            if ( !in_array( $key, $columns_names ) ) :
+                unset( $array_data[ $key ] );
+            endif;
+        endforeach;
+
+        // $wpdb->show_errors();
         $result = $wpdb->insert(
             $table_name,
             $array_data
         );
-        $error = $wpdb->print_error();
+        // $error = $wpdb->print_error();
 
-        error_log( print_r( $array_data, TRUE ) );
-        error_log('---------');
-        error_log( $result );
+        // error_log( print_r( $array_data, TRUE ) );
+        // error_log('---------');
+        // error_log( $result );
 
         wp_send_json_success( array(
             'array_data' => $array_data,
             'table_name' => $table_name,
             'result' => $result,
-            'error' => $error
+            // 'error' => $error
         ) );
     }
 
