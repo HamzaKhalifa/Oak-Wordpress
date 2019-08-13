@@ -1127,10 +1127,12 @@ class Oak {
             unset( $array_data['selected_terms'] );
         endif;
 
+        $wpdb->show_errors();
         $result = $wpdb->insert(
             $table_name,
             $array_data
         );
+        $error = $wpdb->print_error();
 
         error_log( print_r( $array_data, TRUE ) );
         error_log('---------');
@@ -1140,6 +1142,7 @@ class Oak {
             'array_data' => $array_data,
             'table_name' => $table_name,
             'result' => $result,
+            'error' => $error
         ) );
     }
 
