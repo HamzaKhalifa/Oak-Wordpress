@@ -267,7 +267,6 @@ class Oak_Elementor {
                         update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': Designation', $the_source->source_designation );
                         if ( $the_source->source_type == 'internal' ) :
                             if ( $the_source->source_internal_type == 'post_or_page' ) :
-                                error_log('dfkldfdfjkldfjld');
                                 update_post_meta( $post_id, 'Oak: ' . $source . ' ' . $source_number . ': Lien Poste/Page', get_post( $the_source->source_post )->guid );
                             endif;
                         else :

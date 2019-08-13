@@ -1137,10 +1137,9 @@ class Oak {
         error_log( $result );
 
         wp_send_json_success( array(
-            'properties' => $_POST['properties'],
             'array_data' => $array_data,
-            'result' => $properties,
-            'test' => $test_file_url
+            'table_name' => $table_name,
+            'result' => $result,
         ) );
     }
 

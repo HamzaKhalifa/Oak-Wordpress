@@ -37,6 +37,8 @@ var steps = [];
                 console.log(data);
                 doneLoading();
                 allData = data.data;
+                exportToJson(allData.quantisWithoutRedundancy);
+
                 populateImportContainer(
                     'Organisations',
                     allData.organizationsWithoutRedundancy, 
@@ -52,6 +54,23 @@ var steps = [];
             } 
         });
     });
+
+    function exportToJson (objecToDownload) {
+        let filename = "export.json";
+        let contentType = "application/json;charset=utf-8;";
+        // if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(objecToDownload)))], { type: contentType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+            var a = document.createElement('a');
+            a.download = filename;
+            a.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(objecToDownload));
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        // }
+    }
 
     function populateImportContainer(title, data, dataInfo, dataFields, dataType, nextStep, publicationsThatBelongNumber, fromCancel) {
         var cancelButton = document.querySelector('.next_button_container_cancel');
