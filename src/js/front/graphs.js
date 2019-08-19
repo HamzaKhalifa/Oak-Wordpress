@@ -59,10 +59,9 @@ function handleGraphsInitialization() {
                 data.options.legend = JSON.parse(GRAPHS_DATA.graphs[j].graph_legend_configuration);
                 
                 if (data.data.datasets[0].backgroundColor) {
-                    data.data.datasets[0].backgroundColor = data.data.datasets[0].backgroundColor.split(',')
+                    // data.data.datasets[0].backgroundColor = data.data.datasets[0].backgroundColor.split(',')
                 }
                 var chart = new Chart(chartCreator, data);
-
 
                 // Make canvas full width: 
                 parent = canvas.parentNode;
