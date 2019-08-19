@@ -2442,6 +2442,10 @@ input.import_container__element_checkbox {
 
 /*# sourceMappingURL=style.css.map */
 
+.elementor-background-overlay {
+  opacity: .5;
+}
+
 .elementor-sticky--effects .elementor-background-overlay {
   opacity: 1!important
 }
