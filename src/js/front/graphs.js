@@ -7,6 +7,16 @@ function handleGraphsInitialization() {
 
         allGraphContainers[i].innerHTML = '';
         allGraphContainers[i].append(canvas);
+
+        var clickMeSignal = document.createElement('div');
+        clickMeSignal.className = 'oak_graph_click_me';
+        clickMeTitle = document.createElement('h2');
+        clickMeTitle.className = 'oak_graph_click_me_title';
+        clickMeTitle.innerHTML = 'Clique moi !'
+
+        clickMeSignal.append(clickMeTitle);
+        allGraphContainers[i].append(clickMeSignal);
+
         var chartCreator = canvas.getContext('2d');
 
         var graphIdentifier = allGraphContainers[i].getAttribute('graph-identifier');
@@ -56,7 +66,9 @@ function handleGraphsInitialization() {
                     };
                 }
                 
-                data.options.legend = JSON.parse(GRAPHS_DATA.graphs[j].graph_legend_configuration);
+                if (GRAPHS_DATA.graphs[j].graph_legend_configuration) {
+                    data.options.legend = JSON.parse(GRAPHS_DATA.graphs[j].graph_legend_configuration);
+                }
                 
                 if (data.data.datasets[0].backgroundColor) {
                     // data.data.datasets[0].backgroundColor = data.data.datasets[0].backgroundColor.split(',')

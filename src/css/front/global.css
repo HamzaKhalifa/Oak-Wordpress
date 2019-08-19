@@ -51,3 +51,26 @@
     from { background-color: red }
     to { background-color: transparent };
 }
+
+@keyframes backtocolor {
+    from { background-color: red }
+    to { background-color: transparent };
+}
+
+.oak_graph_click_me {
+    position: absolute;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    left: 50%;
+    top: 50%;
+}
+
+.oak_graph_click_me_title {
+    animation: clickme 1s infinite;
+}
+
+@keyframes clickme {
+    0% { font-size: 20px }
+    50% { font-size: 30px }
+    100% { font-size: 20px; }
+}
