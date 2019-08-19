@@ -37,7 +37,7 @@ var steps = [];
                 console.log(data);
                 doneLoading();
                 allData = data.data;
-                exportToJson(allData.quantisWithoutRedundancy);
+                // exportToJson(allData.allTerms);
 
                 populateImportContainer(
                     'Organisations',
